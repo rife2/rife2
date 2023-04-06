@@ -10,6 +10,7 @@ import rife.tools.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +63,18 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions addModules(String... modules) {
+        return addModules(Arrays.asList(modules));
+    }
+
+    /**
+     * Root modules to resolve in addition to the initial modules,
+     * or all modules on the module path if a module is
+     * ALL-MODULE-PATH.
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavadocOptions addModules(List<String> modules) {
         add("--add-modules");
         add(StringUtils.join(modules, ","));
         return this;
@@ -132,6 +145,16 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions excludePackages(String... name) {
+        return excludePackages(Arrays.asList(name));
+    }
+
+    /**
+     * Specify a list of packages to exclude
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavadocOptions excludePackages(List<String> name) {
         add("-exclude");
         add(StringUtils.join(name, ","));
         return this;
@@ -144,8 +167,18 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions extDirs(File... dirs) {
+        return extDirs(Arrays.asList(dirs));
+    }
+
+    /**
+     * Override location of installed extensions
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavadocOptions extDirs(List<File> dirs) {
         add("-extdirs");
-        add(Arrays.stream(dirs).map(File::getAbsolutePath).collect(Collectors.joining(",")));
+        add(dirs.stream().map(File::getAbsolutePath).collect(Collectors.joining(",")));
         return this;
     }
 
@@ -156,6 +189,16 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions limitModules(String... modules) {
+        return limitModules(Arrays.asList(modules));
+    }
+
+    /**
+     * Limit the universe of observable modules
+     *
+     * @return this list of options
+     * @since 1.5.12
+     */
+    public JavadocOptions limitModules(List<String> modules) {
         add("--limit-modules");
         add(StringUtils.join(modules, ","));
         return this;
@@ -568,6 +611,16 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions noQualifier(String... qualifiers) {
+        return noQualifier(Arrays.asList(qualifiers));
+    }
+
+    /**
+     * Exclude the list of qualifiers from the output
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavadocOptions noQualifier(List<String> qualifiers) {
         add("-noqualifier");
         add(StringUtils.join(qualifiers, ":"));
         return this;
@@ -649,6 +702,16 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions since(String... release) {
+        return since(Arrays.asList(release));
+    }
+
+    /**
+     * Document new and deprecated API in the specified releases
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavadocOptions since(List<String> release) {
         add("-since");
         add(StringUtils.join(release, ","));
         return this;
@@ -818,6 +881,21 @@ public class JavadocOptions extends ArrayList<String> {
      * @since 1.5.12
      */
     public JavadocOptions docLintPackage(String... packages) {
+        return docLintPackage(Arrays.asList(packages));
+    }
+
+    /**
+     * Enable or disable checks in specific packages.
+     * <p>
+     * A package specifier is either a qualified name of a package or a package
+     * name prefix followed by .*, which expands to all sub-packages
+     * of the given package. Prefix the package specifier with - to
+     * disable checks for the specified packages.
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavadocOptions docLintPackage(List<String> packages) {
         add("-Xdoclint/package:" + (StringUtils.join(packages, ",")));
         return this;
     }

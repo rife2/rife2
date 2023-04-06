@@ -29,11 +29,11 @@ public class ExamplesBuild extends WebProject {
             .compileMainClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
             .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath());
         runOperation()
-            .javaOptions(List.of("-javaagent:" + new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName())))
-            .classpath(mainBuild.buildMainDirectory().getAbsolutePath());
+            .classpath(mainBuild.buildMainDirectory().getAbsolutePath())
+            .javaOptions().javaAgent(new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName()));
         testOperation()
-            .javaOptions(List.of("-javaagent:" + new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName())))
-            .classpath(mainBuild.buildMainDirectory().getAbsolutePath());
+            .classpath(mainBuild.buildMainDirectory().getAbsolutePath())
+            .javaOptions().javaAgent(new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName()));
     }
 
     public void compile()

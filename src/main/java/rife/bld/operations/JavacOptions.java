@@ -10,15 +10,16 @@ import rife.tools.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Options for the standard javac tool.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.5.12
+ * @since 1.5.18
  */
-public class CompileOptions extends ArrayList<String> {
+public class JavacOptions extends ArrayList<String> {
     public enum DebuggingInfo {
         ALL, NONE, LINES, VAR, SOURCE
     }
@@ -35,9 +36,9 @@ public class CompileOptions extends ArrayList<String> {
      * Option to pass to annotation processors
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions annotationOption(String key, String value) {
+    public JavacOptions annotationOption(String key, String value) {
         add("-A" + key + "=" + value);
         return this;
     }
@@ -48,9 +49,21 @@ public class CompileOptions extends ArrayList<String> {
      * ALL-MODULE-PATH.
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions addModules(String... modules) {
+    public JavacOptions addModules(String... modules) {
+        return addModules(Arrays.asList(modules));
+    }
+
+    /**
+     * Root modules to resolve in addition to the initial modules,
+     * or all modules on the module path if a module is
+     * ALL-MODULE-PATH.
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavacOptions addModules(List<String> modules) {
         add("--add-modules");
         add(StringUtils.join(modules, ","));
         return this;
@@ -60,9 +73,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify character encoding used by source files
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions encoding(String name) {
+    public JavacOptions encoding(String name) {
         add("-encoding");
         add("name");
         return this;
@@ -72,9 +85,9 @@ public class CompileOptions extends ArrayList<String> {
      * Output source locations where deprecated APIs are used
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions deprecation() {
+    public JavacOptions deprecation() {
         add("-deprecation");
         return this;
     }
@@ -83,9 +96,9 @@ public class CompileOptions extends ArrayList<String> {
      * Enable preview language features. To be used in conjunction with {@link #release}.
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions enablePreview() {
+    public JavacOptions enablePreview() {
         add("--enable-preview");
         return this;
     }
@@ -94,11 +107,21 @@ public class CompileOptions extends ArrayList<String> {
      * Override location of endorsed standards path
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions endorsedDirs(File... dirs) {
+    public JavacOptions endorsedDirs(File... dirs) {
+        return endorsedDirs(Arrays.asList(dirs));
+    }
+
+    /**
+     * Override location of endorsed standards path
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavacOptions endorsedDirs(List<File> dirs) {
         add("-endorseddirs");
-        add(Arrays.stream(dirs).map(File::getAbsolutePath).collect(Collectors.joining(",")));
+        add(dirs.stream().map(File::getAbsolutePath).collect(Collectors.joining(",")));
         return this;
     }
 
@@ -106,11 +129,21 @@ public class CompileOptions extends ArrayList<String> {
      * Override location of installed extensions
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions extDirs(File... dirs) {
+    public JavacOptions extDirs(File... dirs) {
+        return extDirs(Arrays.asList(dirs));
+    }
+
+    /**
+     * Override location of installed extensions
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavacOptions extDirs(List<File> dirs) {
         add("-extdirs");
-        add(Arrays.stream(dirs).map(File::getAbsolutePath).collect(Collectors.joining(",")));
+        add(dirs.stream().map(File::getAbsolutePath).collect(Collectors.joining(",")));
         return this;
     }
 
@@ -129,9 +162,9 @@ public class CompileOptions extends ArrayList<String> {
      * Compile for the specified Java SE release.
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions release(int version) {
+    public JavacOptions release(int version) {
         add("--release");
         add(Convert.toString(version));
         return this;
@@ -141,9 +174,9 @@ public class CompileOptions extends ArrayList<String> {
      * Generate debugging info
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions debuggingInfo(DebuggingInfo option) {
+    public JavacOptions debuggingInfo(DebuggingInfo option) {
         if (option.equals(DebuggingInfo.ALL)) {
             add("-g");
         } else {
@@ -156,9 +189,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify where to place generated native header files
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions nativeHeaders(File path) {
+    public JavacOptions nativeHeaders(File path) {
         add("-h");
         add(path.getAbsolutePath());
         return this;
@@ -168,9 +201,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify whether or not to generate class files for implicitly referenced files
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions implicit(Implicit option) {
+    public JavacOptions implicit(Implicit option) {
         add("-implicit:" + option.name().toLowerCase());
         return this;
     }
@@ -179,9 +212,19 @@ public class CompileOptions extends ArrayList<String> {
      * Limit the universe of observable modules
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions limitModules(String... modules) {
+    public JavacOptions limitModules(String... modules) {
+        return limitModules(Arrays.asList(modules));
+    }
+
+    /**
+     * Limit the universe of observable modules
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavacOptions limitModules(List<String> modules) {
         add("--limit-modules");
         add(StringUtils.join(modules, ","));
         return this;
@@ -191,9 +234,19 @@ public class CompileOptions extends ArrayList<String> {
      * Compile only the specified module(s), check timestamps
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions module(String... modules) {
+    public JavacOptions module(String... modules) {
+        return module(Arrays.asList(modules));
+    }
+
+    /**
+     * Compile only the specified module(s), check timestamps
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavacOptions module(List<String> modules) {
         add("--module");
         add(StringUtils.join(modules, ","));
         return this;
@@ -203,9 +256,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify where to find application modules
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions modulePath(File path) {
+    public JavacOptions modulePath(File path) {
         add("--module-path");
         add(path.getAbsolutePath());
         return this;
@@ -215,9 +268,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify where to find input source files for multiple modules
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions moduleSourcePath(File path) {
+    public JavacOptions moduleSourcePath(File path) {
         add("--module-source-path");
         add(path.getAbsolutePath());
         return this;
@@ -227,9 +280,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify version of modules that are being compiled
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions moduleSourcePath(String version) {
+    public JavacOptions moduleSourcePath(String version) {
         add("--module-version");
         add(version);
         return this;
@@ -239,9 +292,9 @@ public class CompileOptions extends ArrayList<String> {
      * Generate no warnings
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions noWarn() {
+    public JavacOptions noWarn() {
         add("-nowarn");
         return this;
     }
@@ -250,9 +303,9 @@ public class CompileOptions extends ArrayList<String> {
      * Generate metadata for reflection on method parameters
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions parameters() {
+    public JavacOptions parameters() {
         add("-parameters");
         return this;
     }
@@ -261,9 +314,9 @@ public class CompileOptions extends ArrayList<String> {
      * Control whether annotation processing and/or compilation is done.
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions process(Processing option) {
+    public JavacOptions process(Processing option) {
         add("-proc:" + option.name().toLowerCase());
         return this;
     }
@@ -272,9 +325,19 @@ public class CompileOptions extends ArrayList<String> {
      * Names of the annotation processors to run; bypasses default discovery process
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions processors(String... classnames) {
+    public JavacOptions processors(String... classnames) {
+        return processors(Arrays.asList(classnames));
+    }
+
+    /**
+     * Names of the annotation processors to run; bypasses default discovery process
+     *
+     * @return this list of options
+     * @since 1.5.18
+     */
+    public JavacOptions processors(List<String> classnames) {
         add("-processor");
         add(StringUtils.join(classnames, ","));
         return this;
@@ -284,9 +347,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify a module path where to find annotation processors
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions processorModulePath(File path) {
+    public JavacOptions processorModulePath(File path) {
         add("--processor-module-path");
         add(path.getAbsolutePath());
         return this;
@@ -296,9 +359,9 @@ public class CompileOptions extends ArrayList<String> {
      * Specify where to find annotation processors
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions processorPath(File path) {
+    public JavacOptions processorPath(File path) {
         add("--processor-path");
         add(path.getAbsolutePath());
         return this;
@@ -308,9 +371,9 @@ public class CompileOptions extends ArrayList<String> {
      * Check that API used is available in the specified profile
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions profile(String profile) {
+    public JavacOptions profile(String profile) {
         add("-profile");
         add(profile);
         return this;
@@ -320,9 +383,9 @@ public class CompileOptions extends ArrayList<String> {
      * Override location of system modules. Option is &lt;jdk&gt; or none.
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions system(String option) {
+    public JavacOptions system(String option) {
         add("--system");
         add(option);
         return this;
@@ -332,9 +395,9 @@ public class CompileOptions extends ArrayList<String> {
      * Override location of upgradeable modules
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions upgradeModulePath(File path) {
+    public JavacOptions upgradeModulePath(File path) {
         add("--upgrade-module-path");
         add(path.getAbsolutePath());
         return this;
@@ -344,9 +407,9 @@ public class CompileOptions extends ArrayList<String> {
      * Terminate compilation if warnings occur
      *
      * @return this list of options
-     * @since 1.5.12
+     * @since 1.5.18
      */
-    public CompileOptions warningError() {
+    public JavacOptions warningError() {
         add("-Werror");
         return this;
     }

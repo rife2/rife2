@@ -27,7 +27,7 @@ public class RunOperation extends AbstractOperation<RunOperation> {
 
     private File workDirectory_ = new File(System.getProperty("user.dir"));
     private String javaTool_ = DEFAULT_JAVA_TOOL;
-    private final List<String> javaOptions_ = new ArrayList<>();
+    private final JavaOptions javaOptions_ = new JavaOptions();
     private final List<String> classpath_ = new ArrayList<>();
     private String mainClass_;
     private final List<String> runOptions_ = new ArrayList<>();
@@ -123,11 +123,14 @@ public class RunOperation extends AbstractOperation<RunOperation> {
      * @since 1.5
      */
     public RunOperation fromProject(Project project) {
-        return workDirectory(project.workDirectory())
+        var operation = workDirectory(project.workDirectory())
                 .javaTool(project.javaTool())
-                .javaOptions(project.runJavaOptions())
                 .classpath(project.runClasspath())
                 .mainClass(project.mainClass());
+        if (project.usesRife2Agent()) {
+            operation.javaOptions().agentPath(project.getRife2AgentFile());
+        }
+        return operation;
     }
 
     /**
@@ -296,7 +299,7 @@ public class RunOperation extends AbstractOperation<RunOperation> {
      * @return the java tool's options
      * @since 1.5
      */
-    public List<String> javaOptions() {
+    public JavaOptions javaOptions() {
         return javaOptions_;
     }
 

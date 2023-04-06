@@ -75,7 +75,7 @@ public class Rife2Build extends Project {
         compileOperation()
             .mainSourceDirectories(antlr4Operation.outputDirectory())
             .compileOptions()
-                .debuggingInfo(CompileOptions.DebuggingInfo.ALL);
+                .debuggingInfo(JavacOptions.DebuggingInfo.ALL);
 
         jarOperation()
             .manifestAttribute(Attributes.Name.MAIN_CLASS, mainClass());
@@ -121,8 +121,9 @@ public class Rife2Build extends Project {
             .destinationFileName("rife2-" + version() + "-bld.zip");
 
         testOperation()
-            .javaOptions(List.of("-javaagent:" + new File(buildDistDirectory(), jarAgentOperation.destinationFileName())));
-        passPropertyToTest(
+            .javaOptions()
+                .javaAgent(new File(buildDistDirectory(), jarAgentOperation.destinationFileName()));
+        propagateJavaProperties(testOperation().javaOptions(),
             "test.postgres",
             "test.mysql",
             "test.oracle",
@@ -180,10 +181,10 @@ public class Rife2Build extends Project {
         examples = new ExamplesBuild(this);
     }
 
-    void passPropertyToTest(String... names) {
+    void propagateJavaProperties(JavaOptions options, String... names) {
         for (var name : names) {
             if (properties().contains(name)) {
-                testOperation().javaOptions().add("-D" + name + "=" + properties().getValueString(name));
+                options.property(name, properties().getValueString(name));
             }
         }
     }

@@ -81,20 +81,6 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected DependencyScopes dependencies = new DependencyScopes();
-    /**
-     * The project's default repository for publishing artifacts.
-     *
-     * @see #publishRepository()
-     * @since 1.5.7
-     */
-    protected Repository publishRepository = null;
-    /**
-     * The project's publishing information.
-     *
-     * @see #publishInfo()
-     * @since 1.5.7
-     */
-    protected PublishInfo publishInfo = null;
 
     /**
      * The project's precompiled template types.
@@ -117,20 +103,6 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     protected String javaTool = null;
-    /**
-     * The project's java options for the run command.
-     *
-     * @see #runJavaOptions()
-     * @since 1.5
-     */
-    protected List<String> runJavaOptions = new ArrayList<>();
-    /**
-     * The project's java options for the test command.
-     *
-     * @see #testJavaOptions()
-     * @since 1.5
-     */
-    protected List<String> testJavaOptions = new ArrayList<>();
     /**
      * The base name that is used for creating archives.
      *
@@ -711,6 +683,8 @@ public class Project extends BuildExecutor {
      * Useful methods
      */
 
+    private Dependency rife2Agent_ = null;
+
     /**
      * Includes the RIFE2 instrumentation agent as a runtime dependency,
      * and activates it for run and test commands.
@@ -719,10 +693,33 @@ public class Project extends BuildExecutor {
      * @since 1.5.5
      */
     public void useRife2Agent(VersionNumber version) {
-        var agent = new Dependency("com.uwyn.rife2", "rife2", version, "agent");
-        scope(runtime).include(agent);
-        runJavaOptions.add("-javaagent:" + new File(libRuntimeDirectory(), agent.toFileName()));
-        testJavaOptions.add("-javaagent:" + new File(libRuntimeDirectory(), agent.toFileName()));
+        rife2Agent_ = new Dependency("com.uwyn.rife2", "rife2", version, "agent");
+        scope(runtime).include(rife2Agent_);
+    }
+
+    /**
+     * Indicates whether the RIFE2 instrumentation agent should be used.
+     *
+     * @return {@code true} if the RIFE2 instrumentation agent should be used; or
+     * {@code false} otherwise
+     * @since 1.5.18
+     */
+    public boolean usesRife2Agent() {
+        return rife2Agent_ != null;
+    }
+
+    /**
+     * Returns the jar file of the RIFE2 instrumentation agent that should be used.
+     *
+     * @return the jar file of the RIFE2 instrumentation agent; or
+     * {@code null} if no agent should be used
+     * @since 1.5.18
+     */
+    public File getRife2AgentFile() {
+        if (rife2Agent_ == null) {
+            return null;
+        }
+        return new File(libRuntimeDirectory(), rife2Agent_.toFileName());
     }
 
     /**
@@ -1344,24 +1341,6 @@ public class Project extends BuildExecutor {
     }
 
     /**
-     * Returns the default publication repository for this project.
-     *
-     * @since 1.5.7
-     */
-    public Repository publishRepository() {
-        return publishRepository;
-    }
-
-    /**
-     * Returns the publishing info for this project.
-     *
-     * @since 1.5.7
-     */
-    public PublishInfo publishInfo() {
-        return publishInfo;
-    }
-
-    /**
      * Returns the project's precompiled template types.
      * <p>
      * This list can be modified to change the template types that are precompiled in the project.
@@ -1403,58 +1382,6 @@ public class Project extends BuildExecutor {
      */
     public String javaTool() {
         return Objects.requireNonNullElse(javaTool, "java");
-    }
-
-    /**
-     * Returns the project's java options for the run command.
-     * <p>
-     * This list can be modified to change the java run command options for the project.
-     *
-     * @since 1.5
-     */
-    public List<String> runJavaOptions() {
-        if (runJavaOptions == null) {
-            runJavaOptions = new ArrayList<>();
-        }
-        return runJavaOptions;
-    }
-
-    /**
-     * Adds java run options to this project.
-     *
-     * @param options the options to add
-     * @since 1.5.6
-     */
-    public void runJavaOptions(String... options) {
-        for (var option : options) {
-            runJavaOptions().add(option);
-        }
-    }
-
-    /**
-     * Returns the project's java options for the test command.
-     * <p>
-     * This list can be modified to change the java test command options for the project.
-     *
-     * @since 1.5
-     */
-    public List<String> testJavaOptions() {
-        if (testJavaOptions == null) {
-            testJavaOptions = new ArrayList<>();
-        }
-        return testJavaOptions;
-    }
-
-    /**
-     * Adds java test options to this project.
-     *
-     * @param options the options to add
-     * @since 1.5.6
-     */
-    public void testJavaOptions(String... options) {
-        for (var option : options) {
-            testJavaOptions().add(option);
-        }
     }
 
     /**

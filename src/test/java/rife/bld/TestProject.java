@@ -42,10 +42,6 @@ public class TestProject {
         assertTrue(project.repositories.isEmpty());
         assertNotNull(project.dependencies);
         assertTrue(project.dependencies.isEmpty());
-        assertNull(project.publishRepository);
-        assertNull(project.publishRepository());
-        assertNull(project.publishInfo);
-        assertNull(project.publishInfo());
 
         assertNotNull(project.precompiledTemplateTypes);
         assertTrue(project.precompiledTemplateTypes.isEmpty());
@@ -54,12 +50,6 @@ public class TestProject {
         assertNull(project.javaTool);
         assertNotNull(project.javaTool());
         assertEquals("java", project.javaTool());
-        assertNotNull(project.runJavaOptions);
-        assertTrue(project.runJavaOptions.isEmpty());
-        assertTrue(project.runJavaOptions().isEmpty());
-        assertNotNull(project.testJavaOptions);
-        assertTrue(project.testJavaOptions.isEmpty());
-        assertTrue(project.testJavaOptions().isEmpty());
         assertNull(project.archiveBaseName);
         assertThrows(IllegalStateException.class, project::archiveBaseName);
         assertNull(project.jarFileName);

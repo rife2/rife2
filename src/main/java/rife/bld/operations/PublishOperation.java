@@ -464,29 +464,22 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @since 1.5.7
      */
     public PublishOperation fromProject(Project project) {
-        if (project.publishRepository() != null) {
-            repository(project.publishRepository());
-        }
         dependencies().include(project.dependencies());
         artifacts(List.of(
             new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar"),
             new PublishArtifact(new File(project.buildDistDirectory(), project.sourcesJarFileName()), "sources", "jar"),
             new PublishArtifact(new File(project.buildDistDirectory(), project.javadocJarFileName()), "javadoc", "jar")));
-        var info = project.publishInfo();
-        if (info != null) {
-            info_ = info;
+        if (info().groupId() == null) {
+            info().groupId(project.pkg());
         }
-        if (info_.groupId() == null) {
-            info_.groupId(project.pkg());
+        if (info().artifactId() == null) {
+            info().artifactId(project.name().toLowerCase());
         }
-        if (info_.artifactId() == null) {
-            info_.artifactId(project.name().toLowerCase());
+        if (info().version() == null) {
+            info().version(project.version());
         }
-        if (info_.version() == null) {
-            info_.version(project.version());
-        }
-        if (info_.name() == null) {
-            info_.name(project.name());
+        if (info().name() == null) {
+            info().name(project.name());
         }
         return this;
     }

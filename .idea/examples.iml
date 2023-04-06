@@ -4,7 +4,7 @@
     <output url="file://$MODULE_DIR$/build/main_examples" />
     <output-test url="file://$MODULE_DIR$/build/test_examples" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$">
+    <content url="file://$MODULE_DIR$/examples">
       <sourceFolder url="file://$MODULE_DIR$/examples/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/examples/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/examples/main/resources/templates" />
@@ -23,5 +23,6 @@
     <orderEntry type="library" name="examples" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="runtime" level="project" />
     <orderEntry type="library" scope="TEST" name="test" level="project" />
+    <orderEntry type="module" module-name="framework" />
   </component>
 </module>
