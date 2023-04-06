@@ -464,7 +464,9 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @since 1.5.7
      */
     public PublishOperation fromProject(Project project) {
-        repository(project.publishRepository());
+        if (project.publishRepository() != null) {
+            repository(project.publishRepository());
+        }
         dependencies().include(project.dependencies());
         artifacts(List.of(
             new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar"),
@@ -535,6 +537,18 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      */
     public PublishOperation dependencies(DependencyScopes dependencies) {
         dependencies_.include(dependencies);
+        return this;
+    }
+
+    /**
+     * Provides the publication info structure.
+     *
+     * @param info the publication info
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public PublishOperation info(PublishInfo info) {
+        info_ = info;
         return this;
     }
 
