@@ -31,8 +31,10 @@ public class Rife2Build extends Project {
         mainClass = "rife.bld.Cli";
         version = version(1,5,18,"SNAPSHOT");
 
+        javaRelease = 17;
         downloadSources = true;
         autoDownloadPurge = true;
+
         repositories = List.of(MAVEN_CENTRAL, repository("https://repo.rife2.com/snapshots"), RIFE2);
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
@@ -58,8 +60,6 @@ public class Rife2Build extends Project {
             .include(dependency("org.apache.derby", "derbytools", version("10.16.1.1")))
             .include(dependency("com.oracle.database.jdbc", "ojdbc11", version("21.9.0.0")))
             .include(dependency("org.json", "json", version(20230227)));
-
-        javaRelease = 17;
 
         cleanOperation()
             .directories(
