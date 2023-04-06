@@ -18,13 +18,13 @@ public class ExamplesBuild extends WebProject {
         mainClass = "rife.HelloAll";
         version = version(1,0,0);
 
-        precompiledTemplateTypes = List.of(HTML);
-
         srcDirectory = new File(workDirectory(), "examples");
         buildMainDirectory = new File(buildDirectory(), "main_examples");
         buildTestDirectory = new File(buildDirectory(), "test_examples");
         libStandaloneDirectory = libTestDirectory();
 
+        precompileOperation()
+            .templateTypes(HTML);
         compileOperation()
             .compileMainClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
             .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath());
