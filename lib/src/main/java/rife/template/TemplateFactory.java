@@ -347,6 +347,19 @@ public class TemplateFactory extends EnumClass<String> {
         }
     }
 
+    public synchronized void generateTemplate(String name, String encoding, String generationPath) {
+        if (null == name) throw new IllegalArgumentException("name can't be null.");
+        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (null == generationPath) throw new IllegalArgumentException("generationPath can't be null.");
+        if (0 == generationPath.length()) throw new IllegalArgumentException("generationPath can't be empty.");
+
+        try {
+            TemplateClassLoader.compileTemplate(this, parser_.getPackage() + parser_.escapeClassname(name), encoding, generationPath);
+        } catch (ClassNotFoundException e) {
+            throw new TemplateNotFoundException(name, e);
+        }
+    }
+
     public synchronized Class parse(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");

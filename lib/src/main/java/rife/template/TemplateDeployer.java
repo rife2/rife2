@@ -90,55 +90,42 @@ public class TemplateDeployer {
 
     public void execute()
     throws TemplateException {
-        var previous_generation_path = RifeConfig.template().getGenerationPath();
-        var previous_encoding = RifeConfig.template().getDefaultEncoding();
-        var previous_generate_classes = RifeConfig.template().getGenerateClasses();
-        try {
-            RifeConfig.template().setGenerationPath(generationPath_);
-            RifeConfig.template().setDefaultEncoding(encoding_);
-            RifeConfig.template().setGenerateClasses(true);
+        List<String> files;
+        String classname;
 
-            List<String> files;
-            String classname;
+        for (var template_factory : templateFactories_) {
+            var previous_resourcefinder = template_factory.getResourceFinder();
+            try {
+                template_factory.resetClassLoader();
 
-            for (var template_factory : templateFactories_) {
-                var previous_resourcefinder = template_factory.getResourceFinder();
-                try {
-                    template_factory.resetClassLoader();
+                for (var directory : directories_) {
+                    var group = new ResourceFinderGroup()
+                        .add(new ResourceFinderDirectories(new File[]{directory}))
+                        .add(ResourceFinderClasspath.instance());
+                    template_factory.setResourceFinder(group);
+                    files = FileUtils.getFileList(directory,
+                        Pattern.compile(".*\\" + template_factory.getParser().getExtension() + "$"),
+                        Pattern.compile(".*(SCCS|CVS|\\.svn|\\.git).*"));
 
-                    for (var directory : directories_) {
-                        var group = new ResourceFinderGroup()
-                            .add(new ResourceFinderDirectories(new File[]{directory}))
-                            .add(ResourceFinderClasspath.instance());
-                        template_factory.setResourceFinder(group);
-                        files = FileUtils.getFileList(directory,
-                            Pattern.compile(".*\\" + template_factory.getParser().getExtension() + "$"),
-                            Pattern.compile(".*(SCCS|CVS|\\.svn|\\.git).*"));
+                    for (var file : files) {
+                        if (!StringUtils.filter(file, include_, exclude_)) {
+                            continue;
+                        }
 
-                        for (var file : files) {
-                            if (!StringUtils.filter(file, include_, exclude_)) {
-                                continue;
-                            }
-
-                            if (verbose_) {
-                                System.out.print(directory.getPath() + " : " + file + " ... ");
-                            }
-                            classname = file.replace(File.separatorChar, '.');
-                            classname = classname.substring(0, classname.length() - template_factory.getParser().getExtension().length());
-                            template_factory.parse(classname, null);
-                            if (verbose_) {
-                                System.out.println("done.");
-                            }
+                        if (verbose_) {
+                            System.out.print(directory.getPath() + " : " + file + " ... ");
+                        }
+                        classname = file.replace(File.separatorChar, '.');
+                        classname = classname.substring(0, classname.length() - template_factory.getParser().getExtension().length());
+                        template_factory.generateTemplate(classname, encoding_, generationPath_);
+                        if (verbose_) {
+                            System.out.println("done.");
                         }
                     }
-                } finally {
-                    template_factory.setResourceFinder(previous_resourcefinder);
                 }
+            } finally {
+                template_factory.setResourceFinder(previous_resourcefinder);
             }
-        } finally {
-            RifeConfig.template().setGenerationPath(previous_generation_path);
-            RifeConfig.template().setDefaultEncoding(previous_encoding);
-            RifeConfig.template().setGenerateClasses(previous_generate_classes);
         }
     }
 

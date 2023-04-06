@@ -118,7 +118,11 @@ class TemplateClassLoader extends ClassLoader {
                     // reuse the existing class if it has already been defined
                     c = findLoadedClass(classname);
                     if (null == c) {
-                        var raw = compileTemplate(classname, encoding);
+                        String generation_path = null;
+                        if (RifeConfig.template().getGenerateClasses()) {
+                            generation_path = RifeConfig.template().getGenerationPath();
+                        }
+                        var raw = compileTemplate(templateFactory_, classname, encoding, generation_path);
 
                         // define the bytes of the class for this classloader
                         c = defineClass(classname, raw, 0, raw.length);
@@ -137,29 +141,29 @@ class TemplateClassLoader extends ClassLoader {
         return c;
     }
 
-    private byte[] compileTemplate(String classname, String encoding)
+    public static byte[] compileTemplate(TemplateFactory factory, String classname, String encoding, String generationPath)
     throws ClassNotFoundException {
         assert classname != null;
 
         // try to resolve the classname as a template name by resolving the template
-        var template_url = templateFactory_.getParser().resolve(classname);
+        var template_url = factory.getParser().resolve(classname);
         if (null == template_url) {
             throw new ClassNotFoundException("Couldn't resolve template: '" + classname + "'.");
         }
 
         // prepare the template with all the information that's needed to be able to identify
         // this template uniquely
-        var template_parsed = templateFactory_.getParser().prepare(classname, template_url);
+        var template_parsed = factory.getParser().prepare(classname, template_url);
 
         // parse the template
         try {
-            templateFactory_.getParser().parse(template_parsed, encoding);
+            factory.getParser().parse(template_parsed, encoding);
         } catch (TemplateException e) {
             throw new ClassNotFoundException("Error while parsing template: '" + classname + "'.", e);
         }
 
         var byte_code = template_parsed.getByteCode();
-        if (RifeConfig.template().getGenerateClasses()) {
+        if (generationPath != null) {
             // get the package and the short classname of the template
             var template_package = template_parsed.getPackage();
             template_package = template_package.replace('.', File.separatorChar);
@@ -167,7 +171,7 @@ class TemplateClassLoader extends ClassLoader {
 
             // setup everything to perform the conversion of the template to java sources
             // and to compile it into a java class
-            var generation_path = RifeConfig.template().getGenerationPath() + File.separatorChar;
+            var generation_path = generationPath + File.separatorChar;
             var package_dir = generation_path + template_package;
             var filename_class = package_dir + File.separator + template_classname + ".class";
             var file_package_dir = new File(package_dir);
