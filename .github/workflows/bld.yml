@@ -1,4 +1,4 @@
-name: gradle-ci
+name: bld-ci
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -58,7 +58,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [ 17, 19, 20 ]
+        java-version: [ 17, 19 ]
 
     steps:
       - name: Checkout source repository
