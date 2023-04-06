@@ -83,13 +83,6 @@ public class Project extends BuildExecutor {
     protected DependencyScopes dependencies = new DependencyScopes();
 
     /**
-     * The project's precompiled template types.
-     *
-     * @see #precompiledTemplateTypes()
-     * @since 1.5
-     */
-    protected List<TemplateType> precompiledTemplateTypes = new ArrayList<>();
-    /**
      * The project's Java release version for compilation.
      *
      * @see #javaRelease()
@@ -1338,32 +1331,6 @@ public class Project extends BuildExecutor {
             dependencies = new DependencyScopes();
         }
         return dependencies;
-    }
-
-    /**
-     * Returns the project's precompiled template types.
-     * <p>
-     * This list can be modified to change the template types that are precompiled in the project.
-     *
-     * @since 1.5
-     */
-    public List<TemplateType> precompiledTemplateTypes() {
-        if (precompiledTemplateTypes == null) {
-            precompiledTemplateTypes = new ArrayList<>();
-        }
-        return precompiledTemplateTypes;
-    }
-
-    /**
-     * Adds precompiled template types to this project.
-     *
-     * @param types the template types to add
-     * @since 1.5.6
-     */
-    public void precompiledTemplateTypes(TemplateType... types) {
-        for (var type : types) {
-            precompiledTemplateTypes().add(type);
-        }
     }
 
     /**

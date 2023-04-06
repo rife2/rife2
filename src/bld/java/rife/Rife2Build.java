@@ -58,7 +58,6 @@ public class Rife2Build extends Project {
             .include(dependency("com.oracle.database.jdbc", "ojdbc11", version("21.9.0.0")))
             .include(dependency("org.json", "json", version(20230227)));
 
-        precompiledTemplateTypes = List.of(HTML, XML, SQL, TXT, JSON);
         javaRelease = 17;
 
         cleanOperation()
@@ -71,6 +70,9 @@ public class Rife2Build extends Project {
             .outputDirectory(new File(buildDirectory(), "generated/rife/template/antlr"))
             .visitor()
             .longMessages();
+
+        precompileOperation()
+            .templateTypes(HTML, XML, SQL, TXT, JSON);
 
         compileOperation()
             .mainSourceDirectories(antlr4Operation.outputDirectory())

@@ -80,8 +80,7 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
      * @since 1.5
      */
     public PrecompileOperation fromProject(Project project) {
-        return templateTypes(project.precompiledTemplateTypes())
-            .sourceDirectories(List.of(project.srcMainResourcesTemplatesDirectory()))
+        return sourceDirectories(List.of(project.srcMainResourcesTemplatesDirectory()))
             .destinationDirectory(project.buildTemplatesDirectory());
     }
 
