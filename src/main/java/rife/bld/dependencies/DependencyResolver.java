@@ -5,6 +5,7 @@
 package rife.bld.dependencies;
 
 import rife.bld.dependencies.exceptions.*;
+import rife.bld.operations.PurgeOperation;
 import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
@@ -26,6 +27,7 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5
  */
 public class DependencyResolver {
+    private DependencyResolverCache cache_ = DependencyResolverCache.DUMMY;
     private final List<Repository> repositories_;
     private final Dependency dependency_;
 
@@ -155,7 +157,7 @@ public class DependencyResolver {
                     // dependencies so that they can be added to the queue after
                     // filtering
                     parent = candidate;
-                    next_dependencies = new DependencyResolver(repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
+                    next_dependencies = cache_.getOrCreateResolver(repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
                     break;
                 }
             }
@@ -475,6 +477,10 @@ public class DependencyResolver {
     }
 
     Xml2MavenPom getMavenPom(PomDependency parent) {
+        var cached = cache_.getMavenPom(parent);
+        if (cached != null) {
+            return cached;
+        }
         String retrieved_location = null;
         String pom = null;
         var artifacts = getPomLocations();
@@ -506,6 +512,8 @@ public class DependencyResolver {
             throw new DependencyXmlParsingErrorException(dependency_, retrieved_location, xml.getErrors());
         }
 
+        cache_.cacheMavenPom(parent, xml);
+
         return xml;
     }
 
@@ -529,5 +537,17 @@ public class DependencyResolver {
                 throw new FileUtilsErrorException("Error while reading URL '" + artifact.location() + ".", e);
             }
         }
+    }
+
+    /**
+     * Registers a dependency resolver cache.
+     *
+     * @param cache the cache to register
+     * @return this resolver
+     * @since 1.5.8
+     */
+    public DependencyResolver cache(DependencyResolverCache cache) {
+        cache_ = cache;
+        return this;
     }
 }

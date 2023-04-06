@@ -7,7 +7,6 @@ package rife.bld;
 import rife.bld.dependencies.*;
 import rife.bld.help.*;
 import rife.bld.operations.*;
-import rife.bld.publish.PublishInfo;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
@@ -30,7 +29,7 @@ import static rife.tools.FileUtils.JAR_FILE_PATTERN;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class Project extends BuildExecutor {
+public class Project extends BuildExecutor implements DependencyResolverCache {
     /**
      * The work directory of the project.
      *
@@ -328,17 +327,17 @@ public class Project extends BuildExecutor {
 
     private final CleanOperation cleanOperation_ = new CleanOperation();
     private final CompileOperation compileOperation_ = new CompileOperation();
-    private final DownloadOperation downloadOperation_ = new DownloadOperation();
+    private final DownloadOperation downloadOperation_ = new DownloadOperation().cache(this);
     private final JavadocOperation javadocOperation_ = new JavadocOperation();
     private final PrecompileOperation precompileOperation_ = new PrecompileOperation();
     private final JarOperation jarOperation_ = new JarOperation();
     private final JarOperation jarSourcesOperation_ = new JarOperation();
     private final JarOperation jarJavadocOperation_ = new JarOperation();
-    private final PurgeOperation purgeOperation_ = new PurgeOperation();
+    private final PurgeOperation purgeOperation_ = new PurgeOperation().cache(this);
     private final RunOperation runOperation_ = new RunOperation();
     private final TestOperation testOperation_ = new TestOperation();
     private final UberJarOperation uberJarOperation_ = new UberJarOperation();
-    private final UpdatesOperation updatesOperation_ = new UpdatesOperation();
+    private final UpdatesOperation updatesOperation_ = new UpdatesOperation().cache(this);
     private final PublishOperation publishOperation_ = new PublishOperation();
     private final VersionOperation versionOperation_ = new VersionOperation();
 
@@ -1717,4 +1716,27 @@ public class Project extends BuildExecutor {
         }
     }
 
+    private final Map<Dependency, DependencyResolver> resolverCache_ = new HashMap<>();
+    private final Map<PomDependency, Xml2MavenPom> pomCache_ = new HashMap<>();
+
+    @Override
+    public DependencyResolver getOrCreateResolver(List<Repository> repositories, Dependency dependency) {
+        var resolver = resolverCache_.get(dependency);
+        if (resolver == null) {
+            resolver = new DependencyResolver(repositories(), dependency);
+            resolver.cache(this);
+            resolverCache_.put(dependency, resolver);
+        }
+        return resolver;
+    }
+
+    @Override
+    public Xml2MavenPom getMavenPom(PomDependency dependency) {
+        return pomCache_.get(dependency);
+    }
+
+    @Override
+    public void cacheMavenPom(PomDependency dependency, Xml2MavenPom pom) {
+        pomCache_.put(dependency, pom);
+    }
 }

@@ -10,7 +10,13 @@ import rife.xml.Xml2Data;
 import java.util.*;
 import java.util.regex.Pattern;
 
-class Xml2MavenPom extends Xml2Data {
+/**
+ * Parses an XML document to retrieve POM information, this is an internal class.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.5.18
+ */
+public class Xml2MavenPom extends Xml2Data {
     private final PomDependency parent_;
     private final List<Repository> repositories_;
     private Map<Scope, Set<PomDependency>> resolvedDependencies_ = null;

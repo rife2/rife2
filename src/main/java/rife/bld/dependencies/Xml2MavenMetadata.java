@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Parses an XML document to generate {@link MavenMetadata}.
+ * Parses an XML document to generate {@link MavenMetadata}, this is an internal class.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5.8

@@ -20,7 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser implements Cloneable {
-
     public static final String DEFAULT_TEMPLATES_PATH = "templates/";
 
     public static final String TEMPLATE_PACKAGE = "rife.template.";

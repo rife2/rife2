@@ -6,7 +6,6 @@ package rife.bld.operations;
 
 import rife.bld.Project;
 import rife.bld.dependencies.*;
-import rife.tools.ArrayUtils;
 
 import java.io.File;
 import java.util.*;
@@ -25,6 +24,7 @@ import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
  * @since 1.5
  */
 public class DownloadOperation extends AbstractOperation<DownloadOperation> {
+    private DependencyResolverCache cache_ = DependencyResolverCache.DUMMY;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private File libCompileDirectory_;
@@ -68,13 +68,13 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
         var provided_dependencies = dependencies().get(Scope.provided);
         if (provided_dependencies != null) {
             for (var dependency : provided_dependencies) {
-                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+                excluded.addAll(cache_.getOrCreateResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
         var compile_dependencies = dependencies().get(Scope.compile);
         if (compile_dependencies != null) {
             for (var dependency : compile_dependencies) {
-                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+                excluded.addAll(cache_.getOrCreateResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
         executeDownloadScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
@@ -119,7 +119,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
             var scoped_dependencies = dependencies().get(scope);
             if (scoped_dependencies != null) {
                 for (var dependency : scoped_dependencies) {
-                    dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+                    dependencies.addAll(cache_.getOrCreateResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
                 }
             }
         }
@@ -353,5 +353,17 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      */
     public boolean downloadJavadoc() {
         return downloadJavadoc_;
+    }
+
+    /**
+     * Registers a dependency resolver cache.
+     *
+     * @param cache the cache to register
+     * @return this operation
+     * @since 1.5.8
+     */
+    public DownloadOperation cache(DependencyResolverCache cache) {
+        cache_ = cache;
+        return this;
     }
 }
