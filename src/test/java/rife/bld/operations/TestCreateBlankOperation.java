@@ -223,9 +223,7 @@ public class TestCreateBlankOperation {
                     return true;
                 })
                 .execute();
-            assertEquals("""
-                Hello World!
-                """, check_result.toString());
+            assertEquals("Hello World!", check_result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -423,9 +421,7 @@ public class TestCreateBlankOperation {
                     return true;
                 })
                 .execute();
-            assertEquals("""
-                Hello World!
-                """, check_result.toString());
+            assertEquals("Hello World!", check_result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -546,9 +542,7 @@ public class TestCreateBlankOperation {
                     return true;
                 })
                 .execute();
-            assertEquals("""
-                Hello World!
-                """, check_result.toString());
+            assertEquals("Hello World!", check_result.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

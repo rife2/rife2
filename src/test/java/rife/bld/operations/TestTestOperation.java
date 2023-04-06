@@ -162,7 +162,7 @@ public class TestTestOperation {
                 });
             test_operation.execute();
 
-            assertEquals("true" + System.lineSeparator(), output.toString());
+            assertEquals("true", output.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
@@ -187,7 +187,7 @@ public class TestTestOperation {
             new TestOperation()
                 .fromProject(create_operation.project())
                 .outputProcessor(s -> {
-                    check_result.append(s);
+                    check_result.append(s).append(System.lineSeparator());
                     return true;
                 })
                 .execute();

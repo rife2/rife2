@@ -118,7 +118,7 @@ public abstract class AbstractProcessOperation<T extends AbstractProcessOperatio
                 String line;
                 var in = new BufferedReader(new InputStreamReader(stream));
                 while ((line = in.readLine()) != null) {
-                    successful_ &= processor.apply(line + System.lineSeparator());
+                    successful_ &= processor.apply(line);
                 }
             } catch (Exception e) {
                 // ignore
@@ -226,6 +226,8 @@ public abstract class AbstractProcessOperation<T extends AbstractProcessOperatio
 
     /**
      * Provides the processor that will be used to handle the process output.
+     * <p>
+     * It will be called for each line in the output.
      *
      * @param processor the output processor
      * @return this operation instance
@@ -238,6 +240,8 @@ public abstract class AbstractProcessOperation<T extends AbstractProcessOperatio
 
     /**
      * Provides the processor that will be used to handle the process errors.
+     * <p>
+     * It will be called for each line in the error output.
      *
      * @param processor the error processor
      * @return this operation instance
