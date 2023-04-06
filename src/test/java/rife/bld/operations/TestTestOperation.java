@@ -162,7 +162,7 @@ public class TestTestOperation {
                 });
             test_operation.execute();
 
-            assertEquals("true", output.toString());
+            assertEquals("true" + System.lineSeparator(), output.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }

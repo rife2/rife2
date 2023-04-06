@@ -149,7 +149,7 @@ public class TestRunOperation {
                 });
             run_operation.execute();
 
-            assertEquals("source1", output.toString());
+            assertEquals("source1" + System.lineSeparator(), output.toString());
         } finally {
             FileUtils.deleteDirectory(tmp);
         }
