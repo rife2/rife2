@@ -348,7 +348,7 @@ public class Project extends BuildExecutor {
      * @return the default clean operation instance
      * @since 1.5.18
      */
-    protected CleanOperation cleanOperation() {
+    public CleanOperation cleanOperation() {
         return cleanOperation_;
     }
 
@@ -358,7 +358,7 @@ public class Project extends BuildExecutor {
      * @return the default compile operation instance
      * @since 1.5.18
      */
-    protected CompileOperation compileOperation() {
+    public CompileOperation compileOperation() {
         return compileOperation_;
     }
 
@@ -368,7 +368,7 @@ public class Project extends BuildExecutor {
      * @return the default download operation instance
      * @since 1.5.18
      */
-    protected DownloadOperation downloadOperation() {
+    public DownloadOperation downloadOperation() {
         return downloadOperation_;
     }
 
@@ -378,7 +378,7 @@ public class Project extends BuildExecutor {
      * @return the default javadoc operation instance
      * @since 1.5.18
      */
-    protected JavadocOperation javadocOperation() {
+    public JavadocOperation javadocOperation() {
         return javadocOperation_;
     }
 
@@ -388,7 +388,7 @@ public class Project extends BuildExecutor {
      * @return the default precompile operation instance
      * @since 1.5.18
      */
-    protected PrecompileOperation precompileOperation() {
+    public PrecompileOperation precompileOperation() {
         return precompileOperation_;
     }
 
@@ -398,7 +398,7 @@ public class Project extends BuildExecutor {
      * @return the default jar operation instance
      * @since 1.5.18
      */
-    protected JarOperation jarOperation() {
+    public JarOperation jarOperation() {
         return jarOperation_;
     }
 
@@ -408,7 +408,7 @@ public class Project extends BuildExecutor {
      * @return the default jar operation instance for sources
      * @since 1.5.18
      */
-    protected JarOperation jarSourcesOperation() {
+    public JarOperation jarSourcesOperation() {
         return jarSourcesOperation_;
     }
 
@@ -418,7 +418,7 @@ public class Project extends BuildExecutor {
      * @return the default jar operation instance for javadoc
      * @since 1.5.18
      */
-    protected JarOperation jarJavadocOperation() {
+    public JarOperation jarJavadocOperation() {
         return jarJavadocOperation_;
     }
 
@@ -428,7 +428,7 @@ public class Project extends BuildExecutor {
      * @return the default purge operation instance
      * @since 1.5.18
      */
-    protected PurgeOperation purgeOperation() {
+    public PurgeOperation purgeOperation() {
         return purgeOperation_;
     }
 
@@ -438,7 +438,7 @@ public class Project extends BuildExecutor {
      * @return the default run operation instance
      * @since 1.5.18
      */
-    protected RunOperation runOperation() {
+    public RunOperation runOperation() {
         return runOperation_;
     }
 
@@ -448,7 +448,7 @@ public class Project extends BuildExecutor {
      * @return the default test operation instance
      * @since 1.5.18
      */
-    protected TestOperation testOperation() {
+    public TestOperation testOperation() {
         return testOperation_;
     }
 
@@ -458,7 +458,7 @@ public class Project extends BuildExecutor {
      * @return the default uberjar operation instance
      * @since 1.5.18
      */
-    protected UberJarOperation uberJarOperation() {
+    public UberJarOperation uberJarOperation() {
         return uberJarOperation_;
     }
 
@@ -468,7 +468,7 @@ public class Project extends BuildExecutor {
      * @return the default updates operation instance
      * @since 1.5.18
      */
-    protected UpdatesOperation updatesOperation() {
+    public UpdatesOperation updatesOperation() {
         return updatesOperation_;
     }
 
@@ -478,7 +478,7 @@ public class Project extends BuildExecutor {
      * @return the default publish operation instance
      * @since 1.5.18
      */
-    protected PublishOperation publishOperation() {
+    public PublishOperation publishOperation() {
         return publishOperation_;
     }
 
@@ -488,7 +488,7 @@ public class Project extends BuildExecutor {
      * @return the default version operation instance
      * @since 1.5.18
      */
-    protected VersionOperation versionOperation() {
+    public VersionOperation versionOperation() {
         return versionOperation_;
     }
 

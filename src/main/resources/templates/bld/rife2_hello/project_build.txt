@@ -16,13 +16,13 @@ public class {{v projectBuild/}} extends WebProject {
         uberJarMainClass = "{{v package/}}.{{v projectMainUber/}}";
         version = version(0,1,0);
 
-        precompiledTemplateTypes = List.of(HTML);
-
         downloadSources = true;
         repositories = List.of(MAVEN_CENTRAL, RIFE2);
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
 {{b dependency}}
-            .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}    }
+            .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}
+        precompileOperation().templateTypes(HTML);
+    }
 
     public static void main(String[] args) {
         new {{v projectBuild/}}().start(args);

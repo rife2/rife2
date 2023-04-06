@@ -36,8 +36,6 @@ public class Rife2ProjectBlueprint extends WebProject {
         mainClass = packageName + "." + StringUtils.capitalize(projectName) + "Site";
         version = versionNumber;
 
-        precompiledTemplateTypes = List.of(TemplateType.HTML);
-
         downloadSources = true;
         repositories = List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS);
         scope(compile)
@@ -50,5 +48,7 @@ public class Rife2ProjectBlueprint extends WebProject {
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,14)))
             .include(dependency("org.slf4j", "slf4j-simple", version(2,0,7)));
+
+        precompileOperation().templateTypes(TemplateType.HTML);
     }
 }
