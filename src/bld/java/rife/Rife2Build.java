@@ -7,6 +7,7 @@ package rife;
 import rife.bld.BuildCommand;
 import rife.bld.Project;
 import rife.bld.extension.Antlr4Operation;
+import rife.bld.extension.TestsBadgeOperation;
 import rife.bld.operations.*;
 import rife.bld.publish.*;
 import rife.tools.FileUtils;
@@ -122,10 +123,10 @@ public class Rife2Build extends Project {
             .destinationDirectory(buildDistDirectory())
             .destinationFileName("rife2-" + version() + "-bld.zip");
 
-        testOperation()
+        testsBadgeOperation
             .javaOptions()
                 .javaAgent(new File(buildDistDirectory(), jarAgentOperation.destinationFileName()));
-        propagateJavaProperties(testOperation().javaOptions(),
+        propagateJavaProperties(testsBadgeOperation.javaOptions(),
             "test.postgres",
             "test.mysql",
             "test.oracle",
@@ -261,20 +262,15 @@ public class Rife2Build extends Project {
         }
     }
 
+    private final TestsBadgeOperation testsBadgeOperation = new TestsBadgeOperation();
     public void test()
     throws Exception {
         jarAgent();
-        super.test();
+        testsBadgeOperation.executeOnce(() -> testsBadgeOperation
+            .url(property("testsBadgeUrl"))
+            .apiKey(property("testsBadgeApiKey"))
+            .fromProject(this));
     }
-//    private final TestsBadgeOperation testsBadgeOperation = new TestsBadgeOperation();
-//    public void test()
-//    throws Exception {
-//        jarAgent();
-//        testsBadgeOperation.executeOnce(() -> testsBadgeOperation
-//            .url(property("testsBadgeUrl"))
-//            .apiKey(property("testsBadgeApiKey"))
-//            .fromProject(this));
-//    }
 
     @BuildCommand(summary = "Creates all the distribution artifacts")
     public void all()
