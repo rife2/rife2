@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Cli" type="Application" factoryName="Application">
+    <classpathModifications>
+      <entry path="$PROJECT_DIR$/src/main/resources" />
+    </classpathModifications>
+    <option name="MAIN_CLASS_NAME" value="rife.bld.Cli" />
+    <module name="app" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

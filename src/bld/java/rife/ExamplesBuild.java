@@ -1,0 +1,44 @@
+/*
+ * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ */
+package rife;
+
+import rife.bld.WebProject;
+
+import java.io.File;
+import java.util.List;
+
+import static rife.bld.operations.TemplateType.HTML;
+
+public class ExamplesBuild extends WebProject {
+    public ExamplesBuild(Rife2Build mainBuild) {
+        pkg = "rife";
+        name = "Examples";
+        mainClass = "rife.HelloAll";
+        version = version(1,0,0);
+
+        precompiledTemplateTypes = List.of(HTML);
+
+        srcDirectory = new File(workDirectory(), "examples");
+        buildMainDirectory = new File(buildDirectory(), "main_examples");
+        buildTestDirectory = new File(buildDirectory(), "test_examples");
+        libStandaloneDirectory = libTestDirectory();
+
+        compileOperation()
+            .compileMainClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
+            .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath());
+        runOperation()
+            .javaOptions(List.of("-javaagent:" + new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName())))
+            .classpath(mainBuild.buildMainDirectory().getAbsolutePath());
+        testOperation()
+            .javaOptions(List.of("-javaagent:" + new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName())))
+            .classpath(mainBuild.buildMainDirectory().getAbsolutePath());
+    }
+
+    public void compile()
+    throws Exception {
+        super.compile();
+        precompile();
+    }
+}

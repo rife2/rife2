@@ -52,7 +52,6 @@ jobs:
           - 5432:5432
 
     env:
-      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-XX:MaxMetaspaceSize=512m"
       MYSQL_DATABASE: unittests
       MYSQL_USER: root
       MYSQL_PASSWORD: root
@@ -73,10 +72,9 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.java-version }}
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Test with Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true build check --stacktrace -PtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}
+      - name: Run tests
+        run: >-
+          ./bld download compile test
+          -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true
+          -DtestsBadgeUrl=https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2
+          -DtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}

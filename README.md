@@ -3,8 +3,8 @@
 [![Release](https://img.shields.io/github/release/rife2/rife2.svg)](https://github.com/rife2/rife2/releases/latest)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.uwyn.rife2/rife2/badge.svg?color=blue)](https://maven-badges.herokuapp.com/maven-central/com.uwyn.rife2/rife2)
 [![Nexus Snapshot](https://img.shields.io/nexus/s/com.uwyn.rife2/rife2?server=https%3A%2F%2Fs01.oss.sonatype.org%2F)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/)
-[![gradle-ci](https://github.com/rife2/rife2/actions/workflows/gradle.yml/badge.svg)](https://github.com/rife2/rife2/actions/workflows/gradle.yml)
-[![Tests](https://rife2.com/tests-badge/badge/com.uwyn.rife2/rife2)](https://github.com/rife2/rife2/actions/workflows/gradle.yml)
+[![gradle-ci](https://github.com/rife2/rife2/actions/workflows/bld.yml/badge.svg)](https://github.com/rife2/rife2/actions/workflows/bld.yml)
+[![Tests](https://rife2.com/tests-badge/badge/com.uwyn.rife2/rife2)](https://github.com/rife2/rife2/actions/workflows/bld.yml)
 
 <br>
 
