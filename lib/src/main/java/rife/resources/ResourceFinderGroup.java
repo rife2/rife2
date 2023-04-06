@@ -5,6 +5,7 @@
 package rife.resources;
 
 import rife.resources.exceptions.CantOpenResourceStreamException;
+import rife.resources.exceptions.CantRetrieveResourceContentException;
 import rife.resources.exceptions.ResourceFinderErrorException;
 import rife.tools.InputStreamUser;
 
@@ -62,22 +63,30 @@ public class ResourceFinderGroup extends AbstractResourceFinder {
     throws ResourceFinderErrorException {
         String result = null;
         for (ResourceFinder resource_finder : resourceFinders_) {
-            result = resource_finder.getContent(resource, encoding);
-            if (result != null) {
-                return result;
+            try {
+                result = resource_finder.getContent(resource, encoding);
+                if (result != null) {
+                    return result;
+                }
+            } catch (ResourceFinderErrorException e) {
+                // ignore
             }
         }
 
-        return null;
+        throw new CantRetrieveResourceContentException(resource, encoding, null);
     }
 
     public long getModificationTime(URL resource)
     throws ResourceFinderErrorException {
         long result = -1;
         for (ResourceFinder resource_finder : resourceFinders_) {
-            result = resource_finder.getModificationTime(resource);
-            if (result != -1) {
-                return result;
+            try {
+                result = resource_finder.getModificationTime(resource);
+                if (result != -1) {
+                    return result;
+                }
+            } catch (ResourceFinderErrorException e) {
+                // ignore
             }
         }
 
