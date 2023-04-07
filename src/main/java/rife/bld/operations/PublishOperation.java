@@ -528,7 +528,8 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     }
 
     /**
-     * Provides a repository to publish to.
+     * Provides a repository to publish to, can be called multiple times to
+     * add more repositories.
      *
      * @param repository a repository that the artifacts will be published to
      * @return this operation instance
