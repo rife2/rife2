@@ -123,18 +123,18 @@ public abstract class ArtifactRetriever {
      *
      * @param artifact  the artifact to transfer
      * @param directory the directory to transfer the artifact into
+     * @return {@code true} when the artifact is present in the directory (it could already have been
+     * there and be validated as correct); or {@code false} when the artifact couldn't be transferred
      * @throws IOException             when an error occurred during the transfer
      * @throws FileUtilsErrorException when an error occurred during the transfer
      * @since 1.5.18
      */
-    public void transferIntoDirectory(RepositoryArtifact artifact, File directory)
+    public boolean transferIntoDirectory(RepositoryArtifact artifact, File directory)
     throws IOException, FileUtilsErrorException {
         if (directory == null) throw new IllegalArgumentException("directory can't be null");
         if (!directory.exists()) throw new IllegalArgumentException("directory '" + directory + "' doesn't exit");
-        if (!directory.canWrite())
-            throw new IllegalArgumentException("directory '" + directory + "' can't be written to");
-        if (!directory.isDirectory())
-            throw new IllegalArgumentException("directory '" + directory + "' is not a directory");
+        if (!directory.canWrite()) throw new IllegalArgumentException("directory '" + directory + "' can't be written to");
+        if (!directory.isDirectory()) throw new IllegalArgumentException("directory '" + directory + "' is not a directory");
 
         var download_filename = artifact.location().substring(artifact.location().lastIndexOf("/") + 1);
         var download_file = new File(directory, download_filename);
@@ -146,40 +146,41 @@ public abstract class ArtifactRetriever {
                 if (source.exists()) {
                     FileUtils.copy(source, download_file);
                     System.out.print("done");
+                    return true;
                 } else {
                     System.out.print("not found");
+                    return false;
                 }
             } else {
                 try {
-                    boolean retrieved = false;
                     if (download_file.exists() && download_file.canRead()) {
                         if (checkHash(artifact, download_file, ".sha256", "SHA-256") ||
                             checkHash(artifact, download_file, ".md5", "MD5")) {
-                            retrieved = true;
                             System.out.print("exists");
+                            return true;
                         }
                     }
 
-                    if (!retrieved) {
-                        var connection = new URL(artifact.location()).openConnection();
-                        connection.setUseCaches(false);
-                        if (artifact.repository().username() != null && artifact.repository().password() != null) {
-                            connection.setRequestProperty(
-                                HEADER_AUTHORIZATION,
-                                basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
-                        }
-                        try (var input_stream = connection.getInputStream()) {
-                            var readableByteChannel = Channels.newChannel(input_stream);
-                            try (var fileOutputStream = new FileOutputStream(download_file)) {
-                                var fileChannel = fileOutputStream.getChannel();
-                                fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+                    var connection = new URL(artifact.location()).openConnection();
+                    connection.setUseCaches(false);
+                    if (artifact.repository().username() != null && artifact.repository().password() != null) {
+                        connection.setRequestProperty(
+                            HEADER_AUTHORIZATION,
+                            basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
+                    }
+                    try (var input_stream = connection.getInputStream()) {
+                        var readableByteChannel = Channels.newChannel(input_stream);
+                        try (var fileOutputStream = new FileOutputStream(download_file)) {
+                            var fileChannel = fileOutputStream.getChannel();
+                            fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
-                                System.out.print("done");
-                            }
+                            System.out.print("done");
+                            return true;
                         }
                     }
                 } catch (FileNotFoundException e) {
                     System.out.print("not found");
+                    return false;
                 }
             }
         } finally {

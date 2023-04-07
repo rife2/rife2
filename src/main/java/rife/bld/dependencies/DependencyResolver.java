@@ -237,7 +237,9 @@ public class DependencyResolver {
     throws DependencyTransferException {
         for (var artifact : getTransferArtifacts()) {
             try {
-                retriever_.transferIntoDirectory(artifact, directory);
+                if (retriever_.transferIntoDirectory(artifact, directory)) {
+                    return;
+                }
             } catch (IOException | FileUtilsErrorException e) {
                 throw new DependencyTransferException(dependency_, artifact.location(), directory, e);
             }
