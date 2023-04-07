@@ -5,7 +5,6 @@
 package rife.bld.dependencies;
 
 import rife.bld.dependencies.exceptions.*;
-import rife.bld.operations.PurgeOperation;
 import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
@@ -14,6 +13,8 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.security.MessageDigest;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 import static rife.tools.HttpUtils.HEADER_AUTHORIZATION;
@@ -27,7 +28,8 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5
  */
 public class DependencyResolver {
-    private DependencyResolverCache cache_ = DependencyResolverCache.DUMMY;
+    private final static ConcurrentMap<RepositoryArtifact, String> ARTIFACT_CACHE = new ConcurrentHashMap<>();
+
     private final List<Repository> repositories_;
     private final Dependency dependency_;
 
@@ -157,7 +159,7 @@ public class DependencyResolver {
                     // dependencies so that they can be added to the queue after
                     // filtering
                     parent = candidate;
-                    next_dependencies = cache_.getOrCreateResolver(repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
+                    next_dependencies = new DependencyResolver(repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
                     break;
                 }
             }
@@ -430,7 +432,7 @@ public class DependencyResolver {
     }
 
     private MavenMetadata parseMavenMetadata(List<RepositoryArtifact> artifacts) {
-        String retrieved_location = null;
+        RepositoryArtifact retrieved_artifact = null;
         String metadata = null;
         for (var artifact : artifacts) {
             try {
@@ -439,7 +441,7 @@ public class DependencyResolver {
                     throw new ArtifactNotFoundException(dependency_, artifact.location());
                 }
 
-                retrieved_location = artifact.location();
+                retrieved_artifact = artifact;
                 metadata = content;
 
                 break;
@@ -457,7 +459,7 @@ public class DependencyResolver {
 
         var xml = new Xml2MavenMetadata();
         if (!xml.processXml(metadata)) {
-            throw new DependencyXmlParsingErrorException(dependency_, retrieved_location, xml.getErrors());
+            throw new DependencyXmlParsingErrorException(dependency_, retrieved_artifact.location(), xml.getErrors());
         }
 
         return xml;
@@ -477,13 +479,10 @@ public class DependencyResolver {
     }
 
     Xml2MavenPom getMavenPom(PomDependency parent) {
-        var cached = cache_.getMavenPom(parent);
-        if (cached != null) {
-            return cached;
-        }
-        String retrieved_location = null;
+        RepositoryArtifact retrieved_artifact = null;
         String pom = null;
         var artifacts = getPomLocations();
+
         for (var artifact : artifacts) {
             try {
                 var content = readString(artifact);
@@ -491,7 +490,7 @@ public class DependencyResolver {
                     throw new ArtifactNotFoundException(dependency_, artifact.location());
                 }
 
-                retrieved_location = artifact.location();
+                retrieved_artifact = artifact;
                 pom = content;
 
                 break;
@@ -509,10 +508,8 @@ public class DependencyResolver {
 
         var xml = new Xml2MavenPom(parent, repositories_);
         if (!xml.processXml(pom)) {
-            throw new DependencyXmlParsingErrorException(dependency_, retrieved_location, xml.getErrors());
+            throw new DependencyXmlParsingErrorException(dependency_, retrieved_artifact.location(), xml.getErrors());
         }
-
-        cache_.cacheMavenPom(parent, xml);
 
         return xml;
     }
@@ -522,6 +519,11 @@ public class DependencyResolver {
         if (artifact.repository().isLocal()) {
             return FileUtils.readString(new File(artifact.location()));
         } else {
+            var cached = ARTIFACT_CACHE.get(artifact);
+            if (cached != null) {
+                return cached;
+            }
+
             try {
                 var connection = new URL(artifact.location()).openConnection();
                 connection.setUseCaches(false);
@@ -531,7 +533,9 @@ public class DependencyResolver {
                         basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
                 }
                 try (var input_stream = connection.getInputStream()) {
-                    return FileUtils.readString(input_stream);
+                    var result = FileUtils.readString(input_stream);
+                    ARTIFACT_CACHE.put(artifact, result);
+                    return result;
                 }
             } catch (IOException e) {
                 throw new FileUtilsErrorException("Error while reading URL '" + artifact.location() + ".", e);
@@ -540,14 +544,11 @@ public class DependencyResolver {
     }
 
     /**
-     * Registers a dependency resolver cache.
+     * Clears the artifact cache.
      *
-     * @param cache the cache to register
-     * @return this resolver
-     * @since 1.5.8
+     * @since 1.5.18
      */
-    public DependencyResolver cache(DependencyResolverCache cache) {
-        cache_ = cache;
-        return this;
+    public static void clearArtifactCache() {
+        ARTIFACT_CACHE.clear();
     }
 }

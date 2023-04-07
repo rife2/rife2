@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5.18
  */
-public class Xml2MavenPom extends Xml2Data {
+class Xml2MavenPom extends Xml2Data {
     private final PomDependency parent_;
     private final List<Repository> repositories_;
     private Map<Scope, Set<PomDependency>> resolvedDependencies_ = null;
@@ -160,6 +160,7 @@ public class Xml2MavenPom extends Xml2Data {
                 if (isChildOfProject()) {
                     var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
                     var parent = new DependencyResolver(repositories_, parent_dependency).getMavenPom(parent_);
+
 
                     parent.properties_.keySet().removeAll(properties_.keySet());
                     properties_.putAll(parent.properties_);

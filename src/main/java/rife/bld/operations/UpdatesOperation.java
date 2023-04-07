@@ -17,7 +17,6 @@ import java.util.List;
  * @since 1.5
  */
 public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
-    private DependencyResolverCache cache_ = DependencyResolverCache.DUMMY;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private DependencyScopes updates_ = new DependencyScopes();
@@ -32,7 +31,7 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
         for (var entry : dependencies_.entrySet()) {
             var scope = entry.getKey();
             for (var dependency : entry.getValue()) {
-                var latest = cache_.getOrCreateResolver(repositories(), dependency).latestVersion();
+                var latest = new DependencyResolver(repositories(), dependency).latestVersion();
                 if (latest.compareTo(dependency.version()) > 0) {
                     var latest_dependency = new Dependency(dependency.groupId(), dependency.artifactId(), latest,
                         dependency.classifier(), dependency.type());
@@ -141,15 +140,4 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
         return updates_;
     }
 
-    /**
-     * Registers a dependency resolver cache.
-     *
-     * @param cache the cache to register
-     * @return this operation
-     * @since 1.5.8
-     */
-    public UpdatesOperation cache(DependencyResolverCache cache) {
-        cache_ = cache;
-        return this;
-    }
 }

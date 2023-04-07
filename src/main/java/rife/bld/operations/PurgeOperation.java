@@ -24,7 +24,6 @@ import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
  * @since 1.5
  */
 public class PurgeOperation extends AbstractOperation<PurgeOperation> {
-    private DependencyResolverCache cache_ = DependencyResolverCache.DUMMY;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private File libCompileDirectory_;
@@ -68,13 +67,13 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
         var provided_dependencies = dependencies().get(Scope.provided);
         if (provided_dependencies != null) {
             for (var dependency : provided_dependencies) {
-                excluded.addAll(cache_.getOrCreateResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
         var compile_dependencies = dependencies().get(Scope.compile);
         if (compile_dependencies != null) {
             for (var dependency : compile_dependencies) {
-                excluded.addAll(cache_.getOrCreateResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
         executePurgeScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
@@ -116,7 +115,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
             var scoped_dependencies = dependencies().get(scope);
             if (scoped_dependencies != null) {
                 for (var dependency : scoped_dependencies) {
-                    all_dependencies.addAll(cache_.getOrCreateResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+                    all_dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
                 }
             }
         }
@@ -144,7 +143,7 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
     }
 
     private void addTransferLocations(HashSet<String> filenames, Dependency dependency) {
-        for (var location : cache_.getOrCreateResolver(repositories(), dependency).getTransferLocations()) {
+        for (var location : new DependencyResolver(repositories(), dependency).getTransferLocations()) {
             filenames.add(location.substring(location.lastIndexOf("/") + 1));
         }
     }
@@ -362,17 +361,5 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      */
     public boolean preserveJavadoc() {
         return preserveJavadoc_;
-    }
-
-    /**
-     * Registers a dependency resolver cache.
-     *
-     * @param cache the cache to register
-     * @return this operation
-     * @since 1.5.8
-     */
-    public PurgeOperation cache(DependencyResolverCache cache) {
-        cache_ = cache;
-        return this;
     }
 }
