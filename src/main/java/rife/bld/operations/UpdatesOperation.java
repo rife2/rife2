@@ -17,6 +17,7 @@ import java.util.List;
  * @since 1.5
  */
 public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
+    private ArtifactRetriever retriever_ = null;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private DependencyScopes updates_ = new DependencyScopes();
@@ -31,7 +32,7 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
         for (var entry : dependencies_.entrySet()) {
             var scope = entry.getKey();
             for (var dependency : entry.getValue()) {
-                var latest = new DependencyResolver(repositories(), dependency).latestVersion();
+                var latest = new DependencyResolver(artifactRetriever(), repositories(), dependency).latestVersion();
                 if (latest.compareTo(dependency.version()) > 0) {
                     var latest_dependency = new Dependency(dependency.groupId(), dependency.artifactId(), latest,
                         dependency.classifier(), dependency.type());
@@ -107,6 +108,18 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
     }
 
     /**
+     * Provides the artifact retriever to use.
+     *
+     * @param retriever the artifact retriever
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public UpdatesOperation artifactRetriever(ArtifactRetriever retriever) {
+        retriever_ = retriever;
+        return this;
+    }
+
+    /**
      * Retrieves the repositories in which the dependencies will be resolved.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
@@ -140,4 +153,16 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
         return updates_;
     }
 
+    /**
+     * Returns the artifact retriever that is used.
+     *
+     * @return the artifact retriever
+     * @since 1.5.18
+     */
+    public ArtifactRetriever artifactRetriever() {
+        if (retriever_ == null) {
+            return ArtifactRetriever.instance();
+        }
+        return retriever_;
+    }
 }

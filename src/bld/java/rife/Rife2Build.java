@@ -156,8 +156,9 @@ public class Rife2Build extends Project {
                 .overview(new File(srcMainJavaDirectory(), "overview.html"));
 
         publishOperation()
-            .repository(version.isSnapshot() ? repository("rife2-snapshots") : repository("rife2-releases"))
-            .repository(version.isSnapshot() ? repository("sonatype-snapshots") : repository("sonatype-releases"))
+            .repository(MAVEN_LOCAL)
+//            .repository(version.isSnapshot() ? repository("rife2-snapshots") : repository("rife2-releases"))
+//            .repository(version.isSnapshot() ? repository("sonatype-snapshots") : repository("sonatype-releases"))
             .info(new PublishInfo()
                 .groupId("com.uwyn.rife2")
                 .artifactId("rife2")
@@ -260,7 +261,7 @@ public class Rife2Build extends Project {
                 .sourceDirectories(tmp)
                 .execute();
         } finally {
-            tmp.delete();
+            FileUtils.deleteDirectory(tmp);
         }
     }
 

@@ -28,8 +28,7 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5
  */
 public class DependencyResolver {
-    private final static ConcurrentMap<RepositoryArtifact, String> ARTIFACT_CACHE = new ConcurrentHashMap<>();
-
+    private final ArtifactRetriever retriever_;
     private final List<Repository> repositories_;
     private final Dependency dependency_;
 
@@ -41,11 +40,13 @@ public class DependencyResolver {
      * <p>
      * The repositories will be checked in the order they're listed.
      *
+     * @param retriever    the retriever to use to get artifacts
      * @param repositories the repositories to use for the resolution
      * @param dependency   the dependency to resolve
-     * @since 1.5
+     * @since 1.5.18
      */
-    public DependencyResolver(List<Repository> repositories, Dependency dependency) {
+    public DependencyResolver(ArtifactRetriever retriever, List<Repository> repositories, Dependency dependency) {
+        retriever_ = retriever;
         if (repositories == null) {
             repositories = Collections.emptyList();
         }
@@ -159,7 +160,7 @@ public class DependencyResolver {
                     // dependencies so that they can be added to the queue after
                     // filtering
                     parent = candidate;
-                    next_dependencies = new DependencyResolver(repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
+                    next_dependencies = new DependencyResolver(retriever_, repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
                     break;
                 }
             }
@@ -224,7 +225,7 @@ public class DependencyResolver {
     }
 
     /**
-     * Transfers the artifact for the resolved dependency into the provided directory.
+     * Transfers the artifacts for the resolved dependency into the provided directory.
      * <p>
      * The destination directory must exist and be writable.
      *
@@ -234,83 +235,13 @@ public class DependencyResolver {
      */
     public void transferIntoDirectory(File directory)
     throws DependencyTransferException {
-        if (directory == null) throw new IllegalArgumentException("directory can't be null");
-        if (!directory.exists()) throw new IllegalArgumentException("directory '" + directory + "' doesn't exit");
-        if (!directory.canWrite())
-            throw new IllegalArgumentException("directory '" + directory + "' can't be written to");
-        if (!directory.isDirectory())
-            throw new IllegalArgumentException("directory '" + directory + "' is not a directory");
-
-        boolean retrieved = false;
-        var artifacts = getTransferArtifacts();
-        for (var artifact : artifacts) {
-            var download_filename = artifact.location().substring(artifact.location().lastIndexOf("/") + 1);
-            var download_file = new File(directory, download_filename);
-            System.out.print("Downloading: " + artifact.location() + " ... ");
-            System.out.flush();
+        for (var artifact : getTransferArtifacts()) {
             try {
-                if (artifact.repository().isLocal()) {
-                    var source = new File(artifact.location());
-                    if (source.exists()) {
-                        FileUtils.copy(source, download_file);
-                        System.out.print("done");
-                        break;
-                    } else {
-                        System.out.print("not found");
-                    }
-                } else {
-                    try {
-                        if (download_file.exists() && download_file.canRead()) {
-                            if (checkHash(artifact, download_file, ".sha256", "SHA-256") ||
-                                checkHash(artifact, download_file, ".md5", "MD5")) {
-                                retrieved = true;
-                                System.out.print("exists");
-                                break;
-                            }
-                        }
-
-                        if (!retrieved) {
-                            var connection = new URL(artifact.location()).openConnection();
-                            connection.setUseCaches(false);
-                            if (artifact.repository().username() != null && artifact.repository().password() != null) {
-                                connection.setRequestProperty(
-                                    HEADER_AUTHORIZATION,
-                                    basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
-                            }
-                            try (var input_stream = connection.getInputStream()) {
-                                var readableByteChannel = Channels.newChannel(input_stream);
-                                try (var fileOutputStream = new FileOutputStream(download_file)) {
-                                    var fileChannel = fileOutputStream.getChannel();
-                                    fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
-
-                                    retrieved = true;
-                                    System.out.print("done");
-                                    break;
-                                }
-                            }
-                        }
-                    } catch (FileNotFoundException e) {
-                        System.out.print("not found");
-                    }
-                }
+                retriever_.transferIntoDirectory(artifact, directory);
             } catch (IOException | FileUtilsErrorException e) {
-                throw new DependencyTransferException(dependency_, artifact.location(), download_file, e);
-            } finally {
-                System.out.println();
+                throw new DependencyTransferException(dependency_, artifact.location(), directory, e);
             }
         }
-    }
-
-    private static boolean checkHash(RepositoryArtifact artifact, File downloadFile, String extension, String algorithm) {
-        try {
-            var hash_sum = readString(artifact.appendPath(extension));
-            var digest = MessageDigest.getInstance(algorithm);
-            digest.update(FileUtils.readBytes(downloadFile));
-            return hash_sum.equals(encodeHexLower(digest.digest()));
-        } catch (Exception e) {
-            // no-op, the hash file couldn't be found or calculated, so it couldn't be checked
-        }
-        return false;
     }
 
     /**
@@ -436,7 +367,7 @@ public class DependencyResolver {
         String metadata = null;
         for (var artifact : artifacts) {
             try {
-                var content = readString(artifact);
+                var content = retriever_.readString(artifact);
                 if (content == null) {
                     throw new ArtifactNotFoundException(dependency_, artifact.location());
                 }
@@ -485,7 +416,7 @@ public class DependencyResolver {
 
         for (var artifact : artifacts) {
             try {
-                var content = readString(artifact);
+                var content = retriever_.readString(artifact);
                 if (content == null) {
                     throw new ArtifactNotFoundException(dependency_, artifact.location());
                 }
@@ -506,49 +437,11 @@ public class DependencyResolver {
             throw new ArtifactNotFoundException(dependency_, artifacts.stream().map(RepositoryArtifact::location).collect(Collectors.joining(", ")));
         }
 
-        var xml = new Xml2MavenPom(parent, repositories_);
+        var xml = new Xml2MavenPom(parent, retriever_, repositories_);
         if (!xml.processXml(pom)) {
             throw new DependencyXmlParsingErrorException(dependency_, retrieved_artifact.location(), xml.getErrors());
         }
 
         return xml;
-    }
-
-    private static String readString(RepositoryArtifact artifact)
-    throws FileUtilsErrorException {
-        if (artifact.repository().isLocal()) {
-            return FileUtils.readString(new File(artifact.location()));
-        } else {
-            var cached = ARTIFACT_CACHE.get(artifact);
-            if (cached != null) {
-                return cached;
-            }
-
-            try {
-                var connection = new URL(artifact.location()).openConnection();
-                connection.setUseCaches(false);
-                if (artifact.repository().username() != null && artifact.repository().password() != null) {
-                    connection.setRequestProperty(
-                        HEADER_AUTHORIZATION,
-                        basicAuthorizationHeader(artifact.repository().username(), artifact.repository().password()));
-                }
-                try (var input_stream = connection.getInputStream()) {
-                    var result = FileUtils.readString(input_stream);
-                    ARTIFACT_CACHE.put(artifact, result);
-                    return result;
-                }
-            } catch (IOException e) {
-                throw new FileUtilsErrorException("Error while reading URL '" + artifact.location() + ".", e);
-            }
-        }
-    }
-
-    /**
-     * Clears the artifact cache.
-     *
-     * @since 1.5.18
-     */
-    public static void clearArtifactCache() {
-        ARTIFACT_CACHE.clear();
     }
 }

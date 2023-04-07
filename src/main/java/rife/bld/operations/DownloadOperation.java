@@ -24,6 +24,7 @@ import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
  * @since 1.5
  */
 public class DownloadOperation extends AbstractOperation<DownloadOperation> {
+    private ArtifactRetriever retriever_ = null;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private File libCompileDirectory_;
@@ -67,13 +68,13 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
         var provided_dependencies = dependencies().get(Scope.provided);
         if (provided_dependencies != null) {
             for (var dependency : provided_dependencies) {
-                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+                excluded.addAll(new DependencyResolver(artifactRetriever(), repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
         var compile_dependencies = dependencies().get(Scope.compile);
         if (compile_dependencies != null) {
             for (var dependency : compile_dependencies) {
-                excluded.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(Scope.compile));
+                excluded.addAll(new DependencyResolver(artifactRetriever(), repositories(), dependency).getAllDependencies(Scope.compile));
             }
         }
         executeDownloadScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
@@ -118,7 +119,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
             var scoped_dependencies = dependencies().get(scope);
             if (scoped_dependencies != null) {
                 for (var dependency : scoped_dependencies) {
-                    dependencies.addAll(new DependencyResolver(repositories(), dependency).getAllDependencies(transitiveScopes));
+                    dependencies.addAll(new DependencyResolver(artifactRetriever(), repositories(), dependency).getAllDependencies(transitiveScopes));
                 }
             }
         }
@@ -136,7 +137,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
             additional_classifiers = classifiers.toArray(new String[0]);
         }
 
-        dependencies.transferIntoDirectory(repositories(), destinationDirectory, additional_classifiers);
+        dependencies.transferIntoDirectory(artifactRetriever(), repositories(), destinationDirectory, additional_classifiers);
     }
 
     /**
@@ -269,6 +270,18 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
     }
 
     /**
+     * Provides the artifact retriever to use.
+     *
+     * @param retriever the artifact retriever
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public DownloadOperation artifactRetriever(ArtifactRetriever retriever) {
+        retriever_ = retriever;
+        return this;
+    }
+
+    /**
      * Retrieves the repositories in which the dependencies will be resolved.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
@@ -352,5 +365,18 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      */
     public boolean downloadJavadoc() {
         return downloadJavadoc_;
+    }
+
+    /**
+     * Returns the artifact retriever that is used.
+     *
+     * @return the artifact retriever
+     * @since 1.5.18
+     */
+    public ArtifactRetriever artifactRetriever() {
+        if (retriever_ == null) {
+            return ArtifactRetriever.instance();
+        }
+        return retriever_;
     }
 }

@@ -28,6 +28,7 @@ import static rife.bld.dependencies.Dependency.CLASSIFIER_SOURCES;
  * @since 1.5.8
  */
 public class WrapperExtensionResolver {
+    private final ArtifactRetriever retriever_ = ArtifactRetriever.cachingInstance();
     private final File hashFile_;
     private final String fingerPrintHash_;
     private final File destinationDirectory_;
@@ -115,7 +116,7 @@ public class WrapperExtensionResolver {
         var dependencies = new DependencySet();
         for (var d : dependencies_) {
             if (d != null) {
-                dependencies.addAll(new DependencyResolver(repositories_, d).getAllDependencies(Scope.compile, Scope.runtime));
+                dependencies.addAll(new DependencyResolver(retriever_, repositories_, d).getAllDependencies(Scope.compile, Scope.runtime));
             }
         }
         if (!dependencies.isEmpty()) {
@@ -131,7 +132,7 @@ public class WrapperExtensionResolver {
 
                 additional_classifiers = classifiers.toArray(new String[0]);
             }
-            dependencies.transferIntoDirectory(repositories_, destinationDirectory_, additional_classifiers);
+            dependencies.transferIntoDirectory(retriever_, repositories_, destinationDirectory_, additional_classifiers);
 
             for (var dependency : dependencies) {
                 addTransferLocations(filenames, dependency);
@@ -148,7 +149,7 @@ public class WrapperExtensionResolver {
     }
 
     private void addTransferLocations(HashSet<String> filenames, Dependency dependency) {
-        for (var location : new DependencyResolver(repositories_, dependency).getTransferLocations()) {
+        for (var location : new DependencyResolver(retriever_, repositories_, dependency).getTransferLocations()) {
             filenames.add(location.substring(location.lastIndexOf("/") + 1));
         }
     }

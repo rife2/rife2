@@ -418,8 +418,6 @@ public class TestPublishOperation {
                 .fromProject(create_operation1.project());
             jar_operation1.execute();
 
-            DependencyResolver.clearArtifactCache();
-
             var publish_operation1 = new PublishOperation()
                 .fromProject(create_operation1.project())
                 .moment(ZonedDateTime.of(2023, 3, 29, 18, 54, 32, 909, ZoneId.of("America/New_York")))
@@ -478,7 +476,6 @@ public class TestPublishOperation {
             assertTrue(maven_snapshot_metadata1.getVersions().contains(create_operation1.project().version()));
 
             // created an updated publication
-            DependencyResolver.clearArtifactCache();
             var create_operation2 = new CreateBlankOperation() {
                 protected Project createProjectBlueprint() {
                     return new BlankProjectBlueprint(new File(workDirectory(), projectName()), packageName(), projectName(), new VersionNumber(1, 2, 3, "SNAPSHOT"));

@@ -325,20 +325,22 @@ public class Project extends BuildExecutor {
      * Standard build commands
      */
 
+    private final ArtifactRetriever retriever_ = ArtifactRetriever.cachingInstance();
+
     private final CleanOperation cleanOperation_ = new CleanOperation();
     private final CompileOperation compileOperation_ = new CompileOperation();
-    private final DownloadOperation downloadOperation_ = new DownloadOperation();
+    private final DownloadOperation downloadOperation_ = new DownloadOperation().artifactRetriever(retriever_);
     private final JavadocOperation javadocOperation_ = new JavadocOperation();
     private final PrecompileOperation precompileOperation_ = new PrecompileOperation();
     private final JarOperation jarOperation_ = new JarOperation();
     private final JarOperation jarSourcesOperation_ = new JarOperation();
     private final JarOperation jarJavadocOperation_ = new JarOperation();
-    private final PurgeOperation purgeOperation_ = new PurgeOperation();
+    private final PurgeOperation purgeOperation_ = new PurgeOperation().artifactRetriever(retriever_);
     private final RunOperation runOperation_ = new RunOperation();
     private final TestOperation testOperation_ = new TestOperation();
     private final UberJarOperation uberJarOperation_ = new UberJarOperation();
-    private final UpdatesOperation updatesOperation_ = new UpdatesOperation();
-    private final PublishOperation publishOperation_ = new PublishOperation();
+    private final UpdatesOperation updatesOperation_ = new UpdatesOperation().artifactRetriever(retriever_);
+    private final PublishOperation publishOperation_ = new PublishOperation().artifactRetriever(retriever_);
     private final VersionOperation versionOperation_ = new VersionOperation();
 
     /**

@@ -84,13 +84,14 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
      * <p>
      * The destination directory must exist and be writable.
      *
+     * @param retriever    the retriever to use to get artifacts
      * @param repositories the repositories to use for the transfer
      * @param directory    the directory to transfer the artifacts into
      * @throws DependencyTransferException when an error occurred during the transfer
      * @since 1.5.10
      */
-    public void transferIntoDirectory(List<Repository> repositories, File directory) {
-        transferIntoDirectory(repositories, directory, (String[]) null);
+    public void transferIntoDirectory(ArtifactRetriever retriever, List<Repository> repositories, File directory) {
+        transferIntoDirectory(retriever, repositories, directory, (String[]) null);
     }
 
     /**
@@ -99,19 +100,20 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
      * <p>
      * The destination directory must exist and be writable.
      *
+     * @param retriever    the retriever to use to get artifacts
      * @param repositories the repositories to use for the download
      * @param directory    the directory to download the artifacts into
      * @param classifiers  the additional classifiers to transfer
      * @throws DependencyTransferException when an error occurred during the transfer
      * @since 1.5.10
      */
-    public void transferIntoDirectory(List<Repository> repositories, File directory, String... classifiers) {
+    public void transferIntoDirectory(ArtifactRetriever retriever, List<Repository> repositories, File directory, String... classifiers) {
         for (var dependency : this) {
-            new DependencyResolver(repositories, dependency).transferIntoDirectory(directory);
+            new DependencyResolver(retriever, repositories, dependency).transferIntoDirectory(directory);
             if (classifiers != null) {
                 for (var classifier : classifiers) {
                     if (classifier != null) {
-                        new DependencyResolver(repositories, dependency.withClassifier(classifier)).transferIntoDirectory(directory);
+                        new DependencyResolver(retriever, repositories, dependency.withClassifier(classifier)).transferIntoDirectory(directory);
                     }
                 }
             }

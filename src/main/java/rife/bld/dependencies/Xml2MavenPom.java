@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  */
 class Xml2MavenPom extends Xml2Data {
     private final PomDependency parent_;
+    private final ArtifactRetriever retriever_;
     private final List<Repository> repositories_;
     private Map<Scope, Set<PomDependency>> resolvedDependencies_ = null;
 
@@ -44,8 +45,9 @@ class Xml2MavenPom extends Xml2Data {
     private String lastExclusionGroupId_ = null;
     private String lastExclusionArtifactId_ = null;
 
-    Xml2MavenPom(PomDependency parent, List<Repository> repositories) {
+    Xml2MavenPom(PomDependency parent, ArtifactRetriever retriever, List<Repository> repositories) {
         parent_ = parent;
+        retriever_ = retriever;
         repositories_ = repositories;
     }
 
@@ -159,7 +161,7 @@ class Xml2MavenPom extends Xml2Data {
             case "parent" -> {
                 if (isChildOfProject()) {
                     var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
-                    var parent = new DependencyResolver(repositories_, parent_dependency).getMavenPom(parent_);
+                    var parent = new DependencyResolver(retriever_, repositories_, parent_dependency).getMavenPom(parent_);
 
 
                     parent.properties_.keySet().removeAll(properties_.keySet());

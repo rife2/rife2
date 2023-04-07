@@ -37,6 +37,7 @@ import static rife.tools.StringUtils.encodeHexLower;
  * @since 1.5.7
  */
 public class PublishOperation extends AbstractOperation<PublishOperation> {
+    private ArtifactRetriever retriever_ = null;
     private final HttpClient client_ = HttpClient.newHttpClient();
 
     private ZonedDateTime moment_ = null;
@@ -118,7 +119,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             // determine which build number to use
             var snapshot_build_number = 1;
             try {
-                var resolver = new DependencyResolver(List.of(repository), new Dependency(info().groupId(), info().artifactId(), info().version()));
+                var resolver = new DependencyResolver(artifactRetriever(), List.of(repository), new Dependency(info().groupId(), info().artifactId(), info().version()));
                 var snapshot_meta = resolver.getSnapshotMavenMetadata();
                 snapshot_build_number = snapshot_meta.getSnapshotBuildNumber() + 1;
             } catch (DependencyException e) {
@@ -201,7 +202,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      */
     protected void executePublishMetadata(Repository repository, ZonedDateTime moment) {
         var current_versions = new ArrayList<VersionNumber>();
-        var resolver = new DependencyResolver(List.of(repository), new Dependency(info().groupId(), info().artifactId(), info().version()));
+        var resolver = new DependencyResolver(artifactRetriever(), List.of(repository), new Dependency(info().groupId(), info().artifactId(), info().version()));
         try {
             current_versions.addAll(resolver.getMavenMetadata().getVersions());
         } catch (DependencyException e) {
@@ -617,6 +618,18 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     }
 
     /**
+     * Provides the artifact retriever to use.
+     *
+     * @param retriever the artifact retriever
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public PublishOperation artifactRetriever(ArtifactRetriever retriever) {
+        retriever_ = retriever;
+        return this;
+    }
+
+    /**
      * Retrieves the repositories to which will be published.
      * <p>
      * This is a modifiable list that can be retrieved and changed.
@@ -662,5 +675,18 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      */
     public List<PublishArtifact> artifacts() {
         return artifacts_;
+    }
+
+    /**
+     * Returns the artifact retriever that is used.
+     *
+     * @return the artifact retriever
+     * @since 1.5.18
+     */
+    public ArtifactRetriever artifactRetriever() {
+        if (retriever_ == null) {
+            return ArtifactRetriever.instance();
+        }
+        return retriever_;
     }
 }

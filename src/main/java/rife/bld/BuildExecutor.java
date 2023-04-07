@@ -190,7 +190,6 @@ public class BuildExecutor {
      * @since 1.5.1
      */
     public int execute(String[] arguments) {
-        DependencyResolver.clearArtifactCache();
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
 
         var show_help = arguments_.isEmpty();
