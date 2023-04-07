@@ -7,7 +7,6 @@ package rife;
 import rife.bld.WebProject;
 
 import java.io.File;
-import java.util.List;
 
 import static rife.bld.operations.TemplateType.HTML;
 
@@ -17,6 +16,8 @@ public class ExamplesBuild extends WebProject {
         name = "Examples";
         mainClass = "rife.HelloAll";
         version = version(1,0,0);
+
+        javaRelease = 17;
 
         srcDirectory = new File(workDirectory(), "examples");
         buildMainDirectory = new File(buildDirectory(), "main_examples");

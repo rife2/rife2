@@ -17,7 +17,7 @@ public class {{v projectBuild/}} extends WebProject {
         version = version(0,1,0);
 
         downloadSources = true;
-        repositories = List.of(MAVEN_CENTRAL, RIFE2);
+        repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES);
 {{v scopes}}{{/v}}{{b scope}}        scope({{v name/}}){{v dependencies}}{{/v}};
 {{b dependency}}
             .include(dependency("{{v groupId/}}", "{{v artifactId/}}", version({{v version/}}))){{/b}}{{/b}}

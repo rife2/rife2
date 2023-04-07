@@ -25,17 +25,18 @@ import static rife.bld.operations.JavadocOptions.DocLinkOption.NO_MISSING;
 import static rife.bld.operations.TemplateType.*;
 
 public class Rife2Build extends Project {
-    public Rife2Build() {
+    public Rife2Build()
+    throws Exception {
         pkg = "rife";
         name = "RIFE2";
         mainClass = "rife.bld.Cli";
-        version = version(1,5,18,"SNAPSHOT");
+        version = version(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
         javaRelease = 17;
         downloadSources = true;
         autoDownloadPurge = true;
 
-        repositories = List.of(MAVEN_CENTRAL, repository("https://repo.rife2.com/snapshots"), RIFE2);
+        repositories = List.of(MAVEN_CENTRAL, RIFE2_SNAPSHOTS, RIFE2_RELEASES);
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
@@ -313,7 +314,8 @@ public class Rife2Build extends Project {
         examples.run();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    throws Exception {
         new Rife2Build().start(args);
     }
 }
