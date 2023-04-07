@@ -157,6 +157,7 @@ public class Rife2Build extends Project {
 
         publishOperation()
             .repository(version.isSnapshot() ? repository("rife2-snapshots") : repository("rife2-releases"))
+            .repository(version.isSnapshot() ? repository("sonatype-snapshots") : repository("sonatype-releases"))
             .info(new PublishInfo()
                 .groupId("com.uwyn.rife2")
                 .artifactId("rife2")

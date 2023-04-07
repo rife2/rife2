@@ -40,7 +40,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     private final HttpClient client_ = HttpClient.newHttpClient();
 
     private ZonedDateTime moment_ = null;
-    private Repository repository_;
+    private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencyScopes dependencies_ = new DependencyScopes();
     private PublishInfo info_ = new PublishInfo();
     private final List<PublishArtifact> artifacts_ = new ArrayList<>();
@@ -51,8 +51,8 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @since 1.5.7
      */
     public void execute() {
-        if (repository() == null) {
-            throw new OperationOptionException("ERROR: the publication repository should be specified");
+        if (repositories().isEmpty()) {
+            throw new OperationOptionException("ERROR: the publication repositories should be specified");
         }
 
         var moment = moment_;
@@ -64,14 +64,18 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
 
         var actual_version = info().version();
 
-        // treat a snapshot version differently
-        if (info().version().isSnapshot()) {
-            actual_version = executePublishSnapshotMetadata(moment);
-        }
+        for (var repository : repositories()) {
+            System.out.println("Publishing to '" + repository.location() + "'");
 
-        executePublishArtifacts(actual_version);
-        executePublishPom(actual_version);
-        executePublishMetadata(moment);
+            // treat a snapshot version differently
+            if (info().version().isSnapshot()) {
+                actual_version = executePublishSnapshotMetadata(repository, moment);
+            }
+
+            executePublishArtifacts(repository, actual_version);
+            executePublishPom(repository, actual_version);
+            executePublishMetadata(repository, moment);
+        }
         if (!silent()) {
             System.out.println("Publishing finished successfully.");
         }
@@ -96,15 +100,16 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * Part of the {@link #execute} operation, publishes snapshot metadata if this
      * is a snapshot version.
      *
+     * @param repository the repository to publish to
      * @param moment the timestamp at which the operation started executing
      * @return the adapted version number with the snapshot timestamp and build number
      * @since 1.5.10
      */
-    protected VersionNumber executePublishSnapshotMetadata(ZonedDateTime moment) {
+    protected VersionNumber executePublishSnapshotMetadata(Repository repository, ZonedDateTime moment) {
         var metadata = new MetadataBuilder();
 
         VersionNumber actual_version;
-        if (repository().isLocal()) {
+        if (repository.isLocal()) {
             actual_version = info().version();
             metadata.snapshotLocal();
         } else {
@@ -113,7 +118,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             // determine which build number to use
             var snapshot_build_number = 1;
             try {
-                var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
+                var resolver = new DependencyResolver(List.of(repository), new Dependency(info().groupId(), info().artifactId(), info().version()));
                 var snapshot_meta = resolver.getSnapshotMavenMetadata();
                 snapshot_build_number = snapshot_meta.getSnapshotBuildNumber() + 1;
             } catch (DependencyException e) {
@@ -138,11 +143,12 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
 
         // publish snapshot metadata
         executePublishStringArtifact(
+            repository,
             metadata
                 .info(info())
                 .updated(moment)
                 .build(),
-            info().version() + "/" + repository().getMetadataName(), true);
+            info().version() + "/" + repository.getMetadataName(), true);
         return actual_version;
     }
 
@@ -150,10 +156,11 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * Part of the {@link #execute} operation, publishes all the artifacts
      * in this operation.
      *
+     * @param repository the repository to publish to
      * @param actualVersion the version that was potentially adapted if this is a snapshot
      * @since 1.5.10
      */
-    protected void executePublishArtifacts(VersionNumber actualVersion) {
+    protected void executePublishArtifacts(Repository repository, VersionNumber actualVersion) {
         // upload artifacts
         for (var artifact : artifacts()) {
             var artifact_name = new StringBuilder(info().artifactId()).append("-").append(actualVersion);
@@ -166,19 +173,21 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             }
             artifact_name.append(".").append(type);
 
-            executePublishFileArtifact(artifact.file(), info().version() + "/" + artifact_name);
+            executePublishFileArtifact(repository, artifact.file(), info().version() + "/" + artifact_name);
         }
     }
 
     /**
      * Part of the {@link #execute} operation, publishes the Maven POM.
      *
+     * @param repository the repository to publish to
      * @param actualVersion the version that was potentially adapted if this is a snapshot
      * @since 1.5.10
      */
-    protected void executePublishPom(VersionNumber actualVersion) {
+    protected void executePublishPom(Repository repository, VersionNumber actualVersion) {
         // generate and upload pom
         executePublishStringArtifact(
+            repository,
             new PomBuilder().info(info()).dependencies(dependencies()).build(),
             info().version() + "/" + info().artifactId() + "-" + actualVersion + ".pom", true);
     }
@@ -186,12 +195,13 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     /**
      * Part of the {@link #execute} operation, publishes the artifact metadata.
      *
+     * @param repository the repository to publish to
      * @param moment the timestamp at which the operation started executing
      * @since 1.5.8
      */
-    protected void executePublishMetadata(ZonedDateTime moment) {
+    protected void executePublishMetadata(Repository repository, ZonedDateTime moment) {
         var current_versions = new ArrayList<VersionNumber>();
-        var resolver = new DependencyResolver(List.of(repository()), new Dependency(info().groupId(), info().artifactId(), info().version()));
+        var resolver = new DependencyResolver(List.of(repository), new Dependency(info().groupId(), info().artifactId(), info().version()));
         try {
             current_versions.addAll(resolver.getMavenMetadata().getVersions());
         } catch (DependencyException e) {
@@ -202,39 +212,41 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
 
         // upload metadata
         executePublishStringArtifact(
+            repository,
             new MetadataBuilder()
                 .info(info())
                 .updated(moment)
                 .otherVersions(current_versions)
                 .build(),
-            repository().getMetadataName(), false);
+            repository.getMetadataName(), false);
     }
 
     /**
      * Part of the {@link #execute} operation, publishes a single artifact with
      * hashes and a potential signature.
      *
-     * @param content the content of the file that needs to be published
-     * @param path    the path of the artifact within the artifact folder
-     * @param sign    indicates whether the artifact should be signed
+     * @param repository the repository to publish to
+     * @param content    the content of the file that needs to be published
+     * @param path       the path of the artifact within the artifact folder
+     * @param sign       indicates whether the artifact should be signed
      * @since 1.5.18
      */
-    protected void executePublishStringArtifact(String content, String path, boolean sign)
+    protected void executePublishStringArtifact(Repository repository, String content, String path, boolean sign)
     throws UploadException {
         try {
-            executeTransferArtifact(content, path);
-            if (!repository().isLocal()) {
-                executeTransferArtifact(generateHash(content, "MD5"), path + ".md5");
-                executeTransferArtifact(generateHash(content, "SHA-1"), path + ".sha1");
-                executeTransferArtifact(generateHash(content, "SHA-256"), path + ".sha256");
-                executeTransferArtifact(generateHash(content, "SHA-512"), path + ".sha512");
+            executeTransferArtifact(repository, content, path);
+            if (!repository.isLocal()) {
+                executeTransferArtifact(repository, generateHash(content, "MD5"), path + ".md5");
+                executeTransferArtifact(repository, generateHash(content, "SHA-1"), path + ".sha1");
+                executeTransferArtifact(repository, generateHash(content, "SHA-256"), path + ".sha256");
+                executeTransferArtifact(repository, generateHash(content, "SHA-512"), path + ".sha512");
             }
 
             if (sign && info().signKey() != null) {
                 var tmp_file = File.createTempFile(path, "gpg");
                 FileUtils.writeString(content, tmp_file);
                 try {
-                    executeTransferArtifact(executeSignFile(tmp_file), path + ".asc");
+                    executeTransferArtifact(repository, executeSignFile(tmp_file), path + ".asc");
                 } finally {
                     tmp_file.delete();
                 }
@@ -264,11 +276,12 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * Part of the {@link #execute} operation, publishes a single artifact with
      * hashes and a potential signature.
      *
-     * @param file the file that needs to be published
-     * @param path the path of the artifact within the artifact folder
+     * @param repository the repository to publish to
+     * @param file       the file that needs to be published
+     * @param path       the path of the artifact within the artifact folder
      * @since 1.5.8
      */
-    protected void executePublishFileArtifact(File file, String path)
+    protected void executePublishFileArtifact(Repository repository, File file, String path)
     throws UploadException {
         try {
             var digest_md5 = MessageDigest.getInstance("MD5");
@@ -286,15 +299,15 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                     digest_sha512.update(buffer, 0, return_value);
                 }
 
-                executeTransferArtifact(file, path);
-                if (!repository().isLocal()) {
-                    executeTransferArtifact(encodeHexLower(digest_md5.digest()), path + ".md5");
-                    executeTransferArtifact(encodeHexLower(digest_sha1.digest()), path + ".sha1");
-                    executeTransferArtifact(encodeHexLower(digest_sha256.digest()), path + ".sha256");
-                    executeTransferArtifact(encodeHexLower(digest_sha512.digest()), path + ".sha512");
+                executeTransferArtifact(repository, file, path);
+                if (!repository.isLocal()) {
+                    executeTransferArtifact(repository, encodeHexLower(digest_md5.digest()), path + ".md5");
+                    executeTransferArtifact(repository, encodeHexLower(digest_sha1.digest()), path + ".sha1");
+                    executeTransferArtifact(repository, encodeHexLower(digest_sha256.digest()), path + ".sha256");
+                    executeTransferArtifact(repository, encodeHexLower(digest_sha512.digest()), path + ".sha512");
                 }
                 if (info().signKey() != null) {
-                    executeTransferArtifact(executeSignFile(file), path + ".asc");
+                    executeTransferArtifact(repository, executeSignFile(file), path + ".asc");
                 }
             }
         } catch (IOException | NoSuchAlgorithmException | FileUtilsErrorException e) {
@@ -333,45 +346,48 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     /**
      * Part of the {@link #execute} operation, transfers an artifact.
      *
-     * @param file the file to transfer
-     * @param path the path of the file within the artifact folder
-     * @since 1.5.10
+     * @param repository the repository to transfer to
+     * @param file       the file to transfer
+     * @param path       the path of the file within the artifact folder
+     * @since 1.5.18
      */
-    protected void executeTransferArtifact(File file, String path)
+    protected void executeTransferArtifact(Repository repository, File file, String path)
     throws FileUtilsErrorException, IOException {
-        if (repository().isLocal()) {
-            executeStoreArtifact(file, path);
+        if (repository.isLocal()) {
+            executeStoreArtifact(repository, file, path);
         } else {
-            executeUploadArtifact(BodyPublishers.ofFile(file.toPath()), path);
+            executeUploadArtifact(repository, BodyPublishers.ofFile(file.toPath()), path);
         }
     }
 
     /**
      * Part of the {@link #execute} operation, transfers an artifact.
      *
-     * @param content the content to transfer
-     * @param path the path of the file within the artifact folder
-     * @since 1.5.10
+     * @param repository the repository to transfer to
+     * @param content    the content to transfer
+     * @param path       the path of the file within the artifact folder
+     * @since 1.5.18
      */
-    protected void executeTransferArtifact(String content, String path)
+    protected void executeTransferArtifact(Repository repository, String content, String path)
     throws FileUtilsErrorException, IOException {
-        if (repository().isLocal()) {
-            executeStoreArtifact(content, path);
+        if (repository.isLocal()) {
+            executeStoreArtifact(repository, content, path);
         } else {
-            executeUploadArtifact(BodyPublishers.ofString(content), path);
+            executeUploadArtifact(repository, BodyPublishers.ofString(content), path);
         }
     }
 
     /**
      * Part of the {@link #execute} operation, stores an artifact.
      *
-     * @param file the file to store
-     * @param path the path of the file within the artifact folder
-     * @since 1.5.10
+     * @param repository the repository to store in
+     * @param file       the file to store
+     * @param path       the path of the file within the artifact folder
+     * @since 1.5.18
      */
-    protected void executeStoreArtifact(File file, String path)
+    protected void executeStoreArtifact(Repository repository, File file, String path)
     throws FileUtilsErrorException {
-        var location = repository().getArtifactLocation(info().groupId(), info().artifactId()) + path;
+        var location = repository.getArtifactLocation(info().groupId(), info().artifactId()) + path;
         System.out.print("Storing: " + location + " ... ");
         try {
             var target = new File(location);
@@ -389,13 +405,14 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     /**
      * Part of the {@link #execute} operation, stores an artifact.
      *
-     * @param content the content to store
-     * @param path the path of the file within the artifact folder
-     * @since 1.5.10
+     * @param repository the repository to store in
+     * @param content    the content to store
+     * @param path       the path of the file within the artifact folder
+     * @since 1.5.18
      */
-    protected void executeStoreArtifact(String content, String path)
+    protected void executeStoreArtifact(Repository repository, String content, String path)
     throws FileUtilsErrorException {
-        var location = repository().getArtifactLocation(info().groupId(), info().artifactId()) + path;
+        var location = repository.getArtifactLocation(info().groupId(), info().artifactId()) + path;
         System.out.print("Storing: " + location + " ... ");
         try {
             var target = new File(location);
@@ -413,12 +430,13 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     /**
      * Part of the {@link #execute} operation, uploads an artifact.
      *
-     * @param body the body of the file to upload
-     * @param path the path of the file within the artifact folder
-     * @since 1.5.10
+     * @param repository the repository to upload to
+     * @param body       the body of the file to upload
+     * @param path       the path of the file within the artifact folder
+     * @since 1.5.18
      */
-    protected void executeUploadArtifact(HttpRequest.BodyPublisher body, String path) {
-        var url = repository().getArtifactLocation(info().groupId(), info().artifactId()) + path;
+    protected void executeUploadArtifact(Repository repository, HttpRequest.BodyPublisher body, String path) {
+        var url = repository.getArtifactLocation(info().groupId(), info().artifactId()) + path;
         System.out.print("Uploading: " + url + " ... ");
         System.out.flush();
         try {
@@ -426,11 +444,11 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                 .PUT(body)
                 .uri(URI.create(url))
                 .header(HEADER_USER_AGENT, "bld/" + Version.getVersion() +
-                                           " (" + System.getProperty("os.name") + "; " + System.getProperty("os.version") + "; " + System.getProperty("os.arch") + ") " +
-                                           "RIFE2/" + Version.getVersion() +
-                                           " (" + System.getProperty("java.vendor") + " " + System.getProperty("java.vm.name") + "; " + System.getProperty("java.version") + "; " + System.getProperty("java.vm.version") + ")");
-            if (repository().username() != null && repository().password() != null) {
-                builder.header(HEADER_AUTHORIZATION, basicAuthorizationHeader(repository().username(), repository().password()));
+                    " (" + System.getProperty("os.name") + "; " + System.getProperty("os.version") + "; " + System.getProperty("os.arch") + ") " +
+                    "RIFE2/" + Version.getVersion() +
+                    " (" + System.getProperty("java.vendor") + " " + System.getProperty("java.vm.name") + "; " + System.getProperty("java.version") + "; " + System.getProperty("java.vm.version") + ")");
+            if (repository.username() != null && repository.password() != null) {
+                builder.header(HEADER_AUTHORIZATION, basicAuthorizationHeader(repository.username(), repository.password()));
             }
             var request = builder.build();
 
@@ -510,14 +528,40 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     }
 
     /**
-     * Provides the repository to publish to
+     * Provides a repository to publish to.
      *
-     * @param repository the repository that the artifacts will be published to
+     * @param repository a repository that the artifacts will be published to
      * @return this operation instance
      * @since 1.5.7
      */
     public PublishOperation repository(Repository repository) {
-        repository_ = repository;
+        repositories_.add(repository);
+        return this;
+    }
+
+    /**
+     * Provides repositories to publish to.
+     *
+     * @param repositories repositories where the artifacts will be published
+     * @return this operation instance
+     * @since 1.5.18
+     */
+    public PublishOperation repositories(Repository... repositories) {
+        repositories_.addAll(List.of(repositories));
+        return this;
+    }
+
+    /**
+     * Provides a list of repositories to publish to.
+     * <p>
+     * A copy will be created to allow this list to be independently modifiable.
+     *
+     * @param repositories a list of repositories where the artifacts will be published
+     * @return this operation instance
+     * @since 1.5
+     */
+    public PublishOperation repositories(List<Repository> repositories) {
+        repositories_.addAll(repositories);
         return this;
     }
 
@@ -572,13 +616,15 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     }
 
     /**
-     * Retrieves the repository that will be published to.
+     * Retrieves the repositories to which will be published.
+     * <p>
+     * This is a modifiable list that can be retrieved and changed.
      *
-     * @return the publishing repository
-     * @since 1.5.7
+     * @return the repositories where the artifacts will be published
+     * @since 1.51.8
      */
-    public Repository repository() {
-        return repository_;
+    public List<Repository> repositories() {
+        return repositories_;
     }
 
     /**

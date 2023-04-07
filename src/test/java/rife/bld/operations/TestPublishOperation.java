@@ -51,7 +51,7 @@ public class TestPublishOperation {
     @Test
     void testInstantiation() {
         var operation = new PublishOperation();
-        assertNull(operation.repository());
+        assertTrue(operation.repositories().isEmpty());
         assertNull(operation.moment());
         assertTrue(operation.dependencies().isEmpty());
         assertNotNull(operation.info());
@@ -69,29 +69,45 @@ public class TestPublishOperation {
 
     @Test
     void testPopulation() {
-        var repository = new Repository("repository1");
+        var repository1 = new Repository("repository1");
+        var repository2 = new Repository("repository2");
         var moment = ZonedDateTime.now();
 
         var artifact1 = new PublishArtifact(new File("file1"), "classifier1", "type1");
         var artifact2 = new PublishArtifact(new File("file2"), "classifier2", "type2");
 
         var operation1 = new PublishOperation()
-            .repository(repository)
+            .repositories(repository1, repository2)
             .moment(moment)
             .artifacts(List.of(artifact1, artifact2));
-        assertEquals(repository, operation1.repository());
+        assertTrue(operation1.repositories().contains(repository1));
+        assertTrue(operation1.repositories().contains(repository2));
         assertEquals(moment, operation1.moment());
-        operation1.artifacts().contains(artifact1);
-        operation1.artifacts().contains(artifact2);
+        assertTrue(operation1.artifacts().contains(artifact1));
+        assertTrue(operation1.artifacts().contains(artifact2));
 
         var operation2 = new PublishOperation()
-            .repository(repository)
-            .moment(moment)
-            .artifacts(artifact1, artifact2);
-        assertEquals(repository, operation2.repository());
+            .moment(moment);
+        operation2.repositories().add(repository1);
+        operation2.repositories().add(repository2);
+        operation2.artifacts().add(artifact1);
+        operation2.artifacts().add(artifact2);
+        assertTrue(operation2.repositories().contains(repository1));
+        assertTrue(operation2.repositories().contains(repository2));
         assertEquals(moment, operation2.moment());
-        operation2.artifacts().contains(artifact1);
-        operation2.artifacts().contains(artifact2);
+        assertTrue(operation2.artifacts().contains(artifact1));
+        assertTrue(operation2.artifacts().contains(artifact2));
+
+        var operation3 = new PublishOperation()
+            .repository(repository1)
+            .repository(repository2)
+            .moment(moment)
+            .artifacts(List.of(artifact1, artifact2));
+        assertTrue(operation3.repositories().contains(repository1));
+        assertTrue(operation3.repositories().contains(repository2));
+        assertEquals(moment, operation3.moment());
+        assertTrue(operation3.artifacts().contains(artifact1));
+        assertTrue(operation3.artifacts().contains(artifact2));
     }
 
     @Test
@@ -134,7 +150,7 @@ public class TestPublishOperation {
 
             var publish_operation1 = new PublishOperation()
                 .fromProject(create_operation1.project())
-                .repository(new Repository("http://localhost:8081/releases", "manager", "passwd"));
+                .repositories(new Repository("http://localhost:8081/releases", "manager", "passwd"));
             publish_operation1.execute();
 
             var dir_json1 = new JSONObject(FileUtils.readString(new URL("http://localhost:8081/api/maven/details/releases/test/pkg/myapp")));
@@ -195,7 +211,7 @@ public class TestPublishOperation {
 
             var publish_operation2 = new PublishOperation()
                 .fromProject(create_operation2.project())
-                .repository(new Repository("http://localhost:8081/releases", "manager", "passwd"));
+                .repositories(new Repository("http://localhost:8081/releases", "manager", "passwd"));
             publish_operation2.execute();
 
             var dir_json2 = new JSONObject(FileUtils.readString(new URL("http://localhost:8081/api/maven/details/releases/test/pkg/myapp")));
@@ -284,7 +300,7 @@ public class TestPublishOperation {
 
             var publish_operation1 = new PublishOperation()
                 .fromProject(create_operation1.project())
-                .repository(new Repository(tmp_local.getAbsolutePath()));
+                .repositories(new Repository(tmp_local.getAbsolutePath()));
             publish_operation1.execute();
 
             assertEquals("""
@@ -328,7 +344,7 @@ public class TestPublishOperation {
 
             var publish_operation2 = new PublishOperation()
                 .fromProject(create_operation2.project())
-                .repository(new Repository(tmp_local.getAbsolutePath()));
+                .repositories(new Repository(tmp_local.getAbsolutePath()));
             publish_operation2.execute();
 
             assertEquals("""
@@ -407,7 +423,7 @@ public class TestPublishOperation {
             var publish_operation1 = new PublishOperation()
                 .fromProject(create_operation1.project())
                 .moment(ZonedDateTime.of(2023, 3, 29, 18, 54, 32, 909, ZoneId.of("America/New_York")))
-                .repository(new Repository("http://localhost:8081/releases", "manager", "passwd"));
+                .repositories(new Repository("http://localhost:8081/releases", "manager", "passwd"));
             publish_operation1.execute();
 
             var dir_json1 = new JSONObject(FileUtils.readString(new URL("http://localhost:8081/api/maven/details/releases/test/pkg/myapp")));
@@ -485,7 +501,7 @@ public class TestPublishOperation {
             var publish_operation2 = new PublishOperation()
                 .fromProject(create_operation2.project())
                 .moment(ZonedDateTime.of(2023, 3, 30, 13, 17, 29, 89, ZoneId.of("America/New_York")))
-                .repository(new Repository("http://localhost:8081/releases", "manager", "passwd"));
+                .repositories(new Repository("http://localhost:8081/releases", "manager", "passwd"));
             publish_operation2.execute();
 
             var dir_json2 = new JSONObject(FileUtils.readString(new URL("http://localhost:8081/api/maven/details/releases/test/pkg/myapp")));
@@ -578,7 +594,7 @@ public class TestPublishOperation {
             var publish_operation1 = new PublishOperation()
                 .fromProject(create_operation1.project())
                 .moment(ZonedDateTime.of(2023, 3, 29, 18, 54, 32, 909, ZoneId.of("America/New_York")))
-                .repository(new Repository(tmp_local.getAbsolutePath()));
+                .repositories(new Repository(tmp_local.getAbsolutePath()));
             publish_operation1.execute();
 
             assertEquals("""
@@ -634,7 +650,7 @@ public class TestPublishOperation {
             var publish_operation2 = new PublishOperation()
                 .fromProject(create_operation2.project())
                 .moment(ZonedDateTime.of(2023, 3, 30, 13, 17, 29, 89, ZoneId.of("America/New_York")))
-                .repository(new Repository(tmp_local.getAbsolutePath()));
+                .repositories(new Repository(tmp_local.getAbsolutePath()));
             publish_operation2.execute();
 
             assertEquals("""
