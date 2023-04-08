@@ -3,7 +3,7 @@ name: bld-ci
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  build-gradle-project:
+  build-bld-project:
     runs-on: ubuntu-latest
 
     services:
