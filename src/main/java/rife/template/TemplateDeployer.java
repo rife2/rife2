@@ -4,7 +4,6 @@
  */
 package rife.template;
 
-import rife.config.RifeConfig;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.ResourceFinderDirectories;
 import rife.resources.ResourceFinderGroup;

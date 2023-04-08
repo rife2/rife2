@@ -30,6 +30,10 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
      * @since 1.5
      */
     public void execute() {
+        if (templateTypes_.isEmpty()) {
+            return;
+        }
+
         if (destinationDirectory() != null) {
             destinationDirectory().mkdirs();
         }
