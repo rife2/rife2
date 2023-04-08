@@ -48,7 +48,7 @@ public class RunOperation extends AbstractProcessOperation<RunOperation> {
             .classpath(project.runClasspath())
             .mainClass(project.mainClass());
         if (project.usesRife2Agent()) {
-            operation.javaOptions().agentPath(project.getRife2AgentFile());
+            operation.javaOptions().javaAgent(project.getRife2AgentFile());
         }
         return operation;
     }

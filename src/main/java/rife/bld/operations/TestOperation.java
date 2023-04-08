@@ -64,7 +64,7 @@ public class TestOperation extends AbstractProcessOperation<TestOperation> {
             .javaTool(project.javaTool())
             .classpath(project.testClasspath());
         if (project.usesRife2Agent()) {
-            operation.javaOptions().agentPath(project.getRife2AgentFile());
+            operation.javaOptions().javaAgent(project.getRife2AgentFile());
         }
         return operation;
     }
