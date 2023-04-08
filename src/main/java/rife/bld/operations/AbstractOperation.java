@@ -4,8 +4,6 @@
  */
 package rife.bld.operations;
 
-import java.util.function.Consumer;
-
 /**
  * Provides common features across all operations
  *

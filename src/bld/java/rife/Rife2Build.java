@@ -8,6 +8,7 @@ import rife.bld.BuildCommand;
 import rife.bld.Project;
 import rife.bld.extension.Antlr4Operation;
 import rife.bld.extension.TestsBadgeOperation;
+import rife.bld.extension.ZipOperation;
 import rife.bld.operations.*;
 import rife.bld.publish.*;
 import rife.tools.FileUtils;
@@ -156,9 +157,8 @@ public class Rife2Build extends Project {
                 .overview(new File(srcMainJavaDirectory(), "overview.html"));
 
         publishOperation()
-            .repository(MAVEN_LOCAL)
-//            .repository(version.isSnapshot() ? repository("rife2-snapshots") : repository("rife2-releases"))
-//            .repository(version.isSnapshot() ? repository("sonatype-snapshots") : repository("sonatype-releases"))
+            .repository(version.isSnapshot() ? repository("rife2-snapshots") : repository("rife2-releases"))
+            .repository(version.isSnapshot() ? repository("sonatype-snapshots") : repository("sonatype-releases"))
             .info(new PublishInfo()
                 .groupId("com.uwyn.rife2")
                 .artifactId("rife2")
