@@ -1625,7 +1625,7 @@ public class Project extends BuildExecutor {
      * @since 1.5
      */
     public List<String> testClasspath() {
-        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), testClasspathJars());
+        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(srcTestResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
