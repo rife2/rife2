@@ -37,7 +37,7 @@ public class Rife2Build extends Project {
         downloadSources = true;
         autoDownloadPurge = true;
 
-        repositories = List.of(MAVEN_CENTRAL, RIFE2_SNAPSHOTS, RIFE2_RELEASES);
+        repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES);
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", version(1,15,4)))
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,14)))
