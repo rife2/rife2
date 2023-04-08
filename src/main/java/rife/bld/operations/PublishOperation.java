@@ -9,6 +9,7 @@ import rife.bld.Project;
 import rife.bld.dependencies.*;
 import rife.bld.dependencies.exceptions.DependencyException;
 import rife.bld.operations.exceptions.OperationOptionException;
+import rife.bld.operations.exceptions.SignException;
 import rife.bld.operations.exceptions.UploadException;
 import rife.bld.publish.*;
 import rife.tools.FileUtils;
@@ -235,14 +236,6 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     protected void executePublishStringArtifact(Repository repository, String content, String path, boolean sign)
     throws UploadException {
         try {
-            executeTransferArtifact(repository, content, path);
-            if (!repository.isLocal()) {
-                executeTransferArtifact(repository, generateHash(content, "MD5"), path + ".md5");
-                executeTransferArtifact(repository, generateHash(content, "SHA-1"), path + ".sha1");
-                executeTransferArtifact(repository, generateHash(content, "SHA-256"), path + ".sha256");
-                executeTransferArtifact(repository, generateHash(content, "SHA-512"), path + ".sha512");
-            }
-
             if (sign && info().signKey() != null) {
                 var tmp_file = File.createTempFile(path, "gpg");
                 FileUtils.writeString(content, tmp_file);
@@ -252,6 +245,15 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                     tmp_file.delete();
                 }
             }
+
+            if (!repository.isLocal()) {
+                executeTransferArtifact(repository, generateHash(content, "MD5"), path + ".md5");
+                executeTransferArtifact(repository, generateHash(content, "SHA-1"), path + ".sha1");
+                executeTransferArtifact(repository, generateHash(content, "SHA-256"), path + ".sha256");
+                executeTransferArtifact(repository, generateHash(content, "SHA-512"), path + ".sha512");
+            }
+
+            executeTransferArtifact(repository, content, path);
         } catch (NoSuchAlgorithmException | IOException | FileUtilsErrorException e) {
             throw new UploadException(path, e);
         }
@@ -300,16 +302,18 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
                     digest_sha512.update(buffer, 0, return_value);
                 }
 
-                executeTransferArtifact(repository, file, path);
+                if (info().signKey() != null) {
+                    executeTransferArtifact(repository, executeSignFile(file), path + ".asc");
+                }
+
                 if (!repository.isLocal()) {
                     executeTransferArtifact(repository, encodeHexLower(digest_md5.digest()), path + ".md5");
                     executeTransferArtifact(repository, encodeHexLower(digest_sha1.digest()), path + ".sha1");
                     executeTransferArtifact(repository, encodeHexLower(digest_sha256.digest()), path + ".sha256");
                     executeTransferArtifact(repository, encodeHexLower(digest_sha512.digest()), path + ".sha512");
                 }
-                if (info().signKey() != null) {
-                    executeTransferArtifact(repository, executeSignFile(file), path + ".asc");
-                }
+
+                executeTransferArtifact(repository, file, path);
             }
         } catch (IOException | NoSuchAlgorithmException | FileUtilsErrorException e) {
             throw new UploadException(path, e);
@@ -341,6 +345,16 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
         builder.redirectOutput(ProcessBuilder.Redirect.PIPE);
         builder.redirectError(ProcessBuilder.Redirect.PIPE);
         var process = builder.start();
+        try {
+            process.waitFor();
+        } catch (InterruptedException e) {
+            throw new SignException(file, e.getMessage());
+        }
+
+        if (process.exitValue() != 0) {
+            var error = FileUtils.readString(process.getErrorStream());
+            throw new SignException(file, error);
+        }
         return FileUtils.readString(process.getInputStream());
     }
 
