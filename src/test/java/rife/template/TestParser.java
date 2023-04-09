@@ -1400,7 +1400,8 @@ public class TestParser {
         } catch (GetContentErrorException e) {
             assertTrue(e.getCause() instanceof rife.resources.exceptions.ResourceFinderErrorException);
             assertTrue(e.getCause().getCause() instanceof rife.tools.exceptions.FileUtilsErrorException);
-            assertTrue(e.getCause().getCause().getCause() instanceof java.io.UnsupportedEncodingException);
+            assertTrue(e.getCause().getCause().getCause() instanceof rife.tools.exceptions.FileUtilsErrorException);
+            assertTrue(e.getCause().getCause().getCause().getCause() instanceof java.io.UnsupportedEncodingException);
         }
     }
 }
