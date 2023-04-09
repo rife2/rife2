@@ -4,11 +4,12 @@
  */
 package rife.tools.exceptions;
 
+import java.io.IOException;
 import java.io.Serial;
 
-public class FileUtilsErrorException extends Exception {
+public class FileUtilsErrorException extends IOException {
     @Serial
-    private static final long serialVersionUID = 5563842867757961501L;
+    private static final long serialVersionUID = -2727442872243338966L;
 
     public FileUtilsErrorException(String message) {
         super(message);

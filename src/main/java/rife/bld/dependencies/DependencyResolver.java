@@ -240,7 +240,7 @@ public class DependencyResolver {
                 if (retriever_.transferIntoDirectory(artifact, directory)) {
                     return;
                 }
-            } catch (IOException | FileUtilsErrorException e) {
+            } catch (IOException e) {
                 throw new DependencyTransferException(dependency_, artifact.location(), directory, e);
             }
         }

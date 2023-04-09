@@ -683,7 +683,7 @@ public class TestTemplateFactory {
             template1_file.delete();
             try {
                 FileUtils.copy(template1_resource.openStream(), template1_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -707,7 +707,7 @@ public class TestTemplateFactory {
             var template2_resource = TemplateFactory.HTML.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template2_resource.openStream(), template1_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1135,7 +1135,7 @@ public class TestTemplateFactory {
             template1_file.delete();
             try {
                 FileUtils.copy(template1_resource.openStream(), template1_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1159,7 +1159,7 @@ public class TestTemplateFactory {
             var template2_resource = TemplateFactory.TXT.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template2_resource.openStream(), template1_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1213,7 +1213,7 @@ public class TestTemplateFactory {
             try {
                 FileUtils.copy(template1_resource.openStream(), template1_file);
                 FileUtils.copy(template1_included_resource.openStream(), template1_included_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1237,7 +1237,7 @@ public class TestTemplateFactory {
             var template1_included_resource2 = TemplateFactory.HTML.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template1_included_resource2.openStream(), template1_included_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1294,7 +1294,7 @@ public class TestTemplateFactory {
             try {
                 FileUtils.copy(template1_resource.openStream(), template1_file);
                 FileUtils.copy(template1_included_resource.openStream(), template1_included_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1318,7 +1318,7 @@ public class TestTemplateFactory {
             var template1_included_resource2 = TemplateFactory.TXT.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template1_included_resource2.openStream(), template1_included_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }
@@ -1401,7 +1401,7 @@ public class TestTemplateFactory {
             var template1_included_resource2 = TemplateFactory.HTML.getParser().resolve("noblocks_in");
             try {
                 FileUtils.copy(template1_included_resource2.openStream(), template1_included_file);
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
                 return;
             }

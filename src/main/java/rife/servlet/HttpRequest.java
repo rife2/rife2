@@ -20,7 +20,6 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import rife.tools.exceptions.FileUtilsErrorException;
 
 public class HttpRequest implements Request {
     private final HttpServletRequest request_;
@@ -86,7 +85,7 @@ public class HttpRequest implements Request {
         if (bodyAsBytes_ == null) {
             try {
                 bodyAsBytes_ = FileUtils.readBytes(request_.getInputStream());
-            } catch (FileUtilsErrorException | IOException e) {
+            } catch (IOException e) {
                 throw new EngineException(e);
             }
         }

@@ -254,7 +254,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
             }
 
             executeTransferArtifact(repository, content, path);
-        } catch (NoSuchAlgorithmException | IOException | FileUtilsErrorException e) {
+        } catch (NoSuchAlgorithmException | IOException e) {
             throw new UploadException(path, e);
         }
     }
@@ -315,7 +315,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
 
                 executeTransferArtifact(repository, file, path);
             }
-        } catch (IOException | NoSuchAlgorithmException | FileUtilsErrorException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             throw new UploadException(path, e);
         }
     }

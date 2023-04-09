@@ -10,10 +10,8 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -22,6 +20,7 @@ import java.util.zip.ZipFile;
 
 import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static java.nio.file.attribute.PosixFilePermission.*;
 
 public final class FileUtils {
     public static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
@@ -669,5 +668,62 @@ public final class FileUtils {
                 FileUtils.writeString(transformed, file);
             }
         }
+    }
+
+    private static final int S_IRUSR = 0000400;
+    private static final int S_IWUSR = 0000200;
+    private static final int S_IXUSR = 0000100;
+    private static final int S_IRGRP = 0000040;
+    private static final int S_IWGRP = 0000020;
+    private static final int S_IXGRP = 0000010;
+    private static final int S_IROTH = 0000004;
+    private static final int S_IWOTH = 0000002;
+    private static final int S_IXOTH = 0000001;
+
+    /**
+     * Creates a new set of {@code PosixFilePermission} based on the given Posix mode.
+     * <p>
+     * Standard Posix permissions can be provided on octal numbers, for instance {@code 0755} and {@code 0644}.
+     *
+     * @param mode an integer containing permissions for the owner, group and others
+     * @return a Set of PosixFilePermission
+     * @since 1.5.19
+     */
+    public static Set<PosixFilePermission> permissionsFromMode(int mode) {
+        var perms = new HashSet<PosixFilePermission>();
+        if ((mode & S_IRUSR) != 0) perms.add(OWNER_READ);
+        if ((mode & S_IWUSR) != 0) perms.add(OWNER_WRITE);
+        if ((mode & S_IXUSR) != 0) perms.add(OWNER_EXECUTE);
+        if ((mode & S_IRGRP) != 0) perms.add(GROUP_READ);
+        if ((mode & S_IWGRP) != 0) perms.add(GROUP_WRITE);
+        if ((mode & S_IXGRP) != 0) perms.add(GROUP_EXECUTE);
+        if ((mode & S_IROTH) != 0) perms.add(OTHERS_READ);
+        if ((mode & S_IWOTH) != 0) perms.add(OTHERS_WRITE);
+        if ((mode & S_IXOTH) != 0) perms.add(OTHERS_EXECUTE);
+        return perms;
+    }
+
+    /**
+     * Constructs a new {@code Path} instance using the specified file and additional path elements.
+     *
+     * @param file  The file to use as the starting point for the Path.
+     * @param paths Additional path elements to add to the Path.
+     * @return A new Path instance.
+     * @since 1.5.19
+     */
+    public static Path path(File file, String... paths) {
+        return Path.of(file.getAbsolutePath(), paths);
+    }
+
+    /**
+     * Constructs a new {@code Path} instance using the specified file and additional path elements.
+     *
+     * @param path  The path to use as the starting point for the Path.
+     * @param paths Additional path elements to add to the Path.
+     * @return A new Path instance.
+     * @since 1.5.19
+     */
+    public static Path path(Path path, String... paths) {
+        return Path.of(path.toAbsolutePath().toString(), paths);
     }
 }

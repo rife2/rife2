@@ -6,17 +6,19 @@ package rife;
 
 import rife.bld.BuildCommand;
 import rife.bld.Project;
+import rife.bld.dependencies.VersionNumber;
 import rife.bld.extension.Antlr4Operation;
 import rife.bld.extension.TestsBadgeOperation;
 import rife.bld.extension.ZipOperation;
 import rife.bld.operations.*;
 import rife.bld.publish.*;
+import rife.bld.wrapper.Wrapper;
+import rife.tools.DirBuilder;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.jar.Attributes;
 
@@ -24,6 +26,7 @@ import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
 import static rife.bld.operations.JavadocOptions.DocLinkOption.NO_MISSING;
 import static rife.bld.operations.TemplateType.*;
+import static rife.tools.FileUtils.path;
 
 public class Rife2Build extends Project {
     public Rife2Build()
@@ -240,22 +243,25 @@ public class Rife2Build extends Project {
         jar();
         var tmp = Files.createTempDirectory("bld").toFile();
         try {
-            new RunOperation().fromProject(this)
-                .workDirectory(tmp)
-                .runOptions("upgrade")
-                .outputProcessor(s -> true )
-                .execute();
-
-            var bld_dir = new File(tmp, "bld");
-            var bld_bin_dir = new File(bld_dir, "bin");
-            var bld_lib_dir = new File(bld_dir, "lib");
-            bld_bin_dir.mkdirs();
-            bld_lib_dir.mkdirs();
-
-            Files.copy(Path.of(srcMainDirectory().getAbsolutePath(), "bld", "bld"), Path.of(bld_bin_dir.getAbsolutePath(), "bld"));
-            Files.copy(Path.of(srcMainDirectory().getAbsolutePath(), "bld", "bld.bat"), Path.of(bld_bin_dir.getAbsolutePath(), "bld.bat"));
-            Files.move(Path.of(tmp.getAbsolutePath(), "lib", "bld", "bld-wrapper.jar"), Path.of(bld_lib_dir.getAbsolutePath(), "bld-wrapper.jar"));
-            FileUtils.deleteDirectory(new File(tmp, "lib"));
+            new Wrapper().createWrapperFiles(path(tmp, "lib").toFile(), VersionNumber.UNKNOWN.toString());
+            new DirBuilder(tmp, t -> {
+                t.dir("bld", b -> {
+                    b.dir("bin", i -> {
+                        i.file("bld", f -> {
+                            f.copy(path(srcMainDirectory(), "bld", "bld"));
+                            f.perms(0755);
+                        });
+                        i.file("bld.bat", f -> {
+                            f.copy(path(srcMainDirectory(), "bld", "bld.bat"));
+                            f.perms(0755);
+                        });
+                    });
+                    b.dir("lib", l -> {
+                        l.file("bld-wrapper.jar", f -> f.move(path(tmp, "lib", "bld-wrapper.jar")));
+                    });
+                });
+                t.dir("lib", l -> l.delete());
+            });
 
             zipBldOperation
                 .sourceDirectories(tmp)
