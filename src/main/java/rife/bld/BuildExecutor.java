@@ -33,12 +33,29 @@ public class BuildExecutor {
     public static final String BLD_PROPERTIES = "bld.properties";
     public static final String LOCAL_PROPERTIES = "local.properties";
 
+    private static final String ARG_HELP1 = "--help";
+    private static final String ARG_HELP2 = "-h";
+    private static final String ARG_HELP3 = "-?";
+    private static final String ARG_STACKTRACE1 = "--stacktrace";
+    private static final String ARG_STACKTRACE2 = "-s";
+
     private final HierarchicalProperties properties_;
     private List<String> arguments_ = Collections.emptyList();
     private Map<String, CommandDefinition> buildCommands_ = null;
     private final AtomicReference<String> currentCommandName_ = new AtomicReference<>();
     private final AtomicReference<CommandDefinition> currentCommandDefinition_ = new AtomicReference<>();
     private int exitStatus_ = 0;
+
+    /**
+     * Show the full Java stacktrace when exceptions occur, as opposed
+     * to the chain of messages.
+     * <p>
+     * Defaults to {@code false}, can be set to {@code true} by setting
+     * through code or by adding {@code --stacktrace} as a CLI argument.
+     *
+     * @since 1.5.19
+     */
+    protected boolean showStacktrace = false;
 
     /**
      * Creates a new build executor instance.
@@ -192,7 +209,10 @@ public class BuildExecutor {
     public int execute(String[] arguments) {
         arguments_ = new ArrayList<>(Arrays.asList(arguments));
 
-        var show_help = arguments_.isEmpty();
+        var show_help = false;
+        show_help |= arguments_.removeAll(List.of(ARG_HELP1, ARG_HELP2, ARG_HELP3));
+        showStacktrace |= arguments_.removeAll(List.of(ARG_STACKTRACE1, ARG_STACKTRACE2));
+        show_help |= arguments_.isEmpty();
 
         while (!arguments_.isEmpty()) {
             var command = arguments_.remove(0);
@@ -205,21 +225,26 @@ public class BuildExecutor {
                 exitStatus(1);
 
                 System.err.println();
-                boolean first = true;
-                var e2 = e;
-                while (e2 != null) {
-                    if (e2.getMessage() != null) {
-                        if (!first) {
-                            System.err.print("> ");
-                        }
-                        System.err.println(e2.getMessage());
-                        first = false;
-                    }
-                    e2 = e2.getCause();
-                }
 
-                if (first) {
+                if (showStacktrace) {
                     System.err.println(ExceptionUtils.getExceptionStackTrace(e));
+                } else {
+                    boolean first = true;
+                    var e2 = e;
+                    while (e2 != null) {
+                        if (e2.getMessage() != null) {
+                            if (!first) {
+                                System.err.print("> ");
+                            }
+                            System.err.println(e2.getMessage());
+                            first = false;
+                        }
+                        e2 = e2.getCause();
+                    }
+
+                    if (first) {
+                        System.err.println(ExceptionUtils.getExceptionStackTrace(e));
+                    }
                 }
             }
         }
