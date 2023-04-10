@@ -32,6 +32,14 @@ public final class ArrayUtils {
         // no-op
     }
 
+    /**
+     * Determines the type of the array based on the object's class name.
+     *
+     * @param object the object to check if it is an array
+     * @return an ArrayType value indicating the type of the array, or NO_ARRAY if object is not an array
+     * @throws NullPointerException if object is null
+     * @since 1.0
+     */
     public static ArrayType getArrayType(Object object) {
         var classname = object.getClass().getName();
 
@@ -132,10 +140,25 @@ public final class ArrayUtils {
         return result;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input object array.
+     *
+     * @param array the input object array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input object array
+     * @since 1.0
+     */
     public static String[] createStringArray(Object[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input object array.
+     *
+     * @param array               the input object array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input object array
+     * @since 1.0
+     */
     public static String[] createStringArray(Object[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -150,10 +173,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input boolean array.
+     *
+     * @param array the input boolean array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input boolean array
+     * @since 1.0
+     */
     public static String[] createStringArray(boolean[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input boolean array.
+     *
+     * @param array               the input boolean array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input boolean array
+     * @since 1.0
+     */
     public static String[] createStringArray(boolean[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -168,10 +206,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input byte array.
+     *
+     * @param array the input byte array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input byte array
+     * @since 1.0
+     */
     public static String[] createStringArray(byte[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input byte array.
+     *
+     * @param array               the input byte array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input byte array
+     * @since 1.0
+     */
     public static String[] createStringArray(byte[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -186,10 +239,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input char array.
+     *
+     * @param array the input char array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input char array
+     * @since 1.0
+     */
     public static String[] createStringArray(char[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input char array.
+     *
+     * @param array               the input char array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input char array
+     * @since 1.0
+     */
     public static String[] createStringArray(char[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -204,10 +272,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input short array.
+     *
+     * @param array the input short array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input short array
+     * @since 1.0
+     */
     public static String[] createStringArray(short[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input short array.
+     *
+     * @param array               the input short array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input short array
+     * @since 1.0
+     */
     public static String[] createStringArray(short[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -222,10 +305,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input int array.
+     *
+     * @param array the input int array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input int array
+     * @since 1.0
+     */
     public static String[] createStringArray(int[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input int array.
+     *
+     * @param array               the input int array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input int array
+     * @since 1.0
+     */
     public static String[] createStringArray(int[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -240,10 +338,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input long array.
+     *
+     * @param array the input long array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input long array
+     * @since 1.0
+     */
     public static String[] createStringArray(long[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input long array.
+     *
+     * @param array               the input long array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input long array
+     * @since 1.0
+     */
     public static String[] createStringArray(long[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -258,10 +371,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input float array.
+     *
+     * @param array the input float array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input float array
+     * @since 1.0
+     */
     public static String[] createStringArray(float[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input float array.
+     *
+     * @param array               the input float array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input float array
+     * @since 1.0
+     */
     public static String[] createStringArray(float[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -276,10 +404,25 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input double array.
+     *
+     * @param array the input double array, can be empty or {@code null}
+     * @return a new string array containing formatted string values of the input double array
+     * @since 1.0
+     */
     public static String[] createStringArray(double[] array) {
         return createStringArray(array, null);
     }
 
+    /**
+     * Creates a new string array containing formatted string values of the input double array.
+     *
+     * @param array               the input double array, can be empty or {@code null}
+     * @param constrainedProperty the optional {@link ConstrainedProperty} object containing constraints for formatting the property value
+     * @return a new string array containing formatted string values of the input double array
+     * @since 1.0
+     */
     public static String[] createStringArray(double[] array, ConstrainedProperty constrainedProperty) {
         if (null == array) {
             return null;
@@ -294,6 +437,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of booleans from an array of objects.
+     *
+     * @param array the array to create a boolean array from
+     * @return a new boolean array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static boolean[] createBooleanArray(Object[] array) {
         if (null == array) {
             return null;
@@ -312,6 +463,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of bytes from an array of objects.
+     *
+     * @param array the array to create a byte array from
+     * @return a new byte array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static byte[] createByteArray(Object[] array) {
         if (null == array) {
             return null;
@@ -334,6 +493,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of chars from an array of objects.
+     *
+     * @param array the array to create a char array from
+     * @return a new char array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static char[] createCharArray(Object[] array) {
         if (null == array) {
             return null;
@@ -356,6 +523,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of shorts from an array of objects.
+     *
+     * @param array the array to create a short array from
+     * @return a new short array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static short[] createShortArray(Object[] array) {
         if (null == array) {
             return null;
@@ -378,6 +553,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of ints from an array of objects.
+     *
+     * @param array the array to create an int array from
+     * @return a new int array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static int[] createIntArray(Object[] array) {
         if (null == array) {
             return null;
@@ -400,6 +583,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of longs from an array of objects.
+     *
+     * @param array the array to create a long array from
+     * @return a new long array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static long[] createLongArray(Object[] array) {
         if (null == array) {
             return null;
@@ -422,6 +613,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of floats from an array of objects.
+     *
+     * @param array the array to create a float array from
+     * @return a new float array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static float[] createFloatArray(Object[] array) {
         if (null == array) {
             return null;
@@ -444,6 +643,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Creates an array of doubles from an array of objects.
+     *
+     * @param array the array to create a double array from
+     * @return a new double array that contains the converted values of the original array,
+     * or null if the original array is null
+     * @since 1.0
+     */
     public static double[] createDoubleArray(Object[] array) {
         if (null == array) {
             return null;
@@ -466,6 +673,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two String arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first String array to join
+     * @param second the second String array to join
+     * @return a new String array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static String[] join(String[] first, String[] second) {
         if (null == first &&
             null == second) {
@@ -486,6 +701,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single String and a String array into a new array containing all elements.
+     *
+     * @param first  the String array to which to append the second String
+     * @param second the String to append to the first array
+     * @return a new String array with every element of the input array and the appended String,
+     * or a new array containing only the second String if the input array is null
+     * @since 1.0
+     */
     public static String[] join(String[] first, String second) {
         if (null == first &&
             null == second) {
@@ -506,6 +730,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two byte arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first byte array to join
+     * @param second the second byte array to join
+     * @return a new byte array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static byte[] join(byte[] first, byte[] second) {
         if (null == first &&
             null == second) {
@@ -526,6 +758,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single byte and a byte array into a new array containing all elements.
+     *
+     * @param first  the byte array to which to append the second byte
+     * @param second the byte to append to the first array
+     * @return a new byte array with every element of the input array and the appended byte,
+     * or a new array containing only the second byte if the input array is null
+     * @since 1.0
+     */
     public static byte[] join(byte[] first, byte second) {
         if (null == first) {
             return new byte[]{second};
@@ -539,6 +780,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two char arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first char array to join
+     * @param second the second char array to join
+     * @return a new char array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static char[] join(char[] first, char[] second) {
         if (null == first &&
             null == second) {
@@ -559,6 +808,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single char and a char array into a new array containing all elements.
+     *
+     * @param first  the char array to which to append the second char
+     * @param second the char to append to the first array
+     * @return a new char array with every element of the input array and the appended char,
+     * or a new array containing only the second char if the input array is null
+     * @since 1.0
+     */
     public static char[] join(char[] first, char second) {
         if (null == first) {
             return new char[]{second};
@@ -572,6 +830,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two short arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first short array to join
+     * @param second the second short array to join
+     * @return a new short array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static short[] join(short[] first, short[] second) {
         if (null == first &&
             null == second) {
@@ -592,6 +858,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single short and a short array into a new array containing all elements.
+     *
+     * @param first  the short array to which to append the second short
+     * @param second the short to append to the first array
+     * @return a new short array with every element of the input array and the appended short,
+     * or a new array containing only the second short if the input array is null
+     * @since 1.0
+     */
     public static short[] join(short[] first, short second) {
         if (null == first) {
             return new short[]{second};
@@ -605,6 +880,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two int arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first int array to join
+     * @param second the second int array to join
+     * @return a new int array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static int[] join(int[] first, int[] second) {
         if (null == first &&
             null == second) {
@@ -625,6 +908,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single int and an int array into a new array containing all elements.
+     *
+     * @param first  the int array to which to append the second int
+     * @param second the int to append to the first array
+     * @return a new int array with every element of the input array and the appended int,
+     * or a new array containing only the second int if the input array is null
+     * @since 1.0
+     */
     public static int[] join(int[] first, int second) {
         if (null == first) {
             return new int[]{second};
@@ -638,6 +930,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two long arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first long array to join
+     * @param second the second long array to join
+     * @return a new long array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static long[] join(long[] first, long[] second) {
         if (null == first &&
             null == second) {
@@ -658,6 +958,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single long and a long array into a new array containing all elements.
+     *
+     * @param first  the long array to which to append the second long
+     * @param second the long to append to the first array
+     * @return a new long array with every element of the input array and the appended long,
+     * or a new array containing only the second long if the input array is null
+     * @since 1.0
+     */
     public static long[] join(long[] first, long second) {
         if (null == first) {
             return new long[]{second};
@@ -671,6 +980,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two float arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first float array to join
+     * @param second the second float array to join
+     * @return a new float array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static float[] join(float[] first, float[] second) {
         if (null == first &&
             null == second) {
@@ -691,6 +1008,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single float and a float array into a new array containing all elements.
+     *
+     * @param first  the float array to which to append the second float
+     * @param second the float to append to the first array
+     * @return a new float array with every element of the input array and the appended float,
+     * or a new array containing only the second float if the input array is null
+     * @since 1.0
+     */
     public static float[] join(float[] first, float second) {
         if (null == first) {
             return new float[]{second};
@@ -704,6 +1030,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two double arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first double array to join
+     * @param second the second double array to join
+     * @return a new double array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static double[] join(double[] first, double[] second) {
         if (null == first &&
             null == second) {
@@ -724,6 +1058,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single double and a double array into a new array containing all elements.
+     *
+     * @param first  the double array to which to append the second double
+     * @param second the double to append to the first array
+     * @return a new double array with every element of the input array and the appended double,
+     * or a new array containing only the second double if the input array is null
+     * @since 1.0
+     */
     public static double[] join(double[] first, double second) {
         if (null == first) {
             return new double[]{second};
@@ -737,6 +1080,14 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins two boolean arrays into a new array containing all elements from both arrays.
+     *
+     * @param first  the first boolean array to join
+     * @param second the second boolean array to join
+     * @return a new boolean array with every element of both input arrays, or null if both inputs are null
+     * @since 1.0
+     */
     public static boolean[] join(boolean[] first, boolean[] second) {
         if (null == first &&
             null == second) {
@@ -757,6 +1108,15 @@ public final class ArrayUtils {
         return new_array;
     }
 
+    /**
+     * Joins a single boolean and a boolean array into a new array containing all elements.
+     *
+     * @param first  the boolean array to which to append the second boolean
+     * @param second the boolean to append to the first array
+     * @return a new boolean array with every element of the input array and the appended boolean,
+     * or a new array containing only the second boolean if the input array is null
+     * @since 1.0
+     */
     public static boolean[] join(boolean[] first, boolean second) {
         if (null == first) {
             return new boolean[]{second};

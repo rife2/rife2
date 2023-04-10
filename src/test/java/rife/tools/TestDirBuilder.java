@@ -6,10 +6,7 @@ package rife.tools;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import rife.bld.Cli;
-import rife.bld.blueprints.BlankProjectBlueprint;
 import rife.bld.operations.CreateBlankOperation;
-import rife.bld.operations.RunOperation;
 
 import java.io.File;
 import java.io.IOException;

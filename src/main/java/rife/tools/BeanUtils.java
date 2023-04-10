@@ -31,7 +31,18 @@ import java.text.ParseException;
 
 import static rife.tools.BeanUtils.Accessors.*;
 
+/**
+ * Utility class providing methods for working with Java beans.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public final class BeanUtils {
+    /**
+     * Enum used to specify which accessors to consider when retrieving a bean's properties.
+     *
+     * @since 1.0
+     */
     public enum Accessors {
         GETTERS,
         SETTERS,
@@ -42,6 +53,14 @@ public final class BeanUtils {
         // no-op
     }
 
+    /**
+     * Gets the BeanInfo for the specified beanClass.
+     *
+     * @param beanClass The Class to get the BeanInfo for.
+     * @return The BeanInfo for the specified beanClass.
+     * @throws BeanUtilsException If an error occurs while introspecting the bean.
+     * @since 1.0
+     */
     public static BeanInfo getBeanInfo(Class beanClass)
     throws BeanUtilsException {
         try {
@@ -55,6 +74,17 @@ public final class BeanUtils {
         return !method.getDeclaringClass().getPackageName().equals(MetaData.class.getPackageName());
     }
 
+    /**
+     * Validates the specified property using the given parameters.
+     *
+     * @param accessor           The Accessors to use when validating the property.
+     * @param property           The PropertyDescriptor to validate.
+     * @param includedProperties The properties that should be included.
+     * @param excludedProperties The properties that should be excluded.
+     * @param prefix             The prefix to apply to the property name.
+     * @return The name of the property if it's valid and should be included, null otherwise.
+     * @since 1.0
+     */
     private static String validateProperty(Accessors accessor, PropertyDescriptor property, Collection<String> includedProperties, Collection<String> excludedProperties, String prefix) {
         String name = null;
 
@@ -84,11 +114,34 @@ public final class BeanUtils {
         return null;
     }
 
+    /**
+     * Gets the names of the properties of the specified beanClass that have both read and write accessors.
+     *
+     * @param beanClass          The Class to get the property names for.
+     * @param includedProperties The properties that should be included.
+     * @param excludedProperties The properties that should be excluded.
+     * @param prefix             The prefix to apply to the property name.
+     * @return A set containing the names of the properties.
+     * @throws BeanUtilsException If an error occurs while introspecting the bean.
+     * @since 1.0
+     */
     public static Set<String> getPropertyNames(Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         return getPropertyNames(GETTERS_SETTERS, beanClass, includedProperties, excludedProperties, prefix);
     }
 
+    /**
+     * Gets the names of the properties of the specified beanClass that have the specified accessors.
+     *
+     * @param accessors          The Accessors to use when retrieving the property names.
+     * @param beanClass          The Class to get the property names for.
+     * @param includedProperties The properties that should be included.
+     * @param excludedProperties The properties that should be excluded.
+     * @param prefix             The prefix to apply to the property name.
+     * @return A set containing the names of the properties.
+     * @throws BeanUtilsException If an error occurs while introspecting the bean.
+     * @since 1.0
+     */
     public static Set<String> getPropertyNames(Accessors accessors, Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         if (null == beanClass) return Collections.emptySet();
@@ -104,11 +157,36 @@ public final class BeanUtils {
         return property_names;
     }
 
+    /**
+     * Processes the properties of a given bean class with provided accessors, including and excluding properties,
+     * using the given prefix and calling the provided BeanPropertyProcessor with each valid property.
+     *
+     * @param beanClass          The class of the bean to process.
+     * @param includedProperties An array of property names to include, or null if all properties should be included.
+     * @param excludedProperties An array of property names to exclude, or null if no properties should be excluded.
+     * @param prefix             A string to prepend to each property name when processing.
+     * @param processor          The BeanPropertyProcessor to call for each valid property.
+     * @throws BeanUtilsException If an error occurs while processing the properties, such as an invalid property name or an error invoking a property method.
+     * @since 1.0
+     */
     public static void processProperties(Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix, BeanPropertyProcessor processor)
     throws BeanUtilsException {
         processProperties(GETTERS_SETTERS, beanClass, includedProperties, excludedProperties, prefix, processor);
     }
 
+    /**
+     * Processes the properties of a given bean class with the provided accessors, including and excluding properties,
+     * using the given prefix and calling the provided BeanPropertyProcessor with each valid property.
+     *
+     * @param accessors          The Accessors to use when processing properties (either GETTERS_SETTERS or FIELDS).
+     * @param beanClass          The class of the bean to process.
+     * @param includedProperties An array of property names to include, or null if all properties should be included.
+     * @param excludedProperties An array of property names to exclude, or null if no properties should be excluded.
+     * @param prefix             A string to prepend to each property name when processing.
+     * @param processor          The BeanPropertyProcessor to call for each valid property.
+     * @throws BeanUtilsException If an error occurs while processing the properties, such as an invalid property name or an error invoking a property method.
+     * @since 1.0
+     */
     public static void processProperties(Accessors accessors, Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix, BeanPropertyProcessor processor)
     throws BeanUtilsException {
         if (null == beanClass) return;
@@ -154,11 +232,34 @@ public final class BeanUtils {
         }
     }
 
+    /**
+     * Processes the property values of a bean based on the provided parameters.
+     *
+     * @param bean               the bean whose properties will be processed
+     * @param includedProperties an array of property names to include in the processing
+     * @param excludedProperties an array of property names to exclude from the processing
+     * @param prefix             a prefix to add to all processed property names
+     * @param processor          a processor function that will handle each property value
+     * @throws BeanUtilsException if an error occurs during property processing
+     * @since 1.0
+     */
     public static void processPropertyValues(final Object bean, String[] includedProperties, String[] excludedProperties, String prefix, final BeanPropertyValueProcessor processor)
     throws BeanUtilsException {
         processPropertyValues(GETTERS_SETTERS, bean, includedProperties, excludedProperties, prefix, processor);
     }
 
+    /**
+     * Processes the property values of a bean based on the provided parameters, using the specified Accessors enum value.
+     *
+     * @param accessors          the Accessors enum value to use for getting property values
+     * @param bean               the bean whose properties will be processed
+     * @param includedProperties an array of property names to include in the processing
+     * @param excludedProperties an array of property names to exclude from the processing
+     * @param prefix             a prefix to add to all processed property names
+     * @param processor          a processor function that will handle each property value
+     * @throws BeanUtilsException if an error occurs during property processing
+     * @since 1.0
+     */
     public static void processPropertyValues(Accessors accessors, final Object bean, String[] includedProperties, String[] excludedProperties, String prefix, final BeanPropertyValueProcessor processor)
     throws BeanUtilsException {
         if (null == bean) return;
@@ -187,11 +288,34 @@ public final class BeanUtils {
         });
     }
 
+    /**
+     * Counts the number of properties that match the given criteria for a specified bean class.
+     *
+     * @param beanClass          the bean class to examine
+     * @param includedProperties an array of property names to include in the count
+     * @param excludedProperties an array of property names to exclude from the count
+     * @param prefix             a prefix to add to all property names being counted
+     * @return the number of properties that match the given criteria
+     * @throws BeanUtilsException if an error occurs during property counting
+     * @since 1.0
+     */
     public static int countProperties(Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         return countProperties(GETTERS_SETTERS, beanClass, includedProperties, excludedProperties, prefix);
     }
 
+    /**
+     * Counts the number of properties that match the given criteria for a specified bean class, using the specified Accessors enum value.
+     *
+     * @param accessors          the Accessors enum value to use for getting property values
+     * @param beanClass          the bean class to examine
+     * @param includedProperties an array of property names to include in the count
+     * @param excludedProperties an array of property names to exclude from the count
+     * @param prefix             a prefix to add to all property names being counted
+     * @return the number of properties that match the given criteria
+     * @throws BeanUtilsException if an error occurs during property counting
+     * @since 1.0
+     */
     public static int countProperties(Accessors accessors, Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         if (null == beanClass) return 0;
@@ -206,6 +330,16 @@ public final class BeanUtils {
         return result[0];
     }
 
+    /**
+     * Returns the value of the property with the given name from the specified bean.
+     * Throws an exception if the property does not exist or is not readable.
+     *
+     * @param bean The bean instance to retrieve the property value from.
+     * @param name The name of the property to retrieve.
+     * @return The value of the property.
+     * @throws BeanUtilsException If the bean is null, is a class and not an instance, or if the property does not exist or is not readable.
+     * @since 1.0
+     */
     public static Object getPropertyValue(Object bean, String name)
     throws BeanUtilsException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
@@ -252,6 +386,16 @@ public final class BeanUtils {
         throw new BeanUtilsException("The bean '" + bean_class + "' doesn't contain property '" + name + "'", bean_class);
     }
 
+    /**
+     * Sets the value of the property with the given name in the specified bean.
+     * Throws an exception if the property does not exist or is not writable.
+     *
+     * @param bean  The bean instance to set the property value on.
+     * @param name  The name of the property to set.
+     * @param value The value to set the property to.
+     * @throws BeanUtilsException If the bean is null, is a class and not an instance, or if the property does not exist or is not writable.
+     * @since 1.0
+     */
     public static void setPropertyValue(Object bean, String name, Object value)
     throws BeanUtilsException {
         if (null == bean) throw new IllegalArgumentException("bean can't be null.");
@@ -295,6 +439,16 @@ public final class BeanUtils {
         throw new BeanUtilsException("The bean '" + bean_class + "' doesn't contain property '" + name + "'", bean_class);
     }
 
+    /**
+     * Returns the class of a property of a bean, given its name.
+     *
+     * @param beanClass the class of the bean to search for the property
+     * @param name      the name of the property to retrieve the type
+     * @return the class of the property
+     * @throws BeanUtilsException       if the bean doesn't contain the specified property
+     * @throws IllegalArgumentException if the bean class or the name are null or empty
+     * @since 1.0
+     */
     public static Class getPropertyType(Class beanClass, String name)
     throws BeanUtilsException {
         if (null == beanClass) throw new IllegalArgumentException("beanClass can't be null.");
@@ -326,11 +480,34 @@ public final class BeanUtils {
         throw new BeanUtilsException("The bean '" + beanClass + "' doesn't contain property '" + name + "'", beanClass);
     }
 
+    /**
+     * Returns the values of the properties of a bean as a map, given an optional prefix and inclusive/exclusive property filters.
+     *
+     * @param bean               the bean to get the properties from
+     * @param includedProperties an array of the property names to include in the result map
+     * @param excludedProperties an array of the property names to exclude from the result map
+     * @param prefix             an optional prefix to add to the property names in the result map
+     * @return a map containing the property values of the bean
+     * @throws BeanUtilsException if there was an error while retrieving the property values
+     * @since 1.0
+     */
     public static Map<String, Object> getPropertyValues(Object bean, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         return getPropertyValues(GETTERS_SETTERS, bean, includedProperties, excludedProperties, prefix);
     }
 
+    /**
+     * Returns the values of the properties of a bean as a map, given an optional prefix and inclusive/exclusive property filters and a custom set of accessors.
+     *
+     * @param accessors          the Accessors object to use to retrieve the property values
+     * @param bean               the bean to get the properties from
+     * @param includedProperties an array of the property names to include in the result map
+     * @param excludedProperties an array of the property names to exclude from the result map
+     * @param prefix             an optional prefix to add to the property names in the result map
+     * @return a map containing the property values of the bean
+     * @throws BeanUtilsException if there was an error while retrieving the property values
+     * @since 1.0
+     */
     public static Map<String, Object> getPropertyValues(Accessors accessors, Object bean, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         final var property_values = new LinkedHashMap<String, Object>();
@@ -343,6 +520,14 @@ public final class BeanUtils {
         return property_values;
     }
 
+    /**
+     * Formats a property value based on the given format from a constrained property.
+     *
+     * @param propertyValue       the value of the property to format
+     * @param constrainedProperty the constrained property that contains formatting info
+     * @return the formatted value of the property
+     * @since 1.0
+     */
     public static String formatPropertyValue(Object propertyValue, ConstrainedProperty constrainedProperty) {
         if (propertyValue instanceof String) {
             return (String) propertyValue;
@@ -365,9 +550,9 @@ public final class BeanUtils {
                 throw new RuntimeException(e);
             }
         } else if (propertyValue instanceof Date ||
-                   propertyValue instanceof Instant ||
-                   propertyValue instanceof LocalDateTime ||
-                   propertyValue instanceof LocalDate) {
+            propertyValue instanceof Instant ||
+            propertyValue instanceof LocalDateTime ||
+            propertyValue instanceof LocalDate) {
             if (format == null) {
                 format = RifeConfig.tools().getConcisePreciseDateFormat();
             }
@@ -391,11 +576,36 @@ public final class BeanUtils {
         return Convert.toString(propertyValue);
     }
 
+    /**
+     * Returns a map of property names and their corresponding types for the given bean class,
+     * based on the included/excluded properties and prefix.
+     *
+     * @param beanClass          the class for which to retrieve property types
+     * @param includedProperties the list of property names to include
+     * @param excludedProperties the list of property names to exclude
+     * @param prefix             the prefix to use when filtering properties
+     * @return a map of property names and their corresponding types for the given bean class
+     * @throws BeanUtilsException if an error occurs during property retrieval
+     * @since 1.0
+     */
     public static Map<String, Class> getPropertyTypes(Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         return getPropertyTypes(GETTERS_SETTERS, beanClass, includedProperties, excludedProperties, prefix);
     }
 
+    /**
+     * Returns a map of property names and their corresponding types for the given bean class,
+     * based on the included/excluded properties and prefix, using the specified accessors.
+     *
+     * @param accessors          the accessor type to use for property retrieval
+     * @param beanClass          the class for which to retrieve property types
+     * @param includedProperties the list of property names to include
+     * @param excludedProperties the list of property names to exclude
+     * @param prefix             the prefix to use when filtering properties
+     * @return a map of property names and their corresponding types for the given bean class
+     * @throws BeanUtilsException if an error occurs during property retrieval
+     * @since 1.0
+     */
     public static Map<String, Class> getPropertyTypes(Accessors accessors, Class beanClass, String[] includedProperties, String[] excludedProperties, String prefix)
     throws BeanUtilsException {
         if (null == beanClass) return Collections.emptyMap();
@@ -541,7 +751,7 @@ public final class BeanUtils {
         if (beanProperties.containsKey(name_upper)) {
             if (null == emptyBean &&
                 (null == propertyValues ||
-                 0 == propertyValues.length)) {
+                    0 == propertyValues.length)) {
                 return;
             }
 
@@ -576,9 +786,9 @@ public final class BeanUtils {
                 // in case an empty template bean has been provided
                 if (emptyBean != null &&
                     (null == propertyValues ||
-                     0 == propertyValues.length ||
-                     null == propertyValues[0] ||
-                     0 == propertyValues[0].length())) {
+                        0 == propertyValues.length ||
+                        null == propertyValues[0] ||
+                        0 == propertyValues[0].length())) {
                     var read_method = property.getReadMethod();
                     var empty_value = read_method.invoke(emptyBean, (Object[]) null);
                     write_method.invoke(beanInstance, empty_value);
@@ -795,11 +1005,11 @@ public final class BeanUtils {
                             }
                             write_method.invoke(beanInstance, new Object[]{parameter_values_typed});
                         } else if (Date.class.isAssignableFrom(component_type) ||
-                                   Instant.class.isAssignableFrom(component_type) ||
-                                   LocalDateTime.class.isAssignableFrom(component_type) ||
-                                   LocalDate.class.isAssignableFrom(component_type) ||
-                                   Time.class.isAssignableFrom(component_type) ||
-                                   LocalTime.class.isAssignableFrom(component_type)) {
+                            Instant.class.isAssignableFrom(component_type) ||
+                            LocalDateTime.class.isAssignableFrom(component_type) ||
+                            LocalDate.class.isAssignableFrom(component_type) ||
+                            Time.class.isAssignableFrom(component_type) ||
+                            LocalTime.class.isAssignableFrom(component_type)) {
                             Format custom_format = null;
                             if (constrained_property != null &&
                                 constrained_property.isFormatted()) {
@@ -904,48 +1114,48 @@ public final class BeanUtils {
                         if (property_type == String.class) {
                             parameter_value_typed = propertyValues[0];
                         } else if (property_type == int.class ||
-                                   property_type == Integer.class) {
+                            property_type == Integer.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toInt(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toInt(propertyValues[0]);
                             }
                         } else if (property_type == char.class ||
-                                   property_type == Character.class) {
+                            property_type == Character.class) {
                             parameter_value_typed = propertyValues[0].charAt(0);
                         } else if (property_type == boolean.class ||
-                                   property_type == Boolean.class) {
+                            property_type == Boolean.class) {
                             parameter_value_typed = Convert.toBoolean(StringUtils.convertToBoolean(propertyValues[0]));
                         } else if (property_type == byte.class ||
-                                   property_type == Byte.class) {
+                            property_type == Byte.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toByte(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toByte(propertyValues[0]);
                             }
                         } else if (property_type == double.class ||
-                                   property_type == Double.class) {
+                            property_type == Double.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toDouble(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toDouble(propertyValues[0]);
                             }
                         } else if (property_type == float.class ||
-                                   property_type == Float.class) {
+                            property_type == Float.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toFloat(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toFloat(propertyValues[0]);
                             }
                         } else if (property_type == long.class ||
-                                   property_type == Long.class) {
+                            property_type == Long.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toLong(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
                                 parameter_value_typed = Convert.toLong(propertyValues[0]);
                             }
                         } else if (property_type == short.class ||
-                                   property_type == Short.class) {
+                            property_type == Short.class) {
                             if (constrained_property != null && constrained_property.isFormatted()) {
                                 parameter_value_typed = Convert.toShort(constrained_property.getFormat().parseObject(propertyValues[0]));
                             } else {
@@ -963,11 +1173,11 @@ public final class BeanUtils {
                         } else if (property_type == StringBuilder.class) {
                             parameter_value_typed = new StringBuilder(propertyValues[0]);
                         } else if (Date.class.isAssignableFrom(property_type) ||
-                                   Instant.class.isAssignableFrom(property_type) ||
-                                   LocalDateTime.class.isAssignableFrom(property_type) ||
-                                   LocalDate.class.isAssignableFrom(property_type) ||
-                                   Time.class.isAssignableFrom(property_type) ||
-                                   LocalTime.class.isAssignableFrom(property_type)) {
+                            Instant.class.isAssignableFrom(property_type) ||
+                            LocalDateTime.class.isAssignableFrom(property_type) ||
+                            LocalDate.class.isAssignableFrom(property_type) ||
+                            Time.class.isAssignableFrom(property_type) ||
+                            LocalTime.class.isAssignableFrom(property_type)) {
                             Format custom_format = null;
                             if (constrained_property != null &&
                                 constrained_property.isFormatted()) {
