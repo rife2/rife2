@@ -22,6 +22,12 @@ import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static java.nio.file.attribute.PosixFilePermission.*;
 
+/**
+ * A utility class for handling files.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public final class FileUtils {
     public static final Pattern JAVA_FILE_PATTERN = Pattern.compile("^.*\\.java$");
     public static final Pattern JAR_FILE_PATTERN = Pattern.compile("^.*\\.jar$");
@@ -30,20 +36,57 @@ public final class FileUtils {
         // no-op
     }
 
-    public static List<String> getFileList(File file) {
-        return getFileList(file, null, null, true);
+    /**
+     * Returns a list of files in the given directory.
+     *
+     * @param dir The directory to search for files.
+     * @return A list of files in the given directory.
+     * @since 1.0
+     */
+    public static List<String> getFileList(File dir) {
+        return getFileList(dir, null, null, true);
     }
 
-    public static List<String> getFileList(File file, Pattern included, Pattern excluded) {
-        return getFileList(file, new Pattern[]{included}, new Pattern[]{excluded}, true);
+    /**
+     * Returns a list of files in the given directory that match the specified
+     * inclusion and exclusion patterns.
+     *
+     * @param dir      The directory to search for files.
+     * @param included A pattern for files to include.
+     * @param excluded A pattern for files to exclude.
+     * @return A list of files in the given directory that match the specified inclusion and exclusion patterns.
+     * @since 1.0
+     */
+    public static List<String> getFileList(File dir, Pattern included, Pattern excluded) {
+        return getFileList(dir, new Pattern[]{included}, new Pattern[]{excluded}, true);
     }
 
-    public static List<String> getFileList(File file, List<Pattern> included, List<Pattern> excluded) {
-        return getFileList(file, included.toArray(new Pattern[0]), excluded.toArray(new Pattern[0]), true);
+    /**
+     * Returns a list of files in the given directory that match the specified
+     * inclusion and exclusion patterns.
+     *
+     * @param dir      The directory to search for files.
+     * @param included A list of patterns for files to include.
+     * @param excluded A list of patterns for files to exclude.
+     * @return A list of files in the given directory that match the specified inclusion and exclusion patterns.
+     * @since 1.0
+     */
+    public static List<String> getFileList(File dir, List<Pattern> included, List<Pattern> excluded) {
+        return getFileList(dir, included.toArray(new Pattern[0]), excluded.toArray(new Pattern[0]), true);
     }
 
-    public static List<String> getFileList(File file, Pattern[] included, Pattern[] excluded) {
-        return getFileList(file, included, excluded, true);
+    /**
+     * Returns a list of files in the given directory that match the specified
+     * inclusion and exclusion patterns.
+     *
+     * @param dir      The directory to search for files.
+     * @param included An array of patterns for files to include.
+     * @param excluded An array of patterns for files to exclude.
+     * @return A list of files in the given directory that match the specified inclusion and exclusion patterns.
+     * @since 1.0
+     */
+    public static List<String> getFileList(File dir, Pattern[] included, Pattern[] excluded) {
+        return getFileList(dir, included, excluded, true);
     }
 
     private static List<String> getFileList(File file, Pattern[] included, Pattern[] excluded, boolean root) {
@@ -133,6 +176,15 @@ public final class FileUtils {
         return accepted;
     }
 
+    /**
+     * Moves the source file to the target location.
+     *
+     * @param source the file to be moved.
+     * @param target the new location to move the file to.
+     * @throws FileUtilsErrorException  if an error occurs while moving the file.
+     * @throws IllegalArgumentException if either the source or target is null.
+     * @since 1.0
+     */
     public static void moveFile(File source, File target)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -145,11 +197,19 @@ public final class FileUtils {
         // copy
         copy(source, target);
 
-        // then delete sourcefile
+        // then delete source file
         deleteFile(source);
     }
 
-
+    /**
+     * Moves the source directory to the target location.
+     *
+     * @param source the directory to be moved.
+     * @param target the new location to move the directory to.
+     * @throws FileUtilsErrorException  if an error occurs while moving the directory.
+     * @throws IllegalArgumentException if either the source or target is null.
+     * @since 1.0
+     */
     public static void moveDirectory(File source, File target)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -180,9 +240,16 @@ public final class FileUtils {
 
         // If we get here it means we're finished with this directory ... delete it.
         deleteFile(source);
-
     }
 
+    /**
+     * Deletes a directory and all its contents recursively.
+     *
+     * @param source the directory to be deleted.
+     * @throws FileUtilsErrorException  if an error occurs while deleting the directory.
+     * @throws IllegalArgumentException if the source is null.
+     * @since 1.0
+     */
     public static void deleteDirectory(File source)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -208,6 +275,15 @@ public final class FileUtils {
         deleteFile(source);
     }
 
+    /**
+     * Copy the contents of an InputStream to an OutputStream.
+     *
+     * @param inputStream  the InputStream to copy from. Must not be null.
+     * @param outputStream the OutputStream to copy to. Must not be null.
+     * @throws FileUtilsErrorException  if there is an error during the copying of streams.
+     * @throws IllegalArgumentException if either inputStream or outputStream is null.
+     * @since 1.0
+     */
     public static void copy(InputStream inputStream, OutputStream outputStream)
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
@@ -228,6 +304,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Copy the contents of an InputStream to a file.
+     *
+     * @param inputStream the InputStream to copy from; must not be null
+     * @param target      the File to copy to; must not be null
+     * @throws FileUtilsErrorException  if an error occurs while copying the stream to the file
+     * @throws IllegalArgumentException if inputStream or target is null
+     * @since 1.0
+     */
     public static void copy(InputStream inputStream, File target)
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
@@ -242,6 +327,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Copy the contents of a file to an OutputStream.
+     *
+     * @param source       the File to copy from; must not be null
+     * @param outputStream the OutputStream to copy to; must not be null
+     * @throws FileUtilsErrorException  if an error occurs while copying the file to the stream
+     * @throws IllegalArgumentException if source or outputStream is null
+     * @since 1.0
+     */
     public static void copy(File source, OutputStream outputStream)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -256,6 +350,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Copy the contents of one file to another file.
+     *
+     * @param source the File to copy from; must not be null
+     * @param target the File to copy to; must not be null
+     * @throws FileUtilsErrorException  if an error occurs while copying the source file to the target file
+     * @throws IllegalArgumentException if source or target is null
+     * @since 1.0
+     */
     public static void copy(File source, File target)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -271,6 +374,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Copies all files and directories from the source directory to the target directory.
+     *
+     * @param sourceDir the directory to be copied from
+     * @param targetDir the directory to be copied to
+     * @throws FileUtilsErrorException  if there's an error copying the files
+     * @throws IllegalArgumentException if either sourceDir or targetDir are null
+     * @since 1.0
+     */
     public static void copyDirectory(File sourceDir, File targetDir)
     throws FileUtilsErrorException {
         if (null == sourceDir) throw new IllegalArgumentException("sourceDir can't be null.");
@@ -294,10 +406,18 @@ public final class FileUtils {
             throw new FileUtilsErrorException("Error while copying directory '" + sourceDir.getAbsolutePath() + "' to directory '" + targetDir.getAbsolutePath() + "'.", e);
         } catch (InnerClassException e) {
             throw new FileUtilsErrorException(e.getMessage(), e.getCause());
-
         }
     }
 
+    /**
+     * Reads the complete contents of an input stream and returns it as a ByteArrayOutputStream object.
+     *
+     * @param inputStream the input stream to be read.
+     * @return a ByteArrayOutputStream object containing the complete contents of the specified input stream.
+     * @throws FileUtilsErrorException  if there is an error while reading the input stream.
+     * @throws IllegalArgumentException if the inputStream parameter is null.
+     * @since 1.0
+     */
     public static ByteArrayOutputStream readStream(InputStream inputStream)
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
@@ -324,6 +444,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Reads the entire contents of an InputStream and returns it as a String, using UTF-8 encoding.
+     *
+     * @param inputStream The InputStream to read the contents from.
+     * @return A String containing the complete contents of the InputStream.
+     * @throws FileUtilsErrorException  If there was an error while reading the InputStream.
+     * @throws IllegalArgumentException If the inputStream is null.
+     * @since 1.0
+     */
     public static String readString(InputStream inputStream)
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
@@ -331,6 +460,15 @@ public final class FileUtils {
         return readStream(inputStream).toString(StandardCharsets.UTF_8);
     }
 
+    /**
+     * Reads the entire contents of a Reader and returns it as a String.
+     *
+     * @param reader The Reader to read the contents from.
+     * @return A String containing the complete contents of the Reader.
+     * @throws FileUtilsErrorException  If there was an error while reading the Reader.
+     * @throws IllegalArgumentException If the reader is null.
+     * @since 1.0
+     */
     public static String readString(Reader reader)
     throws FileUtilsErrorException {
         if (null == reader) throw new IllegalArgumentException("reader can't be null.");
@@ -351,6 +489,16 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Reads the entire contents of an InputStream and returns it as a String, using the specified character encoding.
+     *
+     * @param inputStream The InputStream to read the contents from.
+     * @param encoding    The name of the character encoding to use.
+     * @return A String containing the complete contents of the InputStream.
+     * @throws FileUtilsErrorException  If there was an error while reading the InputStream.
+     * @throws IllegalArgumentException If the inputStream is null.
+     * @since 1.0
+     */
     public static String readString(InputStream inputStream, String encoding)
     throws FileUtilsErrorException {
         if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
@@ -362,18 +510,16 @@ public final class FileUtils {
         }
     }
 
-    public static byte[] readBytes(InputStream inputStream)
-    throws FileUtilsErrorException {
-        if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
-
-        return readStream(inputStream).toByteArray();
-    }
-
-    public static String readString(URL source)
-    throws FileUtilsErrorException {
-        return readString(source, null);
-    }
-
+    /**
+     * Reads the content of the given URL into a string.
+     *
+     * @param source   the URL to read from
+     * @param encoding the character encoding to use, or null to use the default encoding
+     * @return the content of the URL as a string
+     * @throws FileUtilsErrorException  if an error occurs while reading the URL
+     * @throws IllegalArgumentException if source is null
+     * @since 1.0
+     */
     public static String readString(URL source, String encoding)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -393,26 +539,30 @@ public final class FileUtils {
         }
     }
 
-    public static byte[] readBytes(URL source)
-    throws FileUtilsErrorException {
-        if (null == source) throw new IllegalArgumentException("source can't be null.");
-
-        try {
-            var connection = source.openConnection();
-            connection.setUseCaches(false);
-            try (var input_stream = connection.getInputStream()) {
-                return readBytes(input_stream);
-            }
-        } catch (IOException e) {
-            throw new FileUtilsErrorException("Error while reading url '" + source + ".", e);
-        }
-    }
-
+    /**
+     * Reads the content of the given file into a string using the default encoding.
+     *
+     * @param source the file to read from
+     * @return the content of the file as a string
+     * @throws FileUtilsErrorException  if an error occurs while reading the file
+     * @throws IllegalArgumentException if source is null
+     * @since 1.0
+     */
     public static String readString(File source)
     throws FileUtilsErrorException {
         return readString(source, null);
     }
 
+    /**
+     * Reads the content of the given file into a string using the specified character encoding.
+     *
+     * @param source   the file to read from
+     * @param encoding the character encoding to use, or null to use the default encoding
+     * @return the content of the file as a string
+     * @throws FileUtilsErrorException  if an error occurs while reading the file
+     * @throws IllegalArgumentException if source is null
+     * @since 1.0
+     */
     public static String readString(File source, String encoding)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -430,6 +580,69 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Reads all characters from the {@link java.net.URL} and returns its contents as a string.
+     *
+     * @param source the URL to read from
+     * @return a string containing all the characters read from the URL
+     * @throws FileUtilsErrorException  if an error occurs while reading the URL
+     * @throws IllegalArgumentException if source is null
+     * @since 1.0
+     */
+    public static String readString(URL source)
+    throws FileUtilsErrorException {
+        return readString(source, null);
+    }
+
+    /**
+     * Reads all the bytes from the {@link java.io.InputStream}.
+     *
+     * @param inputStream the inputStream to read from
+     * @return a byte array containing all the bytes read from the input stream
+     * @throws FileUtilsErrorException  if an error occurs while reading the input stream
+     * @throws IllegalArgumentException if inputStream is null
+     * @since 1.0
+     */
+    public static byte[] readBytes(InputStream inputStream)
+    throws FileUtilsErrorException {
+        if (null == inputStream) throw new IllegalArgumentException("inputStream can't be null.");
+
+        return readStream(inputStream).toByteArray();
+    }
+
+    /**
+     * Reads all the bytes from the file denoted by the specified {@link java.io.File} object.
+     *
+     * @param source the file to read from
+     * @return a byte array containing all the bytes read from the file
+     * @throws FileUtilsErrorException  if an error occurs while reading the file
+     * @throws IllegalArgumentException if source is null
+     * @since 1.0
+     */
+    public static byte[] readBytes(URL source)
+    throws FileUtilsErrorException {
+        if (null == source) throw new IllegalArgumentException("source can't be null.");
+
+        try {
+            var connection = source.openConnection();
+            connection.setUseCaches(false);
+            try (var input_stream = connection.getInputStream()) {
+                return readBytes(input_stream);
+            }
+        } catch (IOException e) {
+            throw new FileUtilsErrorException("Error while reading url '" + source + ".", e);
+        }
+    }
+
+    /**
+     * Reads all the bytes from the {@link java.net.URL}.
+     *
+     * @param source the URL to read from
+     * @return a byte array containing all the bytes read from the URL
+     * @throws FileUtilsErrorException  if an error occurs while reading the URL
+     * @throws IllegalArgumentException if source is null
+     * @since 1.0
+     */
     public static byte[] readBytes(File source)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -443,6 +656,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Writes a byte array to a given file.
+     *
+     * @param content     the byte array to be written
+     * @param destination the file to which the byte array should be written
+     * @throws FileUtilsErrorException  if there is an error writing the byte array to the file
+     * @throws IllegalArgumentException if either the content or destination arguments are null
+     * @since 1.0
+     */
     public static void writeBytes(byte[] content, File destination)
     throws FileUtilsErrorException {
         if (null == content) throw new IllegalArgumentException("content can't be null.");
@@ -458,6 +680,15 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Writes a string to a given file.
+     *
+     * @param content     the string to be written
+     * @param destination the file to which the string should be written
+     * @throws FileUtilsErrorException  if there is an error writing the string to the file
+     * @throws IllegalArgumentException if either the content or destination arguments are null
+     * @since 1.0
+     */
     public static void writeString(String content, File destination)
     throws FileUtilsErrorException {
         if (null == content) throw new IllegalArgumentException("content can't be null.");
@@ -473,18 +704,39 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Deletes a given file.
+     *
+     * @param file The file to be deleted.
+     * @throws IllegalArgumentException if file is null.
+     * @since 1.0
+     */
     public static void deleteFile(File file) {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
 
         file.delete();
     }
 
+    /**
+     * Generates a unique filename.
+     *
+     * @return A unique filename string.
+     * @since 1.0
+     */
     public static String getUniqueFilename() {
         var current_date = new Date();
 
         return current_date.getTime() + "-" + (long) (1000000 * Math.random());
     }
 
+    /**
+     * Unzips a file from the source location to a destination.
+     *
+     * @param source      the file to unzip (must not be null)
+     * @param destination the location to unzip the file to (must not be null)
+     * @throws FileUtilsErrorException if an error occurs while unzipping the file or creating directories
+     * @since 1.0
+     */
     public static void unzipFile(File source, File destination)
     throws FileUtilsErrorException {
         if (null == source) throw new IllegalArgumentException("source can't be null.");
@@ -579,27 +831,62 @@ public final class FileUtils {
         }
     }
 
+    /**
+     * Returns the base name of the specified file, without the extension.
+     *
+     * @param file The file whose base name is to be returned.
+     * @return The base name of the file.
+     * @since 1.0
+     */
     public static String getBaseName(File file) {
+        if (null == file) throw new IllegalArgumentException("file can't be null.");
+
         return getBaseName(file.getName());
     }
 
+    /**
+     * Returns the base name of the specified file name, without the extension.
+     *
+     * @param fileName The name of the file whose base name is to be returned.
+     * @return The base name of the file.
+     * @throws IllegalArgumentException if fileName is null.
+     * @since 1.0
+     */
     public static String getBaseName(String fileName) {
         if (null == fileName) throw new IllegalArgumentException("fileName can't be null.");
 
-        String basename = null;
+        var basename = fileName;
 
         var index = fileName.lastIndexOf('.');
-        if (index > 0 && index < fileName.length() - 1) {
+        if (index >= 0) {
             basename = fileName.substring(0, index);
         }
 
         return basename;
     }
 
+    /**
+     * Returns the extension of the specified {@link File}.
+     *
+     * @param file the file to get the extension from
+     * @return the extension of the given file or null if the file has no extension.
+     * @throws IllegalArgumentException if file is null
+     * @since 1.0
+     */
     public static String getExtension(File file) {
+        if (null == file) throw new IllegalArgumentException("file can't be null.");
+
         return getExtension(file.getName());
     }
 
+    /**
+     * Returns the extension of the specified file name.
+     *
+     * @param fileName the name of the file to get the extension from
+     * @return the extension of the given file name or null if the file name has no extension.
+     * @throws IllegalArgumentException if fileName is null
+     * @since 1.0
+     */
     public static String getExtension(String fileName) {
         if (null == fileName) throw new IllegalArgumentException("fileName can't be null.");
 
@@ -613,8 +900,18 @@ public final class FileUtils {
         return ext;
     }
 
+    /**
+     * Combines an arbitrary number of lists of files into a single list of absolute file paths.
+     *
+     * @param files zero or more lists of files to be combined
+     * @return the list of absolute file paths resulting from combining the input lists
+     * @since 1.5.2
+     */
     @SafeVarargs
     public static List<String> combineToAbsolutePaths(List<File>... files) {
+        if (files == null) {
+            return Collections.emptyList();
+        }
         var result = new ArrayList<String>();
         for (var list : files) {
             for (var file : list) {
@@ -624,6 +921,14 @@ public final class FileUtils {
         return result;
     }
 
+    /**
+     * Generates a sorted directory listing of all files and subdirectories in the specified directory.
+     *
+     * @param directory The root directory to list.
+     * @return A string containing a sorted directory listing of all files and subdirectories in the specified directory.
+     * @throws IOException If an error occurs while listing the directory.
+     * @since 1.5.0
+     */
     public static String generateDirectoryListing(File directory)
     throws IOException {
         return Files.walk(Path.of(directory.getAbsolutePath()))
@@ -633,31 +938,94 @@ public final class FileUtils {
             .collect(Collectors.joining(System.lineSeparator()));
     }
 
+    /**
+     * Joins a list of file paths into a single string with the file path separator.
+     *
+     * @param paths A list of file paths to join.
+     * @return A single string consisting of all the input file paths separated by the file path separator, or an empty string if input list is null.
+     * @since 1.5.2
+     */
     public static String joinPaths(List<String> paths) {
+        if (paths == null) {
+            return "";
+        }
+
         return String.join(File.pathSeparator, paths);
     }
 
+    /**
+     * Returns a list of Java files in the specified directory.
+     *
+     * @param directory The directory to search for Java files.
+     * @return A list of File objects pointing to the Java files in the directory, or an empty list if input directory is null.
+     * @since 1.5.10
+     */
     public static List<File> getJavaFileList(File directory) {
+        if (directory == null) {
+            return Collections.emptyList();
+        }
+
         var dir_abs = directory.getAbsoluteFile();
         return FileUtils.getFileList(dir_abs, JAVA_FILE_PATTERN, null)
             .stream().map(file -> new File(dir_abs, file)).toList();
     }
 
+    /**
+     * Transforms all files in the specified directory using the provided transformation function.
+     *
+     * @param directory   The directory containing the files to be transformed.
+     * @param transformer The transformation function to be applied to each file.
+     * @throws FileUtilsErrorException If there is an error while reading or writing a file.
+     * @since 1.5.10
+     */
     public static void transformFiles(File directory, Function<String, String> transformer)
     throws FileUtilsErrorException {
         transformFiles(directory, null, (Pattern[]) null, transformer);
     }
 
+    /**
+     * Transforms files in the specified directory that match the included pattern and do not match the excluded pattern
+     * using the provided transformation function.
+     *
+     * @param directory   The directory containing the files to be transformed.
+     * @param included    A regex pattern specifying which files to include.
+     * @param excluded    A regex pattern specifying which files to exclude.
+     * @param transformer The transformation function to be applied to each file.
+     * @throws FileUtilsErrorException If there is an error while reading or writing a file.
+     * @since 1.5.10
+     */
     public static void transformFiles(File directory, Pattern included, Pattern excluded, Function<String, String> transformer)
     throws FileUtilsErrorException {
         transformFiles(directory, new Pattern[]{included}, new Pattern[]{excluded}, transformer);
     }
 
+    /**
+     * Transforms files in the specified directory that match at least one of the included patterns and do not match any
+     * of the excluded patterns using the provided transformation function.
+     *
+     * @param directory   The directory containing the files to be transformed.
+     * @param included    A list of regex patterns specifying which files to include.
+     * @param excluded    A list of regex patterns specifying which files to exclude.
+     * @param transformer The transformation function to be applied to each file.
+     * @throws FileUtilsErrorException If there is an error while reading or writing a file.
+     * @since 1.5.10
+     */
     public static void transformFiles(File directory, List<Pattern> included, List<Pattern> excluded, Function<String, String> transformer)
     throws FileUtilsErrorException {
         transformFiles(directory, included.toArray(new Pattern[0]), excluded.toArray(new Pattern[0]), transformer);
     }
 
+    /**
+     * Transforms files in the specified directory that match at least one of the included patterns and do not match any
+     * of the excluded patterns using the provided transformation function.
+     *
+     * @param directory   The directory containing the files to be transformed.
+     * @param included    An array of regex patterns specifying which files to include.
+     * @param excluded    An array of regex patterns specifying which files to exclude.
+     * @param transformer The transformation function to be applied to each file.
+     * @throws FileUtilsErrorException If there is an error while reading or writing a file.
+     * @since 1.5.10
+     */
     public static void transformFiles(File directory, Pattern[] included, Pattern[] excluded, Function<String, String> transformer)
     throws FileUtilsErrorException {
         for (var entry : FileUtils.getFileList(directory, included, excluded)) {
