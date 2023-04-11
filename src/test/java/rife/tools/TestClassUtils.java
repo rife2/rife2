@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestClassUtils {
     @Test
@@ -83,6 +82,47 @@ public class TestClassUtils {
         assertTrue(ClassUtils.isFromJdk(Date.class));
         assertFalse(ClassUtils.isFromJdk(Interface1.class));
         assertFalse(ClassUtils.isFromJdk(getClass()));
+    }
+
+    @Test
+    public void testSimpleClassName() {
+        String simpleName = ClassUtils.simpleClassName(String.class);
+        assertEquals("String", simpleName);
+    }
+
+    @Test
+    public void testSimpleClassName2() {
+        String simpleName = ClassUtils.simpleClassName(Outer.Inner.class);
+        assertEquals("TestClassUtils$Outer$Inner", simpleName);
+    }
+
+    @Test
+    public void testShortenClassName() {
+        String shortenedName = ClassUtils.shortenClassName(Outer.Inner.class);
+        assertEquals("TestClassUtils_Outer_Inner", shortenedName);
+    }
+
+    private static class Outer {
+        private static class Inner {
+        }
+    }
+
+    @Test
+    public void testGetEnumClassValues() {
+        String[] values = ClassUtils.getEnumClassValues(TestEnum.class);
+        assertArrayEquals(new String[]{"ONE", "TWO", "THREE"}, values);
+    }
+
+    private enum TestEnum {
+        ONE,
+        TWO,
+        THREE
+    }
+
+    @Test
+    public void testGetEnumClassValuesNonEnum() {
+        String[] values = ClassUtils.getEnumClassValues(String.class);
+        assertNull(values);
     }
 }
 
