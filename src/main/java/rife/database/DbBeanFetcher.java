@@ -6,11 +6,14 @@ package rife.database;
 
 import rife.database.exceptions.BeanException;
 import rife.database.exceptions.DatabaseException;
+import rife.tools.Convert;
+import rife.tools.exceptions.ConversionException;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -183,26 +186,28 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
                     else {
                         var column_string_value = resultSet.getString(columnIndex);
                         if (column_string_value != null) {
+                            Constructor<?> constructor;
                             try {
-                                var constructor = property.getPropertyType().getConstructor(String.class);
-                                if (constructor != null) {
+                                constructor = property.getPropertyType().getConstructor(String.class);
+                            } catch (NoSuchMethodException ignored) {
+                                // couldn't find a string argument constructor
+                                constructor = null;
+                            }
+
+                            if (constructor != null) {
+                                try {
                                     typed_object = constructor.newInstance((Object[]) new String[]{column_string_value});
+                                } catch (SecurityException e) {
+                                    throw new SQLException("No permission to obtain the String constructor of the property with name '" + property.getName() + "' and class '" + property.getPropertyType().getName() + "' of the bean with class '" + beanClass_.getName() + "'.", e);
+                                } catch (InstantiationException e) {
+                                    throw new SQLException("Can't instantiate a new instance of the property with name '" + property.getName() + "' and class '" + property.getPropertyType().getName() + "' of the bean with class '" + beanClass_.getName() + "'.", e);
                                 }
-                            } catch (SecurityException e) {
-                                instance = null;
-                                var e2 = new SQLException("No permission to obtain the String constructor of the property with name '" + property.getName() + "' and class '" + property.getPropertyType().getName() + "' of the bean with class '" + beanClass_.getName() + "'.");
-                                e2.initCause(e);
-                                throw e2;
-                            } catch (NoSuchMethodException e) {
-                                instance = null;
-                                var e2 = new SQLException("Couldn't find a String constructor for the property with name '" + property.getName() + "' and class '" + property.getPropertyType().getName() + "' of the bean with class '" + beanClass_.getName() + "'.");
-                                e2.initCause(e);
-                                throw e2;
-                            } catch (InstantiationException e) {
-                                instance = null;
-                                var e2 = new SQLException("Can't instantiate a new instance of the property with name '" + property.getName() + "' and class '" + property.getPropertyType().getName() + "' of the bean with class '" + beanClass_.getName() + "'.");
-                                e2.initCause(e);
-                                throw e2;
+                            } else {
+                                try {
+                                    typed_object = Convert.toType(column_string_value, property.getPropertyType());
+                                } catch (ConversionException e) {
+                                    throw new SQLException("Unable to convert '" + column_string_value + "' nor could find a String constructor for the property with name '" + property.getName() + "' and class '" + property.getPropertyType().getName() + "' of the bean with class '" + beanClass_.getName() + "'.", e);
+                                }
                             }
                         }
                     }
