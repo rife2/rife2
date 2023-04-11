@@ -20,11 +20,26 @@ import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
+/**
+ * General purpose class providing methods to convert between data types.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.0
+ */
 public final class Convert {
     private Convert() {
         // no-op
     }
 
+    /**
+     * Converts the given value into the specified target class.
+     *
+     * @param value  the value to be converted.
+     * @param target the class representing the target type of the conversion.
+     * @return the value converted to the target type
+     * @throws ConversionException if the value can't be converted to the target type.
+     * @since 1.0
+     */
     public static Object toType(Object value, Class<?> target)
     throws ConversionException {
         if (null == target) return null;
@@ -63,6 +78,15 @@ public final class Convert {
         throw new ConversionException(value, target, null);
     }
 
+    /**
+     * Converts the given string into an object of specified type.
+     *
+     * @param string the string to be converted.
+     * @param type   the class representing the target type of the conversion.
+     * @return the string converted to the target type.
+     * @throws ConversionException if the string can't be converted to the target type.
+     * @since 1.5.20
+     */
     public static Object fromString(String string, Class<?> type)
     throws ConversionException {
         if (string == null || type == null) {
@@ -158,6 +182,16 @@ public final class Convert {
         throw new ConversionException(string, type, null);
     }
 
+    /**
+     * Returns the string representation of the specified object.
+     * <p>
+     * If {@code null} is provided as value, the result will also be {@code null} and
+     * not the string literal {@code "null"}.
+     *
+     * @param value the object to convert to string.
+     * @return the string representation of the specified object.
+     * @since 1.0
+     */
     public static String toString(Object value) {
         if (null == value) {
             return null;
@@ -166,6 +200,14 @@ public final class Convert {
         return value.toString();
     }
 
+    /**
+     * Converts the specified object to a char value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to char.
+     * @param defaultValue the default value.
+     * @return the char value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static char toChar(Object value, char defaultValue) {
         try {
             return toChar(value);
@@ -174,6 +216,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a char value.
+     *
+     * @param value the object to convert to char.
+     * @return the char value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a char value.
+     * @since 1.0
+     */
     public static char toChar(Object value)
     throws ConversionException {
         if (null == value) {
@@ -197,6 +247,14 @@ public final class Convert {
         throw new ConversionException(value, char.class, null);
     }
 
+    /**
+     * Converts the specified object to a boolean value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to boolean.
+     * @param defaultValue the default value.
+     * @return the boolean value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static boolean toBoolean(Object value, boolean defaultValue) {
         try {
             return toBoolean(value);
@@ -205,6 +263,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a boolean value.
+     *
+     * @param value the object to convert to boolean.
+     * @return the boolean value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a boolean value.
+     * @since 1.0
+     */
     public static boolean toBoolean(Object value)
     throws ConversionException {
         if (null == value) {
@@ -235,6 +301,14 @@ public final class Convert {
         throw new ConversionException(value, boolean.class, null);
     }
 
+    /**
+     * Converts the specified object to a byte value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to byte.
+     * @param defaultValue the default value.
+     * @return the byte value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static byte toByte(Object value, byte defaultValue) {
         try {
             return toByte(value);
@@ -243,6 +317,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a byte value.
+     *
+     * @param value the object to convert to byte.
+     * @return the byte value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a byte value.
+     * @since 1.0
+     */
     public static byte toByte(Object value)
     throws ConversionException {
         if (null == value) {
@@ -264,6 +346,14 @@ public final class Convert {
         throw new ConversionException(value, byte.class, null);
     }
 
+    /**
+     * Converts the specified object to a short value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to short.
+     * @param defaultValue the default value.
+     * @return the short value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static short toShort(Object value, short defaultValue) {
         try {
             return toShort(value);
@@ -272,6 +362,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a short value.
+     *
+     * @param value the object to convert to short.
+     * @return the short value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a short value.
+     * @since 1.0
+     */
     public static short toShort(Object value)
     throws ConversionException {
         if (null == value) {
@@ -293,6 +391,14 @@ public final class Convert {
         throw new ConversionException(value, short.class, null);
     }
 
+    /**
+     * Converts the specified object to an int value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to int.
+     * @param defaultValue the default value.
+     * @return the int value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static int toInt(Object value, int defaultValue) {
         try {
             return toInt(value);
@@ -301,6 +407,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to an int value.
+     *
+     * @param value the object to convert to int.
+     * @return the int value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to an int value.
+     * @since 1.0
+     */
     public static int toInt(Object value)
     throws ConversionException {
         if (null == value) {
@@ -322,6 +436,14 @@ public final class Convert {
         throw new ConversionException(value, int.class, null);
     }
 
+    /**
+     * Converts the specified object to a long value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to long.
+     * @param defaultValue the default value.
+     * @return the long value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static long toLong(Object value, long defaultValue) {
         try {
             return toLong(value);
@@ -330,6 +452,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a long value.
+     *
+     * @param value the object to convert to long.
+     * @return the long value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a long value.
+     * @since 1.0
+     */
     public static long toLong(Object value)
     throws ConversionException {
         if (null == value) {
@@ -351,6 +481,14 @@ public final class Convert {
         throw new ConversionException(value, long.class, null);
     }
 
+    /**
+     * Converts the specified object to a float value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to float.
+     * @param defaultValue the default value.
+     * @return the float value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static float toFloat(Object value, float defaultValue) {
         try {
             return toFloat(value);
@@ -359,6 +497,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a float value.
+     *
+     * @param value the object to convert to float.
+     * @return the float value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a float value.
+     * @since 1.0
+     */
     public static float toFloat(Object value)
     throws ConversionException {
         if (null == value) {
@@ -380,6 +526,14 @@ public final class Convert {
         throw new ConversionException(value, float.class, null);
     }
 
+    /**
+     * Converts the specified object to a double value; returns the default value if the conversion fails.
+     *
+     * @param value        the object to convert to double.
+     * @param defaultValue the default value.
+     * @return the double value represented by the specified object or the default value if the conversion fails.
+     * @since 1.0
+     */
     public static double toDouble(Object value, double defaultValue) {
         try {
             return toDouble(value);
@@ -388,6 +542,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts the specified object to a double value.
+     *
+     * @param value the object to convert to double.
+     * @return the double value represented by the specified object.
+     * @throws ConversionException if the specified object cannot be converted to a double value.
+     * @since 1.0
+     */
     public static double toDouble(Object value)
     throws ConversionException {
         if (null == value) {
@@ -409,6 +571,13 @@ public final class Convert {
         throw new ConversionException(value, double.class, null);
     }
 
+    /**
+     * Converts a given Calendar object to a Date.
+     *
+     * @param cal the Calendar object to be converted to a Date
+     * @return the Date representing the Calendar object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(Calendar cal) {
         if (null == cal) {
             return null;
@@ -416,6 +585,13 @@ public final class Convert {
         return cal.getTime();
     }
 
+    /**
+     * Converts a given java.sql.Date object to a Date.
+     *
+     * @param date the java.sql.Date object to be converted to a Date
+     * @return the Date representing the java.sql.Date object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -423,6 +599,13 @@ public final class Convert {
         return Date.from(toInstant(date));
     }
 
+    /**
+     * Converts a given Time object to a Date.
+     *
+     * @param time the Time object to be converted to a Date
+     * @return the Date representing the Time object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(Time time) {
         if (null == time) {
             return null;
@@ -430,6 +613,13 @@ public final class Convert {
         return Date.from(toInstant(time));
     }
 
+    /**
+     * Converts a given Timestamp object to a Date.
+     *
+     * @param ts the Timestamp object to be converted to a Date
+     * @return the Date representing the Timestamp object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(Timestamp ts) {
         if (null == ts) {
             return null;
@@ -437,6 +627,13 @@ public final class Convert {
         return Date.from(toInstant(ts));
     }
 
+    /**
+     * Converts a given Instant object to a Date.
+     *
+     * @param instant the Instant object to be converted to a Date
+     * @return the Date representing the Instant object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(Instant instant) {
         if (null == instant) {
             return null;
@@ -444,6 +641,13 @@ public final class Convert {
         return Date.from(instant);
     }
 
+    /**
+     * Converts a given LocalDateTime object to a Date.
+     *
+     * @param localDateTime the LocalDateTime object to be converted to a Date
+     * @return the Date representing the LocalDateTime object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -451,6 +655,13 @@ public final class Convert {
         return Date.from(toInstant(localDateTime));
     }
 
+    /**
+     * Converts a given LocalDate object to a Date.
+     *
+     * @param localDate the LocalDate object to be converted to a Date
+     * @return the Date representing the LocalDate object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(LocalDate localDate) {
         if (null == localDate) {
             return null;
@@ -458,6 +669,13 @@ public final class Convert {
         return Date.from(toInstant(localDate));
     }
 
+    /**
+     * Converts a given LocalTime object to a Date.
+     *
+     * @param localTime the LocalTime object to be converted to a Date
+     * @return the Date representing the LocalTime object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -465,6 +683,13 @@ public final class Convert {
         return Date.from(toInstant(localTime));
     }
 
+    /**
+     * Converts a given Number object to a Date.
+     *
+     * @param number the Number object to be converted to a Date
+     * @return the Date representing the Number object passed as parameter, or null if it is null
+     * @since 1.0
+     */
     public static Date toDate(Number number) {
         if (null == number) {
             return null;
@@ -472,6 +697,14 @@ public final class Convert {
         return new Date(number.longValue());
     }
 
+    /**
+     * Converts a given String object to a Date.
+     *
+     * @param string the String object to be converted to a Date
+     * @return the Date representing the String object passed as parameter, or null if it is null
+     * @throws ConversionException if the String object passed cannot be converted to a Date
+     * @since 1.0
+     */
     public static Date toDate(String string)
     throws ConversionException {
         if (null == string) {
@@ -492,6 +725,15 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts a given object to a Date. Depending on the type of the object passed,
+     * it uses the appropriate method to convert it to a Date.
+     *
+     * @param value the Object to be converted to a Date
+     * @return the Date representing the Object passed as parameter, or null if it is null
+     * @throws ConversionException if the Object passed cannot be converted to a Date
+     * @since 1.0
+     */
     public static Date toDate(Object value)
     throws ConversionException {
         if (null == value) {
@@ -535,6 +777,13 @@ public final class Convert {
         throw new ConversionException(value, Date.class, null);
     }
 
+    /**
+     * Converts a java.util.Date object to a java.sql.Date object.
+     *
+     * @param date the java.util.Date object to be converted
+     * @return a java.sql.Date object representing the same date as the input
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(Date date) {
         if (null == date) {
             return null;
@@ -542,6 +791,13 @@ public final class Convert {
         return new java.sql.Date(date.getTime());
     }
 
+    /**
+     * Converts a java.util.Calendar object to a java.sql.Date object.
+     *
+     * @param cal the java.util.Calendar object to be converted
+     * @return a java.sql.Date object representing the same date as the input
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(Calendar cal) {
         if (null == cal) {
             return null;
@@ -549,6 +805,13 @@ public final class Convert {
         return new java.sql.Date(cal.getTime().getTime());
     }
 
+    /**
+     * Converts an Instant object to a java.sql.Date object.
+     *
+     * @param instant the Instant object to be converted
+     * @return a java.sql.Date object representing the same date as the input
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(Instant instant) {
         if (null == instant) {
             return null;
@@ -556,6 +819,13 @@ public final class Convert {
         return new java.sql.Date(toDate(instant).getTime());
     }
 
+    /**
+     * Converts a LocalDateTime object to a java.sql.Date object.
+     *
+     * @param localDateTime the LocalDateTime object to be converted
+     * @return a java.sql.Date object representing the same date as the input
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -563,6 +833,13 @@ public final class Convert {
         return new java.sql.Date(localDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli());
     }
 
+    /**
+     * Converts a LocalDate object to a java.sql.Date object.
+     *
+     * @param localDate the LocalDate object to be converted
+     * @return a java.sql.Date object representing the same date as the input with time set to midnight
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(LocalDate localDate) {
         if (null == localDate) {
             return null;
@@ -571,6 +848,13 @@ public final class Convert {
         return new java.sql.Date(localDate.atStartOfDay(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli());
     }
 
+    /**
+     * Converts a LocalTime object to a java.sql.Date object.
+     *
+     * @param localTime the LocalTime object to be converted
+     * @return a java.sql.Date object representing the same time as the input with date set to epoch (1970-01-01)
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -578,6 +862,13 @@ public final class Convert {
         return new java.sql.Date(localTime.atDate(LocalDate.EPOCH).atZone(TimeZone.getDefault().toZoneId()).toInstant().toEpochMilli());
     }
 
+    /**
+     * Converts a Number object to a java.sql.Date object.
+     *
+     * @param number the Number object to be converted
+     * @return a java.sql.Date object representing the same date as the input
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(Number number) {
         if (null == number) {
             return null;
@@ -585,6 +876,14 @@ public final class Convert {
         return new java.sql.Date(number.longValue());
     }
 
+    /**
+     * Converts a String object to a java.sql.Date object.
+     *
+     * @param string the String object to be converted
+     * @return a java.sql.Date object representing the same date as the input, parsed using a default format or specified format (if possible)
+     * @throws ConversionException if the input cannot be parsed to a java.sql.Date object using any of the available formats
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(String string)
     throws ConversionException {
         if (null == string) {
@@ -605,6 +904,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an object to a java.sql.Date object.
+     *
+     * @param value the object to be converted
+     * @return a java.sql.Date object representing the same date as the input, if the input is one of the supported types
+     * @throws ConversionException if the input is not one of the supported types
+     * @since 1.0
+     */
     public static java.sql.Date toSqlDate(Object value)
     throws ConversionException {
         if (null == value) {
@@ -642,6 +949,13 @@ public final class Convert {
         throw new ConversionException(value, java.sql.Date.class, null);
     }
 
+    /**
+     * Converts a java.sql.Date object to a Timestamp object.
+     *
+     * @param date the java.sql.Date object to be converted
+     * @return a Timestamp object representing the same date and time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -649,6 +963,13 @@ public final class Convert {
         return new Timestamp(date.getTime());
     }
 
+    /**
+     * Converts a java.sql.Time object to a Timestamp object.
+     *
+     * @param time the java.sql.Time object to be converted
+     * @return a Timestamp object representing the same time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(Time time) {
         if (null == time) {
             return null;
@@ -656,6 +977,13 @@ public final class Convert {
         return new Timestamp(time.getTime());
     }
 
+    /**
+     * Converts a java.util.Date object to a Timestamp object.
+     *
+     * @param date the java.util.Date object to be converted
+     * @return a Timestamp object representing the same date and time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(Date date) {
         if (null == date) {
             return null;
@@ -663,6 +991,13 @@ public final class Convert {
         return new Timestamp(date.getTime());
     }
 
+    /**
+     * Converts a java.util.Calendar object to a Timestamp object.
+     *
+     * @param cal the java.util.Calendar object to be converted
+     * @return a Timestamp object representing the same date and time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(Calendar cal) {
         if (null == cal) {
             return null;
@@ -677,6 +1012,13 @@ public final class Convert {
         return Timestamp.from(instant);
     }
 
+    /**
+     * Converts a LocalDateTime object to a Timestamp object.
+     *
+     * @param localDateTime the LocalDateTime object to be converted
+     * @return a Timestamp object representing the same date and time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -684,6 +1026,13 @@ public final class Convert {
         return Timestamp.valueOf(localDateTime);
     }
 
+    /**
+     * Converts a LocalDate object to a Timestamp object.
+     *
+     * @param localDate the LocalDate object to be converted
+     * @return a Timestamp object representing the same date and time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(LocalDate localDate) {
         if (null == localDate) {
             return null;
@@ -691,6 +1040,13 @@ public final class Convert {
         return Timestamp.valueOf(toLocalDateTime(localDate));
     }
 
+    /**
+     * Converts a LocalTime object to a Timestamp object.
+     *
+     * @param localTime the LocalTime object to be converted
+     * @return a Timestamp object representing the same time as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -698,6 +1054,13 @@ public final class Convert {
         return Timestamp.valueOf(toLocalDateTime(localTime));
     }
 
+    /**
+     * Converts a Number object to a Timestamp object.
+     *
+     * @param number the Number object to be converted
+     * @return a Timestamp object representing the same time in milliseconds since Epoch as the input
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(Number number) {
         if (null == number) {
             return null;
@@ -705,6 +1068,14 @@ public final class Convert {
         return new Timestamp(number.longValue());
     }
 
+    /**
+     * Converts a String object to a Timestamp object.
+     *
+     * @param string the String object to be converted to a Timestamp
+     * @return a Timestamp object representing the same time as the input
+     * @throws ConversionException if the given string cannot be parsed as a timestamp
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(String string)
     throws ConversionException {
         if (null == string) {
@@ -723,6 +1094,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an object to a Timestamp object.
+     *
+     * @param value the object to be converted to a Timestamp
+     * @return object representing the same timestamp as the input, if the input is one of the supported types
+     * @throws ConversionException if the input is not one of the supported types
+     * @since 1.0
+     */
     public static Timestamp toSqlTimestamp(Object value)
     throws ConversionException {
         if (null == value) {
