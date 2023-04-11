@@ -120,6 +120,13 @@ public class com_mysql_cj_jdbc_Driver extends Common implements SqlConversion {
             result = resultSet.getTime(columnNumber);
         } else if (type == Types.TIMESTAMP) {
             result = resultSet.getTimestamp(columnNumber);
+            // legacy MySQL sometimes used "0000-00-00 00:00:00" as timestamp format
+            // this can't be parsed to a timestamp and thus result as a null instance
+            // but still results in a string value that can't be parsed either
+            // later in the code, so we return a Timestamp at epoch time instead
+            if (result == null && !resultSet.wasNull()) {
+                result = new Timestamp(0);
+            }
         } else if (type == Types.NUMERIC || type == Types.DECIMAL) {
             result = resultSet.getBigDecimal(columnNumber);
         } else if (type == Types.DOUBLE || type == Types.FLOAT || type == Types.REAL) {
