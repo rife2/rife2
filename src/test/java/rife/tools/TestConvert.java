@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.tools.exceptions.ConversionException;
 
+import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.*;
@@ -108,6 +109,77 @@ public class TestConvert {
         assertEquals("1234", Convert.toType(1234, String.class));
 
         assertEquals("IUOJKO", Convert.toType(new StringBuffer("IUOJKO"), CharSequence.class).toString());
+
+        assertEquals(Duration.parse("P2DT3H4M"), Convert.toType("P2DT3H4M", Duration.class));
+        assertEquals(UUID.fromString("89fbbee1-a654-4ae7-ada1-5cd6555cec38"), Convert.toType("89fbbee1-a654-4ae7-ada1-5cd6555cec38", UUID.class));
+    }
+
+    static class MyCustomType {
+        private final String value;
+
+        public MyCustomType(String value) {
+            this.value = value;
+        }
+
+        public static MyCustomType fromString(String v) {
+            if (v.equals("invalid")) {
+                throw new RuntimeException();
+            }
+            return new MyCustomType(v);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            MyCustomType other = (MyCustomType) obj;
+            return Objects.equals(value, other.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
+    }
+
+    static class MyCustomType2 {
+        private final String value;
+
+        public MyCustomType2(String value) {
+            this.value = value;
+        }
+
+        public static MyCustomType fromString(String v) {
+            if (v.equals("invalid")) {
+                throw new RuntimeException();
+            }
+            return new MyCustomType(v);
+        }
+    }
+
+    @Test
+    void testFromString()
+    throws ConversionException {
+        assertNull(Convert.fromString(null, null));
+        assertEquals(Timestamp.valueOf("2023-03-11 06:10:42"), Convert.fromString("2023-03-11 06:10:42", Timestamp.class));
+        assertEquals(Duration.parse("P2DT3H4M"), Convert.fromString("P2DT3H4M", Duration.class));
+        assertEquals(Instant.parse("2007-12-03T10:15:30.00Z"), Convert.fromString("2007-12-03T10:15:30.00Z", Instant.class));
+        assertEquals(Month.JULY, Convert.fromString("JULY", Month.class));
+        assertEquals(ZoneId.of("America/New_York"), Convert.fromString("America/New_York", ZoneId.class));
+        assertEquals(UUID.fromString("89fbbee1-a654-4ae7-ada1-5cd6555cec38"), Convert.fromString("89fbbee1-a654-4ae7-ada1-5cd6555cec38", UUID.class));
+
+        assertThrows(ConversionException.class, () -> Convert.fromString("abc", Integer.class));
+
+        MyCustomType customResult = (MyCustomType) Convert.fromString("custom", MyCustomType.class);
+        assertEquals(new MyCustomType("custom"), customResult);
+
+        assertThrows(ConversionException.class, () -> Convert.fromString("invalid", MyCustomType.class));
+
+        assertThrows(ConversionException.class, () -> Convert.fromString("custom", MyCustomType2.class));
     }
 
     @Test

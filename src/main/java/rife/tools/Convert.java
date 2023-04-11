@@ -8,6 +8,11 @@ import rife.config.RifeConfig;
 import rife.tools.exceptions.ConversionException;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -20,7 +25,7 @@ public final class Convert {
         // no-op
     }
 
-    public static Object toType(Object value, Class target)
+    public static Object toType(Object value, Class<?> target)
     throws ConversionException {
         if (null == target) return null;
 
@@ -53,8 +58,104 @@ public final class Convert {
         if (target == LocalTime.class) return toLocalTime(value);
         if (String.class.isAssignableFrom(target)) return toString(value);
         if (target.isAssignableFrom(value.getClass())) return value;
+        if (value instanceof String str) return fromString(str, target);
 
         throw new ConversionException(value, target, null);
+    }
+
+    public static Object fromString(String string, Class<?> type)
+    throws ConversionException {
+        if (string == null || type == null) {
+            return null;
+        }
+
+        Method method = null;
+        try {
+            method = type.getDeclaredMethod("valueOf", String.class);
+            if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                method = null;
+            }
+        } catch (NoSuchMethodException ignored) {
+            // try other method
+        }
+        try {
+            method = type.getMethod("valueOf", CharSequence.class);
+            if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                method = null;
+            }
+        } catch (NoSuchMethodException ignored) {
+            // try other method
+        }
+        if (method == null) {
+            try {
+                method = type.getMethod("parse", String.class);
+                if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                    method = null;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // try other method
+            }
+        }
+        if (method == null) {
+            try {
+                method = type.getMethod("parse", CharSequence.class);
+                if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                    method = null;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // try other method
+            }
+        }
+        if (method == null) {
+            try {
+                method = type.getMethod("fromString", String.class);
+                if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                    method = null;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // try other method
+            }
+        }
+        if (method == null) {
+            try {
+                method = type.getMethod("fromString", CharSequence.class);
+                if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                    method = null;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // try other method
+            }
+        }
+        if (method == null) {
+            try {
+                method = type.getMethod("of", String.class);
+                if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                    method = null;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // try other method
+            }
+        }
+        if (method == null) {
+            try {
+                method = type.getMethod("of", CharSequence.class);
+                if (!Modifier.isStatic(method.getModifiers()) || !method.getReturnType().isAssignableFrom(type)) {
+                    method = null;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // try other method
+            }
+        }
+
+        if (method != null) {
+            try {
+                return method.invoke(null, string);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new ConversionException(string, type, e);
+            }
+        }
+
+        throw new ConversionException(string, type, null);
     }
 
     public static String toString(Object value) {
