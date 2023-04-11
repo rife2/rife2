@@ -219,25 +219,13 @@ public class DbBeanFetcher<BeanType> extends DbRowProcessor {
                     write_method.invoke(instance, typed_object);
                 }
             } catch (IllegalAccessException e) {
-                instance = null;
-                var e2 = new SQLException("No permission to invoke the '" + write_method.getName() + "' method on the bean with class '" + beanClass_.getName() + "'.");
-                e2.initCause(e);
-                throw e2;
+                throw new SQLException("No permission to invoke the '" + write_method.getName() + "' method on the bean with class '" + beanClass_.getName() + "'.", e);
             } catch (IllegalArgumentException e) {
-                instance = null;
-                var e2 = new SQLException("Invalid arguments while invoking the '" + write_method.getName() + "' method on the bean with class '" + beanClass_.getName() + "'.");
-                e2.initCause(e);
-                throw e2;
+                throw new SQLException("Invalid arguments while invoking the '" + write_method.getName() + "' method on the bean with class '" + beanClass_.getName() + "'.", e);
             } catch (InvocationTargetException e) {
-                instance = null;
-                var e2 = new SQLException("The '" + write_method.getName() + "' method of the bean with class '" + beanClass_.getName() + "' has thrown an exception");
-                e2.initCause(e);
-                throw e2;
+                throw new SQLException("The '" + write_method.getName() + "' method of the bean with class '" + beanClass_.getName() + "' has thrown an exception", e);
             } catch (SQLException e) {
-                instance = null;
-                var e2 = new SQLException("SQLException while invoking the '" + write_method.getName() + "' method of the bean with class '" + beanClass_.getName() + "'");
-                e2.initCause(e);
-                throw e2;
+                throw new SQLException("SQLException while invoking the '" + write_method.getName() + "' method of the bean with class '" + beanClass_.getName() + "'", e);
             }
         }
     }
