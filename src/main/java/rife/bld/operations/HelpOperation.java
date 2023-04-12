@@ -97,9 +97,9 @@ public class HelpOperation {
 
         System.err.println("""
               
-              -?, -h, --help    Shows this help message.
-              -D<name>=<value>  Set a JVM system property.
-              -s, --stacktrace  Print out the stacktrace for exceptions.
+              -?, -h, --help    Shows this help message
+              -D<name>=<value>  Set a JVM system property
+              -s, --stacktrace  Print out the stacktrace for exceptions
             """);
     }
 }
