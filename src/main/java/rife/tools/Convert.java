@@ -1145,6 +1145,13 @@ public final class Convert {
         throw new ConversionException(value, Timestamp.class, null);
     }
 
+    /**
+     * Converts a Timestamp object to a Time object.
+     *
+     * @param ts the Timestamp object to be converted
+     * @return a Time object representing the same time as the input Timestamp object
+     * @since 1.0
+     */
     public static Time toSqlTime(Timestamp ts) {
         if (null == ts) {
             return null;
@@ -1152,6 +1159,13 @@ public final class Convert {
         return new Time(ts.getTime());
     }
 
+    /**
+     * Converts a java.sql.Date object to a Time object.
+     *
+     * @param date the java.sql.Date object to be converted
+     * @return a Time object representing the same time as the input java.sql.Date object
+     * @since 1.0
+     */
     public static Time toSqlTime(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -1159,6 +1173,13 @@ public final class Convert {
         return new Time(date.getTime());
     }
 
+    /**
+     * Converts a Date object to a Time object.
+     *
+     * @param date the Date object to be converted
+     * @return a Time object representing the same time as the input Date object
+     * @since 1.0
+     */
     @SuppressWarnings("deprecated")
     public static Time toSqlTime(Date date) {
         if (null == date) {
@@ -1169,6 +1190,13 @@ public final class Convert {
         return toSqlTime(cal);
     }
 
+    /**
+     * Converts a Calendar object to a Time object.
+     *
+     * @param cal the Calendar object to be converted
+     * @return a Time object representing the same time as the input Calendar object
+     * @since 1.0
+     */
     @SuppressWarnings("deprecated")
     public static Time toSqlTime(Calendar cal) {
         if (null == cal) {
@@ -1177,6 +1205,13 @@ public final class Convert {
         return toSqlTime(cal.toInstant());
     }
 
+    /**
+     * Converts an Instant object to a Time object.
+     *
+     * @param instant the Instant object to be converted
+     * @return a Time object representing the same time as the input Instant object
+     * @since 1.0
+     */
     @SuppressWarnings("deprecated")
     public static Time toSqlTime(Instant instant) {
         if (null == instant) {
@@ -1186,6 +1221,13 @@ public final class Convert {
         return new Time(zoned.getHour(), zoned.getMinute(), zoned.getSecond());
     }
 
+    /**
+     * Converts a LocalDateTime object to a Time object.
+     *
+     * @param localDateTime the LocalDateTime object to be converted
+     * @return a Time object representing the same time as the input LocalDateTime object
+     * @since 1.0
+     */
     public static Time toSqlTime(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -1193,6 +1235,13 @@ public final class Convert {
         return toSqlTime(localDateTime.atZone(TimeZone.getDefault().toZoneId()).toInstant());
     }
 
+    /**
+     * Converts a LocalDate object to a Time object.
+     *
+     * @param localDate the LocalDate object to be converted
+     * @return a Time object representing midnight for the input LocalDate object
+     * @since 1.0
+     */
     @SuppressWarnings("deprecated")
     public static Time toSqlTime(LocalDate localDate) {
         if (null == localDate) {
@@ -1201,6 +1250,13 @@ public final class Convert {
         return toSqlTime(LocalTime.MIDNIGHT);
     }
 
+    /**
+     * Converts a LocalTime object to a Time object.
+     *
+     * @param localTime the LocalTime object to be converted
+     * @return a Time object representing the same time as the input LocalTime object on January 1, 1970
+     * @since 1.0
+     */
     public static Time toSqlTime(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -1208,6 +1264,13 @@ public final class Convert {
         return toSqlTime(localTime.atDate(LocalDate.EPOCH));
     }
 
+    /**
+     * Converts a Number object to a Time object.
+     *
+     * @param number the Number object to be converted
+     * @return a Time object representing the same time as the input Number object, treated as a number of milliseconds since January 1, 1970
+     * @since 1.0
+     */
     public static Time toSqlTime(Number number) {
         if (null == number) {
             return null;
@@ -1215,6 +1278,14 @@ public final class Convert {
         return toSqlTime(new Date(number.longValue()));
     }
 
+    /**
+     * Converts a String object to a Time object.
+     *
+     * @param string the String object to be converted
+     * @return a Time object representing the same time as the input String object
+     * @throws ConversionException if the input String cannot be parsed as a Time object
+     * @since 1.0
+     */
     @SuppressWarnings("deprecated")
     public static Time toSqlTime(String string)
     throws ConversionException {
@@ -1236,6 +1307,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an object to a TIme object.
+     *
+     * @param value the object to be converted to a Time
+     * @return object representing the same time as the input, if the input is one of the supported types
+     * @throws ConversionException if the input is not one of the supported types
+     * @since 1.0
+     */
     @SuppressWarnings("deprecated")
     public static Time toSqlTime(Object value)
     throws ConversionException {
@@ -1280,6 +1359,13 @@ public final class Convert {
         throw new ConversionException(value, Time.class, null);
     }
 
+    /**
+     * Converts a java.sql.Date to an Instant.
+     *
+     * @param date the date to be converted.
+     * @return the instant representing the provided date or null if the date is null.
+     * @since 1.0
+     */
     public static Instant toInstant(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -1288,6 +1374,13 @@ public final class Convert {
         return date.toLocalDate().atStartOfDay().atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
+    /**
+     * Converts a Time to an Instant.
+     *
+     * @param time the time to be converted.
+     * @return the instant representing the provided time or null if the time is null.
+     * @since 1.0
+     */
     public static Instant toInstant(Time time) {
         if (null == time) {
             return null;
@@ -1296,6 +1389,13 @@ public final class Convert {
         return time.toLocalTime().atDate(LocalDate.EPOCH).atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
+    /**
+     * Converts a Timestamp to an Instant.
+     *
+     * @param ts the timestamp to be converted.
+     * @return the instant representing the provided timestamp or null if the timestamp is null.
+     * @since 1.0
+     */
     public static Instant toInstant(Timestamp ts) {
         if (null == ts) {
             return null;
@@ -1304,6 +1404,13 @@ public final class Convert {
         return ts.toLocalDateTime().atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
+    /**
+     * Converts a Date to an Instant.
+     *
+     * @param date the date to be converted.
+     * @return the instant representing the provided date or null if the date is null.
+     * @since 1.0
+     */
     public static Instant toInstant(Date date) {
         if (null == date) {
             return null;
@@ -1312,6 +1419,13 @@ public final class Convert {
         return date.toInstant();
     }
 
+    /**
+     * Converts a Calendar to an Instant.
+     *
+     * @param cal the calendar to be converted.
+     * @return the instant representing the provided calendar or null if the calendar is null.
+     * @since 1.0
+     */
     public static Instant toInstant(Calendar cal) {
         if (null == cal) {
             return null;
@@ -1320,6 +1434,13 @@ public final class Convert {
         return cal.toInstant();
     }
 
+    /**
+     * Converts a LocalDateTime to an Instant.
+     *
+     * @param localDateTime the LocalDateTime to be converted.
+     * @return the instant representing the provided LocalDateTime or null if the LocalDateTime is null.
+     * @since 1.0
+     */
     public static Instant toInstant(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -1328,6 +1449,13 @@ public final class Convert {
         return localDateTime.atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
+    /**
+     * Converts a LocalDate to an Instant.
+     *
+     * @param localDate the LocalDate to be converted.
+     * @return the instant representing the provided LocalDate or null if the LocalDate is null.
+     * @since 1.0
+     */
     public static Instant toInstant(LocalDate localDate) {
         if (null == localDate) {
             return null;
@@ -1336,6 +1464,13 @@ public final class Convert {
         return localDate.atStartOfDay(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
+    /**
+     * Converts a LocalTime to an Instant.
+     *
+     * @param localTime the LocalTime to be converted.
+     * @return the instant representing the provided LocalTime or null if the LocalTime is null.
+     * @since 1.0
+     */
     public static Instant toInstant(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -1344,6 +1479,13 @@ public final class Convert {
         return localTime.atDate(LocalDate.EPOCH).atZone(RifeConfig.tools().getDefaultZoneId()).toInstant();
     }
 
+    /**
+     * Converts a Number to an Instant.
+     *
+     * @param number the Number to be converted.
+     * @return the instant representing the provided Number or null if the Number is null.
+     * @since 1.0
+     */
     public static Instant toInstant(Number number) {
         if (null == number) {
             return null;
@@ -1352,6 +1494,14 @@ public final class Convert {
         return Instant.ofEpochMilli(number.longValue());
     }
 
+    /**
+     * Converts a String to an Instant.
+     *
+     * @param string the String to be converted.
+     * @return the instant representing the provided String or null if the String is null.
+     * @throws ConversionException if the String cannot be converted to an Instant.
+     * @since 1.0
+     */
     public static Instant toInstant(String string)
     throws ConversionException {
         if (null == string) {
@@ -1373,6 +1523,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an Object to an Instant.
+     *
+     * @param value the Object to be converted.
+     * @return the instant representing the provided Object or null if the Object is null.
+     * @throws ConversionException if the Object cannot be converted to an Instant.
+     * @since 1.0
+     */
     public static Instant toInstant(Object value)
     throws ConversionException {
         if (null == value) {
@@ -1416,6 +1574,13 @@ public final class Convert {
         throw new ConversionException(value, Instant.class, null);
     }
 
+    /**
+     * Converts a java.sql.Timestamp to a LocalDateTime object.
+     *
+     * @param ts the java.sql.Timestamp to convert
+     * @return the LocalDateTime object equivalent to the given timestamp, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Timestamp ts) {
         if (null == ts) {
             return null;
@@ -1424,6 +1589,13 @@ public final class Convert {
         return ts.toLocalDateTime();
     }
 
+    /**
+     * Converts a java.sql.Date to a LocalDateTime object.
+     *
+     * @param date the java.sql.Date to convert
+     * @return the LocalDateTime object equivalent to the given date, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -1432,6 +1604,13 @@ public final class Convert {
         return date.toLocalDate().atStartOfDay();
     }
 
+    /**
+     * Converts a java.sql.Time to a LocalDateTime object.
+     *
+     * @param time the java.sql.Time to convert
+     * @return the LocalDateTime object equivalent to the given time, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Time time) {
         if (null == time) {
             return null;
@@ -1440,6 +1619,13 @@ public final class Convert {
         return time.toLocalTime().atDate(LocalDate.EPOCH);
     }
 
+    /**
+     * Converts a java.util.Date to a LocalDateTime object.
+     *
+     * @param date the java.util.Date to convert
+     * @return the LocalDateTime object equivalent to the given date, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Date date) {
         if (null == date) {
             return null;
@@ -1448,6 +1634,13 @@ public final class Convert {
         return LocalDateTime.ofInstant(date.toInstant(), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a java.util.Calendar to a LocalDateTime object.
+     *
+     * @param cal the java.util.Calendar to convert
+     * @return the LocalDateTime object equivalent to the given calendar, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Calendar cal) {
         if (null == cal) {
             return null;
@@ -1456,6 +1649,13 @@ public final class Convert {
         return LocalDateTime.ofInstant(cal.toInstant(), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts an Instant to a LocalDateTime object.
+     *
+     * @param instant the Instant to convert
+     * @return the LocalDateTime object equivalent to the given instant, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Instant instant) {
         if (null == instant) {
             return null;
@@ -1464,6 +1664,13 @@ public final class Convert {
         return LocalDateTime.ofInstant(instant, RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a LocalDate to a LocalDateTime object.
+     *
+     * @param localDate the LocalDate to convert
+     * @return the LocalDateTime object representing the start of the given date, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(LocalDate localDate) {
         if (null == localDate) {
             return null;
@@ -1472,6 +1679,13 @@ public final class Convert {
         return localDate.atStartOfDay();
     }
 
+    /**
+     * Converts a LocalTime to a LocalDateTime object.
+     *
+     * @param localTime the LocalTime to convert
+     * @return the LocalDateTime object representing the given time on Jan 1, 1970, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -1480,6 +1694,13 @@ public final class Convert {
         return localTime.atDate(LocalDate.EPOCH);
     }
 
+    /**
+     * Converts a Number to a LocalDateTime object.
+     *
+     * @param number the Number object to convert
+     * @return the LocalDateTime object equivalent to the millisecond epoch value of the given number, or null if the input is null.
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Number number) {
         if (null == number) {
             return null;
@@ -1488,6 +1709,14 @@ public final class Convert {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(number.longValue()), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a String to a LocalDateTime object.
+     *
+     * @param string the String to convert
+     * @return the LocalDateTime object parsed from the given string, or null if the input is null.
+     * @throws ConversionException if the string cannot be parsed as a LocalDateTime object
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(String string)
     throws ConversionException {
         if (null == string) {
@@ -1509,6 +1738,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an Object to an LocalDateTime.
+     *
+     * @param value the Object to convert
+     * @return the LocalDateTime object corresponding to the given object, or null if the input is null.
+     * @throws ConversionException if the object cannot be converted to a LocalDateTime object
+     * @since 1.0
+     */
     public static LocalDateTime toLocalDateTime(Object value)
     throws ConversionException {
         if (null == value) {
@@ -1552,6 +1789,13 @@ public final class Convert {
         throw new ConversionException(value, LocalDateTime.class, null);
     }
 
+    /**
+     * Converts a Timestamp to a LocalDate.
+     *
+     * @param ts The Timestamp to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Timestamp ts) {
         if (null == ts) {
             return null;
@@ -1560,6 +1804,13 @@ public final class Convert {
         return ts.toLocalDateTime().toLocalDate();
     }
 
+    /**
+     * Converts a java.sql.Date to a LocalDate.
+     *
+     * @param date The sql Date to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -1568,6 +1819,13 @@ public final class Convert {
         return date.toLocalDate();
     }
 
+    /**
+     * Converts a Time to a LocalDate. Always returns LocalDate.EPOCH.
+     *
+     * @param time The Time to convert
+     * @return LocalDate.EPOCH, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Time time) {
         if (null == time) {
             return null;
@@ -1576,6 +1834,13 @@ public final class Convert {
         return LocalDate.EPOCH;
     }
 
+    /**
+     * Converts a Date to a LocalDate using the default zone ID defined in RifeConfig.
+     *
+     * @param date The Date to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Date date) {
         if (null == date) {
             return null;
@@ -1584,6 +1849,13 @@ public final class Convert {
         return LocalDate.ofInstant(date.toInstant(), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a Calendar to a LocalDate using the default zone ID defined in RifeConfig.
+     *
+     * @param cal The Calendar to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Calendar cal) {
         if (null == cal) {
             return null;
@@ -1592,6 +1864,13 @@ public final class Convert {
         return LocalDate.ofInstant(cal.toInstant(), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts an Instant to a LocalDate using the default zone ID defined in RifeConfig.
+     *
+     * @param instant The Instant to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Instant instant) {
         if (null == instant) {
             return null;
@@ -1600,6 +1879,13 @@ public final class Convert {
         return LocalDate.ofInstant(instant, RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a LocalDateTime to a LocalDate.
+     *
+     * @param localDateTime The LocalDateTime to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -1608,6 +1894,13 @@ public final class Convert {
         return localDateTime.toLocalDate();
     }
 
+    /**
+     * Converts a LocalTime to a LocalDate. Always returns LocalDate.EPOCH.
+     *
+     * @param localTime The LocalTime to convert
+     * @return LocalDate.EPOCH, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(LocalTime localTime) {
         if (null == localTime) {
             return null;
@@ -1616,6 +1909,13 @@ public final class Convert {
         return LocalDate.EPOCH;
     }
 
+    /**
+     * Converts a Number representing an epoch millisecond timestamp to a LocalDate using the default zone ID defined in RifeConfig.
+     *
+     * @param number The Number to convert
+     * @return The corresponding LocalDate, or null if the input is null
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Number number) {
         if (null == number) {
             return null;
@@ -1624,6 +1924,14 @@ public final class Convert {
         return LocalDate.ofInstant(Instant.ofEpochMilli(number.longValue()), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a String representation of a date/time to a LocalDate using various parsing strategies.
+     *
+     * @param string The String to convert
+     * @return The corresponding LocalDate
+     * @throws ConversionException If the input string cannot be parsed as a LocalDate
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(String string)
     throws ConversionException {
         if (null == string) {
@@ -1645,6 +1953,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an Object to a LocalDate.
+     *
+     * @param value The Object to convert
+     * @return The corresponding LocalDate
+     * @throws ConversionException If the input Object cannot be converted to a LocalDate
+     * @since 1.0
+     */
     public static LocalDate toLocalDate(Object value)
     throws ConversionException {
         if (null == value) {
@@ -1688,6 +2004,13 @@ public final class Convert {
         throw new ConversionException(value, LocalDate.class, null);
     }
 
+    /**
+     * Converts a java.sql.Date object to a LocalTime object.
+     *
+     * @param date the java.sql.Date object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(java.sql.Date date) {
         if (null == date) {
             return null;
@@ -1696,6 +2019,13 @@ public final class Convert {
         return LocalTime.MIDNIGHT;
     }
 
+    /**
+     * Converts a Timestamp object to a LocalTime object.
+     *
+     * @param ts the Timestamp object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Timestamp ts) {
         if (null == ts) {
             return null;
@@ -1704,6 +2034,13 @@ public final class Convert {
         return ts.toLocalDateTime().toLocalTime();
     }
 
+    /**
+     * Converts a Time object to a LocalTime object.
+     *
+     * @param time the Time object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Time time) {
         if (null == time) {
             return null;
@@ -1712,6 +2049,13 @@ public final class Convert {
         return time.toLocalTime();
     }
 
+    /**
+     * Converts a Date object to a LocalTime object.
+     *
+     * @param date the Date object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Date date) {
         if (null == date) {
             return null;
@@ -1720,6 +2064,13 @@ public final class Convert {
         return LocalTime.ofInstant(date.toInstant(), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a Calendar object to a LocalTime object.
+     *
+     * @param cal the Calendar object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Calendar cal) {
         if (null == cal) {
             return null;
@@ -1728,6 +2079,13 @@ public final class Convert {
         return LocalTime.ofInstant(cal.toInstant(), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts an Instant object to a LocalTime object.
+     *
+     * @param instant the Instant object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Instant instant) {
         if (null == instant) {
             return null;
@@ -1736,6 +2094,13 @@ public final class Convert {
         return LocalTime.ofInstant(instant, RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a LocalDateTime object to a LocalTime object.
+     *
+     * @param localDateTime the LocalDateTime object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(LocalDateTime localDateTime) {
         if (null == localDateTime) {
             return null;
@@ -1744,6 +2109,13 @@ public final class Convert {
         return localDateTime.toLocalTime();
     }
 
+    /**
+     * Converts a LocalDate object to a LocalTime object.
+     *
+     * @param localDate the LocalDate object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(LocalDate localDate) {
         if (null == localDate) {
             return null;
@@ -1752,6 +2124,13 @@ public final class Convert {
         return LocalTime.MIDNIGHT;
     }
 
+    /**
+     * Converts a Number object to a LocalTime object.
+     *
+     * @param number the Number object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Number number) {
         if (null == number) {
             return null;
@@ -1760,6 +2139,14 @@ public final class Convert {
         return LocalTime.ofInstant(Instant.ofEpochMilli(number.longValue()), RifeConfig.tools().getDefaultZoneId());
     }
 
+    /**
+     * Converts a String object to a LocalTime object.
+     *
+     * @param string the String object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @throws ConversionException if the conversion process fails
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(String string)
     throws ConversionException {
         if (null == string) {
@@ -1781,6 +2168,14 @@ public final class Convert {
         }
     }
 
+    /**
+     * Converts an Object to a LocalTime object.
+     *
+     * @param value the Object to convert
+     * @return the resulting LocalTime object or null if the input is null
+     * @throws ConversionException if the conversion process fails
+     * @since 1.0
+     */
     public static LocalTime toLocalTime(Object value)
     throws ConversionException {
         if (null == value) {
@@ -1824,6 +2219,13 @@ public final class Convert {
         throw new ConversionException(value, LocalTime.class, null);
     }
 
+    /**
+     * Returns the default value of a given class.
+     *
+     * @param clazz the class whose default value is to be returned
+     * @return the default value of the given class
+     * @since 1.0
+     */
     public static <T> T getDefaultValue(Class<T> clazz) {
         return (T) Array.get(Array.newInstance(clazz, 1), 0);
     }
