@@ -15,10 +15,10 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class TestTestOperation {
+public class TestJUnitOperation {
     @Test
     void testInstantiation() {
-        var operation = new TestOperation();
+        var operation = new JUnitOperation();
         assertNotNull(operation.workDirectory());
         assertTrue(operation.workDirectory().exists());
         assertTrue(operation.workDirectory().isDirectory());
@@ -48,7 +48,7 @@ public class TestTestOperation {
             Function<String, Boolean> test_output_consumer = (String) -> true;
             Function<String, Boolean> test_error_consumer = (String) -> true;
 
-            var operation1 = new TestOperation();
+            var operation1 = new JUnitOperation();
             operation1
                 .workDirectory(work_directory)
                 .javaTool(java_tool)
@@ -71,7 +71,7 @@ public class TestTestOperation {
             assertSame(test_output_consumer, operation1.outputProcessor());
             assertSame(test_error_consumer, operation1.errorProcessor());
 
-            var operation2 = new TestOperation();
+            var operation2 = new JUnitOperation();
             operation2.workDirectory(work_directory);
             operation2.javaTool(java_tool);
             operation2.javaOptions().add(test_java_option1);
@@ -96,7 +96,7 @@ public class TestTestOperation {
             assertSame(test_output_consumer, operation2.outputProcessor());
             assertSame(test_error_consumer, operation2.errorProcessor());
 
-            var operation3 = new TestOperation();
+            var operation3 = new JUnitOperation();
             operation3
                 .classpath(test_classpath1, test_classpath2)
                 .testToolOptions(test_tool_option1, test_tool_option2);
@@ -153,7 +153,7 @@ public class TestTestOperation {
             assertTrue(compile_operation.diagnostics().isEmpty());
 
             var output = new StringBuilder();
-            var test_operation = new TestOperation()
+            var test_operation = new JUnitOperation()
                 .mainClass("Source2")
                 .classpath(List.of(build_main.getAbsolutePath(), build_test.getAbsolutePath()))
                 .outputProcessor(s -> {
@@ -184,7 +184,7 @@ public class TestTestOperation {
                 .fromProject(create_operation.project()).execute();
 
             var check_result = new StringBuilder();
-            new TestOperation()
+            new JUnitOperation()
                 .fromProject(create_operation.project())
                 .outputProcessor(s -> {
                     check_result.append(s).append(System.lineSeparator());

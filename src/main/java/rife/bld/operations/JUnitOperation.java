@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tests a Java application.
+ * Tests a Java application with JUnit.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5.20
  */
-public class JUnitTestOperation extends TestOperation {
+public class JUnitOperation extends TestOperation {
     public static final String DEFAULT_TEST_TOOL_JUNIT5 = "org.junit.platform.console.ConsoleLauncher";
 
     /**

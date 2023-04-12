@@ -27,7 +27,7 @@ public class Project extends BaseProject {
     private final JarOperation jarOperation_ = new JarOperation();
     private final JarOperation jarSourcesOperation_ = new JarOperation();
     private final JarOperation jarJavadocOperation_ = new JarOperation();
-    private final JUnitTestOperation junitTestOperation_ = new JUnitTestOperation();
+    private final JUnitOperation junitTestOperation_ = new JUnitOperation();
     private final UberJarOperation uberJarOperation_ = new UberJarOperation();
 
     @Override
