@@ -13,16 +13,16 @@ import java.util.List;
  * Tests a Java application.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.5
+ * @since 1.5.20
  */
 public class JUnitTestOperation extends TestOperation {
     public static final String DEFAULT_TEST_TOOL_JUNIT5 = "org.junit.platform.console.ConsoleLauncher";
 
     /**
      * Part of the {@link #execute} operation, constructs the command list
-     * to use for building the process.
+     * to use for building the process, defaults to adding JUnit options.
      *
-     * @since 1.5
+     * @since 1.5.20
      */
     protected List<String> executeConstructProcessCommandList() {
         var args = new ArrayList<String>();
