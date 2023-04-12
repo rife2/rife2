@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.bld.dependencies.*;
 
@@ -59,12 +60,12 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
     }
 
     /**
-     * Configures an updates operation from a {@link Project}.
+     * Configures an updates operation from a {@link BaseProject}.
      *
      * @param project the project to configure the updates operation from
      * @since 1.5
      */
-    public UpdatesOperation fromProject(Project project) {
+    public UpdatesOperation fromProject(BaseProject project) {
         return repositories(project.repositories())
             .dependencies(project.dependencies());
     }

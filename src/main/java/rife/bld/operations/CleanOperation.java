@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
@@ -50,12 +51,12 @@ public class CleanOperation extends AbstractOperation<CleanOperation> {
     }
 
     /**
-     * Configures a clean operation from a {@link Project}.
+     * Configures a clean operation from a {@link BaseProject}.
      *
      * @param project the project to configure the clean operation from
      * @since 1.5
      */
-    public CleanOperation fromProject(Project project) {
+    public CleanOperation fromProject(BaseProject project) {
         return directories(List.of(
             project.buildDirectory()
                 .listFiles(f -> !f.equals(project.buildBldDirectory()))));

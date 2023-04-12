@@ -157,7 +157,9 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         test_template.setValue("package", project_.pkg());
         test_template.setValue("projectTest", projectTestName_);
         test_template.setValue("projectMain", projectMainName_);
-        if (test_template.hasValueId("project")) test_template.setValue("project", projectClassName_);
+        if (test_template.hasValueId("project")) {
+            test_template.setValue("project", projectClassName_);
+        }
         var project_test_file = new File(testPackageDirectory_, projectTestName_ + ".java");
         FileUtils.writeString(test_template.getContent(), project_test_file);
 
@@ -167,7 +169,12 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         build_template.setValue("package", project_.pkg());
         build_template.setValue("project", projectClassName_);
         build_template.setValue("projectMain", projectMainName_);
-        if (build_template.hasValueId("projectMainUber")) build_template.setValue("projectMainUber", projectMainUberName_);
+        if (build_template.hasValueId("projectTest")) {
+            build_template.setValue("projectTest", projectTestName_);
+        }
+        if (build_template.hasValueId("projectMainUber")) {
+            build_template.setValue("projectMainUber", projectMainUberName_);
+        }
         for (var entry : project_.dependencies().entrySet()) {
             build_template.blankValue("dependencies");
 
@@ -252,6 +259,9 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         // IDEA run tests
         var run_tests_template = TemplateFactory.XML.get(templateBase_ + "idea.runConfigurations.Run_Tests");
         run_tests_template.setValue("package", project_.pkg());
+        if (run_tests_template.hasValueId("projectTest")) {
+            run_tests_template.setValue("projectTest", projectTestName_);
+        }
         var run_tests_file = new File(ideaRunConfigurationsDirectory_, "Run Tests.xml");
         FileUtils.writeString(run_tests_template.getContent(), run_tests_file);
     }
@@ -266,6 +276,9 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         var launch_template = TemplateFactory.JSON.get(templateBase_ + "vscode.launch");
         launch_template.setValue("package", project_.pkg());
         launch_template.setValue("projectMain", projectMainName_);
+        if (launch_template.hasValueId("projectTest")) {
+            launch_template.setValue("projectTest", projectTestName_);
+        }
         var launch_file = new File(vscodeDirectory_, "launch.json");
         FileUtils.writeString(launch_template.getContent(), launch_file);
 

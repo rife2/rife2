@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
@@ -137,12 +138,12 @@ public class JavadocOperation extends AbstractOperation<JavadocOperation> {
     }
 
     /**
-     * Configures a javadoc operation from a {@link Project}.
+     * Configures a javadoc operation from a {@link BaseProject}.
      *
      * @param project the project to configure the javadoc operation from
      * @since 1.5.10
      */
-    public JavadocOperation fromProject(Project project) {
+    public JavadocOperation fromProject(BaseProject project) {
         var operation = buildDirectory(project.buildJavadocDirectory())
             .classpath(project.compileMainClasspath())
             .classpath(project.buildMainDirectory().getAbsolutePath())

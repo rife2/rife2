@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.NamedFile;
 import rife.bld.Project;
 import rife.tools.FileUtils;
@@ -103,12 +104,12 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
     }
 
     /**
-     * Configures an uberjar operation from a {@link Project}.
+     * Configures an uberjar operation from a {@link BaseProject}.
      *
      * @param project the project to configure the uberjar operation from
      * @since 1.5
      */
-    public UberJarOperation fromProject(Project project) {
+    public UberJarOperation fromProject(BaseProject project) {
         var jars = new ArrayList<>(project.compileClasspathJars());
         jars.addAll(project.runtimeClasspathJars());
         jars.add(new File(project.buildDistDirectory(), project.jarFileName()));

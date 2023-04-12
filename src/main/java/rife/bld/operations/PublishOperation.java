@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import rife.Version;
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.bld.dependencies.*;
 import rife.bld.dependencies.exceptions.DependencyException;
@@ -491,12 +492,12 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
     }
 
     /**
-     * Configures a publish operation from a {@link Project}.
+     * Configures a publish operation from a {@link BaseProject}.
      *
      * @param project the project to configure the publish operation from
      * @since 1.5.7
      */
-    public PublishOperation fromProject(Project project) {
+    public PublishOperation fromProject(BaseProject project) {
         dependencies().include(project.dependencies());
         artifacts(List.of(
             new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar"),

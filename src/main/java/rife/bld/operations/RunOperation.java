@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.tools.FileUtils;
 
@@ -37,12 +38,12 @@ public class RunOperation extends AbstractProcessOperation<RunOperation> {
     }
 
     /**
-     * Configures a run operation from a {@link Project}.
+     * Configures a run operation from a {@link BaseProject}.
      *
      * @param project the project to configure the run operation from
      * @since 1.5
      */
-    public RunOperation fromProject(Project project) {
+    public RunOperation fromProject(BaseProject project) {
         var operation = workDirectory(project.workDirectory())
             .javaTool(project.javaTool())
             .classpath(project.runClasspath())

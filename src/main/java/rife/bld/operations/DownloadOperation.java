@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.bld.dependencies.*;
 
@@ -141,12 +142,12 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
     }
 
     /**
-     * Configures a compile operation from a {@link Project}.
+     * Configures a compile operation from a {@link BaseProject}.
      *
      * @param project the project to configure the compile operation from
      * @since 1.5
      */
-    public DownloadOperation fromProject(Project project) {
+    public DownloadOperation fromProject(BaseProject project) {
         return repositories(project.repositories())
             .dependencies(project.dependencies())
             .libCompileDirectory(project.libCompileDirectory())

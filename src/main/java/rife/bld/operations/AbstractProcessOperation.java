@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.operations.exceptions.OperationOptionException;
@@ -129,12 +130,12 @@ public abstract class AbstractProcessOperation<T extends AbstractProcessOperatio
     }
 
     /**
-     * Configures the operation from a {@link Project}.
+     * Configures the operation from a {@link BaseProject}.
      *
      * @param project the project to configure the operation from
      * @since 1.5
      */
-    abstract public T fromProject(Project project);
+    abstract public T fromProject(BaseProject project);
 
     /**
      * Provides the work directory in which the operation will be performed.

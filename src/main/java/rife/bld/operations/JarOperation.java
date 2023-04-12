@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.NamedFile;
 import rife.bld.Project;
 import rife.tools.FileUtils;
@@ -121,12 +122,12 @@ public class JarOperation extends AbstractOperation<JarOperation> {
     }
 
     /**
-     * Configures a jar operation from a {@link Project}.
+     * Configures a jar operation from a {@link BaseProject}.
      *
      * @param project the project to configure the jar operation from
      * @since 1.5
      */
-    public JarOperation fromProject(Project project) {
+    public JarOperation fromProject(BaseProject project) {
         return manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
             .destinationDirectory(project.buildDistDirectory())

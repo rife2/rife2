@@ -17,6 +17,7 @@ import rife.bld.operations.*;
 public class Cli extends BuildExecutor {
     private final CreateRife2Operation createRife2Operation_ = new CreateRife2Operation();
     private final CreateBlankOperation createBlankOperation_ = new CreateBlankOperation();
+    private final CreateBaseOperation createBaseOperation_ = new CreateBaseOperation();
     private final UpgradeOperation upgradeOperation_ = new UpgradeOperation();
     private final VersionOperation versionOperation_ = new VersionOperation();
 
@@ -42,6 +43,18 @@ public class Cli extends BuildExecutor {
     public void createBlank()
     throws Exception {
         createBlankOperation_.executeOnce(() -> createBlankOperation_.fromArguments(arguments()));
+    }
+
+    /**
+     * The standard {@code create-base} command.
+     *
+     * @throws Exception when an error occurred during the creation process
+     * @since 1.5.20
+     */
+    @BuildCommand(value = "create-base", help = CreateBaseHelp.class)
+    public void createBase()
+    throws Exception {
+        createBaseOperation_.executeOnce(() -> createBaseOperation_.fromArguments(arguments()));
     }
 
     /**

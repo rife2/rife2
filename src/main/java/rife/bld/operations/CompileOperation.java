@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.tools.FileUtils;
@@ -151,12 +152,12 @@ public class CompileOperation extends AbstractOperation<CompileOperation> {
     }
 
     /**
-     * Configures a compile operation from a {@link Project}.
+     * Configures a compile operation from a {@link BaseProject}.
      *
      * @param project the project to configure the compile operation from
      * @since 1.5
      */
-    public CompileOperation fromProject(Project project) {
+    public CompileOperation fromProject(BaseProject project) {
         var operation = buildMainDirectory(project.buildMainDirectory())
             .buildTestDirectory(project.buildTestDirectory())
             .compileMainClasspath(project.compileMainClasspath())

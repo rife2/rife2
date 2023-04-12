@@ -4,6 +4,7 @@
  */
 package rife.bld.operations;
 
+import rife.bld.BaseProject;
 import rife.bld.Project;
 import rife.template.TemplateDeployer;
 import rife.template.TemplateFactory;
@@ -78,12 +79,12 @@ public class PrecompileOperation extends AbstractOperation<PrecompileOperation> 
     }
 
     /**
-     * Configures a precompile operation from a {@link Project}.
+     * Configures a precompile operation from a {@link BaseProject}.
      *
      * @param project the project to configure the precompile operation from
      * @since 1.5
      */
-    public PrecompileOperation fromProject(Project project) {
+    public PrecompileOperation fromProject(BaseProject project) {
         return sourceDirectories(List.of(project.srcMainResourcesTemplatesDirectory()))
             .destinationDirectory(project.buildTemplatesDirectory());
     }
