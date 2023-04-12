@@ -135,9 +135,14 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
             }
         }
 
+        boolean printed_header = false;
         for (var file : destinationDirectory.listFiles()) {
             if (!filenames.contains(file.getName())) {
-                System.out.println("Deleting : " + file.getName());
+                if (!printed_header) {
+                    printed_header = true;
+                    System.out.println("Deleting from " + destinationDirectory.getName() + ":");
+                }
+                System.out.println("    " + file.getName());
                 file.delete();
             }
         }
