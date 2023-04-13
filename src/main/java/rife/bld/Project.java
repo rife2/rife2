@@ -95,6 +95,13 @@ public class Project extends BaseProject {
         return uberJarOperation_;
     }
 
+    @BuildCommand(help = JUnitHelp.class)
+    @Override
+    public void test()
+    throws Exception {
+        super.test();
+    }
+
     /**
      * Standard build command, generates javadoc.
      *

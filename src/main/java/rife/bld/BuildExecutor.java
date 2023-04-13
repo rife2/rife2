@@ -214,6 +214,11 @@ public class BuildExecutor {
         showStacktrace |= arguments_.removeAll(List.of(ARG_STACKTRACE1, ARG_STACKTRACE2));
         show_help |= arguments_.isEmpty();
 
+        if (show_help) {
+            new HelpOperation(this, Collections.emptyList()).execute();
+            return exitStatus_;
+        }
+
         while (!arguments_.isEmpty()) {
             var command = arguments_.remove(0);
 
@@ -249,9 +254,6 @@ public class BuildExecutor {
             }
         }
 
-        if (show_help) {
-            help();
-        }
 
         return exitStatus_;
     }

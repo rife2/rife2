@@ -4,10 +4,7 @@
  */
 package rife.bld.operations;
 
-import rife.tools.FileUtils;
-
-import java.util.ArrayList;
-import java.util.List;
+import rife.bld.BaseProject;
 
 /**
  * Tests a Java application with JUnit.
@@ -27,32 +24,48 @@ public class JUnitOperation extends TestOperation<JUnitOperation, JUnitOptions> 
         return new JUnitOptions();
     }
 
-    /**
-     * Part of the {@link #execute} operation, constructs the command list
-     * to use for building the process, defaults to adding JUnit options.
-     *
-     * @since 1.5.20
-     */
     @Override
-    protected List<String> executeConstructProcessCommandList() {
-        var args = new ArrayList<String>();
-        args.add(javaTool());
-        args.addAll(javaOptions());
-        args.add("-cp");
-        args.add(FileUtils.joinPaths(classpath()));
+    public JUnitOperation fromProject(BaseProject project) {
+        super.fromProject(project);
 
-        var main_class = mainClass();
-        if (main_class == null) {
-            main_class = DEFAULT_TEST_TOOL_JUNIT5;
-        }
-        args.add(main_class);
-
-        if (testToolOptions().isEmpty() && main_class.equals(DEFAULT_TEST_TOOL_JUNIT5)) {
-            args.addAll(new JUnitOptions().defaultOptions());
-        } else {
-            args.addAll(testToolOptions());
+        // use the default JUnit 5 console launcher as the test tool
+        if (mainClass() == null) {
+            mainClass(DEFAULT_TEST_TOOL_JUNIT5);
         }
 
-        return args;
+        // add the default JUnit options if none were specified
+        if (testToolOptions().isEmpty() && mainClass().equals(DEFAULT_TEST_TOOL_JUNIT5)) {
+            testToolOptions().defaultOptions();
+        }
+
+        // evaluate the next arguments and pass them to the JUnit console launcher
+        // if they meet the required conditions
+        var arguments = project.arguments();
+        while (!arguments.isEmpty()) {
+            var argument = arguments.get(0);
+            if (argument.startsWith("-")) {
+                arguments.remove(0);
+                if (argument.equals("--junit-help")) {
+                    testToolOptions().add("--help");
+                } else if (argument.equals("--junit-clear")) {
+                    testToolOptions().clear();
+                } else {
+                    testToolOptions().add(argument);
+                    // check whether this option could have the need for an additional argument
+                    if (argument.length() == 2 && !arguments.isEmpty()) {
+                        switch (argument.charAt(1)) {
+                            // these are options in the form of -x where the next argument is separated
+                            // by a space and should also be passed on to the JUnit console launcher
+                            case 'f', 'd', 'o', 'p', 'c', 'm', 'r', 'i', 'n', 'N', 't', 'T', 'e', 'E' ->
+                                    testToolOptions().add(arguments.remove(0));
+                        }
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+
+        return this;
     }
 }

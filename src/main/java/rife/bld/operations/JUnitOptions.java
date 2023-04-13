@@ -6,6 +6,7 @@ package rife.bld.operations;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Options for JUnit 5.
@@ -20,6 +21,61 @@ public class JUnitOptions extends ArrayList<String> {
 
     public enum Theme {
         ASCII, UNICODE
+    }
+
+    private void removeMutuallyExclusiveOptions(String element) {
+        if (element.startsWith("--scan-classpath")) {
+            removeIf(s -> s.startsWith("--select-"));
+        } else if (element.startsWith("--select-")) {
+            removeIf(s -> s.startsWith("--scan-classpath"));
+        }
+        switch (element) {
+            // these are shorthand options for the longer --select-* options
+            case "-u", "-f", "-d", "-o", "-p", "-c", "-m", "-r", "-i" ->
+                    removeIf(s -> s.startsWith("--scan-classpath"));
+        }
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends String> c) {
+        var result = super.addAll(c);
+        if (result) {
+            for (var element : c) {
+                removeMutuallyExclusiveOptions(element);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends String> c) {
+        var result = super.addAll(index, c);
+        if (result) {
+            for (var element : c) {
+                removeMutuallyExclusiveOptions(element);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String set(int index, String element) {
+        var result = super.set(index, element);
+        removeMutuallyExclusiveOptions(element);
+        return result;
+    }
+
+    @Override
+    public boolean add(String s) {
+        var result = super.add(s);
+        removeMutuallyExclusiveOptions(s);
+        return result;
+    }
+
+    @Override
+    public void add(int index, String element) {
+        super.add(index, element);
+        removeMutuallyExclusiveOptions(element);
     }
 
     /**
@@ -54,7 +110,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions scanClassPath() {
-        removeIf(s -> s.startsWith("--select-"));
         add("--scan-classpath");
         return this;
     }
@@ -73,7 +128,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions scanClassPath(String path) {
-        removeIf(s -> s.startsWith("--select-"));
         add("--scan-classpath=" + path);
         return this;
     }
@@ -89,7 +143,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions scanModules() {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--scan-modules");
         return this;
     }
@@ -105,7 +158,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectUri(String uri) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-uri=" + uri);
         return this;
     }
@@ -121,7 +173,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectFile(File file) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-file=" + file);
         return this;
     }
@@ -137,7 +188,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectDirectory(File file) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-directory=" + file);
         return this;
     }
@@ -153,7 +203,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectModule(String name) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-module=" + name);
         return this;
     }
@@ -169,7 +218,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectPackage(String name) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-package=" + name);
         return this;
     }
@@ -185,7 +233,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectClass(String name) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-class=" + name);
         return this;
     }
@@ -201,7 +248,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectMethod(String name) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-method=" + name);
         return this;
     }
@@ -217,7 +263,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectResource(String resource) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-resource=" + resource);
         return this;
     }
@@ -234,7 +279,6 @@ public class JUnitOptions extends ArrayList<String> {
      * @since 1.5.20
      */
     public JUnitOptions selectIteration(String iteration) {
-        removeIf(s -> s.startsWith("--scan-classpath"));
         add("--select-iteration=" + iteration);
         return this;
     }

@@ -56,6 +56,8 @@ public class TestOperation<T extends TestOperation<T, O>, O extends List<String>
         args.add("-cp");
         args.add(FileUtils.joinPaths(classpath()));
         args.add(mainClass());
+        args.addAll(testToolOptions());
+
         return args;
     }
 
