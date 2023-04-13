@@ -10,6 +10,7 @@ import rife.tools.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Tests a Java application.
@@ -17,7 +18,27 @@ import java.util.List;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public class TestOperation extends AbstractProcessOperation<TestOperation> {
+public class TestOperation<T extends TestOperation<T, O>, O extends List<String>> extends AbstractProcessOperation<T> {
+    protected final O testToolOptions_;
+
+    /**
+     * Instantiates a new test operation.
+     * @since 1.5.20
+     */
+    public TestOperation() {
+        testToolOptions_ = createTestToolOptions();
+    }
+
+    /**
+     * Creates a new collection of test tool options.
+     *
+     * @return the test tool options to use
+     * @since 1.5.20
+     */
+    protected O createTestToolOptions() {
+        return (O)new ArrayList<String>();
+    }
+
     /**
      * Part of the {@link #execute} operation, constructs the command list
      * to use for building the process.
@@ -44,7 +65,7 @@ public class TestOperation extends AbstractProcessOperation<TestOperation> {
      * @param project the project to configure the test operation from
      * @since 1.5
      */
-    public TestOperation fromProject(BaseProject project) {
+    public T fromProject(BaseProject project) {
         var operation = workDirectory(project.workDirectory())
             .javaTool(project.javaTool())
             .classpath(project.testClasspath());
@@ -61,9 +82,9 @@ public class TestOperation extends AbstractProcessOperation<TestOperation> {
      * @return this operation instance
      * @since 1.5.18
      */
-    public TestOperation testToolOptions(String... options) {
-        processOptions_.addAll(List.of(options));
-        return this;
+    public T testToolOptions(String... options) {
+        testToolOptions_.addAll(List.of(options));
+        return (T)this;
     }
 
     /**
@@ -75,9 +96,9 @@ public class TestOperation extends AbstractProcessOperation<TestOperation> {
      * @return this operation instance
      * @since 1.5
      */
-    public TestOperation testToolOptions(List<String> options) {
-        processOptions_.addAll(options);
-        return this;
+    public T testToolOptions(List<String> options) {
+        testToolOptions_.addAll(options);
+        return (T)this;
     }
 
     /**
@@ -86,7 +107,7 @@ public class TestOperation extends AbstractProcessOperation<TestOperation> {
      * @return the test tool's options
      * @since 1.5
      */
-    public List<String> testToolOptions() {
-        return processOptions_;
+    public O testToolOptions() {
+        return (O)testToolOptions_;
     }
 }

@@ -5,7 +5,6 @@
 package rife.bld.operations;
 
 import rife.bld.BaseProject;
-import rife.bld.Project;
 import rife.tools.FileUtils;
 
 import java.util.ArrayList;
@@ -18,6 +17,8 @@ import java.util.List;
  * @since 1.5
  */
 public class RunOperation extends AbstractProcessOperation<RunOperation> {
+    protected final List<String> runOptions_ = new ArrayList<>();
+
     /**
      * Part of the {@link #execute} operation, constructs the command list
      * to use for building the process.
@@ -62,7 +63,7 @@ public class RunOperation extends AbstractProcessOperation<RunOperation> {
      * @since 1.5.18
      */
     public RunOperation runOptions(String... options) {
-        processOptions_.addAll(List.of(options));
+        runOptions_.addAll(List.of(options));
         return this;
     }
 
@@ -76,7 +77,7 @@ public class RunOperation extends AbstractProcessOperation<RunOperation> {
      * @since 1.5.18
      */
     public RunOperation runOptions(List<String> options) {
-        processOptions_.addAll(options);
+        runOptions_.addAll(options);
         return this;
     }
 
@@ -87,6 +88,6 @@ public class RunOperation extends AbstractProcessOperation<RunOperation> {
      * @since 1.5.18
      */
     public List<String> runOptions() {
-        return processOptions_;
+        return runOptions_;
     }
 }

@@ -31,7 +31,7 @@ public class Project extends BaseProject {
     private final UberJarOperation uberJarOperation_ = new UberJarOperation();
 
     @Override
-    public TestOperation testOperation() {
+    public JUnitOperation testOperation() {
         return junitTestOperation_;
     }
 

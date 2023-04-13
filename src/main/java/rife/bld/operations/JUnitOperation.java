@@ -11,12 +11,21 @@ import java.util.List;
 
 /**
  * Tests a Java application with JUnit.
+ * <p>
+ * If no JUnit options are specified, the {@link JUnitOptions#defaultOptions()}
+ * are used. To tweak the default options, manually add them with this method
+ * and use the other desired options.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5.20
  */
-public class JUnitOperation extends TestOperation {
+public class JUnitOperation extends TestOperation<JUnitOperation, JUnitOptions> {
     public static final String DEFAULT_TEST_TOOL_JUNIT5 = "org.junit.platform.console.ConsoleLauncher";
+
+    @Override
+    protected JUnitOptions createTestToolOptions() {
+        return new JUnitOptions();
+    }
 
     /**
      * Part of the {@link #execute} operation, constructs the command list
@@ -24,6 +33,7 @@ public class JUnitOperation extends TestOperation {
      *
      * @since 1.5.20
      */
+    @Override
     protected List<String> executeConstructProcessCommandList() {
         var args = new ArrayList<String>();
         args.add(javaTool());
@@ -37,18 +47,12 @@ public class JUnitOperation extends TestOperation {
         }
         args.add(main_class);
 
-        var test_tool_options = testToolOptions();
-        if (test_tool_options.isEmpty() && main_class.equals(DEFAULT_TEST_TOOL_JUNIT5)) {
-            test_tool_options.add("--config=junit.jupiter.testclass.order.default=org.junit.jupiter.api.ClassOrderer$ClassName");
-            test_tool_options.add("--details=verbose");
-            test_tool_options.add("--scan-classpath");
-            test_tool_options.add("--disable-banner");
-            test_tool_options.add("--disable-ansi-colors");
-            test_tool_options.add("--exclude-engine=junit-platform-suite");
-            test_tool_options.add("--exclude-engine=junit-vintage");
+        if (testToolOptions().isEmpty() && main_class.equals(DEFAULT_TEST_TOOL_JUNIT5)) {
+            args.addAll(new JUnitOptions().defaultOptions());
+        } else {
+            args.addAll(testToolOptions());
         }
 
-        args.addAll(test_tool_options);
         return args;
     }
 }

@@ -333,7 +333,7 @@ public class BaseProject extends BuildExecutor {
     private final PurgeOperation purgeOperation_ = new PurgeOperation().artifactRetriever(retriever_);
     private final PublishOperation publishOperation_ = new PublishOperation().artifactRetriever(retriever_);
     private final RunOperation runOperation_ = new RunOperation();
-    private final TestOperation testOperation_ = new TestOperation();
+    private final TestOperation<?, ?> testOperation_ = new TestOperation<>();
     private final UpdatesOperation updatesOperation_ = new UpdatesOperation().artifactRetriever(retriever_);
     private final VersionOperation versionOperation_ = new VersionOperation();
 
@@ -403,7 +403,7 @@ public class BaseProject extends BuildExecutor {
      * @return the default test operation instance
      * @since 1.5.18
      */
-    public TestOperation testOperation() {
+    public TestOperation<?, ?> testOperation() {
         return testOperation_;
     }
 

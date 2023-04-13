@@ -5,7 +5,6 @@
 package rife.bld.operations;
 
 import rife.bld.BaseProject;
-import rife.bld.Project;
 import rife.bld.operations.exceptions.ExitStatusException;
 import rife.bld.operations.exceptions.OperationOptionException;
 import rife.tools.exceptions.FileUtilsErrorException;
@@ -29,7 +28,6 @@ public abstract class AbstractProcessOperation<T extends AbstractProcessOperatio
     protected final JavaOptions javaOptions_ = new JavaOptions();
     protected final List<String> classpath_ = new ArrayList<>();
     protected String mainClass_;
-    protected final List<String> processOptions_ = new ArrayList<>();
     protected Function<String, Boolean> outputProcessor_;
     protected Function<String, Boolean> errorProcessor_;
     protected Process process_;
