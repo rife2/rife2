@@ -597,7 +597,7 @@ public class TestDependencyResolver {
             org.webjars.npm:mobile-drag-drop:2.3.0-rc.2
             com.vaadin:vaadin-flow-components-base:23.3.7
             org.apache.commons:commons-lang3:3.12.0
-            com.fasterxml.jackson.core:jackson-annotations
+            com.fasterxml.jackson.core:jackson-annotations:2.14.1
             com.github.oshi:oshi-core:6.1.6
             com.auth0:java-jwt:3.19.2
             com.helger.commons:ph-commons
@@ -998,7 +998,7 @@ public class TestDependencyResolver {
                 gwt-elemental-2.8.2.vaadin2.jar
                 httpclient-4.5.13.jar
                 httpcore-4.4.13.jar
-                jackson-annotations-2.14.2.jar
+                jackson-annotations-2.14.1.jar
                 jackson-core-2.14.1.jar
                 jackson-databind-2.14.1.jar
                 jackson-datatype-jsr310-2.14.1.jar

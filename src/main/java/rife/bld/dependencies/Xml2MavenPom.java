@@ -293,24 +293,33 @@ class Xml2MavenPom extends Xml2Data {
             return null;
         }
 
-        var processed_data = new StringBuilder();
-        var matcher = MAVEN_PROPERTY.matcher(data);
-        var last_end = 0;
-        while (matcher.find()) {
-            if (matcher.groupCount() == 1) {
-                var property = matcher.group(1);
-                if (properties_.containsKey(property)) {
-                    processed_data.append(data, last_end, matcher.start());
-                    processed_data.append(properties_.get(property));
-                    last_end = matcher.end();
+        boolean replaced;
+        do {
+            replaced = false;
+
+            var processed_data = new StringBuilder();
+            var matcher = MAVEN_PROPERTY.matcher(data);
+            var last_end = 0;
+            while (matcher.find()) {
+                if (matcher.groupCount() == 1) {
+                    var property = matcher.group(1);
+                    if (properties_.containsKey(property)) {
+                        processed_data.append(data, last_end, matcher.start());
+                        processed_data.append(properties_.get(property));
+                        last_end = matcher.end();
+
+                        replaced = true;
+                    }
                 }
             }
-        }
-        if (last_end < data.length()) {
-            processed_data.append(data.substring(last_end));
-        }
+            if (last_end < data.length()) {
+                processed_data.append(data.substring(last_end));
+            }
 
-        return processed_data.toString();
+            data = processed_data.toString();
+        } while (replaced);
+
+        return data;
     }
 
     private void resetState() {
