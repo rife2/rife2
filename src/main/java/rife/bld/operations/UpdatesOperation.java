@@ -66,7 +66,8 @@ public class UpdatesOperation extends AbstractOperation<UpdatesOperation> {
      * @since 1.5
      */
     public UpdatesOperation fromProject(BaseProject project) {
-        return repositories(project.repositories())
+        return artifactRetriever(project.artifactRetriever())
+            .repositories(project.repositories())
             .dependencies(project.dependencies());
     }
 

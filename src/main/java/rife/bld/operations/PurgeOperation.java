@@ -162,7 +162,8 @@ public class PurgeOperation extends AbstractOperation<PurgeOperation> {
      * @since 1.5
      */
     public PurgeOperation fromProject(BaseProject project) {
-        return repositories(project.repositories())
+        return artifactRetriever(project.artifactRetriever())
+            .repositories(project.repositories())
             .dependencies(project.dependencies())
             .libCompileDirectory(project.libCompileDirectory())
             .libRuntimeDirectory(project.libRuntimeDirectory())

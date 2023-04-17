@@ -183,7 +183,7 @@ public class TestProject {
             var project = new CustomProjectInlineHelp(tmp);
             project.execute(new String[]{""});
 
-            assertTrue(out.toString(StandardCharsets.UTF_8).contains("newcommand   mysummary"));
+            assertTrue(out.toString(StandardCharsets.UTF_8).contains("newcommand       mysummary"));
             out.reset();
 
             project.execute(new String[]{"help", "newcommand"});
@@ -238,7 +238,7 @@ public class TestProject {
         try {
             var result = new StringBuilder();
             var project = new CustomProjectLambda(tmp, result);
-            project.execute(new String[]{"ne", "nc", "n"});
+            project.execute(new String[]{"ne2", "nc2", "n2"});
             assertEquals("newcommand2" +
                 "newcommand2" +
                 "newcommand2", result.toString());

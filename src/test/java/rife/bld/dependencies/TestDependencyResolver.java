@@ -1012,7 +1012,7 @@ public class TestDependencyResolver {
                 mobile-drag-drop-2.3.0-rc.2.jar
                 open-8.5.0.jar
                 oshi-core-6.1.6.jar
-                ph-commons-11.0.2.jar
+                ph-commons-11.0.3.jar
                 ph-css-6.5.0.jar
                 slf4j-api-1.7.36.jar
                 throw-if-servlet5-1.0.2.jar

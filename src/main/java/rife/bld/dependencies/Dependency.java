@@ -15,10 +15,12 @@ import java.util.regex.Pattern;
  * @param version    the dependency version
  * @param classifier the dependency classier
  * @param type       the dependency type
+ * @param exclusions the dependency exclusions for transitive resolution
+ * @param parent     the parent dependency that created this dependency (only for information purposes)
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.5
  */
-public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions) {
+public record Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions, Dependency parent) {
     public static final String CLASSIFIER_SOURCES = "sources";
     public static final String CLASSIFIER_JAVADOC = "javadoc";
 
@@ -39,12 +41,17 @@ public record Dependency(String groupId, String artifactId, VersionNumber versio
     }
 
     public Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions) {
+        this(groupId, artifactId, version, classifier, type, null, null);
+    }
+
+    public Dependency(String groupId, String artifactId, VersionNumber version, String classifier, String type, ExclusionSet exclusions, Dependency parent) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = (version == null ? VersionNumber.UNKNOWN : version);
         this.classifier = (classifier == null ? "" : classifier);
         this.type = (type == null ? "jar" : type);
         this.exclusions = (exclusions == null ? new ExclusionSet() : exclusions);
+        this.parent = parent;
     }
 
     private static final Pattern DEPENDENCY_PATTERN = Pattern.compile("^(?<groupId>[^:@]+):(?<artifactId>[^:@]+)(?::(?<version>[^:@]+)(?::(?<classifier>[^:@]+))?)?(?:@(?<type>[^:@]+))?$");

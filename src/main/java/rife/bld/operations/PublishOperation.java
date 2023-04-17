@@ -498,6 +498,7 @@ public class PublishOperation extends AbstractOperation<PublishOperation> {
      * @since 1.5.7
      */
     public PublishOperation fromProject(BaseProject project) {
+        artifactRetriever(project.artifactRetriever());
         dependencies().include(project.dependencies());
         artifacts(List.of(
             new PublishArtifact(new File(project.buildDistDirectory(), project.jarFileName()), "", "jar"),

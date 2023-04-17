@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.jar.Attributes;
 import java.util.regex.Pattern;
 
 import static rife.bld.dependencies.Scope.runtime;
@@ -327,14 +326,25 @@ public class BaseProject extends BuildExecutor {
 
     private final ArtifactRetriever retriever_ = ArtifactRetriever.cachingInstance();
 
+    /**
+     * Returns the artifact retriever that is used.
+     *
+     * @return the artifact retriever
+     * @since 1.5.21
+     */
+    public ArtifactRetriever artifactRetriever() {
+        return retriever_;
+    }
+
     private final CleanOperation cleanOperation_ = new CleanOperation();
     private final CompileOperation compileOperation_ = new CompileOperation();
-    private final DownloadOperation downloadOperation_ = new DownloadOperation().artifactRetriever(retriever_);
-    private final PurgeOperation purgeOperation_ = new PurgeOperation().artifactRetriever(retriever_);
-    private final PublishOperation publishOperation_ = new PublishOperation().artifactRetriever(retriever_);
+    private final DependencyTreeOperation dependencyTreeOperation_ = new DependencyTreeOperation();
+    private final DownloadOperation downloadOperation_ = new DownloadOperation();
+    private final PurgeOperation purgeOperation_ = new PurgeOperation();
+    private final PublishOperation publishOperation_ = new PublishOperation();
     private final RunOperation runOperation_ = new RunOperation();
     private final TestOperation<?, ?> testOperation_ = new TestOperation<>();
-    private final UpdatesOperation updatesOperation_ = new UpdatesOperation().artifactRetriever(retriever_);
+    private final UpdatesOperation updatesOperation_ = new UpdatesOperation();
     private final VersionOperation versionOperation_ = new VersionOperation();
 
     /**
@@ -355,6 +365,16 @@ public class BaseProject extends BuildExecutor {
      */
     public CompileOperation compileOperation() {
         return compileOperation_;
+    }
+
+    /**
+     * Retrieves the project's default dependency tree operation.
+     *
+     * @return the default dependency tree operation instance
+     * @since 1.5.21
+     */
+    public DependencyTreeOperation dependencyTreeOperation() {
+        return dependencyTreeOperation_;
     }
 
     /**
@@ -447,6 +467,17 @@ public class BaseProject extends BuildExecutor {
     public void compile()
     throws Exception {
         compileOperation().executeOnce(() -> compileOperation().fromProject(this));
+    }
+
+    /**
+     * Standard build command, output the dependency tree.
+     *
+     * @since 1.5.21
+     */
+    @BuildCommand(value = "dependency-tree", help = DependencyTreeHelp.class)
+    public void dependencyTree()
+    throws Exception {
+        dependencyTreeOperation().executeOnce(() -> dependencyTreeOperation().fromProject(this));
     }
 
     /**

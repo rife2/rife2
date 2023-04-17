@@ -135,6 +135,102 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
         return dependencies_.get(dependency);
     }
 
+    /**
+     * Generates the string description of the transitive hierarchical tree of
+     * dependencies for a particular scope.
+     *
+     * @param retriever    the retriever to use to get artifacts
+     * @param repositories the repositories to look for dependencies in
+     * @param scopes       the scopes to return the transitive dependencies for
+     * @return the generated tree description string; or an empty string if
+     * there were no dependencies to describe
+     * @since 1.5.21
+     */
+    public String generateTransitiveDependencyTree(ArtifactRetriever retriever, List<Repository> repositories, Scope... scopes) {
+        var compile_dependencies = new DependencySet();
+        for (var dependency : this) {
+            compile_dependencies.addAll(new DependencyResolver(retriever, repositories, dependency).getAllDependencies(scopes));
+        }
+        return compile_dependencies.generateDependencyTree();
+    }
+
+    /**
+     * Generates the string description of the hierarchical tree of
+     * dependencies in this {@code DependencySet}. This relies on the {@code Dependency}
+     * {@code parent} field to be set correctly to indicate their relationships.
+     *
+     * @return the generated tree description string; or an empty string if
+     * there were no dependencies to describe
+     * @since 1.5.21
+     */
+    public String generateDependencyTree() {
+        var result = new StringBuilder();
+
+        var dependency_list = new ArrayList<>(this);
+        var dependency_stack = new Stack<DependencyTreeEntry>();
+
+        var roots = dependency_list.stream().filter(dependency -> dependency.parent() == null).toList();
+        dependency_list.removeIf(dependency -> dependency.parent() == null);
+
+        var roots_it = roots.iterator();
+        while (roots_it.hasNext()) {
+            var root = roots_it.next();
+
+            dependency_list.add(0, root);
+            stack:
+            do {
+                var list_it = dependency_list.iterator();
+                while (list_it.hasNext()) {
+                    var list_dep = list_it.next();
+                    if (list_dep.parent() == null) {
+                        list_it.remove();
+                        var entry = new DependencyTreeEntry(null, list_dep, !roots_it.hasNext());
+                        result.append(entry).append(System.lineSeparator());
+                        dependency_stack.add(entry);
+                    } else {
+                        var stack_entry = dependency_stack.peek();
+                        if (list_dep.parent().equals(stack_entry.dependency())) {
+                            list_it.remove();
+
+                            boolean last = dependency_list.stream().noneMatch(d -> d.parent().equals(stack_entry.dependency()));
+                            var entry = new DependencyTreeEntry(stack_entry, list_dep, last);
+                            result.append(entry).append(System.lineSeparator());
+                            dependency_stack.add(entry);
+                            continue stack;
+                        }
+                    }
+                }
+                dependency_stack.pop();
+            } while (!dependency_stack.isEmpty());
+        }
+
+        return result.toString();
+    }
+
+    private record DependencyTreeEntry(DependencyTreeEntry parent, Dependency dependency, boolean last) {
+        public String toString() {
+            var result = new StringBuilder();
+
+            if (last) {
+                result.insert(0, "└─ ");
+            } else {
+                result.insert(0, "├─ ");
+            }
+
+            var p = parent();
+            while (p != null) {
+                if (p.last()) {
+                    result.insert(0, "   ");
+                } else {
+                    result.insert(0, "│  ");
+                }
+                p = p.parent();
+            }
+
+            return result.toString() + dependency;
+        }
+    }
+
     public boolean add(Dependency dependency) {
         var existing = dependencies_.get(dependency);
         if (existing == null) {

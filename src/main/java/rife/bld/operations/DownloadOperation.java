@@ -148,7 +148,8 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     public DownloadOperation fromProject(BaseProject project) {
-        return repositories(project.repositories())
+        return artifactRetriever(project.artifactRetriever())
+            .repositories(project.repositories())
             .dependencies(project.dependencies())
             .libCompileDirectory(project.libCompileDirectory())
             .libRuntimeDirectory(project.libRuntimeDirectory())

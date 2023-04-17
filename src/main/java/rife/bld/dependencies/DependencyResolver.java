@@ -5,21 +5,11 @@
 package rife.bld.dependencies;
 
 import rife.bld.dependencies.exceptions.*;
-import rife.tools.FileUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.*;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.security.MessageDigest;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
-
-import static rife.tools.HttpUtils.HEADER_AUTHORIZATION;
-import static rife.tools.HttpUtils.basicAuthorizationHeader;
-import static rife.tools.StringUtils.encodeHexLower;
 
 /**
  * Resolves a dependency within a list of Maven-compatible repositories.
@@ -105,7 +95,7 @@ public class DependencyResolver {
      * @since 1.5
      */
     public DependencySet getDirectDependencies(Scope... scopes) {
-        var pom_dependencies = getMavenPom(convertDependency(dependency_)).getDependencies(scopes);
+        var pom_dependencies = getMavenPom(dependency_).getDependencies(scopes);
         var result = new DependencySet();
         for (var dependency : pom_dependencies) {
             result.add(convertPomDependency(dependency));
@@ -132,7 +122,7 @@ public class DependencyResolver {
 
         var dependency_queue = new ArrayList<PomDependency>();
 
-        var parent = convertDependency(dependency_);
+        var parent = dependency_;
         var next_dependencies = getMavenPom(parent).getDependencies(scopes);
 
         while (parent != null && next_dependencies != null) {
@@ -159,7 +149,7 @@ public class DependencyResolver {
                     // we found a dependency that was added to the result, get its
                     // dependencies so that they can be added to the queue after
                     // filtering
-                    parent = candidate;
+                    parent = dependency;
                     next_dependencies = new DependencyResolver(retriever_, repositories_, dependency).getMavenPom(parent).getDependencies(scopes);
                     break;
                 }
@@ -168,7 +158,7 @@ public class DependencyResolver {
         return result;
     }
 
-    private boolean matchesExclusions(PomDependency context, PomDependency checked) {
+    private boolean matchesExclusions(Dependency context, PomDependency checked) {
         while (context != null) {
             if (context.exclusions() != null) {
                 for (var exclusion : context.exclusions()) {
@@ -338,17 +328,18 @@ public class DependencyResolver {
     }
 
     private PomDependency convertDependency(Dependency dependency) {
-        return new PomDependency(null, dependency.groupId(), dependency.artifactId(), dependency.version().toString(), dependency.type(), dependency.type(), "compile", "false", dependency.exclusions());
+        return new PomDependency(dependency.groupId(), dependency.artifactId(), dependency.version().toString(), dependency.type(), dependency.type(), "compile", "false", dependency.exclusions(), dependency.parent());
     }
 
     private Dependency convertPomDependency(PomDependency pomDependency) {
         return new Dependency(
-            pomDependency.groupId(),
-            pomDependency.artifactId(),
-            VersionNumber.parse(pomDependency.version()),
-            pomDependency.classifier(),
-            pomDependency.type(),
-            pomDependency.exclusions());
+                pomDependency.groupId(),
+                pomDependency.artifactId(),
+                VersionNumber.parse(pomDependency.version()),
+                pomDependency.classifier(),
+                pomDependency.type(),
+                pomDependency.exclusions(),
+                pomDependency.parent());
     }
 
     private List<RepositoryArtifact> getArtifactLocations() {
@@ -411,7 +402,7 @@ public class DependencyResolver {
         return getArtifactLocations().stream().map(a -> a.appendPath(version + "/" + dependency_.artifactId() + "-" + pom_version + ".pom")).toList();
     }
 
-    Xml2MavenPom getMavenPom(PomDependency parent) {
+    Xml2MavenPom getMavenPom(Dependency parent) {
         RepositoryArtifact retrieved_artifact = null;
         String pom = null;
         var artifacts = getPomLocations();
