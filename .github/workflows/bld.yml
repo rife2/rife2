@@ -58,7 +58,7 @@ jobs:
 
     strategy:
       matrix:
-        java-version: [ 17, 19 ]
+        java-version: [ 17, 19, 20 ]
 
     steps:
       - name: Checkout source repository
@@ -75,6 +75,7 @@ jobs:
       - name: Run tests
         run: >-
           ./bld download compile test
+          -Djava.locale.providers=COMPAT
           -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true
           -DtestsBadgeUrl=https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2
           -DtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}
