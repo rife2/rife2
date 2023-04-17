@@ -1466,8 +1466,9 @@ public class BaseProject extends BuildExecutor {
      * @since 1.5
      */
     public List<String> compileTestClasspath() {
-        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), testClasspathJars());
+        var paths = new ArrayList<String>();
         paths.add(buildMainDirectory().getAbsolutePath());
+        paths.addAll(FileUtils.combineToAbsolutePaths(compileClasspathJars(), testClasspathJars()));
         return paths;
     }
 
@@ -1481,9 +1482,10 @@ public class BaseProject extends BuildExecutor {
      * @since 1.5
      */
     public List<String> runClasspath() {
-        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars());
+        var paths = new ArrayList<String>();
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
+        paths.addAll(FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars()));
         return paths;
     }
 
@@ -1498,11 +1500,12 @@ public class BaseProject extends BuildExecutor {
      * @since 1.5
      */
     public List<String> testClasspath() {
-        var paths = FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars());
+        var paths = new ArrayList<String>();
         paths.add(srcMainResourcesDirectory().getAbsolutePath());
         paths.add(srcTestResourcesDirectory().getAbsolutePath());
         paths.add(buildMainDirectory().getAbsolutePath());
         paths.add(buildTestDirectory().getAbsolutePath());
+        paths.addAll(FileUtils.combineToAbsolutePaths(compileClasspathJars(), runtimeClasspathJars(), standaloneClasspathJars(), testClasspathJars()));
         return paths;
     }
 
