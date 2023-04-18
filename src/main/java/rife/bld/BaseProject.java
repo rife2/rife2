@@ -1509,13 +1509,17 @@ public class BaseProject extends BuildExecutor {
         return paths;
     }
 
-    @Override
-    public int execute(String[] arguments) {
-        if (autoDownloadPurge()) {
-            performAutoDownloadPurge();
-        }
-
-        return super.execute(arguments);
+    /**
+     * Executes download and purge commands automatically when the
+     * {@code autoDownloadPurge} flag is set and changes have been detected.
+     *
+     * @throws Exception when an exception occurs during the auto download purge operation
+     * @since 1.5.23
+     */
+    public void executeAutoDownloadPurge()
+    throws Exception {
+        download();
+        purge();
     }
 
     private static final String BLD_BUILD_HASH = "bld-build.hash";
@@ -1530,8 +1534,7 @@ public class BaseProject extends BuildExecutor {
         }
 
         try {
-            download();
-            purge();
+            executeAutoDownloadPurge();
 
             writeHash(hash_file, hash);
         } catch (Exception e) {
@@ -1592,5 +1595,14 @@ public class BaseProject extends BuildExecutor {
         } catch (FileUtilsErrorException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int execute(String[] arguments) {
+        if (autoDownloadPurge()) {
+            performAutoDownloadPurge();
+        }
+
+        return super.execute(arguments);
     }
 }
