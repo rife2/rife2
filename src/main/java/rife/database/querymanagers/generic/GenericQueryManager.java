@@ -138,7 +138,7 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
      * #save(Object bean)}.
      *
      * @param bean the bean to be inserted
-     * @return the indentier assigned to the new bean
+     * @return the identifier assigned to the new bean
      * @see #save(Object bean)
      * @since 1.0
      */
@@ -155,7 +155,7 @@ public interface GenericQueryManager<BeanType> extends ValidationContext {
      * #save(Object bean)}.
      *
      * @param bean the bean to be updated
-     * @return the indentier assigned to the new bean
+     * @return the identifier assigned to the new bean
      * @see #save(Object bean)
      * @since 1.0
      */
