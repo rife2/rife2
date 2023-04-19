@@ -4,7 +4,7 @@
  */
 
 /**
- * Provides classes for the configuration of RIFE2 itself.
+ * Provides classes for the configuration framework and for the configuration of RIFE2 itself.
  * @since 1.0
  */
 package rife.config;
