@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -  Copyright 2001-2023 Geert Bevin <gbevin[remove] at uwyn dot com>
+  -  Licensed under the Apache License, Version 2.0 (the "License")
+  -->
+
+<!DOCTYPE config SYSTEM "/dtd/config.dtd">
+
+<config>
+	<list name="list1">
+		<item>item1</item>
+		<item>item2</item>
+		<item>item3</item>
+	</list>
+	<list name="list2">
+		<item>item4</item>
+		<item>item5</item>
+		<item>start:<property name="config.property.test"/>:finish</item>
+	</list>
+	<list name="listfinal" final="true">
+		<item>item6</item>
+		<item>item7</item>
+	</list>
+	<param name="parambool">1</param>
+	<param name="paramchar">C</param>
+	<param name="paramdouble">7863.3434353</param>
+	<param name="paramfloat">545.2546</param>
+	<param name="paramint">5133</param>
+	<param name="paramlong">1111111</param>
+	<param name="paramlong">8736478</param>
+	<param name="paramstring"><value name="includingstring"/>astring</param>
+	<param name="paramproperty">begin:<property name="config.property.test"/>:end</param>
+	<param name="paramfinal" final="true">initial value</param>
+	<param name="paramfinal">new value</param>
+</config>
+

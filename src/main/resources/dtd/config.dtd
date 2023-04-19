@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  -  Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+  -  Licensed under the Apache License, Version 2.0 (the "License")
+  -  PUBLIC ID: -//RIFE2//RIFE2 Config 2.0//EN
+  -  SYSTEM ID: https://rife2.com/dtd/config_2_0.dtd
+  -->
+
+<!ELEMENT config	(param|list|include)*>
+
+<!ELEMENT param     (#PCDATA|value|property|selector)*>
+<!ATTLIST param	    name CDATA #REQUIRED
+					final (0|f|false|1|t|true) "false">
+
+<!ELEMENT value     EMPTY>
+<!ATTLIST value     name CDATA #REQUIRED>
+
+<!ELEMENT list      (item*)>
+<!ATTLIST list      name CDATA #REQUIRED
+					final (0|f|false|1|t|true) "false">
+
+<!ELEMENT item      (#PCDATA|value|property|selector)*>
+
+<!ELEMENT include	(#PCDATA|value|property|selector)*>
+
+<!ELEMENT property  EMPTY>
+<!ATTLIST property  name CDATA #REQUIRED>
+
+<!ELEMENT selector  EMPTY>
+<!ATTLIST selector  class CDATA #REQUIRED>
+

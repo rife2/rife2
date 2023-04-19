@@ -4,11 +4,14 @@
  */
 package rife.engine;
 
+import rife.config.Config;
+import rife.config.exceptions.ConfigErrorException;
 import rife.continuations.ContinuationManager;
 import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
 import rife.workflow.Workflow;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 
@@ -233,5 +236,40 @@ public class Site extends Router {
      */
     public Workflow createWorkflow(ExecutorService executor) {
         return new Workflow(executor, properties_);
+    }
+
+    /**
+     * Looks for a named resource in the classpath and parses it as an
+     * XML {@link Config} file.
+     *
+     * @param name the name of the resource to parse
+     * @return the parsed configuration file
+     * @throws EngineException when an error occurred during the parsing, or
+     *                         if the resource couldn't be found
+     * @since 1.6.0
+     */
+    public Config config(String name) {
+        try {
+            return Config.fromXmlResource(name, properties());
+        } catch (ConfigErrorException e) {
+            throw new EngineException(e);
+        }
+    }
+
+    /**
+     * Parses the provided file as an XML {@link Config} file.
+     *
+     * @param file the file to parse
+     * @return the parsed configuration file
+     * @throws EngineException when an error occurred during the parsing, or
+     *                         if the resource couldn't be found
+     * @since 1.6.0
+     */
+    public Config config(File file) {
+        try {
+            return Config.fromXmlFile(file, properties());
+        } catch (ConfigErrorException e) {
+            throw new EngineException(e);
+        }
     }
 }

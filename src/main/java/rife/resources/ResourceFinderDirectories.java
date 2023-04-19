@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * <p>
  * The resources are looked up in the same order as the order in which the
  * directories were specified. This means that if a resource is found in the
- * first directory but it is also present in the second, only the first one
+ * first directory, but it is also present in the second, only the first one
  * will match.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -40,8 +40,8 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
      *                    searched in.
      * @since 1.0
      */
-    public ResourceFinderDirectories(File[] directories) {
-        directories_ = new ArrayList<File>();
+    public ResourceFinderDirectories(File ... directories) {
+        directories_ = new ArrayList<>();
 
         if (directories != null) {
             for (var directory : directories) {
@@ -58,7 +58,7 @@ public class ResourceFinderDirectories extends AbstractResourceFinder {
         File resource = null;
         for (var directory : directories_) {
             var local_name = name.replace('/', File.separatorChar);
-            resource = new File(directory.getAbsolutePath() + File.separator + local_name);
+            resource = new File(new File(directory.getAbsolutePath()), local_name);
             if (resource.exists() &&
                 resource.canRead() &&
                 resource.isFile()) {

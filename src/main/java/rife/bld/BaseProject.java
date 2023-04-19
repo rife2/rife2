@@ -1514,7 +1514,7 @@ public class BaseProject extends BuildExecutor {
      * {@code autoDownloadPurge} flag is set and changes have been detected.
      *
      * @throws Exception when an exception occurs during the auto download purge operation
-     * @since 1.5.23
+     * @since 1.6.0
      */
     public void executeAutoDownloadPurge()
     throws Exception {

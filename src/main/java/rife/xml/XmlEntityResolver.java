@@ -5,6 +5,7 @@
 package rife.xml;
 
 import rife.resources.ResourceFinder;
+import rife.resources.ResourceFinderClasspath;
 import rife.xml.exceptions.CantFindEntityException;
 
 import java.net.MalformedURLException;
@@ -98,6 +99,12 @@ public class XmlEntityResolver implements EntityResolver {
         }
 
         resource = resourceFinder_.getResource(systemId);
+
+        if (resource != null) {
+            return new XmlInputSource(resource);
+        }
+
+        resource = ResourceFinderClasspath.instance().getResource(systemId);
 
         if (null == resource) {
             throw new CantFindEntityException(systemId, null);

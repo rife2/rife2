@@ -8,12 +8,15 @@ import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
+import rife.config.exceptions.ConfigErrorException;
 import rife.engine.annotations.Parameter;
 import rife.engine.exceptions.AnnotatedElementInstanceFieldException;
 import rife.engine.exceptions.EngineException;
 import rife.template.TemplateFactory;
+import rife.tools.FileUtils;
 import rife.tools.IntegerUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -202,6 +205,7 @@ public class TestEngine {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             Route form;
+
             public void setup() {
                 form = post("/form/map", PathInfoHandling.MAP(m -> m.t("text").s().t("x").p("param2", "\\d+")), c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
@@ -252,6 +256,7 @@ public class TestEngine {
                 });
 
             });
+
             public void setup() {
                 target = get("/target/map", PathInfoHandling.MAP(m -> m.t("text").s().t("x").p("param2", "\\d+")), c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.serverPort() + ":" + c.pathInfo());
@@ -652,7 +657,9 @@ public class TestEngine {
             try (final var server = new TestServerRunner(new Site() {
                 public void setup() {
                     get("/route", new Element() {
-                        @Parameter String parameter;
+                        @Parameter
+                        String parameter;
+
                         public void process(Context c) {
                         }
                     });
@@ -662,11 +669,111 @@ public class TestEngine {
             }
         } catch (EngineException e) {
             assertTrue(e.getCause() instanceof AnnotatedElementInstanceFieldException);
-            assertEquals(((AnnotatedElementInstanceFieldException)e.getCause()).getRoute().path(), "/route");
-            assertEquals(((AnnotatedElementInstanceFieldException)e.getCause()).getField(), "parameter");
+            assertEquals(((AnnotatedElementInstanceFieldException) e.getCause()).getRoute().path(), "/route");
+            assertEquals(((AnnotatedElementInstanceFieldException) e.getCause()).getField(), "parameter");
         } finally {
             RifeConfig.engine().setPrettyEngineExceptions(true);
         }
     }
 
+    @Test
+    void testConfigResource()
+    throws IOException {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                properties().put("config.property.test", "property-engine-value");
+
+                var xml = config("xml/test_xml2config.xml").toXml();
+
+                get("/config", c -> {
+                    c.print(xml);
+                });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final HtmlPage page = webClient.getPage("http://localhost:8181/config");
+                assertEquals("""
+                    <config>
+                    	<list name="list1">
+                    		<item>item1</item>
+                    		<item>item2</item>
+                    		<item>item3</item>
+                    	</list>
+                    	<list name="list2">
+                    		<item>item4</item>
+                    		<item>item5</item>
+                    		<item>start:property-engine-value:finish</item>
+                    	</list>
+                    	<list name="listfinal" final="true">
+                    		<item>item6</item>
+                    		<item>item7</item>
+                    	</list>
+                    	<param name="parambool">1</param>
+                    	<param name="paramchar">C</param>
+                    	<param name="paramdouble">7863.3434353</param>
+                    	<param name="paramfinal" final="true">initial value</param>
+                    	<param name="paramfloat">545.2546</param>
+                    	<param name="paramint">5133</param>
+                    	<param name="paramlong">8736478</param>
+                    	<param name="paramproperty">begin:property-engine-value:end</param>
+                    	<param name="paramstring">astring</param>
+                    </config>
+                    """, page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    void testConfigFile()
+    throws IOException {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                properties().put("config.property.test", "property-engine-value");
+
+                try {
+                    var file = File.createTempFile("config", ".xml");
+                    FileUtils.writeString("""
+                        <?xml version="1.0" encoding="UTF-8"?>
+                        <!DOCTYPE config SYSTEM "/dtd/config.dtd">
+                        <config>
+                            <list name="alist">
+                                <item>start:<property name="config.property.test"/>:finish</item>
+                            </list>
+                            <param name="paramstring">astring</param>
+                            <param name="paramproperty">begin:<property name="config.property.test"/>:end</param>
+                        </config>
+                        """, file);
+
+                    config(file)
+                        .parameter("newparam", "newval")
+                        .storeToXml();
+
+                    var xml = config(file).toXml();
+
+                    file.delete();
+
+                    get("/config", c -> {
+
+                        c.print(xml);
+                    });
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final HtmlPage page = webClient.getPage("http://localhost:8181/config");
+                assertEquals("""
+                    <config>
+                    	<list name="alist">
+                    		<item>start:property-engine-value:finish</item>
+                    	</list>
+                    	<param name="newparam">newval</param>
+                    	<param name="paramproperty">begin:property-engine-value:end</param>
+                    	<param name="paramstring">astring</param>
+                    </config>
+                    """, page.getWebResponse().getContentAsString());
+            }
+        }
+    }
 }

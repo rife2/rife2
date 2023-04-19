@@ -4,7 +4,9 @@
  */
 package rife.engine;
 
+import rife.config.Config;
 import rife.config.RifeConfig;
+import rife.config.exceptions.ConfigErrorException;
 import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
 import rife.continuations.exceptions.*;
@@ -17,6 +19,7 @@ import rife.template.exceptions.TemplateException;
 import rife.tools.*;
 import rife.tools.exceptions.BeanUtilsException;
 
+import java.io.File;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -840,7 +843,7 @@ public class Context {
      * been set, this is never {@code null}, when no values are set an
      * empty list is returned
      * @see FormBuilder
-     * @see FormBuilder#selectParameter 
+     * @see FormBuilder#selectParameter
      * @since 1.0
      */
     public Collection<String> selectParameter(Template template, String name, String[] values) {
@@ -1144,7 +1147,7 @@ public class Context {
     public boolean isParameterEmpty(String name) {
         var parameter = parameter(name);
         return null == parameter ||
-               parameter.trim().equals("");
+            parameter.trim().equals("");
     }
 
     /**
@@ -1676,7 +1679,7 @@ public class Context {
                 parameter_values = parameterValues(parameter_name);
                 if (null == empty_bean &&
                     (null == parameter_values ||
-                     0 == parameter_values[0].length())) {
+                        0 == parameter_values[0].length())) {
                     empty_bean = getNewBeanInstance(bean.getClass());
                 }
 
@@ -1741,8 +1744,8 @@ public class Context {
     public boolean isFileEmpty(String name) {
         try (final var file = file(name)) {
             return null == file ||
-                   null == file.getFile() ||
-                   0 == file.getFile().length();
+                null == file.getFile() ||
+                0 == file.getFile().length();
         }
     }
 
@@ -2599,7 +2602,7 @@ public class Context {
      * Setting parameters acts on a different collection than incoming request
      * parameters and is used for RIFE2 state-related features like URL generation.
      *
-     * @param name the name of the parameter to set
+     * @param name  the name of the parameter to set
      * @param value the value of the parameter
      * @see #urlFor
      * @see #setParametersBean(Object)
@@ -2625,7 +2628,7 @@ public class Context {
      * @see #removeParameter
      * @since 1.0
      */
-   public void setParametersBean(Object bean) {
+    public void setParametersBean(Object bean) {
         setParametersBean(bean, null);
     }
 
@@ -2634,7 +2637,7 @@ public class Context {
      * Sets named parameters values from bean properties for URL generation
      * with {@link #urlFor} or the `route:` filtered template value tags.
      *
-     * @param bean the bean whose properties will be set as parameters
+     * @param bean   the bean whose properties will be set as parameters
      * @param prefix the prefix that will be added to the parameter names
      * @see #urlFor
      * @see #setParameter
@@ -2712,7 +2715,7 @@ public class Context {
      * Sets a response header with the given name and value.
      * <p>If the header had already been set, the new value overwrites the previous one.
      *
-     * @param name the name of the header
+     * @param name  the name of the header
      * @param value the additional header value
      * @since 1.0
      */
@@ -2724,7 +2727,7 @@ public class Context {
      * Adds a response header with the given name and value.
      * <p>This method allows response headers to have multiple values.
      *
-     * @param name the name of the header
+     * @param name  the name of the header
      * @param value the additional header value
      * @since 1.0
      */
@@ -2760,9 +2763,8 @@ public class Context {
      * Adds a response header with the given name and integer value.
      * <p>If the header had already been set, the new value overwrites the previous one.
      *
-     * @param name the name of the header
+     * @param name  the name of the header
      * @param value the assigned integer value
-     *
      * @since 1.0
      */
     public void setHeader(String name, int value) {
@@ -2773,9 +2775,8 @@ public class Context {
      * Adds a response header with the given name and integer value.
      * <p>This method allows response headers to have multiple values.
      *
-     * @param name the name of the header
+     * @param name  the name of the header
      * @param value the assigned integer value
-     *
      * @since 1.0
      */
     public void addHeader(String name, int value) {
@@ -2791,5 +2792,4 @@ public class Context {
     public void setStatus(int statusCode) {
         response_.setStatus(statusCode);
     }
-
 }

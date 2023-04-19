@@ -17,23 +17,6 @@ import org.xml.sax.InputSource;
 public class XmlInputSource extends InputSource {
     private URL resource_ = null;
 
-    public XmlInputSource(String xmlPath, ResourceFinder resourceFinder)
-    throws XmlErrorException {
-        super();
-
-        if (null == xmlPath) throw new IllegalArgumentException("xmlPath can't be null.");
-        if (xmlPath.length() == 0) throw new IllegalArgumentException("xmlPath can't be empty.");
-        if (null == resourceFinder) throw new IllegalArgumentException("resourceFinder can't be null.");
-
-        var resource = resourceFinder.getResource(xmlPath);
-
-        if (null == resource) {
-            throw new CantFindResourceException(xmlPath, null);
-        }
-
-        setResource(resource);
-    }
-
     public XmlInputSource(URL resource)
     throws XmlErrorException {
         super();
