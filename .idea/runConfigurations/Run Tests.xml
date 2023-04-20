@@ -1,14 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Tests" type="JUnit" factoryName="JUnit">
-    <classpathModifications>
-      <entry path="$PROJECT_DIR$/src/test/resources" />
-      <entry path="$PROJECT_DIR$/src/main/resources" />
-    </classpathModifications>
     <module name="framework" />
-    <option name="PACKAGE_NAME" value="rife.engine" />
-    <option name="MAIN_CLASS_NAME" value="rife.engine.TestProcessedTemplates" />
+    <option name="PACKAGE_NAME" value="rife" />
+    <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
-    <option name="TEST_OBJECT" value="class" />
+    <option name="TEST_OBJECT" value="package" />
     <dir value="$PROJECT_DIR$/src/test/java" />
     <method v="2">
       <option name="Make" enabled="true" />
