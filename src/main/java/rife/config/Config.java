@@ -23,6 +23,9 @@ import rife.xml.exceptions.XmlErrorException;
 import java.io.File;
 import java.io.Serializable;
 import java.net.URLDecoder;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -92,6 +95,10 @@ import java.util.prefs.Preferences;
 public class Config implements Cloneable {
     public final static String PARAMETER_PREFERENCES_USER = "config.preferences.user";
     public final static String PARAMETER_PREFERENCES_SYSTEM = "config.preferences.system";
+
+    private final ReadWriteLock lock_ = new ReentrantReadWriteLock();
+    private final Lock readLock_ = lock_.readLock();
+    private final Lock writeLock_ = lock_.writeLock();
 
     private File xmlFile_;
 
@@ -233,7 +240,12 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public File getXmlFile() {
-        return xmlFile_;
+        readLock_.lock();
+        try {
+            return xmlFile_;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -247,7 +259,12 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public Config xmlFile(File file) {
-        xmlFile_ = file;
+        writeLock_.lock();
+        try {
+            xmlFile_ = file;
+        } finally {
+            writeLock_.unlock();
+        }
         return this;
     }
 
@@ -271,12 +288,17 @@ public class Config implements Cloneable {
     public Config preferencesNode(Preferences node) {
         if (null == node) throw new IllegalArgumentException("node can't be null.");
 
-        if (node.isUserNode()) {
-            parameter(PARAMETER_PREFERENCES_USER, node.absolutePath());
-            removeParameter(PARAMETER_PREFERENCES_SYSTEM);
-        } else {
-            removeParameter(PARAMETER_PREFERENCES_USER);
-            parameter(PARAMETER_PREFERENCES_SYSTEM, node.absolutePath());
+        writeLock_.lock();
+        try {
+            if (node.isUserNode()) {
+                parameter(PARAMETER_PREFERENCES_USER, node.absolutePath());
+                removeParameter(PARAMETER_PREFERENCES_SYSTEM);
+            } else {
+                removeParameter(PARAMETER_PREFERENCES_USER);
+                parameter(PARAMETER_PREFERENCES_SYSTEM, node.absolutePath());
+            }
+        } finally {
+            writeLock_.unlock();
         }
 
         return this;
@@ -290,8 +312,13 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public boolean hasPreferencesNode() {
-        return parameters_.containsKey(PARAMETER_PREFERENCES_USER) ||
-            parameters_.containsKey(PARAMETER_PREFERENCES_SYSTEM);
+        readLock_.lock();
+        try {
+            return parameters_.containsKey(PARAMETER_PREFERENCES_USER) ||
+                parameters_.containsKey(PARAMETER_PREFERENCES_SYSTEM);
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -301,12 +328,17 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public Preferences getPreferencesNode() {
-        if (parameters_.containsKey(PARAMETER_PREFERENCES_USER)) {
-            return Preferences.userRoot().node(getString(PARAMETER_PREFERENCES_USER));
-        }
+        readLock_.lock();
+        try {
+            if (parameters_.containsKey(PARAMETER_PREFERENCES_USER)) {
+                return Preferences.userRoot().node(getString(PARAMETER_PREFERENCES_USER));
+            }
 
-        if (parameters_.containsKey(PARAMETER_PREFERENCES_SYSTEM)) {
-            return Preferences.systemRoot().node(getString(PARAMETER_PREFERENCES_SYSTEM));
+            if (parameters_.containsKey(PARAMETER_PREFERENCES_SYSTEM)) {
+                return Preferences.systemRoot().node(getString(PARAMETER_PREFERENCES_SYSTEM));
+            }
+        } finally {
+            readLock_.unlock();
         }
 
         return null;
@@ -324,16 +356,21 @@ public class Config implements Cloneable {
             return false;
         }
 
-        if (parameters_.containsKey(parameter)) {
-            return true;
-        }
+        readLock_.lock();
+        try {
+            if (parameters_.containsKey(parameter)) {
+                return true;
+            }
 
-        if (!isPreferencesParameter(parameter) &&
-            hasPreferencesNode()) {
-            var preferences = getPreferencesNode();
+            if (!isPreferencesParameter(parameter) &&
+                hasPreferencesNode()) {
+                var preferences = getPreferencesNode();
 
-            return preferences != null &&
-                preferences.get(parameter, null) != null;
+                return preferences != null &&
+                    preferences.get(parameter, null) != null;
+            }
+        } finally {
+            readLock_.unlock();
         }
 
         return false;
@@ -353,7 +390,12 @@ public class Config implements Cloneable {
             return false;
         }
 
-        return finalParameters_.contains(parameter);
+        readLock_.lock();
+        try {
+            return finalParameters_.contains(parameter);
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -363,27 +405,32 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public int countParameters() {
-        var result = parameters_.size();
+        readLock_.lock();
+        try {
+            var result = parameters_.size();
 
-        if (hasPreferencesNode()) {
-            var preferences = getPreferencesNode();
+            if (hasPreferencesNode()) {
+                var preferences = getPreferencesNode();
 
-            if (preferences != null) {
-                try {
-                    String[] keys = preferences.keys();
+                if (preferences != null) {
+                    try {
+                        String[] keys = preferences.keys();
 
-                    for (var key : keys) {
-                        if (!parameters_.containsKey(key)) {
-                            result++;
+                        for (var key : keys) {
+                            if (!parameters_.containsKey(key)) {
+                                result++;
+                            }
                         }
+                    } catch (BackingStoreException e) {
+                        // that's ok, don't handle the preferences node
                     }
-                } catch (BackingStoreException e) {
-                    // that's ok, don't handle the preferences node
                 }
             }
-        }
 
-        return result;
+            return result;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -412,7 +459,8 @@ public class Config implements Cloneable {
 
         String result = null;
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             if (!finalParameters_.contains(parameter) &&
                 !isPreferencesParameter(parameter) &&
                 hasPreferencesNode()) {
@@ -427,6 +475,8 @@ public class Config implements Cloneable {
                 null != parameters_) {
                 result = parameters_.get(parameter);
             }
+        } finally {
+            readLock_.unlock();
         }
 
         if (null == result) {
@@ -646,11 +696,16 @@ public class Config implements Cloneable {
         if (null == parameter) throw new IllegalArgumentException("parameter can't be null.");
         if (0 == parameter.length()) throw new IllegalArgumentException("parameter can't be empty.");
 
-        if (isFinal &&
-            !finalParameters_.contains(parameter)) {
-            finalParameters_.add(parameter);
-        } else {
-            finalParameters_.remove(parameter);
+        writeLock_.lock();
+        try {
+            if (isFinal &&
+                !finalParameters_.contains(parameter)) {
+                finalParameters_.add(parameter);
+            } else {
+                finalParameters_.remove(parameter);
+            }
+        } finally {
+            writeLock_.unlock();
         }
         return this;
     }
@@ -668,7 +723,8 @@ public class Config implements Cloneable {
         if (0 == parameter.length()) throw new IllegalArgumentException("parameter can't be empty.");
         if (null == value) throw new IllegalArgumentException("value can't be null.");
 
-        synchronized (this) {
+        writeLock_.lock();
+        try {
             if (!finalParameters_.contains(parameter)) {
                 parameters_.put(parameter, value);
 
@@ -682,6 +738,8 @@ public class Config implements Cloneable {
                     }
                 }
             }
+        } finally {
+            writeLock_.unlock();
         }
 
         return this;
@@ -784,22 +842,26 @@ public class Config implements Cloneable {
      */
     public void removeParameter(String parameter) {
         if (null == parameter ||
-            0 == parameter.length() ||
-            finalParameters_.contains(parameter)) {
+            0 == parameter.length()) {
             return;
         }
 
-        synchronized (this) {
-            parameters_.remove(parameter);
+        writeLock_.lock();
+        try {
+            if (!finalParameters_.contains(parameter)) {
+                parameters_.remove(parameter);
 
-            if (!isPreferencesParameter(parameter) &&
-                hasPreferencesNode()) {
-                var preferences = getPreferencesNode();
+                if (!isPreferencesParameter(parameter) &&
+                    hasPreferencesNode()) {
+                    var preferences = getPreferencesNode();
 
-                if (preferences != null) {
-                    preferences.remove(parameter);
+                    if (preferences != null) {
+                        preferences.remove(parameter);
+                    }
                 }
             }
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -817,7 +879,12 @@ public class Config implements Cloneable {
             return false;
         }
 
-        return finalLists_.contains(list);
+        readLock_.lock();
+        try {
+            return finalLists_.contains(list);
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -832,7 +899,8 @@ public class Config implements Cloneable {
             return null;
         }
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             List<String> list_items = null;
 
             if (!finalLists_.contains(list) &&
@@ -871,6 +939,8 @@ public class Config implements Cloneable {
             }
 
             return list_items;
+        } finally {
+            readLock_.unlock();
         }
     }
 
@@ -1071,26 +1141,31 @@ public class Config implements Cloneable {
             return false;
         }
 
-        if (lists_.containsKey(list)) {
-            return true;
-        }
+        readLock_.lock();
+        try {
+            if (lists_.containsKey(list)) {
+                return true;
+            }
 
-        if (hasPreferencesNode()) {
-            var preferences = getPreferencesNode();
+            if (hasPreferencesNode()) {
+                var preferences = getPreferencesNode();
 
-            if (preferences != null) {
-                try {
-                    var list_names_array = preferences.childrenNames();
+                if (preferences != null) {
+                    try {
+                        var list_names_array = preferences.childrenNames();
 
-                    if (list_names_array != null) {
-                        var list_names = Arrays.asList(list_names_array);
+                        if (list_names_array != null) {
+                            var list_names = Arrays.asList(list_names_array);
 
-                        return list_names.contains(list);
+                            return list_names.contains(list);
+                        }
+                    } catch (BackingStoreException e) {
+                        // that's ok, don't handle the preferences node
                     }
-                } catch (BackingStoreException e) {
-                    // that's ok, don't handle the preferences node
                 }
             }
+        } finally {
+            readLock_.unlock();
         }
 
         return false;
@@ -1103,29 +1178,34 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public int countLists() {
-        var result = lists_.size();
+        readLock_.lock();
+        try {
+            var result = lists_.size();
 
-        if (hasPreferencesNode()) {
-            var preferences = getPreferencesNode();
+            if (hasPreferencesNode()) {
+                var preferences = getPreferencesNode();
 
-            if (preferences != null) {
-                try {
-                    var list_names = preferences.childrenNames();
+                if (preferences != null) {
+                    try {
+                        var list_names = preferences.childrenNames();
 
-                    if (list_names != null) {
-                        for (var list_name : list_names) {
-                            if (!lists_.containsKey(list_name)) {
-                                result++;
+                        if (list_names != null) {
+                            for (var list_name : list_names) {
+                                if (!lists_.containsKey(list_name)) {
+                                    result++;
+                                }
                             }
                         }
+                    } catch (BackingStoreException e) {
+                        // that's ok, don't handle the preferences node
                     }
-                } catch (BackingStoreException e) {
-                    // that's ok, don't handle the preferences node
                 }
             }
-        }
 
-        return result;
+            return result;
+        } finally {
+            readLock_.unlock();
+        }
     }
 
     /**
@@ -1141,58 +1221,59 @@ public class Config implements Cloneable {
         if (0 == list.length()) throw new IllegalArgumentException("list can't be empty.");
         if (null == item) throw new IllegalArgumentException("item can't be null.");
 
-        if (finalLists_.contains(list)) {
-            return this;
-        }
+        writeLock_.lock();
+        try {
+            if (!finalLists_.contains(list)) {
+                List<String> list_items = null;
 
-        synchronized (this) {
-            List<String> list_items = null;
+                if (hasPreferencesNode()) {
+                    var preferences = getPreferencesNode();
 
-            if (hasPreferencesNode()) {
-                var preferences = getPreferencesNode();
+                    if (preferences != null) {
+                        var list_preferences = preferences.node(list);
 
-                if (preferences != null) {
-                    var list_preferences = preferences.node(list);
+                        if (list_preferences != null) {
+                            try {
+                                var string_array = list_preferences.keys();
+                                if (string_array != null) {
+                                    var int_array = new int[string_array.length];
+                                    var counter = 0;
+                                    for (var item_string : string_array) {
+                                        int_array[counter++] = Integer.parseInt(item_string);
+                                    }
+                                    Arrays.sort(int_array);
 
-                    if (list_preferences != null) {
-                        try {
-                            var string_array = list_preferences.keys();
-                            if (string_array != null) {
-                                var int_array = new int[string_array.length];
-                                var counter = 0;
-                                for (var item_string : string_array) {
-                                    int_array[counter++] = Integer.parseInt(item_string);
+                                    list_items = new ArrayList<>(int_array.length);
+                                    for (var item_int : int_array) {
+                                        list_items.add(list_preferences.get(String.valueOf(item_int), null));
+                                    }
+
+                                    list_preferences.put(String.valueOf(string_array.length), item);
+                                    list_items.add(item);
                                 }
-                                Arrays.sort(int_array);
-
-                                list_items = new ArrayList<>(int_array.length);
-                                for (var item_int : int_array) {
-                                    list_items.add(list_preferences.get(String.valueOf(item_int), null));
-                                }
-
-                                list_preferences.put(String.valueOf(string_array.length), item);
-                                list_items.add(item);
+                            } catch (BackingStoreException e) {
+                                // that's ok, don't handle the preferences node
                             }
-                        } catch (BackingStoreException e) {
-                            // that's ok, don't handle the preferences node
                         }
                     }
                 }
-            }
 
-            if (list_items != null) {
-                lists_.put(list, list_items);
-            } else {
-                if (lists_.containsKey(list)) {
-                    list_items = lists_.get(list);
-                    list_items.add(item);
-                } else {
-                    list_items = new ArrayList<>();
+                if (list_items != null) {
                     lists_.put(list, list_items);
+                } else {
+                    if (lists_.containsKey(list)) {
+                        list_items = lists_.get(list);
+                        list_items.add(item);
+                    } else {
+                        list_items = new ArrayList<>();
+                        lists_.put(list, list_items);
 
-                    list_items.add(item);
+                        list_items.add(item);
+                    }
                 }
             }
+        } finally {
+            writeLock_.unlock();
         }
 
         return this;
@@ -1288,32 +1369,35 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public void clearList(String list) {
-        if (null == list ||
-            0 == list.length() ||
-            finalLists_.contains(list)) {
+        if (null == list || 0 == list.length()) {
             return;
         }
 
-        synchronized (this) {
-            if (hasPreferencesNode()) {
-                var preferences = getPreferencesNode();
+        writeLock_.lock();
+        try {
+            if (!finalLists_.contains(list)) {
+                if (hasPreferencesNode()) {
+                    var preferences = getPreferencesNode();
 
-                if (preferences != null) {
-                    var list_preferences = preferences.node(list);
+                    if (preferences != null) {
+                        var list_preferences = preferences.node(list);
 
-                    if (list_preferences != null) {
-                        try {
-                            list_preferences.clear();
-                        } catch (BackingStoreException e) {
-                            // that's ok, don't handle the preferences node
+                        if (list_preferences != null) {
+                            try {
+                                list_preferences.clear();
+                            } catch (BackingStoreException e) {
+                                // that's ok, don't handle the preferences node
+                            }
                         }
                     }
                 }
-            }
 
-            if (lists_.containsKey(list)) {
-                lists_.put(list, new ArrayList<>());
+                if (lists_.containsKey(list)) {
+                    lists_.put(list, new ArrayList<>());
+                }
             }
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -1326,30 +1410,33 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public void removeList(String list) {
-        if (null == list ||
-            0 == list.length() ||
-            finalLists_.contains(list)) {
+        if (null == list || 0 == list.length()) {
             return;
         }
 
-        synchronized (this) {
-            if (hasPreferencesNode()) {
-                var preferences = getPreferencesNode();
+        writeLock_.lock();
+        try {
+            if (!finalLists_.contains(list)) {
+                if (hasPreferencesNode()) {
+                    var preferences = getPreferencesNode();
 
-                if (preferences != null) {
-                    var list_preferences = preferences.node(list);
+                    if (preferences != null) {
+                        var list_preferences = preferences.node(list);
 
-                    if (list_preferences != null) {
-                        try {
-                            list_preferences.removeNode();
-                        } catch (BackingStoreException e) {
-                            // that's ok, don't handle the preferences node
+                        if (list_preferences != null) {
+                            try {
+                                list_preferences.removeNode();
+                            } catch (BackingStoreException e) {
+                                // that's ok, don't handle the preferences node
+                            }
                         }
                     }
                 }
-            }
 
-            lists_.remove(list);
+                lists_.remove(list);
+            }
+        } finally {
+            writeLock_.unlock();
         }
     }
 
@@ -1365,12 +1452,18 @@ public class Config implements Cloneable {
         if (null == list) throw new IllegalArgumentException("list can't be null.");
         if (0 == list.length()) throw new IllegalArgumentException("list can't be empty.");
 
-        if (isFinal &&
-            !finalLists_.contains(list)) {
-            finalLists_.add(list);
-        } else {
-            finalLists_.remove(list);
+        writeLock_.lock();
+        try {
+            if (isFinal &&
+                !finalLists_.contains(list)) {
+                finalLists_.add(list);
+            } else {
+                finalLists_.remove(list);
+            }
+        } finally {
+            writeLock_.unlock();
         }
+
         return this;
     }
 
@@ -1381,45 +1474,50 @@ public class Config implements Cloneable {
      * @since 1.6.0
      */
     public String toXml() {
-        var xml_output = new StringBuilder();
-        xml_output.append("<config>\n");
+        readLock_.lock();
+        try {
+            var xml_output = new StringBuilder();
+            xml_output.append("<config>\n");
 
-        var list_keys_arraylist = new ArrayList<>(lists_.keySet());
-        list_keys_arraylist.sort(String::compareTo);
+            var list_keys_arraylist = new ArrayList<>(lists_.keySet());
+            list_keys_arraylist.sort(String::compareTo);
 
-        for (var list_key : list_keys_arraylist) {
-            xml_output.append("\t<list name=\"");
-            xml_output.append(StringUtils.encodeXml(list_key));
-            if (finalLists_.contains(list_key)) {
-                xml_output.append("\" final=\"true");
+            for (var list_key : list_keys_arraylist) {
+                xml_output.append("\t<list name=\"");
+                xml_output.append(StringUtils.encodeXml(list_key));
+                if (finalLists_.contains(list_key)) {
+                    xml_output.append("\" final=\"true");
+                }
+                xml_output.append("\">\n");
+
+                var list_items = lists_.get(list_key);
+                for (var list_item : list_items) {
+                    xml_output.append("\t\t<item>").append(StringUtils.encodeXml(list_item)).append("</item>\n");
+                }
+
+                xml_output.append("\t</list>\n");
             }
-            xml_output.append("\">\n");
 
-            var list_items = lists_.get(list_key);
-            for (var list_item : list_items) {
-                xml_output.append("\t\t<item>").append(StringUtils.encodeXml(list_item)).append("</item>\n");
+            var parameter_keys_arraylist = new ArrayList<>(parameters_.keySet());
+            parameter_keys_arraylist.sort(String::compareTo);
+
+            for (var parameter_key : parameter_keys_arraylist) {
+                xml_output.append("\t<param name=\"");
+                xml_output.append(StringUtils.encodeXml(parameter_key));
+                if (finalParameters_.contains(parameter_key)) {
+                    xml_output.append("\" final=\"true");
+                }
+                xml_output.append("\">");
+                xml_output.append(StringUtils.encodeXml(parameters_.get(parameter_key)));
+                xml_output.append("</param>\n");
             }
 
-            xml_output.append("\t</list>\n");
+            xml_output.append("</config>\n");
+
+            return xml_output.toString();
+        } finally {
+            readLock_.unlock();
         }
-
-        var parameter_keys_arraylist = new ArrayList<>(parameters_.keySet());
-        parameter_keys_arraylist.sort(String::compareTo);
-
-        for (var parameter_key : parameter_keys_arraylist) {
-            xml_output.append("\t<param name=\"");
-            xml_output.append(StringUtils.encodeXml(parameter_key));
-            if (finalParameters_.contains(parameter_key)) {
-                xml_output.append("\" final=\"true");
-            }
-            xml_output.append("\">");
-            xml_output.append(StringUtils.encodeXml(parameters_.get(parameter_key)));
-            xml_output.append("</param>\n");
-        }
-
-        xml_output.append("</config>\n");
-
-        return xml_output.toString();
     }
 
     /**
@@ -1493,7 +1591,8 @@ public class Config implements Cloneable {
     throws ConfigErrorException {
         if (null == preferences) throw new IllegalArgumentException("destination can't be null");
 
-        synchronized (this) {
+        readLock_.lock();
+        try {
             Preferences list_node = null;
 
             for (var list_key : lists_.keySet()) {
@@ -1525,11 +1624,14 @@ public class Config implements Cloneable {
             } catch (BackingStoreException e) {
                 throw new StorePreferencesErrorException(preferences, e);
             }
+        } finally {
+            readLock_.unlock();
         }
     }
 
     public Config clone() {
         Config new_config = null;
+        readLock_.lock();
         try {
             new_config = (Config) super.clone();
             new_config.parameters_ = ObjectUtils.deepClone(parameters_);
@@ -1537,6 +1639,8 @@ public class Config implements Cloneable {
             new_config.lists_ = ObjectUtils.deepClone(lists_);
             new_config.finalLists_ = ObjectUtils.deepClone(finalLists_);
         } catch (CloneNotSupportedException ignored) {
+        } finally {
+            readLock_.unlock();
         }
 
         return new_config;
