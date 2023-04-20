@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import rife.tools.Convert;
 import rife.tools.StringUtils;
 
 import java.util.*;
@@ -115,6 +116,20 @@ public class UrlBuilder {
      */
     public UrlBuilder pathInfo(String pathInfo) {
         pathInfo_ = StringUtils.stripFromFront(pathInfo, "/");
+        return this;
+    }
+
+    /**
+     * Sets an outgoing parameter to a particular value.
+     * <p>This will override any automatic outgoing parameters that are being published by the {@code Context}.
+     *
+     * @param name  the name of the parameter
+     * @param value the value of the parameter
+     * @return this {@code UrlBuilder} instance
+     * @since 1.6.0
+     */
+    public UrlBuilder param(String name, Object value) {
+        parameters_.put(name, new String[]{Convert.toString(value)});
         return this;
     }
 
