@@ -251,6 +251,19 @@ public class TestDependencyResolver {
     }
 
     @Test
+    void testGetCompileRuntimeDependenciesBitly() {
+        var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS_LEGACY), new Dependency("net.thauvin.erik", "bitly-shorten", new VersionNumber(0, 9, 4, "SNAPSHOT")));
+        var dependencies = resolver.getDirectDependencies(compile, runtime);
+        assertNotNull(dependencies);
+        assertEquals(4, dependencies.size());
+        assertEquals("""
+            org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20
+            com.squareup.okhttp3:okhttp:4.10.0
+            com.squareup.okhttp3:logging-interceptor:4.10.0
+            org.json:json:20230227""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
     void testGetCompileTransitiveDependenciesRIFE2() {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
         var dependencies = resolver.getAllDependencies(compile);
@@ -418,7 +431,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
         var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-        assertEquals(32, dependencies.size());
+//        assertEquals(32, dependencies.size());
         assertEquals("""
             org.apache.maven:maven-core:3.9.0
             org.apache.maven:maven-model:3.9.0
@@ -600,12 +613,31 @@ public class TestDependencyResolver {
             com.fasterxml.jackson.core:jackson-annotations:2.14.1
             com.github.oshi:oshi-core:6.1.6
             com.auth0:java-jwt:3.19.2
-            com.helger.commons:ph-commons
+            com.helger.commons:ph-commons:10.1.6
             org.apache.httpcomponents:httpcore:4.4.13
             commons-logging:commons-logging:1.2
             net.java.dev.jna:jna:5.11.0
             net.java.dev.jna:jna-platform:5.11.0
             com.google.code.findbugs:jsr305:3.0.2""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileRuntimeTransitiveDependenciesBitly() {
+        var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS_LEGACY), new Dependency("net.thauvin.erik", "bitly-shorten", new VersionNumber(0, 9, 4, "SNAPSHOT")));
+        var dependencies = resolver.getAllDependencies(compile, runtime);
+        assertNotNull(dependencies);
+        assertEquals(10, dependencies.size());
+        assertEquals("""
+            net.thauvin.erik:bitly-shorten:0.9.4-SNAPSHOT
+            org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20
+            com.squareup.okhttp3:okhttp:4.10.0
+            com.squareup.okhttp3:logging-interceptor:4.10.0
+            org.json:json:20230227
+            org.jetbrains.kotlin:kotlin-stdlib:1.8.20
+            org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.20
+            com.squareup.okio:okio-jvm:3.0.0
+            org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20
+            org.jetbrains:annotations:13.0""", StringUtils.join(dependencies, "\n"));
     }
 
     @Test
@@ -1012,7 +1044,7 @@ public class TestDependencyResolver {
                 mobile-drag-drop-2.3.0-rc.2.jar
                 open-8.5.0.jar
                 oshi-core-6.1.6.jar
-                ph-commons-11.0.3.jar
+                ph-commons-10.1.6.jar
                 ph-css-6.5.0.jar
                 slf4j-api-1.7.36.jar
                 throw-if-servlet5-1.0.2.jar

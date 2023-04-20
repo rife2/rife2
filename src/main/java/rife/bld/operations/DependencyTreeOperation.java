@@ -62,7 +62,7 @@ public class DependencyTreeOperation extends AbstractOperation<DependencyTreeOpe
      * @since 1.5.21
      */
     protected String executeGenerateRuntimeDependencies() {
-        var runtime_tree = dependencies().scope(runtime).generateTransitiveDependencyTree(artifactRetriever(), repositories(), runtime);
+        var runtime_tree = dependencies().scope(runtime).generateTransitiveDependencyTree(artifactRetriever(), repositories(), compile, runtime);
         if (runtime_tree.isEmpty()) {
             runtime_tree = "no dependencies" + System.lineSeparator();
         }

@@ -5,6 +5,7 @@
 package rife.bld.dependencies;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Convenience class to map a {@link Scope} to its dependencies.
@@ -60,5 +61,82 @@ public class DependencyScopes extends LinkedHashMap<Scope, DependencySet> {
      */
     public DependencySet scope(Scope scope) {
         return computeIfAbsent(scope, k -> new DependencySet());
+    }
+
+    /**
+     * Returns the transitive set of dependencies that would be used for the compile scope in a project.
+     *
+     * @param retriever    the retriever to use to get artifacts
+     * @param repositories the repositories to use for the resolution
+     * @return the compile scope dependency set
+     * @since 1.6
+     */
+    public DependencySet resolveCompileDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
+        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.provided, Scope.compile}, new Scope[]{Scope.compile}, null);
+    }
+
+    /**
+     * Returns the transitive set of dependencies that would be used for the runtime scope in a project.
+     *
+     * @param retriever    the retriever to use to get artifacts
+     * @param repositories the repositories to use for the resolution
+     * @return the runtime scope dependency set
+     * @since 1.6
+     */
+    public DependencySet resolveRuntimeDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
+        var excluded = new DependencySet();
+        var provided_dependencies = get(Scope.provided);
+        if (provided_dependencies != null) {
+            for (var dependency : provided_dependencies) {
+                excluded.addAll(new DependencyResolver(retriever, repositories, dependency).getAllDependencies(Scope.compile));
+            }
+        }
+        var compile_dependencies = get(Scope.compile);
+        if (compile_dependencies != null) {
+            for (var dependency : compile_dependencies) {
+                excluded.addAll(new DependencyResolver(retriever, repositories, dependency).getAllDependencies(Scope.compile));
+            }
+        }
+        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.compile, Scope.runtime}, excluded);
+    }
+
+    /**
+     * Returns the transitive set of dependencies that would be used for the standalone scope in a project.
+     *
+     * @param retriever    the retriever to use to get artifacts
+     * @param repositories the repositories to use for the resolution
+     * @return the standalone scope dependency set
+     * @since 1.6
+     */
+    public DependencySet resolveStandaloneDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
+        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
+    }
+
+    /**
+     * Returns the transitive set of dependencies that would be used for the test scope in a project.
+     *
+     * @param retriever    the retriever to use to get artifacts
+     * @param repositories the repositories to use for the resolution
+     * @return the test scope dependency set
+     * @since 1.6
+     */
+    public DependencySet resolveTestDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
+        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
+    }
+
+    private DependencySet resolveScopedDependencies(ArtifactRetriever retriever, List<Repository> repositories, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
+        var dependencies = new DependencySet();
+        for (var scope : resolvedScopes) {
+            var scoped_dependencies = get(scope);
+            if (scoped_dependencies != null) {
+                for (var dependency : scoped_dependencies) {
+                    dependencies.addAll(new DependencyResolver(retriever, repositories, dependency).getAllDependencies(transitiveScopes));
+                }
+            }
+        }
+        if (excluded != null) {
+            dependencies.removeAll(excluded);
+        }
+        return dependencies;
     }
 }

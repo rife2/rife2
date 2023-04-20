@@ -55,7 +55,7 @@ public abstract class Executor {
      * handle.
      * <p>
      * By default, this is the fully qualified class name of this executor,
-     * overriding this method allows for other type identifiers to be use.
+     * overriding this method allows for other type identifiers to be used.
      *
      * @return this executor's task type
      * @since 1.0

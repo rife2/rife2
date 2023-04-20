@@ -98,7 +98,7 @@ public class DependencyResolver {
         var pom_dependencies = getMavenPom(dependency_).getDependencies(scopes);
         var result = new DependencySet();
         for (var dependency : pom_dependencies) {
-            result.add(convertPomDependency(dependency));
+            result.add(dependency.convertToDependency());
         }
         return result;
     }
@@ -142,7 +142,7 @@ public class DependencyResolver {
             // part of the results yet
             while (!dependency_queue.isEmpty()) {
                 var candidate = dependency_queue.remove(0);
-                var dependency = convertPomDependency(candidate);
+                var dependency = candidate.convertToDependency();
                 if (!result.contains(dependency)) {
                     result.add(dependency);
 
@@ -325,21 +325,6 @@ public class DependencyResolver {
 
             return a.appendPath(result.toString());
         }).toList();
-    }
-
-    private PomDependency convertDependency(Dependency dependency) {
-        return new PomDependency(dependency.groupId(), dependency.artifactId(), dependency.version().toString(), dependency.type(), dependency.type(), "compile", "false", dependency.exclusions(), dependency.parent());
-    }
-
-    private Dependency convertPomDependency(PomDependency pomDependency) {
-        return new Dependency(
-                pomDependency.groupId(),
-                pomDependency.artifactId(),
-                VersionNumber.parse(pomDependency.version()),
-                pomDependency.classifier(),
-                pomDependency.type(),
-                pomDependency.exclusions(),
-                pomDependency.parent());
     }
 
     private List<RepositoryArtifact> getArtifactLocations() {

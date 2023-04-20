@@ -10,8 +10,7 @@ import rife.tools.StringUtils;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static rife.bld.dependencies.Repository.MAVEN_CENTRAL;
-import static rife.bld.dependencies.Repository.SONATYPE_SNAPSHOTS;
+import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.compile;
 import static rife.bld.dependencies.Scope.runtime;
 
@@ -234,7 +233,7 @@ public class TestDependencySet {
                │  │  ├─ com.fasterxml.jackson.core:jackson-core:2.14.1
                │  │  ├─ org.jsoup:jsoup:1.15.3
                │  │  ├─ com.helger:ph-css:6.5.0
-               │  │  │  └─ com.helger.commons:ph-commons
+               │  │  │  └─ com.helger.commons:ph-commons:10.1.6
                │  │  │     └─ com.google.code.findbugs:jsr305:3.0.2
                │  │  ├─ net.bytebuddy:byte-buddy:1.12.20
                │  │  ├─ com.vaadin.external:gentyref:1.2.0.vaadin1
@@ -354,5 +353,23 @@ public class TestDependencySet {
                ├─ com.google.zxing:core:3.5.1
                └─ com.beust:jcommander:1.82
             """, dependencies.generateTransitiveDependencyTree(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL), compile));
+    }
+
+    @Test
+    void testGenerateDependencyTreeCompileRuntime() {
+        var dependencies = new DependencySet()
+            .include(new Dependency("net.thauvin.erik", "bitly-shorten", new VersionNumber(0, 9, 4, "SNAPSHOT")));
+        assertEquals("""
+            └─ net.thauvin.erik:bitly-shorten:0.9.4-SNAPSHOT
+               ├─ org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20
+               │  ├─ org.jetbrains.kotlin:kotlin-stdlib:1.8.20
+               │  │  ├─ org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20
+               │  │  └─ org.jetbrains:annotations:13.0
+               │  └─ org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.20
+               ├─ com.squareup.okhttp3:okhttp:4.10.0
+               │  └─ com.squareup.okio:okio-jvm:3.0.0
+               ├─ com.squareup.okhttp3:logging-interceptor:4.10.0
+               └─ org.json:json:20230227
+            """, dependencies.generateTransitiveDependencyTree(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS_LEGACY), compile, runtime));
     }
 }

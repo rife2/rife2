@@ -119,6 +119,19 @@ class Xml2MavenPom extends Xml2Data {
         return result;
     }
 
+    PomDependency resolveDependency(PomDependency dependency) {
+        return new PomDependency(
+            resolveProperties(dependency.groupId()),
+            resolveProperties(dependency.artifactId()),
+            resolveProperties(dependency.version()),
+            resolveProperties(dependency.classifier()),
+            resolveProperties(dependency.type()),
+            dependency.scope(),
+            resolveProperties(dependency.optional()),
+            dependency.exclusions(),
+            dependency.parent());
+    }
+
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         characterData_ = new StringBuilder();
 
@@ -160,7 +173,7 @@ class Xml2MavenPom extends Xml2Data {
         switch (qName) {
             case "parent" -> {
                 if (isChildOfProject()) {
-                    var parent_dependency = new Dependency(lastGroupId_, lastArtifactId_, VersionNumber.parse(lastVersion_));
+                    var parent_dependency = new Dependency(resolveProperties(lastGroupId_), resolveProperties(lastArtifactId_), VersionNumber.parse(resolveProperties(lastVersion_)));
                     var parent = new DependencyResolver(retriever_, repositories_, parent_dependency).getMavenPom(parent_);
 
                     parent.properties_.keySet().removeAll(properties_.keySet());
@@ -187,7 +200,22 @@ class Xml2MavenPom extends Xml2Data {
             case "dependency" -> {
                 var dependency = new PomDependency(lastGroupId_, lastArtifactId_, lastVersion_, lastClassifier_, lastType_, lastScope_, lastOptional_, exclusions_, parent_);
                 if (collectDependencyManagement_) {
-                    dependencyManagement_.put(dependency, dependency);
+                    if (dependency.isPomImport()) {
+                        var import_dependency = new Dependency(resolveProperties(lastGroupId_), resolveProperties(lastArtifactId_), VersionNumber.parse(resolveProperties(lastVersion_)));
+                        var imported_pom = new DependencyResolver(retriever_, repositories_, import_dependency).getMavenPom(parent_);
+                        imported_pom.dependencyManagement_.keySet().removeAll(dependencyManagement_.keySet());
+                        var resolved_dependencies = new LinkedHashSet<PomDependency>();
+                        for (var managed_dependency : imported_pom.dependencyManagement_.keySet()) {
+                            resolved_dependencies.add(imported_pom.resolveDependency(managed_dependency));
+                        }
+
+                        resolved_dependencies.removeAll(dependencyManagement_.keySet());
+                        for (var resolved_dependency : resolved_dependencies) {
+                            dependencyManagement_.put(resolved_dependency, resolved_dependency);
+                        }
+                    } else {
+                        dependencyManagement_.put(dependency, dependency);
+                    }
                 } else if (collectDependencies_) {
                     dependencies_.add(dependency);
                 }

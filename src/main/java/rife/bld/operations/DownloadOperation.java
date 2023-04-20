@@ -5,7 +5,6 @@
 package rife.bld.operations;
 
 import rife.bld.BaseProject;
-import rife.bld.Project;
 import rife.bld.dependencies.*;
 
 import java.io.File;
@@ -56,7 +55,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     protected void executeDownloadCompileDependencies() {
-        executeDownloadScopedDependencies(libCompileDirectory(), new Scope[]{Scope.provided, Scope.compile}, new Scope[]{Scope.compile}, null);
+        executeDownloadDependencies(libCompileDirectory(), dependencies().resolveCompileDependencies(artifactRetriever(), repositories()));
     }
 
     /**
@@ -65,20 +64,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     protected void executeDownloadRuntimeDependencies() {
-        var excluded = new DependencySet();
-        var provided_dependencies = dependencies().get(Scope.provided);
-        if (provided_dependencies != null) {
-            for (var dependency : provided_dependencies) {
-                excluded.addAll(new DependencyResolver(artifactRetriever(), repositories(), dependency).getAllDependencies(Scope.compile));
-            }
-        }
-        var compile_dependencies = dependencies().get(Scope.compile);
-        if (compile_dependencies != null) {
-            for (var dependency : compile_dependencies) {
-                excluded.addAll(new DependencyResolver(artifactRetriever(), repositories(), dependency).getAllDependencies(Scope.compile));
-            }
-        }
-        executeDownloadScopedDependencies(libRuntimeDirectory(), new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.runtime}, excluded);
+        executeDownloadDependencies(libRuntimeDirectory(), dependencies().resolveRuntimeDependencies(artifactRetriever(), repositories()));
     }
 
     /**
@@ -87,7 +73,7 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     protected void executeDownloadStandaloneDependencies() {
-        executeDownloadScopedDependencies(libStandaloneDirectory(), new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
+        executeDownloadDependencies(libStandaloneDirectory(), dependencies().resolveStandaloneDependencies(artifactRetriever(), repositories()));
     }
 
     /**
@@ -96,37 +82,22 @@ public class DownloadOperation extends AbstractOperation<DownloadOperation> {
      * @since 1.5
      */
     protected void executeDownloadTestDependencies() {
-        executeDownloadScopedDependencies(libTestDirectory(), new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
+        executeDownloadDependencies(libTestDirectory(), dependencies().resolveTestDependencies(artifactRetriever(), repositories()));
     }
 
     /**
      * Part of the {@link #execute} operation, download the artifacts for a particular dependency scope.
      *
      * @param destinationDirectory the directory in which the artifacts should be downloaded
-     * @param resolvedScopes       the scopes whose dependencies should be resolved
-     * @param transitiveScopes     the scopes to use to resolve the transitive dependencies
-     * @param excluded             dependencies should be removed because they likely already exist elsewhere
-     * @since 1.5.5
+     * @param dependencies         the dependencies to download
+     * @since 1.6
      */
-    protected void executeDownloadScopedDependencies(File destinationDirectory, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
+    protected void executeDownloadDependencies(File destinationDirectory, DependencySet dependencies) {
         if (destinationDirectory == null) {
             return;
         }
 
         destinationDirectory.mkdirs();
-
-        var dependencies = new DependencySet();
-        for (var scope : resolvedScopes) {
-            var scoped_dependencies = dependencies().get(scope);
-            if (scoped_dependencies != null) {
-                for (var dependency : scoped_dependencies) {
-                    dependencies.addAll(new DependencyResolver(artifactRetriever(), repositories(), dependency).getAllDependencies(transitiveScopes));
-                }
-            }
-        }
-        if (excluded != null) {
-            dependencies.removeAll(excluded);
-        }
 
         var additional_classifiers = new String[0];
 
