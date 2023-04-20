@@ -13,6 +13,7 @@ import rife.services.HelloService;
 public class HelloAll extends Site implements MyServiceProvider {
     Router authentication;
     Router cmf;
+    Router cookieFlow;
     HelloDependencyInjection dependencyInjection;
     Router generation;
     Router continuations;
@@ -28,6 +29,7 @@ public class HelloAll extends Site implements MyServiceProvider {
         group(authentication = new HelloAuthentication());
         group("/content", cmf = new HelloContentManagement());
         group(new HelloContinuations());
+        group("/cookie", cookieFlow = new HelloCookieFlow());
         group(new HelloCounterContinuations());
         group(new HelloDatabase());
         group(dependencyInjection = new HelloDependencyInjection(new HelloService()));
