@@ -24,6 +24,7 @@ public record Repository(String location, String username, String password) {
     public static final Repository MAVEN_CENTRAL = new Repository("https://repo1.maven.org/maven2/");
     public static final Repository SONATYPE_RELEASES = new Repository("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/");
     public static final Repository SONATYPE_SNAPSHOTS = new Repository("https://s01.oss.sonatype.org/content/repositories/snapshots/");
+    public static final Repository SONATYPE_SNAPSHOTS_LEGACY = new Repository("https://oss.sonatype.org/content/repositories/snapshots/");
     public static final Repository APACHE = new Repository("https://repo.maven.apache.org/maven2/");
     public static final Repository RIFE2_RELEASES = new Repository("https://repo.rife2.com/releases/");
     public static final Repository RIFE2_SNAPSHOTS = new Repository("https://repo.rife2.com/snapshots/");
@@ -83,6 +84,7 @@ public record Repository(String location, String username, String password) {
             case "MAVEN_CENTRAL" -> Repository.MAVEN_CENTRAL;
             case "SONATYPE_RELEASES" -> Repository.SONATYPE_RELEASES;
             case "SONATYPE_SNAPSHOTS" -> Repository.SONATYPE_SNAPSHOTS;
+            case "SONATYPE_SNAPSHOTS_LEGACY" -> Repository.SONATYPE_SNAPSHOTS_LEGACY;
             case "APACHE" -> Repository.APACHE;
             case "RIFE2_RELEASES" -> Repository.RIFE2_RELEASES;
             case "RIFE2_SNAPSHOTS" -> Repository.RIFE2_SNAPSHOTS;
