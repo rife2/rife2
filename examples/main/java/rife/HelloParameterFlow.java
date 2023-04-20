@@ -23,7 +23,7 @@ public class HelloParameterFlow extends Site {
         }
     }
 
-    public static class ContinueCounter implements Element {
+    public static class Counter implements Element {
         @ActiveSite HelloParameterFlow site;
 
         @Parameter(flow = FlowDirection.IN_OUT)
@@ -39,7 +39,7 @@ public class HelloParameterFlow extends Site {
 
     Route start = get("/start", () -> new StartCounter(1));
     Route start10 = get("/start10", () -> new StartCounter(10));
-    Route count = get("/count", ContinueCounter.class);
+    Route count = get("/count", Counter.class);
 
     public static void main(String[] args) {
         new Server().start(new HelloParameterFlow());
