@@ -39,6 +39,7 @@ class EngineTemplateProcessor {
         processApplicationTags(set_values);
         processParameters(set_values);
         processProperties(set_values);
+        processConfig(set_values);
         processAttributes(set_values);
         processCookies(set_values);
         processRoutes(set_values);
@@ -125,6 +126,24 @@ class EngineTemplateProcessor {
                         var prop_value = properties.getValueString(prop_name);
                         template_.setValue(prop_value_id, encoder_.encode(prop_value));
                         setValues.add(prop_value_id);
+                    }
+                }
+            }
+        }
+    }
+
+    private void processConfig(final List<String> setValues) {
+        var config = context_.site().config();
+        final var config_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_CONFIG);
+        if (config_tags != null) {
+            for (var captured_groups : config_tags) {
+                var config_value_id = captured_groups[0];
+                if (!template_.isValueSet(config_value_id)) {
+                    var param_name = captured_groups[1];
+                    var param_value = config.getString(param_name);
+                    if (param_value != null) {
+                        template_.setValue(config_value_id, encoder_.encode(param_value));
+                        setValues.add(config_value_id);
                     }
                 }
             }

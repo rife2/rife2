@@ -101,4 +101,40 @@ public class TestProcessedTemplates {
             }
         }
     }
+
+    @Test
+    void testTemplateConfigHtml()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                config().parameter("param1", "value1");
+                get("/template/html", c -> c.print(c.template("filtered_tags_config")));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final HtmlPage page = webClient.getPage("http://localhost:8181/template/html");
+                var response = page.getWebResponse();
+                assertEquals("text/html", response.getContentType());
+                assertEquals("This is a config value 'value1'.\nThis is another config value '{{v config:another_param/}}'.\n", response.getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    void testTemplateConfigTxt()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                config().parameter("param1", "value1");
+                get("/template/txt", c -> c.print(c.templateTxt("filtered_tags_config")));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final TextPage page = webClient.getPage("http://localhost:8181/template/txt");
+                var response = page.getWebResponse();
+                assertEquals("text/plain", response.getContentType());
+                assertEquals("This is a config value 'value1'.\nThis is another config value '{{v config:another_param/}}'.\n", response.getContentAsString());
+            }
+        }
+    }
 }

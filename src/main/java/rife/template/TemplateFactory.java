@@ -43,12 +43,13 @@ public class TemplateFactory extends EnumClass<String> {
             {
                 ValidationBuilder.TAG_MARK,
                 ValidationBuilder.TAG_ERRORS,
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
-                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE,
                 TemplateFactoryFilters.TAG_ROUTE_ACTION,
@@ -70,12 +71,13 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
-                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -95,12 +97,13 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
-                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -120,12 +123,13 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
-                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },
@@ -161,12 +165,13 @@ public class TemplateFactory extends EnumClass<String> {
             },
         new String[]
             {
+                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_AUTH,
+                TemplateFactoryFilters.TAG_CONFIG,
                 TemplateFactoryFilters.TAG_COOKIE,
                 TemplateFactoryFilters.TAG_L10N,
                 TemplateFactoryFilters.TAG_PARAM,
                 TemplateFactoryFilters.TAG_PROPERTY,
-                TemplateFactoryFilters.TAG_ATTRIBUTE,
                 TemplateFactoryFilters.TAG_RENDER,
                 TemplateFactoryFilters.TAG_ROUTE
             },

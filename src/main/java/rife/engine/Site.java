@@ -4,11 +4,14 @@
  */
 package rife.engine;
 
+import rife.config.Config;
+import rife.config.exceptions.ConfigErrorException;
 import rife.continuations.ContinuationManager;
 import rife.engine.exceptions.EngineException;
 import rife.tools.StringUtils;
 import rife.workflow.Workflow;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 
@@ -28,6 +31,8 @@ public class Site extends Router {
     public final int RND = new Random().nextInt();
 
     final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
+
+    private Config config_ = new Config();
 
     /**
      * Looks up the information of the element that is responsible for handling
@@ -233,5 +238,50 @@ public class Site extends Router {
      */
     public Workflow createWorkflow(ExecutorService executor) {
         return new Workflow(executor, properties_);
+    }
+
+    /**
+     * Returns this site's config instance.
+     *
+     * @return this site's config instance.
+     * @since 1.6.0
+     */
+    public Config config() {
+        return config_;
+    }
+
+    /**
+     * Looks for a named resource in the classpath, parses it as an
+     * XML {@link Config} file and sets it as this site's config
+     * instance.
+     *
+     * @param name the name of the resource to parse
+     * @throws EngineException when an error occurred during the parsing, or
+     *                         if the resource couldn't be found
+     * @since 1.6.0
+     */
+    public void loadConfig(String name) {
+        try {
+            config_ = Config.fromXmlResource(name, properties());
+        } catch (ConfigErrorException e) {
+            throw new EngineException(e);
+        }
+    }
+
+    /**
+     * Parses the provided file as an XML {@link Config} file and
+     * sets it as this site's config instance.
+     *
+     * @param file the file to parse
+     * @throws EngineException when an error occurred during the parsing, or
+     *                         if the resource couldn't be found
+     * @since 1.6.0
+     */
+    public void loadConfig(File file) {
+        try {
+            config_ = Config.fromXmlFile(file, properties());
+        } catch (ConfigErrorException e) {
+            throw new EngineException(e);
+        }
     }
 }
