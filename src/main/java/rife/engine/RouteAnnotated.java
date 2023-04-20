@@ -12,6 +12,7 @@ import rife.tools.exceptions.ConversionException;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 abstract class RouteAnnotated implements Route {
@@ -84,6 +85,7 @@ abstract class RouteAnnotated implements Route {
 
                     if (field.isAnnotationPresent(ActiveSite.class) ||
                         field.isAnnotationPresent(Body.class) ||
+                        field.isAnnotationPresent(Config.class) ||
                         field.isAnnotationPresent(Cookie.class) ||
                         field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Header.class) ||
@@ -243,6 +245,40 @@ abstract class RouteAnnotated implements Route {
                             value = Convert.getDefaultValue(type);
                         }
                         field.set(element, value);
+                    }
+                } else if (field.isAnnotationPresent(Config.class)) {
+                    var config = context.site().config();
+                    var annotation_name = field.getAnnotation(Config.class).value();
+                    if (annotation_name != null && !annotation_name.isEmpty()) {
+                        name = annotation_name;
+                    }
+                    if (List.class.isAssignableFrom(type)) {
+                        var list_items = config.getStringItems(name);
+                        if (list_items != null) {
+                            var generic_type = field.getGenericType();
+                            if (generic_type instanceof ParameterizedType param_type &&
+                                param_type.getActualTypeArguments().length == 1 &&
+                                param_type.getActualTypeArguments()[0] instanceof Class<?> param_class) {
+                                var converted_list = new ArrayList<>();
+                                for (var item : list_items) {
+                                    converted_list.add(Convert.fromString(item, param_class));
+                                }
+                                field.set(element, converted_list);
+                            } else {
+                                field.set(element, list_items);
+                            }
+                        }
+                    } else {
+                        var param_value = config.getString(name);
+                        if (param_value != null) {
+                            Object value;
+                            try {
+                                value = Convert.toType(param_value, type);
+                            } catch (ConversionException e) {
+                                value = Convert.getDefaultValue(type);
+                            }
+                            field.set(element, value);
+                        }
                     }
                 } else if (field.isAnnotationPresent(Header.class) &&
                            shouldProcessInFlow(field.getAnnotation(Header.class).flow())) {

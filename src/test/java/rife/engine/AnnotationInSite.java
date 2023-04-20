@@ -6,8 +6,10 @@ package rife.engine;
 
 import rife.engine.annotations.*;
 import rife.tools.FileUtils;
+import rife.tools.StringUtils;
 
 import java.io.File;
+import java.util.List;
 
 public class AnnotationInSite extends Site {
     public static class ParentElement implements Element {
@@ -25,6 +27,13 @@ public class AnnotationInSite extends Site {
         @Property String prop1 = "defaultProp1";
         @Property String prop2 = "defaultProp2";
         @Property("prop1") String prop3 = "defaultProp3";
+        @Config String config1 = "defaultConfig1";
+        @Config String config2 = "defaultConfig2";
+        @Config("config1") String config3 = "defaultConfig3";
+        @Config List list1 = List.of("one", "two", "false");
+        @Config List<Boolean> list2 = List.of(true, false, false);
+        @Config List<String> list3 = List.of("one", "two", "false");
+        @Config("listint") List<Integer> list4 = List.of(1, 2, 3);
 
         public void process(Context c)
         throws Exception {
@@ -68,7 +77,13 @@ public class AnnotationInSite extends Site {
 
         @Property String prop1 = "defaultProp1";
         @Property String prop2 = "defaultProp2";
-        @Property("prop1") String prop3 = "defaultProp3";
+
+        @Config String config2 = "defaultConfig2";
+        @Config("config1") String config3 = "defaultConfig3";
+
+        @Config List<Boolean> list2 = List.of(true, false, false);
+        @Config List<String> list3 = List.of("one", "two", "false");
+        @Config("listint") List<Integer> list4 = List.of(1, 2, 3);
 
         @ParametersBean BeanImpl beanParams = null;
 
@@ -144,12 +159,32 @@ public class AnnotationInSite extends Site {
             c.print(prop2 + "\n");
             c.print(prop3 + "\n");
 
+            c.print(config1 + "\n");
+            c.print(config2 + "\n");
+            c.print(config3 + "\n");
+
+            c.print(StringUtils.join(list1, ",") + "\n");
+            c.print(StringUtils.join(list2, ",") + "\n");
+            c.print(StringUtils.join(list3, ",") + "\n");
+            c.print(StringUtils.join(list4, ",") + "\n");
+
             beanParams.printToContext(c);
         }
     }
 
     public void setup() {
         properties().put("prop1", "propval1");
+        config().parameter("config1", "configval1");
+        config().listItem("list1", "listitem1");
+        config().listItem("list1", "listitem2");
+        config().listItem("list1", "listitem3");
+        config().listItem("list2", false);
+        config().listItem("list2", true);
+        config().listItem("list3", "listitem4");
+        config().listItem("list3", "listitem5");
+        config().listItem("listint", 11);
+        config().listItem("listint", 22);
+        config().listItem("listint", 33);
         before(c -> {
            if (c.parameterBoolean("generate")) {
                c.setAttribute("stringRequestAttribute", "value9");

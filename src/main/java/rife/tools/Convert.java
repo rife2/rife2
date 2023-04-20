@@ -92,6 +92,9 @@ public final class Convert {
         if (string == null || type == null) {
             return null;
         }
+        if (CharSequence.class.isAssignableFrom(type)) {
+            return string;
+        }
 
         Method method = null;
         try {

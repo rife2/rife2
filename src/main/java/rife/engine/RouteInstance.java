@@ -80,6 +80,7 @@ class RouteInstance implements Route {
 
                     if (field.isAnnotationPresent(ActiveSite.class) ||
                         field.isAnnotationPresent(Body.class) ||
+                        field.isAnnotationPresent(Config.class) ||
                         field.isAnnotationPresent(Cookie.class) ||
                         field.isAnnotationPresent(FileUpload.class) ||
                         field.isAnnotationPresent(Header.class) ||
