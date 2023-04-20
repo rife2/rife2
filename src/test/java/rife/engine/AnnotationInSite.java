@@ -174,17 +174,17 @@ public class AnnotationInSite extends Site {
 
     public void setup() {
         properties().put("prop1", "propval1");
-        config().parameter("config1", "configval1");
-        config().listItem("list1", "listitem1");
-        config().listItem("list1", "listitem2");
-        config().listItem("list1", "listitem3");
-        config().listItem("list2", false);
-        config().listItem("list2", true);
-        config().listItem("list3", "listitem4");
-        config().listItem("list3", "listitem5");
-        config().listItem("listint", 11);
-        config().listItem("listint", 22);
-        config().listItem("listint", 33);
+        config().put("config1", "configval1");
+        config().putItem("list1", "listitem1");
+        config().putItem("list1", "listitem2");
+        config().putItem("list1", "listitem3");
+        config().putItem("list2", false);
+        config().putItem("list2", true);
+        config().putItem("list3", "listitem4");
+        config().putItem("list3", "listitem5");
+        config().putItem("listint", 11);
+        config().putItem("listint", 22);
+        config().putItem("listint", 33);
         before(c -> {
            if (c.parameterBoolean("generate")) {
                c.setAttribute("stringRequestAttribute", "value9");

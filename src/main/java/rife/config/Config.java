@@ -291,11 +291,11 @@ public class Config implements Cloneable {
         writeLock_.lock();
         try {
             if (node.isUserNode()) {
-                parameter(PARAMETER_PREFERENCES_USER, node.absolutePath());
-                removeParameter(PARAMETER_PREFERENCES_SYSTEM);
+                put(PARAMETER_PREFERENCES_USER, node.absolutePath());
+                remove(PARAMETER_PREFERENCES_SYSTEM);
             } else {
-                removeParameter(PARAMETER_PREFERENCES_USER);
-                parameter(PARAMETER_PREFERENCES_SYSTEM, node.absolutePath());
+                remove(PARAMETER_PREFERENCES_USER);
+                put(PARAMETER_PREFERENCES_SYSTEM, node.absolutePath());
             }
         } finally {
             writeLock_.unlock();
@@ -718,7 +718,7 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, String value) {
+    public Config put(String parameter, String value) {
         if (null == parameter) throw new IllegalArgumentException("parameter can't be null.");
         if (0 == parameter.length()) throw new IllegalArgumentException("parameter can't be empty.");
         if (null == value) throw new IllegalArgumentException("value can't be null.");
@@ -753,8 +753,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, boolean value) {
-        return parameter(parameter, String.valueOf(value));
+    public Config put(String parameter, boolean value) {
+        return put(parameter, String.valueOf(value));
     }
 
     /**
@@ -765,8 +765,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, char value) {
-        return parameter(parameter, String.valueOf(value));
+    public Config put(String parameter, char value) {
+        return put(parameter, String.valueOf(value));
     }
 
     /**
@@ -777,8 +777,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, int value) {
-        return parameter(parameter, String.valueOf(value));
+    public Config put(String parameter, int value) {
+        return put(parameter, String.valueOf(value));
     }
 
     /**
@@ -789,8 +789,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, long value) {
-        return parameter(parameter, String.valueOf(value));
+    public Config put(String parameter, long value) {
+        return put(parameter, String.valueOf(value));
     }
 
     /**
@@ -801,8 +801,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, float value) {
-        return parameter(parameter, String.valueOf(value));
+    public Config put(String parameter, float value) {
+        return put(parameter, String.valueOf(value));
     }
 
     /**
@@ -813,8 +813,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, double value) {
-        return parameter(parameter, String.valueOf(value));
+    public Config put(String parameter, double value) {
+        return put(parameter, String.valueOf(value));
     }
 
     /**
@@ -825,10 +825,10 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config parameter(String parameter, Serializable value)
+    public Config put(String parameter, Serializable value)
     throws ConfigErrorException {
         try {
-            return parameter(parameter, SerializationUtils.serializeToString(value));
+            return put(parameter, SerializationUtils.serializeToString(value));
         } catch (SerializationUtilsErrorException e) {
             throw new ConfigErrorException(e);
         }
@@ -840,7 +840,7 @@ public class Config implements Cloneable {
      * @param parameter the parameter name
      * @since 1.6.0
      */
-    public void removeParameter(String parameter) {
+    public void remove(String parameter) {
         if (null == parameter ||
             0 == parameter.length()) {
             return;
@@ -1216,7 +1216,7 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, String item) {
+    public Config putItem(String list, String item) {
         if (null == list) throw new IllegalArgumentException("list can't be null.");
         if (0 == list.length()) throw new IllegalArgumentException("list can't be empty.");
         if (null == item) throw new IllegalArgumentException("item can't be null.");
@@ -1287,8 +1287,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, boolean item) {
-        return listItem(list, String.valueOf(item));
+    public Config putItem(String list, boolean item) {
+        return putItem(list, String.valueOf(item));
     }
 
     /**
@@ -1299,8 +1299,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, char item) {
-        return listItem(list, String.valueOf(item));
+    public Config putItem(String list, char item) {
+        return putItem(list, String.valueOf(item));
     }
 
     /**
@@ -1311,12 +1311,12 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, int item) {
-        return listItem(list, String.valueOf(item));
+    public Config putItem(String list, int item) {
+        return putItem(list, String.valueOf(item));
     }
 
-    public Config listItem(String list, long item) {
-        return listItem(list, String.valueOf(item));
+    public Config putItem(String list, long item) {
+        return putItem(list, String.valueOf(item));
     }
 
     /**
@@ -1327,8 +1327,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, float item) {
-        return listItem(list, String.valueOf(item));
+    public Config putItem(String list, float item) {
+        return putItem(list, String.valueOf(item));
     }
 
     /**
@@ -1339,8 +1339,8 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, double item) {
-        return listItem(list, String.valueOf(item));
+    public Config putItem(String list, double item) {
+        return putItem(list, String.valueOf(item));
     }
 
     /**
@@ -1351,10 +1351,10 @@ public class Config implements Cloneable {
      * @return this config instance
      * @since 1.6.0
      */
-    public Config listItem(String list, Serializable item)
+    public Config putItem(String list, Serializable item)
     throws ConfigErrorException {
         try {
-            return listItem(list, SerializationUtils.serializeToString(item));
+            return putItem(list, SerializationUtils.serializeToString(item));
         } catch (SerializationUtilsErrorException e) {
             throw new ConfigErrorException(e);
         }

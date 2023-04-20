@@ -8,7 +8,6 @@ import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
-import rife.config.exceptions.ConfigErrorException;
 import rife.engine.annotations.Parameter;
 import rife.engine.exceptions.AnnotatedElementInstanceFieldException;
 import rife.engine.exceptions.EngineException;
@@ -746,7 +745,7 @@ public class TestEngine {
 
                     loadConfig(file);
                     config()
-                        .parameter("newparam", "newval")
+                        .put("newparam", "newval")
                         .storeToXml();
                     loadConfig(file);
                     file.delete();

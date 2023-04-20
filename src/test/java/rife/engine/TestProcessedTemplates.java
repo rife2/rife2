@@ -107,7 +107,7 @@ public class TestProcessedTemplates {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                config().parameter("param1", "value1");
+                config().put("param1", "value1");
                 get("/template/html", c -> c.print(c.template("filtered_tags_config")));
             }
         })) {
@@ -125,7 +125,7 @@ public class TestProcessedTemplates {
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
-                config().parameter("param1", "value1");
+                config().put("param1", "value1");
                 get("/template/txt", c -> c.print(c.templateTxt("filtered_tags_config")));
             }
         })) {

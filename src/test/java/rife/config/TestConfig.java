@@ -33,18 +33,18 @@ public class TestConfig {
 
         assertEquals(config.countParameters(), 0);
         config
-            .parameter("paramstring", "astring")
-            .parameter("parambool1", "0")
-            .parameter("parambool2", "1")
-            .parameter("parambool3", "false")
-            .parameter("parambool4", "true")
-            .parameter("parambool5", "f")
-            .parameter("parambool6", "t")
-            .parameter("paramchar", "C")
-            .parameter("paramint", "5133")
-            .parameter("paramlong", "8736478")
-            .parameter("paramfloat", "545.2546")
-            .parameter("paramdouble", "7863.3434353");
+            .put("paramstring", "astring")
+            .put("parambool1", "0")
+            .put("parambool2", "1")
+            .put("parambool3", "false")
+            .put("parambool4", "true")
+            .put("parambool5", "f")
+            .put("parambool6", "t")
+            .put("paramchar", "C")
+            .put("paramint", "5133")
+            .put("paramlong", "8736478")
+            .put("paramfloat", "545.2546")
+            .put("paramdouble", "7863.3434353");
 
         assertTrue(config.hasParameter("paramstring"));
         assertTrue(config.hasParameter("parambool1"));
@@ -86,7 +86,7 @@ public class TestConfig {
         assertEquals(config.getFloat("paramfloat"), 545.2546f, 0);
         assertEquals(config.getDouble("paramdouble"), 7863.3434353d, 0);
 
-        config.removeParameter("paramstring");
+        config.remove("paramstring");
         assertFalse(config.hasParameter("paramstring"));
         assertNull(config.getString("paramstring"));
     }
@@ -118,13 +118,13 @@ public class TestConfig {
         var config = new Config();
 
         config
-            .parameter("paramstring", "astring")
-            .parameter("parambool", true)
-            .parameter("paramchar", 'C')
-            .parameter("paramint", 5133)
-            .parameter("paramlong", 8736478L)
-            .parameter("paramfloat", 545.2546f)
-            .parameter("paramdouble", 7863.3434353d);
+            .put("paramstring", "astring")
+            .put("parambool", true)
+            .put("paramchar", 'C')
+            .put("paramint", 5133)
+            .put("paramlong", 8736478L)
+            .put("paramfloat", 545.2546f)
+            .put("paramdouble", 7863.3434353d);
 
         assertEquals(config.getString("paramstring", "defaultstring"), "astring");
         assertTrue(config.getBool("parambool", false));
@@ -147,25 +147,25 @@ public class TestConfig {
     void testFinalParameters() {
         var config = new Config();
 
-        config.parameter("final", "first");
+        config.put("final", "first");
         assertFalse(config.isFinalParameter("final"));
         assertEquals(config.getString("final"), "first");
 
         config.finalParameter("final", true);
         assertTrue(config.isFinalParameter("final"));
-        config.parameter("final", "second");
+        config.put("final", "second");
         assertEquals(config.getString("final"), "first");
 
-        config.removeParameter("final");
+        config.remove("final");
         assertTrue(config.isFinalParameter("final"));
         assertEquals(config.getString("final"), "first");
 
         config.finalParameter("final", false);
         assertFalse(config.isFinalParameter("final"));
-        config.parameter("final", "second");
+        config.put("final", "second");
         assertEquals(config.getString("final"), "second");
 
-        config.removeParameter("final");
+        config.remove("final");
         assertNull(config.getString("final"));
     }
 
@@ -176,12 +176,12 @@ public class TestConfig {
 
         var serializable1 = new SerializableClass(459, "thestring");
         var serializable2 = new SerializableClass(680824, "thesecondstring");
-        config.parameter("paramserializable", serializable1);
+        config.put("paramserializable", serializable1);
         SerializableClass serializable3 = config.getSerializable("paramserializable");
         assertEquals(serializable1, serializable3);
         assertNotSame(serializable1, serializable3);
 
-        config.parameter("paramstring", "astring");
+        config.put("paramstring", "astring");
         serializable3 = config.getSerializable("paramstring");
         assertNull(serializable3);
         serializable3 = config.getSerializable("paramstring", serializable2);
@@ -194,11 +194,11 @@ public class TestConfig {
 
         assertEquals(config.countLists(), 0);
         config
-            .listItem("list1", "item1")
-            .listItem("list1", "item2")
-            .listItem("list1", "item3")
-            .listItem("list2", "item4")
-            .listItem("list2", "item5");
+            .putItem("list1", "item1")
+            .putItem("list1", "item2")
+            .putItem("list1", "item3")
+            .putItem("list2", "item4")
+            .putItem("list2", "item5");
 
         assertTrue(config.hasList("list1"));
         assertTrue(config.hasList("list2"));
@@ -221,9 +221,9 @@ public class TestConfig {
         assertEquals(item_it.next(), "item3");
         assertFalse(item_it.hasNext());
 
-        config.listItem("list1", "item3");
+        config.putItem("list1", "item3");
         assertEquals(items.size(), 4);
-        config.listItem("list1", "item6");
+        config.putItem("list1", "item6");
         assertEquals(items.size(), 5);
 
         items = config.getStringItems("list2");
@@ -250,9 +250,9 @@ public class TestConfig {
 
         Collection<Boolean> booleans = null;
         config
-            .listItem("booleanlist", true)
-            .listItem("booleanlist", false)
-            .listItem("booleanlist", true);
+            .putItem("booleanlist", true)
+            .putItem("booleanlist", false)
+            .putItem("booleanlist", true);
         booleans = config.getBoolItems("booleanlist");
 
         assertEquals(3, booleans.size());
@@ -266,10 +266,10 @@ public class TestConfig {
         assertFalse(booleans_it.hasNext());
 
         config
-            .listItem("stringlist", "thestring")
-            .listItem("stringlist", "anotherstring")
-            .listItem("stringlist", true)
-            .listItem("stringlist", "athirdstring");
+            .putItem("stringlist", "thestring")
+            .putItem("stringlist", "anotherstring")
+            .putItem("stringlist", true)
+            .putItem("stringlist", "athirdstring");
         booleans = config.getBoolItems("stringlist");
         assertEquals(4, booleans.size());
         booleans_it = booleans.iterator();
@@ -303,9 +303,9 @@ public class TestConfig {
 
         Collection<Character> chars = null;
         config
-            .listItem("charlist", 'G')
-            .listItem("charlist", 'i')
-            .listItem("charlist", 'M');
+            .putItem("charlist", 'G')
+            .putItem("charlist", 'i')
+            .putItem("charlist", 'M');
         chars = config.getCharItems("charlist");
 
         assertEquals(3, chars.size());
@@ -319,10 +319,10 @@ public class TestConfig {
         assertFalse(chars_it.hasNext());
 
         config
-            .listItem("stringlist", "t")
-            .listItem("stringlist", "a")
-            .listItem("stringlist", 'O')
-            .listItem("stringlist", "a");
+            .putItem("stringlist", "t")
+            .putItem("stringlist", "a")
+            .putItem("stringlist", 'O')
+            .putItem("stringlist", "a");
         chars = config.getCharItems("stringlist");
         assertEquals(4, chars.size());
         chars_it = chars.iterator();
@@ -356,9 +356,9 @@ public class TestConfig {
 
         Collection<Integer> ints = null;
         config
-            .listItem("intlist", 96285)
-            .listItem("intlist", 1596)
-            .listItem("intlist", 4174);
+            .putItem("intlist", 96285)
+            .putItem("intlist", 1596)
+            .putItem("intlist", 4174);
         ints = config.getIntItems("intlist");
 
         assertEquals(3, ints.size());
@@ -372,10 +372,10 @@ public class TestConfig {
         assertFalse(ints_it.hasNext());
 
         config
-            .listItem("stringlist", "thestring")
-            .listItem("stringlist", "anotherstring")
-            .listItem("stringlist", 88646)
-            .listItem("stringlist", "athirdstring");
+            .putItem("stringlist", "thestring")
+            .putItem("stringlist", "anotherstring")
+            .putItem("stringlist", 88646)
+            .putItem("stringlist", "athirdstring");
         ints = config.getIntItems("stringlist");
         assertEquals(1, ints.size());
         ints_it = ints.iterator();
@@ -403,9 +403,9 @@ public class TestConfig {
 
         Collection<Long> longs = null;
         config
-            .listItem("longlist", 69778249L)
-            .listItem("longlist", 6687792094L)
-            .listItem("longlist", 24425829L);
+            .putItem("longlist", 69778249L)
+            .putItem("longlist", 6687792094L)
+            .putItem("longlist", 24425829L);
         longs = config.getLongItems("longlist");
 
         assertEquals(3, longs.size());
@@ -419,10 +419,10 @@ public class TestConfig {
         assertFalse(longs_it.hasNext());
 
         config
-            .listItem("stringlist", "thestring")
-            .listItem("stringlist", "anotherstring")
-            .listItem("stringlist", 7098634812L)
-            .listItem("stringlist", "athirdstring");
+            .putItem("stringlist", "thestring")
+            .putItem("stringlist", "anotherstring")
+            .putItem("stringlist", 7098634812L)
+            .putItem("stringlist", "athirdstring");
         longs = config.getLongItems("stringlist");
         assertEquals(1, longs.size());
         longs_it = longs.iterator();
@@ -450,9 +450,9 @@ public class TestConfig {
 
         Collection<Float> floats = null;
         config
-            .listItem("floatlist", 425.68f)
-            .listItem("floatlist", 9682.54f)
-            .listItem("floatlist", 134.98f);
+            .putItem("floatlist", 425.68f)
+            .putItem("floatlist", 9682.54f)
+            .putItem("floatlist", 134.98f);
         floats = config.getFloatItems("floatlist");
 
         assertEquals(3, floats.size());
@@ -466,10 +466,10 @@ public class TestConfig {
         assertFalse(floats_it.hasNext());
 
         config
-            .listItem("stringlist", "thestring")
-            .listItem("stringlist", "anotherstring")
-            .listItem("stringlist", 4512.78f)
-            .listItem("stringlist", "athirdstring");
+            .putItem("stringlist", "thestring")
+            .putItem("stringlist", "anotherstring")
+            .putItem("stringlist", 4512.78f)
+            .putItem("stringlist", "athirdstring");
         floats = config.getFloatItems("stringlist");
         assertEquals(1, floats.size());
         floats_it = floats.iterator();
@@ -497,9 +497,9 @@ public class TestConfig {
 
         Collection<Double> doubles = null;
         config
-            .listItem("doublelist", 69978.23524d)
-            .listItem("doublelist", 413387.23451d)
-            .listItem("doublelist", 441534.79798d);
+            .putItem("doublelist", 69978.23524d)
+            .putItem("doublelist", 413387.23451d)
+            .putItem("doublelist", 441534.79798d);
         doubles = config.getDoubleItems("doublelist");
 
         assertEquals(3, doubles.size());
@@ -513,10 +513,10 @@ public class TestConfig {
         assertFalse(doubles_it.hasNext());
 
         config
-            .listItem("stringlist", "thestring")
-            .listItem("stringlist", "anotherstring")
-            .listItem("stringlist", 551348.7986d)
-            .listItem("stringlist", "athirdstring");
+            .putItem("stringlist", "thestring")
+            .putItem("stringlist", "anotherstring")
+            .putItem("stringlist", 551348.7986d)
+            .putItem("stringlist", "athirdstring");
         doubles = config.getDoubleItems("stringlist");
         assertEquals(1, doubles.size());
         doubles_it = doubles.iterator();
@@ -547,9 +547,9 @@ public class TestConfig {
         var serializable2 = new SerializableClass(69823, "anotherstring");
         var serializable3 = new SerializableClass(499417, "athirdstring");
         config
-            .listItem("serializablelist", serializable1)
-            .listItem("serializablelist", serializable2)
-            .listItem("serializablelist", serializable3);
+            .putItem("serializablelist", serializable1)
+            .putItem("serializablelist", serializable2)
+            .putItem("serializablelist", serializable3);
         Collection<SerializableClass> serializables = config.getSerializableItems("serializablelist");
 
         assertEquals(3, serializables.size());
@@ -563,10 +563,10 @@ public class TestConfig {
         assertFalse(serializables_it.hasNext());
 
         config
-            .listItem("stringlist", "thestring")
-            .listItem("stringlist", "anotherstring")
-            .listItem("stringlist", serializable2)
-            .listItem("stringlist", "athirdstring");
+            .putItem("stringlist", "thestring")
+            .putItem("stringlist", "anotherstring")
+            .putItem("stringlist", serializable2)
+            .putItem("stringlist", "athirdstring");
         serializables = config.getSerializableItems("stringlist");
         assertEquals(1, serializables.size());
         serializables_it = serializables.iterator();
@@ -597,9 +597,9 @@ public class TestConfig {
         Iterator<String> item_it = null;
 
         config
-            .listItem("final", "item1")
-            .listItem("final", "item2")
-            .listItem("final", "item3");
+            .putItem("final", "item1")
+            .putItem("final", "item2")
+            .putItem("final", "item3");
         assertFalse(config.isFinalList("final"));
 
         items = config.getStringItems("final");
@@ -615,7 +615,7 @@ public class TestConfig {
 
         config.finalList("final", true);
         assertTrue(config.isFinalList("final"));
-        config.listItem("final", "item4");
+        config.putItem("final", "item4");
         items = config.getStringItems("final");
         assertEquals(items.size(), 3);
         item_it = items.iterator();
@@ -636,7 +636,7 @@ public class TestConfig {
 
         config.finalList("final", false);
         assertFalse(config.isFinalList("final"));
-        config.listItem("final", "item4");
+        config.putItem("final", "item4");
         items = config.getStringItems("final");
         assertEquals(items.size(), 4);
         item_it = items.iterator();
@@ -665,23 +665,23 @@ public class TestConfig {
         var serializable2 = new SerializableClass(459, "thestring");
         var serializable3 = new SerializableClass(499417, "athirdstring");
         config
-            .parameter("paramstring", "astring")
+            .put("paramstring", "astring")
             .finalParameter("paramstring", true)
-            .parameter("parambool", true)
-            .parameter("paramchar", 'C')
-            .parameter("paramint", 5133)
-            .parameter("paramlong", 8736478L)
-            .parameter("paramfloat", 545.2546f)
-            .parameter("paramdouble", 7863.3434353d)
-            .listItem("list1", "item1")
-            .listItem("list1", "item2")
-            .listItem("list1", "item3")
-            .listItem("list2", "item4")
-            .listItem("list2", "item5")
+            .put("parambool", true)
+            .put("paramchar", 'C')
+            .put("paramint", 5133)
+            .put("paramlong", 8736478L)
+            .put("paramfloat", 545.2546f)
+            .put("paramdouble", 7863.3434353d)
+            .putItem("list1", "item1")
+            .putItem("list1", "item2")
+            .putItem("list1", "item3")
+            .putItem("list2", "item4")
+            .putItem("list2", "item5")
             .finalList("list2", true)
-            .parameter("paramserializable", serializable1)
-            .listItem("serializablelist", serializable2)
-            .listItem("serializablelist", serializable3);
+            .put("paramserializable", serializable1)
+            .putItem("serializablelist", serializable2)
+            .putItem("serializablelist", serializable3);
 
         var xml = config.toXml();
         assertEquals(xml, "<config>\n" +
@@ -714,19 +714,19 @@ public class TestConfig {
         var config = new Config();
 
         config
-            .parameter("paramstring", "astring")
+            .put("paramstring", "astring")
             .finalParameter("paramstring", true)
-            .parameter("parambool", true)
-            .parameter("paramchar", 'C')
-            .parameter("paramint", 5133)
-            .parameter("paramlong", 8736478L)
-            .parameter("paramfloat", 545.2546f)
-            .parameter("paramdouble", 7863.3434353d)
-            .listItem("list1", "item1")
-            .listItem("list1", "item2")
-            .listItem("list1", "item3")
-            .listItem("list2", "item4")
-            .listItem("list2", "item5")
+            .put("parambool", true)
+            .put("paramchar", 'C')
+            .put("paramint", 5133)
+            .put("paramlong", 8736478L)
+            .put("paramfloat", 545.2546f)
+            .put("paramdouble", 7863.3434353d)
+            .putItem("list1", "item1")
+            .putItem("list1", "item2")
+            .putItem("list1", "item3")
+            .putItem("list2", "item4")
+            .putItem("list2", "item5")
             .finalList("list2", true);
 
         var xml_filename = "config_storexml_test.xml";
@@ -791,9 +791,9 @@ public class TestConfig {
             assertEquals(item_it.next(), "item5");
             assertFalse(item_it.hasNext());
 
-            config_stored.parameter("paramstring2", "anotherstring");
-            config_stored.listItem("list3", "item6");
-            config_stored.listItem("list3", "item7");
+            config_stored.put("paramstring2", "anotherstring");
+            config_stored.putItem("list3", "item6");
+            config_stored.putItem("list3", "item7");
 
             assertTrue(config_stored.hasList("list3"));
 
@@ -829,22 +829,22 @@ public class TestConfig {
             var config = new Config();
 
             config
-                .parameter("paramstring", "astring")
-                .parameter("paramstring2", "astring2")
-                .parameter("parambool", true)
-                .parameter("paramchar", 'C')
-                .parameter("paramint", 5133)
-                .parameter("paramlong", 8736478L)
-                .parameter("paramfloat", 545.2546f)
-                .parameter("paramdouble", 7863.3434353d)
-                .listItem("list1", "item1")
-                .listItem("list1", "item2")
-                .listItem("list1", "item3")
-                .listItem("list2", "item4")
-                .listItem("list2", "item5")
-                .listItem("list3", "item6")
-                .listItem("list3", "item7")
-                .listItem("list3", "item8");
+                .put("paramstring", "astring")
+                .put("paramstring2", "astring2")
+                .put("parambool", true)
+                .put("paramchar", 'C')
+                .put("paramint", 5133)
+                .put("paramlong", 8736478L)
+                .put("paramfloat", 545.2546f)
+                .put("paramdouble", 7863.3434353d)
+                .putItem("list1", "item1")
+                .putItem("list1", "item2")
+                .putItem("list1", "item3")
+                .putItem("list2", "item4")
+                .putItem("list2", "item5")
+                .putItem("list3", "item6")
+                .putItem("list3", "item7")
+                .putItem("list3", "item8");
 
             config.storeToPreferences(preferences);
 
@@ -852,19 +852,19 @@ public class TestConfig {
 
             assertEquals(config_other.countParameters(), 0);
 
-            config_other.parameter("paramstring", "afirststring");
-            config_other.parameter("paramstring2", "afirststring2");
+            config_other.put("paramstring", "afirststring");
+            config_other.put("paramstring2", "afirststring2");
             config_other.finalParameter("paramstring2", true);
-            config_other.parameter("paramstring3", "afirststring3");
-            config_other.parameter("parambool", false);
-            config_other.parameter("paramchar", 'D');
-            config_other.parameter("paramint", 698);
-            config_other.parameter("paramlong", 985835L);
-            config_other.parameter("paramfloat", 978.14898f);
-            config_other.parameter("paramdouble", 6098.1439724d);
-            config_other.listItem("list1", "item1a");
-            config_other.listItem("list1", "item2a");
-            config_other.listItem("list2", "item3a");
+            config_other.put("paramstring3", "afirststring3");
+            config_other.put("parambool", false);
+            config_other.put("paramchar", 'D');
+            config_other.put("paramint", 698);
+            config_other.put("paramlong", 985835L);
+            config_other.put("paramfloat", 978.14898f);
+            config_other.put("paramdouble", 6098.1439724d);
+            config_other.putItem("list1", "item1a");
+            config_other.putItem("list1", "item2a");
+            config_other.putItem("list2", "item3a");
             config_other.finalList("list2", true);
 
             assertEquals(config_other.countParameters(), 9);
@@ -970,18 +970,18 @@ public class TestConfig {
             assertEquals(item_it.next(), "item8");
             assertFalse(item_it.hasNext());
 
-            config_other.removeParameter("paramint");
-            config_other.parameter("paramstring3", "anotherstring");
-            config_other.listItem("list1", "item9");
-            config_other.listItem("list4", "item10");
-            config_other.listItem("list4", "item11");
+            config_other.remove("paramint");
+            config_other.put("paramstring3", "anotherstring");
+            config_other.putItem("list1", "item9");
+            config_other.putItem("list4", "item10");
+            config_other.putItem("list4", "item11");
 
             assertTrue(config_other.hasList("list4"));
 
             config_other.storeToPreferences();
 
             var config_other2 = new Config();
-            config_other2.parameter("paramstring2", "oncemoreastring");
+            config_other2.put("paramstring2", "oncemoreastring");
             config_other2.preferencesNode(preferences);
 
             assertEquals(config_other2.countParameters(), 9);
@@ -1100,19 +1100,19 @@ public class TestConfig {
         var config1 = new Config();
 
         config1
-            .parameter("paramstring", "astring")
+            .put("paramstring", "astring")
             .finalParameter("paramstring", true)
-            .parameter("parambool", true)
-            .parameter("paramchar", 'C')
-            .parameter("paramint", 5133)
-            .parameter("paramlong", 8736478L)
-            .parameter("paramfloat", 545.2546f)
-            .parameter("paramdouble", 7863.3434353d)
-            .listItem("list1", "item1")
-            .listItem("list1", "item2")
-            .listItem("list1", "item3")
-            .listItem("list2", "item4")
-            .listItem("list2", "item5")
+            .put("parambool", true)
+            .put("paramchar", 'C')
+            .put("paramint", 5133)
+            .put("paramlong", 8736478L)
+            .put("paramfloat", 545.2546f)
+            .put("paramdouble", 7863.3434353d)
+            .putItem("list1", "item1")
+            .putItem("list1", "item2")
+            .putItem("list1", "item3")
+            .putItem("list2", "item4")
+            .putItem("list2", "item5")
             .finalList("list2", true);
 
         var config2 = config1.clone();
@@ -1123,20 +1123,20 @@ public class TestConfig {
 
         config2
             .finalParameter("paramstring", false)
-            .parameter("paramstring", "astring2")
-            .parameter("parambool", false)
+            .put("paramstring", "astring2")
+            .put("parambool", false)
             .finalParameter("parambool", true)
-            .parameter("paramchar", 'D')
-            .parameter("paramint", 442)
-            .parameter("paramlong", 9121L)
-            .parameter("paramfloat", 112.87f)
-            .parameter("paramdouble", 1313.2232887d)
-            .parameter("paramnew", 2223)
-            .listItem("list1", "item6")
+            .put("paramchar", 'D')
+            .put("paramint", 442)
+            .put("paramlong", 9121L)
+            .put("paramfloat", 112.87f)
+            .put("paramdouble", 1313.2232887d)
+            .put("paramnew", 2223)
+            .putItem("list1", "item6")
             .finalList("list1", true)
             .finalList("list2", false)
-            .listItem("list2", "item7")
-            .listItem("list3", "item8");
+            .putItem("list2", "item7")
+            .putItem("list3", "item8");
 
         assertNotEquals(config1.toXml(), config2.toXml());
 
