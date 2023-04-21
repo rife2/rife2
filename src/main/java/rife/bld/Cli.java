@@ -15,9 +15,10 @@ import rife.bld.operations.*;
  * @since 1.5
  */
 public class Cli extends BuildExecutor {
-    private final CreateRife2Operation createRife2Operation_ = new CreateRife2Operation();
-    private final CreateBlankOperation createBlankOperation_ = new CreateBlankOperation();
     private final CreateBaseOperation createBaseOperation_ = new CreateBaseOperation();
+    private final CreateBlankOperation createBlankOperation_ = new CreateBlankOperation();
+    private final CreateLibOperation createLibOperation_ = new CreateLibOperation();
+    private final CreateRife2Operation createRife2Operation_ = new CreateRife2Operation();
     private final UpgradeOperation upgradeOperation_ = new UpgradeOperation();
     private final VersionOperation versionOperation_ = new VersionOperation();
 
@@ -55,6 +56,18 @@ public class Cli extends BuildExecutor {
     public void createBase()
     throws Exception {
         createBaseOperation_.executeOnce(() -> createBaseOperation_.fromArguments(arguments()));
+    }
+
+    /**
+     * The standard {@code create-lib} command.
+     *
+     * @throws Exception when an error occurred during the creation process
+     * @since 1.6
+     */
+    @BuildCommand(value = "create-lib", help = CreateLibHelp.class)
+    public void createLib()
+    throws Exception {
+        createLibOperation_.executeOnce(() -> createLibOperation_.fromArguments(arguments()));
     }
 
     /**

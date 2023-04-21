@@ -15,7 +15,7 @@ import rife.tools.StringUtils;
  */
 public class CreateBaseHelp implements CommandHelp {
     public String getSummary() {
-        return "Creates a new Java project with minimal commands";
+        return "Creates a new baseline Java project with minimal commands";
     }
 
     public String getDescription(String topic) {

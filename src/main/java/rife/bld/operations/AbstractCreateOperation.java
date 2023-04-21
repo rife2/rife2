@@ -97,10 +97,10 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
 
         // standard names
         projectClassName_ = StringUtils.capitalize(project_.name());
-        projectBuildName_ = projectClassName_ + "Build";
-        projectMainName_ = projectClassName_ + "Main";
-        projectMainUberName_ = projectMainName_;
-        projectTestName_ = projectClassName_ + "Test";
+        projectBuildName_ = projectBuildClassName(projectClassName_);
+        projectMainName_ = projectMainClassName(projectClassName_);
+        projectMainUberName_ = projectMainUberClassName(projectClassName_);
+        projectTestName_ = projectTestClassName(projectClassName_);
 
         // create the main project structure
         ideaDirectory_ = new File(project_.workDirectory(), ".idea");
@@ -112,6 +112,46 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         bldPackageDirectory_ = new File(project_.srcBldJavaDirectory(), package_dir);
         mainPackageDirectory_ = new File(project_.srcMainJavaDirectory(), package_dir);
         testPackageDirectory_ = new File(project_.srcTestJavaDirectory(), package_dir);
+    }
+
+    /**
+     * Generates the build class name from the project class name
+     * @param projectClassName the project class name
+     * @return the generated build class name
+     * @since 1.6
+     */
+    protected String projectBuildClassName(String projectClassName) {
+        return projectClassName + "Build";
+    }
+
+    /**
+     * Generates the main class name from the project class name
+     * @param projectClassName the project class name
+     * @return the generated main class name
+     * @since 1.6
+     */
+    protected String projectMainClassName(String projectClassName) {
+        return projectClassName + "Main";
+    }
+
+    /**
+     * Generates the main uber class name from the project class name
+     * @param projectClassName the project class name
+     * @return the generated main uber class name
+     * @since 1.6
+     */
+    protected String projectMainUberClassName(String projectClassName) {
+        return projectClassName + "Main";
+    }
+
+    /**
+     * Generates the test class name from the project class name
+     * @param projectClassName the project class name
+     * @return the generated test class name
+     * @since 1.6
+     */
+    protected String projectTestClassName(String projectClassName) {
+        return projectClassName + "Test";
     }
 
     /**
@@ -168,7 +208,9 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
         build_template.setValue("projectBuild", projectBuildName_);
         build_template.setValue("package", project_.pkg());
         build_template.setValue("project", projectClassName_);
-        build_template.setValue("projectMain", projectMainName_);
+        if (build_template.hasValueId("projectMain")) {
+            build_template.setValue("projectMain", projectMainName_);
+        }
         if (build_template.hasValueId("projectTest")) {
             build_template.setValue("projectTest", projectTestName_);
         }
@@ -250,11 +292,13 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
             new File(ideaLibrariesDirectory_, "test.xml"));
 
         // IDEA run site
-        var run_site_template = TemplateFactory.XML.get(templateBase_ + "idea.runConfigurations.Run_Main");
-        run_site_template.setValue("package", project_.pkg());
-        run_site_template.setValue("projectMain", projectMainName_);
-        var run_site_file = new File(ideaRunConfigurationsDirectory_, "Run Main.xml");
-        FileUtils.writeString(run_site_template.getContent(), run_site_file);
+        if (createIdeaRunMain()) {
+            var run_site_template = TemplateFactory.XML.get(templateBase_ + "idea.runConfigurations.Run_Main");
+            run_site_template.setValue("package", project_.pkg());
+            run_site_template.setValue("projectMain", projectMainName_);
+            var run_site_file = new File(ideaRunConfigurationsDirectory_, "Run Main.xml");
+            FileUtils.writeString(run_site_template.getContent(), run_site_file);
+        }
 
         // IDEA run tests
         var run_tests_template = TemplateFactory.XML.get(templateBase_ + "idea.runConfigurations.Run_Tests");
@@ -267,6 +311,15 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
     }
 
     /**
+     * Indicates whether the IDEA main run target should be generated
+     * @return {@code true} of it should be generated; or {@code false} otherwise
+     * @since 1.6
+     */
+    protected boolean createIdeaRunMain() {
+        return true;
+    }
+
+    /**
      * Part of the {@link #execute} operation, populates the vscode project structure.
      *
      * @since 1.5.6
@@ -275,7 +328,9 @@ public abstract class AbstractCreateOperation<T extends AbstractCreateOperation<
     throws FileUtilsErrorException {
         var launch_template = TemplateFactory.JSON.get(templateBase_ + "vscode.launch");
         launch_template.setValue("package", project_.pkg());
-        launch_template.setValue("projectMain", projectMainName_);
+        if (launch_template.hasValueId("projectMain")) {
+            launch_template.setValue("projectMain", projectMainName_);
+        }
         if (launch_template.hasValueId("projectTest")) {
             launch_template.setValue("projectTest", projectTestName_);
         }
