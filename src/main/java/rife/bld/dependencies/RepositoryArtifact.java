@@ -4,8 +4,20 @@
  */
 package rife.bld.dependencies;
 
-record RepositoryArtifact(Repository repository, String location) {
-    RepositoryArtifact appendPath(String path) {
+/**
+ * Represents an artifact location in a repository.
+ *
+ * @param repository the repository of the artifact
+ * @param location   the location of the artifact in the repository
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.6
+ */
+public record RepositoryArtifact(Repository repository, String location) {
+    public RepositoryArtifact appendPath(String path) {
         return new RepositoryArtifact(repository, location + path);
+    }
+
+    public String toString() {
+        return repository + ":" + location;
     }
 }

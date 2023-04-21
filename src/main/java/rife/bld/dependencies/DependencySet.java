@@ -87,11 +87,12 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
      * @param retriever    the retriever to use to get artifacts
      * @param repositories the repositories to use for the transfer
      * @param directory    the directory to transfer the artifacts into
+     * @return the list of artifacts that were transferred successfully
      * @throws DependencyTransferException when an error occurred during the transfer
      * @since 1.5.10
      */
-    public void transferIntoDirectory(ArtifactRetriever retriever, List<Repository> repositories, File directory) {
-        transferIntoDirectory(retriever, repositories, directory, (String[]) null);
+    public List<RepositoryArtifact> transferIntoDirectory(ArtifactRetriever retriever, List<Repository> repositories, File directory) {
+        return transferIntoDirectory(retriever, repositories, directory, (String[]) null);
     }
 
     /**
@@ -104,20 +105,30 @@ public class DependencySet extends AbstractSet<Dependency> implements Set<Depend
      * @param repositories the repositories to use for the download
      * @param directory    the directory to download the artifacts into
      * @param classifiers  the additional classifiers to transfer
+     * @return the list of artifacts that were transferred successfully
      * @throws DependencyTransferException when an error occurred during the transfer
      * @since 1.5.10
      */
-    public void transferIntoDirectory(ArtifactRetriever retriever, List<Repository> repositories, File directory, String... classifiers) {
+    public List<RepositoryArtifact> transferIntoDirectory(ArtifactRetriever retriever, List<Repository> repositories, File directory, String... classifiers) {
+        var result = new ArrayList<RepositoryArtifact>();
         for (var dependency : this) {
-            new DependencyResolver(retriever, repositories, dependency).transferIntoDirectory(directory);
+            var artifact = new DependencyResolver(retriever, repositories, dependency).transferIntoDirectory(directory);
+            if (artifact != null) {
+                result.add(artifact);
+            }
+
             if (classifiers != null) {
                 for (var classifier : classifiers) {
                     if (classifier != null) {
-                        new DependencyResolver(retriever, repositories, dependency.withClassifier(classifier)).transferIntoDirectory(directory);
+                        var classifier_artifact = new DependencyResolver(retriever, repositories, dependency.withClassifier(classifier)).transferIntoDirectory(directory);
+                        if (classifier_artifact != null) {
+                            result.add(classifier_artifact);
+                        }
                     }
                 }
             }
         }
+        return result;
     }
 
     /**

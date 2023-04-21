@@ -34,6 +34,7 @@ public class WrapperExtensionResolver {
     private final File destinationDirectory_;
     private final List<Repository> repositories_ = new ArrayList<>();
     private final DependencySet dependencies_ = new DependencySet();
+    private final List<File> localArtifacts_ = new ArrayList<>();
     private final boolean downloadSources_;
     private final boolean downloadJavadoc_;
 
@@ -91,9 +92,33 @@ public class WrapperExtensionResolver {
     private boolean validateHash() {
         try {
             if (hashFile_.exists()) {
-                var hash = FileUtils.readString(hashFile_);
-                if (hash.equals(fingerPrintHash_)) {
-                    return true;
+                var contents = FileUtils.readString(hashFile_);
+                var lines = StringUtils.split(contents, "\n");
+                if (!lines.isEmpty()) {
+                    // first line is the fingerprint hash
+                    if (lines.remove(0).equals(fingerPrintHash_)) {
+                        // other lines are last modified timestamps of local files
+                        // that were dependency artifacts
+                        while (!lines.isEmpty()) {
+                            var line = lines.get(0);
+                            var parts = line.split(":", 2);
+                            // verify that the local file has the same modified timestamp still
+                            if (parts.length == 2) {
+                                var file = new File(parts[1]);
+                                if (!file.exists() || !file.canRead() || file.lastModified() != Long.parseLong(parts[0])) {
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                            lines.remove(0);
+                        }
+
+                        // there were no invalid lines, so the hash file contents are valid
+                        if (lines.isEmpty()) {
+                            return true;
+                        }
+                    }
                 }
                 hashFile_.delete();
             }
@@ -105,7 +130,15 @@ public class WrapperExtensionResolver {
 
     private void writeHash() {
         try {
-            FileUtils.writeString(fingerPrintHash_, hashFile_);
+            var contents = new StringBuilder();
+            contents.append(fingerPrintHash_);
+            for (var file : localArtifacts_) {
+                if (file.exists() && file.canRead()) {
+                    contents.append("\n").append(file.lastModified()).append(":").append(file.getAbsolutePath());
+                }
+            }
+
+            FileUtils.writeString(contents.toString(), hashFile_);
         } catch (FileUtilsErrorException e) {
             throw new RuntimeException(e);
         }
@@ -132,26 +165,19 @@ public class WrapperExtensionResolver {
 
                 additional_classifiers = classifiers.toArray(new String[0]);
             }
-            dependencies.transferIntoDirectory(retriever_, repositories_, destinationDirectory_, additional_classifiers);
 
-            for (var dependency : dependencies) {
-                addTransferLocations(filenames, dependency);
-                if (downloadSources_) {
-                    addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_SOURCES));
+            var artifacts = dependencies.transferIntoDirectory(retriever_, repositories_, destinationDirectory_, additional_classifiers);
+            for (var artifact : artifacts) {
+                var location = artifact.location();
+
+                if (artifact.repository().isLocal()) {
+                    localArtifacts_.add(new File(location));
                 }
-                if (downloadJavadoc_) {
-                    addTransferLocations(filenames, dependency.withClassifier(CLASSIFIER_JAVADOC));
-                }
+                filenames.add(location.substring(location.lastIndexOf("/") + 1));
             }
         }
 
         return filenames;
-    }
-
-    private void addTransferLocations(HashSet<String> filenames, Dependency dependency) {
-        for (var location : new DependencyResolver(retriever_, repositories_, dependency).getTransferLocations()) {
-            filenames.add(location.substring(location.lastIndexOf("/") + 1));
-        }
     }
 
     private void purgeExtensionDependencies(Set<String> filenames) {

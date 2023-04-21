@@ -220,20 +220,22 @@ public class DependencyResolver {
      * The destination directory must exist and be writable.
      *
      * @param directory the directory to transfer the dependency artifact into
+     * @return the artifact that was successfully transferred; or {@code null} if no artifact was transferred
      * @throws DependencyTransferException when an error occurred during the transfer
      * @since 1.5.10
      */
-    public void transferIntoDirectory(File directory)
+    public RepositoryArtifact transferIntoDirectory(File directory)
     throws DependencyTransferException {
         for (var artifact : getTransferArtifacts()) {
             try {
                 if (retriever_.transferIntoDirectory(artifact, directory)) {
-                    return;
+                    return artifact;
                 }
             } catch (IOException e) {
                 throw new DependencyTransferException(dependency_, artifact.location(), directory, e);
             }
         }
+        return null;
     }
 
     /**

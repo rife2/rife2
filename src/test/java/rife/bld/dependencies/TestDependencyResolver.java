@@ -646,7 +646,9 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertTrue(StringUtils.join(result, "\n").matches("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/.*/rife2-.*.jar"""));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
@@ -662,7 +664,10 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            assertTrue(StringUtils.join(result, "\n").matches("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/.*/rife2-.*.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/.*/rife2-.*-sources.jar"""));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(2, files.size());
@@ -678,7 +683,11 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2"));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            assertTrue(StringUtils.join(result, "\n").matches("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/.*/rife2-.*.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/.*/rife2-.*-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/uwyn/rife2/rife2/.*/rife2-.*-javadoc.jar"""));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(3, files.size());
@@ -694,7 +703,9 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://s01.oss.sonatype.org/content/repositories/snapshots/:https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/1.4.0-SNAPSHOT/rife2-1.4.0-20230303.130437-4.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(1, files.size());
@@ -710,7 +721,10 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            assertEquals("""
+                https://s01.oss.sonatype.org/content/repositories/snapshots/:https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/1.4.0-SNAPSHOT/rife2-1.4.0-20230303.130437-4.jar
+                https://s01.oss.sonatype.org/content/repositories/snapshots/:https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/1.4.0-SNAPSHOT/rife2-1.4.0-20230303.130437-4-sources.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(2, files.size());
@@ -727,7 +741,11 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.uwyn.rife2", "rife2", new VersionNumber(1, 4, 0, "SNAPSHOT")));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            assertEquals("""
+                https://s01.oss.sonatype.org/content/repositories/snapshots/:https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/1.4.0-SNAPSHOT/rife2-1.4.0-20230303.130437-4.jar
+                https://s01.oss.sonatype.org/content/repositories/snapshots/:https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/1.4.0-SNAPSHOT/rife2-1.4.0-20230303.130437-4-sources.jar
+                https://s01.oss.sonatype.org/content/repositories/snapshots/:https://s01.oss.sonatype.org/content/repositories/snapshots/com/uwyn/rife2/rife2/1.4.0-SNAPSHOT/rife2-1.4.0-20230303.130437-4-javadoc.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(3, files.size());
@@ -745,7 +763,15 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/11.0.14/jetty-server-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/toolchain/jetty-jakarta-servlet-api/5.0.2/jetty-jakarta-servlet-api-5.0.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/11.0.14/jetty-http-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/11.0.14/jetty-io-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.5/slf4j-api-2.0.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/11.0.14/jetty-util-11.0.14.jar""", StringUtils.join(result, "\n"));
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(6, files.size());
             Collections.sort(files);
@@ -767,7 +793,21 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/11.0.14/jetty-server-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/11.0.14/jetty-server-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/toolchain/jetty-jakarta-servlet-api/5.0.2/jetty-jakarta-servlet-api-5.0.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/toolchain/jetty-jakarta-servlet-api/5.0.2/jetty-jakarta-servlet-api-5.0.2-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/11.0.14/jetty-http-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/11.0.14/jetty-http-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/11.0.14/jetty-io-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/11.0.14/jetty-io-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.5/slf4j-api-2.0.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.5/slf4j-api-2.0.5-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/11.0.14/jetty-util-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/11.0.14/jetty-util-11.0.14-sources.jar""", StringUtils.join(result, "\n"));
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(12, files.size());
             Collections.sort(files);
@@ -795,7 +835,27 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.eclipse.jetty", "jetty-server", new VersionNumber(11, 0, 14)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp, CLASSIFIER_SOURCES, CLASSIFIER_JAVADOC);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/11.0.14/jetty-server-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/11.0.14/jetty-server-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-server/11.0.14/jetty-server-11.0.14-javadoc.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/toolchain/jetty-jakarta-servlet-api/5.0.2/jetty-jakarta-servlet-api-5.0.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/toolchain/jetty-jakarta-servlet-api/5.0.2/jetty-jakarta-servlet-api-5.0.2-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/toolchain/jetty-jakarta-servlet-api/5.0.2/jetty-jakarta-servlet-api-5.0.2-javadoc.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/11.0.14/jetty-http-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/11.0.14/jetty-http-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-http/11.0.14/jetty-http-11.0.14-javadoc.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/11.0.14/jetty-io-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/11.0.14/jetty-io-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-io/11.0.14/jetty-io-11.0.14-javadoc.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.5/slf4j-api-2.0.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.5/slf4j-api-2.0.5-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.5/slf4j-api-2.0.5-javadoc.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/11.0.14/jetty-util-11.0.14.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/11.0.14/jetty-util-11.0.14-sources.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-util/11.0.14/jetty-util-11.0.14-javadoc.jar""", StringUtils.join(result, "\n"));
+
             var files = FileUtils.getFileList(tmp);
             assertEquals(18, files.size());
             Collections.sort(files);
@@ -829,7 +889,16 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.junit.jupiter", "junit-jupiter", new VersionNumber(5, 9, 2)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile, runtime).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile, runtime).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter/5.9.2/junit-jupiter-5.9.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.9.2/junit-jupiter-api-5.9.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-params/5.9.2/junit-jupiter-params-5.9.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.9.2/junit-jupiter-engine-5.9.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/junit/platform/junit-platform-commons/1.9.2/junit-platform-commons-1.9.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/junit/platform/junit-platform-engine/1.9.2/junit-platform-engine-1.9.2.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(8, files.size());
@@ -854,7 +923,26 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.springframework.boot", "spring-boot-starter", new VersionNumber(3, 0, 4)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter/3.0.4/spring-boot-starter-3.0.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/3.0.4/spring-boot-3.0.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-autoconfigure/3.0.4/spring-boot-autoconfigure-3.0.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-logging/3.0.4/spring-boot-starter-logging-3.0.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/spring-core/6.0.6/spring-core-6.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/yaml/snakeyaml/1.33/snakeyaml-1.33.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/spring-context/6.0.6/spring-context-6.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.4.5/logback-classic-1.4.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-to-slf4j/2.19.0/log4j-to-slf4j-2.19.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/jul-to-slf4j/2.0.6/jul-to-slf4j-2.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/spring-jcl/6.0.6/spring-jcl-6.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/spring-aop/6.0.6/spring-aop-6.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/spring-beans/6.0.6/spring-beans-6.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/springframework/spring-expression/6.0.6/spring-expression-6.0.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.4.5/logback-core-1.4.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.4/slf4j-api-2.0.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.19.0/log4j-api-2.19.0.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(18, files.size());
@@ -889,7 +977,40 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-core/3.9.0/maven-core-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-model/3.9.0/maven-model-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-settings/3.9.0/maven-settings-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-settings-builder/3.9.0/maven-settings-builder-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-builder-support/3.9.0/maven-builder-support-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-repository-metadata/3.9.0/maven-repository-metadata-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-artifact/3.9.0/maven-artifact-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-plugin-api/3.9.0/maven-plugin-api-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-model-builder/3.9.0/maven-model-builder-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/maven-resolver-provider/3.9.0/maven-resolver-provider-3.9.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/resolver/maven-resolver-impl/1.9.4/maven-resolver-impl-1.9.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/resolver/maven-resolver-api/1.9.4/maven-resolver-api-1.9.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/resolver/maven-resolver-spi/1.9.4/maven-resolver-spi-1.9.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/resolver/maven-resolver-util/1.9.4/maven-resolver-util-1.9.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/shared/maven-shared-utils/3.3.4/maven-shared-utils-3.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.5/org.eclipse.sisu.plexus-0.3.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.5/org.eclipse.sisu.inject-0.3.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/inject/guice/5.1.0/guice-5.1.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/guava/guava/30.1-jre/guava-30.1-jre.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.4.2/plexus-utils-3.4.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-classworlds/2.6.0/plexus-classworlds-2.6.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-interpolation/1.26/plexus-interpolation-1.26.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-component-annotations/2.1.0/plexus-component-annotations-2.1.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-sec-dispatcher/2.0/plexus-sec-dispatcher-2.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/maven/resolver/maven-resolver-named-locks/1.9.4/maven-resolver-named-locks-1.9.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/aopalliance/aopalliance/1.0/aopalliance-1.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-cipher/2.0/plexus-cipher-2.0.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(32, files.size());
@@ -938,7 +1059,56 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.typesafe.play", "play_2.13", new VersionNumber(2, 8, 19)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/play_2.13/2.8.19/play_2.13-2.8.19.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.13.10/scala-library-2.13.10.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/build-link/2.8.19/build-link-2.8.19.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/play-streams_2.13/2.8.19/play-streams_2.13-2.8.19.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/twirl-api_2.13/1.5.1/twirl-api_2.13-1.5.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/jul-to-slf4j/1.7.36/jul-to-slf4j-1.7.36.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/jcl-over-slf4j/1.7.36/jcl-over-slf4j-1.7.36.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.6.20/akka-actor_2.13-2.6.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor-typed_2.13/2.6.20/akka-actor-typed_2.13-2.6.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/akka/akka-slf4j_2.13/2.6.20/akka-slf4j_2.13-2.6.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/akka/akka-serialization-jackson_2.13/2.6.20/akka-serialization-jackson_2.13-2.6.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.11.4/jackson-core-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.11.4/jackson-annotations-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.11.4/jackson-datatype-jdk8-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.11.4/jackson-datatype-jsr310-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.11.4/jackson-databind-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/play-json_2.13/2.8.2/play-json_2.13-2.8.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/io/jsonwebtoken/jjwt/0.9.1/jjwt-0.9.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/jakarta/transaction/jakarta.transaction-api/1.3.3/jakarta.transaction-api-1.3.3.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/scala-lang/modules/scala-java8-compat_2.13/1.0.2/scala-java8-compat_2.13-1.0.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/ssl-config-core_2.13/0.4.3/ssl-config-core_2.13-0.4.3.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.13/1.1.2/scala-parser-combinators_2.13-1.1.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/play-exceptions/2.8.19/play-exceptions-2.8.19.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/akka/akka-stream_2.13/2.6.20/akka-stream_2.13-2.6.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.13/1.2.0/scala-xml_2.13-1.2.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/config/1.4.2/config-1.4.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-parameter-names/2.11.4/jackson-module-parameter-names-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformat-cbor/2.11.4/jackson-dataformat-cbor-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-scala_2.13/2.11.4/jackson-module-scala_2.13-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/play/play-functional_2.13/2.8.2/play-functional_2.13-2.8.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.13.1/scala-reflect-2.13.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/joda-time/joda-time/2.10.5/joda-time-2.10.5.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/checkerframework/checker-qual/3.8.0/checker-qual-3.8.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.5.1/error_prone_annotations-2.5.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/jakarta/activation/jakarta.activation-api/1.2.2/jakarta.activation-api-1.2.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf-v3_2.13/2.6.20/akka-protobuf-v3_2.13-2.6.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/module/jackson-module-paranamer/2.11.4/jackson-module-paranamer-2.11.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/thoughtworks/paranamer/paranamer/2.8/paranamer-2.8.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(48, files.size());
@@ -1003,7 +1173,96 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("com.vaadin", "vaadin", new VersionNumber(23, 3, 7)));
         var tmp = Files.createTempDirectory("transfers").toFile();
         try {
-            resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            var result = resolver.getAllDependencies(compile).transferIntoDirectory(ArtifactRetriever.instance(), resolver.repositories(), tmp);
+            assertEquals("""
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin/23.3.7/vaadin-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-core/23.3.7/vaadin-core-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-board-flow/23.3.7/vaadin-board-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-charts-flow/23.3.7/vaadin-charts-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-cookie-consent-flow/23.3.7/vaadin-cookie-consent-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-crud-flow/23.3.7/vaadin-crud-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-grid-pro-flow/23.3.7/vaadin-grid-pro-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-map-flow/23.3.7/vaadin-map-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-rich-text-editor-flow/23.3.7/vaadin-rich-text-editor-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/collaboration-engine/5.3.0/collaboration-engine-5.3.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-server/23.3.4/flow-server-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-dev-server/23.3.4/vaadin-dev-server-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-lit-template/23.3.4/flow-lit-template-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-polymer-template/23.3.4/flow-polymer-template-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-push/23.3.4/flow-push-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-client/23.3.4/flow-client-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-html-components/23.3.4/flow-html-components-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-data/23.3.4/flow-data-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/flow-dnd/23.3.4/flow-dnd-23.3.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-lumo-theme/23.3.7/vaadin-lumo-theme-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-material-theme/23.3.7/vaadin-material-theme-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-accordion-flow/23.3.7/vaadin-accordion-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-avatar-flow/23.3.7/vaadin-avatar-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-button-flow/23.3.7/vaadin-button-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-checkbox-flow/23.3.7/vaadin-checkbox-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-combo-box-flow/23.3.7/vaadin-combo-box-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-confirm-dialog-flow/23.3.7/vaadin-confirm-dialog-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-custom-field-flow/23.3.7/vaadin-custom-field-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-date-picker-flow/23.3.7/vaadin-date-picker-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-date-time-picker-flow/23.3.7/vaadin-date-time-picker-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-details-flow/23.3.7/vaadin-details-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-time-picker-flow/23.3.7/vaadin-time-picker-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-select-flow/23.3.7/vaadin-select-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-dialog-flow/23.3.7/vaadin-dialog-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-form-layout-flow/23.3.7/vaadin-form-layout-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-field-highlighter-flow/23.3.7/vaadin-field-highlighter-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-grid-flow/23.3.7/vaadin-grid-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-icons-flow/23.3.7/vaadin-icons-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-iron-list-flow/23.3.7/vaadin-iron-list-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-virtual-list-flow/23.3.7/vaadin-virtual-list-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-list-box-flow/23.3.7/vaadin-list-box-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-login-flow/23.3.7/vaadin-login-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-messages-flow/23.3.7/vaadin-messages-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-ordered-layout-flow/23.3.7/vaadin-ordered-layout-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-progress-bar-flow/23.3.7/vaadin-progress-bar-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-radio-button-flow/23.3.7/vaadin-radio-button-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-renderer-flow/23.3.7/vaadin-renderer-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-split-layout-flow/23.3.7/vaadin-split-layout-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-tabs-flow/23.3.7/vaadin-tabs-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-text-field-flow/23.3.7/vaadin-text-field-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-upload-flow/23.3.7/vaadin-upload-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-notification-flow/23.3.7/vaadin-notification-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-app-layout-flow/23.3.7/vaadin-app-layout-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-context-menu-flow/23.3.7/vaadin-context-menu-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-menu-bar-flow/23.3.7/vaadin-menu-bar-flow-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.14.1/jackson-databind-2.14.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.14.1/jackson-datatype-jsr310-2.14.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/license-checker/1.5.1/license-checker-1.5.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/servletdetector/throw-if-servlet5/1.0.2/throw-if-servlet5-1.0.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/external/gwt/gwt-elemental/2.8.2.vaadin2/gwt-elemental-2.8.2.vaadin2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/commons-fileupload/commons-fileupload/1.4/commons-fileupload-1.4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.14.1/jackson-core-2.14.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/jsoup/jsoup/1.15.3/jsoup-1.15.3.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/helger/ph-css/6.5.0/ph-css-6.5.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy/1.12.20/byte-buddy-1.12.20.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/external/gentyref/1.2.0.vaadin1/gentyref-1.2.0.vaadin1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.22/commons-compress-1.22.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/commons-codec/commons-codec/1.15/commons-codec-1.15.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/open/8.5.0/open-8.5.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/external/atmosphere/atmosphere-runtime/2.7.3.slf4jvaadin4/atmosphere-runtime-2.7.3.slf4jvaadin4.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/javax/validation/validation-api/2.0.1.Final/validation-api-2.0.1.Final.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/webjars/npm/vaadin__vaadin-mobile-drag-drop/1.0.1/vaadin__vaadin-mobile-drag-drop-1.0.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/webjars/npm/mobile-drag-drop/2.3.0-rc.2/mobile-drag-drop-2.3.0-rc.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/vaadin/vaadin-flow-components-base/23.3.7/vaadin-flow-components-base-23.3.7.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.14.1/jackson-annotations-2.14.1.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/github/oshi/oshi-core/6.1.6/oshi-core-6.1.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/auth0/java-jwt/3.19.2/java-jwt-3.19.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/helger/commons/ph-commons/10.1.6/ph-commons-10.1.6.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.11.0/jna-5.11.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.11.0/jna-platform-5.11.0.jar
+                https://repo1.maven.org/maven2/:https://repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar""", StringUtils.join(result, "\n"));
 
             var files = FileUtils.getFileList(tmp);
             assertEquals(88, files.size());
