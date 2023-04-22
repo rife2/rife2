@@ -232,8 +232,7 @@ public class Datasource implements AutoCloseable, Cloneable {
                             post_driver_set.removeAll(initial_driver_set);
                             // detect which new driver applies
                             for (var post_driver : post_driver_set) {
-                                if (post_driver.getClass().getClassLoader() == getClass().getClassLoader() &&
-                                    driver_class.isAssignableFrom(post_driver.getClass())) {
+                                if (driver_class.isAssignableFrom(post_driver.getClass())) {
                                     activeDriver_ = new WeakReference<>(post_driver);
                                     break;
                                 }
