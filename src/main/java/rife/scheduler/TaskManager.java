@@ -154,7 +154,7 @@ public interface TaskManager {
      * This method will be called when the task is fully done being executed.
      * The task should be set as not busy.
      *
-     * @param id the unique ID of the task to activate
+     * @param id the unique ID of the task to deactivate
      * @return {@code true} if the task was successfully deactivated; or
      * {@code false} otherwise
      * @throws TaskManagerException when an error occurred during the deactivation of the task
