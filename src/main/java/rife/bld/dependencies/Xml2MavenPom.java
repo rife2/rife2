@@ -56,6 +56,8 @@ class Xml2MavenPom extends Xml2Data {
             return Collections.emptySet();
         }
 
+        var scopes_list = Arrays.asList(scopes);
+
         if (resolvedDependencies_ == null) {
             var resolved_dependencies = new HashMap<Scope, Set<PomDependency>>();
 
@@ -99,8 +101,11 @@ class Xml2MavenPom extends Xml2Data {
                         exclusions,
                         dependency.parent());
                     if (resolved_dependency.type() == null || resolved_dependency.type().equals("jar")) {
-                        var resolved_dependency_set = resolved_dependencies.computeIfAbsent(Scope.valueOf(resolved_dependency.scope()), k -> new LinkedHashSet<>());
-                        resolved_dependency_set.add(resolved_dependency);
+                        var scope = Scope.valueOf(resolved_dependency.scope());
+                        if (scopes_list.contains(scope)) {
+                            var resolved_dependency_set = resolved_dependencies.computeIfAbsent(scope, k -> new LinkedHashSet<>());
+                            resolved_dependency_set.add(resolved_dependency);
+                        }
                     }
                 }
             }

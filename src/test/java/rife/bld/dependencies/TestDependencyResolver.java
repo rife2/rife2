@@ -431,7 +431,7 @@ public class TestDependencyResolver {
         var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.apache.maven", "maven-core", new VersionNumber(3, 9, 0)));
         var dependencies = resolver.getAllDependencies(compile);
         assertNotNull(dependencies);
-//        assertEquals(32, dependencies.size());
+        assertEquals(32, dependencies.size());
         assertEquals("""
             org.apache.maven:maven-core:3.9.0
             org.apache.maven:maven-model:3.9.0
@@ -638,6 +638,29 @@ public class TestDependencyResolver {
             com.squareup.okio:okio-jvm:3.0.0
             org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20
             org.jetbrains:annotations:13.0""", StringUtils.join(dependencies, "\n"));
+    }
+
+    @Test
+    void testGetCompileRuntimeTransitiveDependenciesMariaDb() {
+        var resolver = new DependencyResolver(ArtifactRetriever.instance(), List.of(MAVEN_CENTRAL, SONATYPE_SNAPSHOTS), new Dependency("org.mariadb.jdbc", "mariadb-java-client", new VersionNumber(3, 1, 3)));
+        var dependencies_compile = resolver.getAllDependencies(compile, runtime);
+        assertNotNull(dependencies_compile);
+        assertEquals(9, dependencies_compile.size());
+        assertEquals("""
+            org.mariadb.jdbc:mariadb-java-client:3.1.3
+            com.github.waffle:waffle-jna:3.2.0
+            net.java.dev.jna:jna:5.12.1
+            net.java.dev.jna:jna-platform:5.12.1
+            org.slf4j:jcl-over-slf4j:1.7.36
+            org.slf4j:slf4j-api:1.7.36
+            com.github.ben-manes.caffeine:caffeine:2.9.3
+            org.checkerframework:checker-qual:3.23.0
+            com.google.errorprone:error_prone_annotations:2.10.0""", StringUtils.join(dependencies_compile, "\n"));
+        var dependencies_runtime = resolver.getAllDependencies(runtime);
+        assertNotNull(dependencies_runtime);
+        assertEquals(1, dependencies_runtime.size());
+        assertEquals("""
+            org.mariadb.jdbc:mariadb-java-client:3.1.3""", StringUtils.join(dependencies_runtime, "\n"));
     }
 
     @Test
