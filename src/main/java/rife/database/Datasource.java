@@ -209,33 +209,24 @@ public class Datasource implements AutoCloseable, Cloneable {
             try {
                 synchronized (DriverManager.class) {
                     if (activeDriver_ == null || activeDriver_.get() == null) {
-                        // check if an existing driver is present for this URL
-                        Driver driver = null;
-                        try {
-                            driver = DriverManager.getDriver(url_);
-                        } catch (SQLException ignored) {
-                        }
+                        // keep track of the drivers that were there before
+                        final var initial_driver_set = new HashSet<Driver>();
+                        DriverManager.getDrivers().asIterator().forEachRemaining(initial_driver_set::add);
 
-                        // if there's not, register a new driver
-                        if (driver == null) {
-                            // keep track of the drivers that were there before
-                            final var initial_driver_set = new HashSet<Driver>();
-                            DriverManager.getDrivers().asIterator().forEachRemaining(initial_driver_set::add);
+                        // load the driver class
+                        var driver_class = Class.forName(driver_);
 
-                            // load the driver class
-                            var driver_class = Class.forName(driver_);
-
-                            // keep track of the drivers that are there afterward
-                            final var post_driver_set = new HashSet<Driver>();
-                            DriverManager.getDrivers().asIterator().forEachRemaining(post_driver_set::add);
-                            // remove all the drivers before
-                            post_driver_set.removeAll(initial_driver_set);
-                            // detect which new driver applies
-                            for (var post_driver : post_driver_set) {
-                                if (post_driver.getClass().getName().equals(driver_)) {
-                                    activeDriver_ = new WeakReference<>(post_driver);
-                                    break;
-                                }
+                        // keep track of the drivers that are there afterward
+                        final var post_driver_set = new HashSet<Driver>();
+                        DriverManager.getDrivers().asIterator().forEachRemaining(post_driver_set::add);
+                        // remove all the drivers before
+                        post_driver_set.removeAll(initial_driver_set);
+                        // detect which new driver applies
+                        for (var post_driver : post_driver_set) {
+                            if (driver_class.isAssignableFrom(post_driver.getClass()) &&
+                                post_driver.getClass().getClassLoader() == getClass().getClassLoader()) {
+                                activeDriver_ = new WeakReference<>(post_driver);
+                                break;
                             }
                         }
                     }
