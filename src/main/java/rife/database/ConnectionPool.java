@@ -8,9 +8,6 @@ import rife.database.exceptions.DatabaseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * This is a class designed for database connection pooling. By storing
@@ -25,10 +22,6 @@ public class ConnectionPool implements AutoCloseable {
     private int poolSize_ = 0;
     private ArrayList<DbConnection> connectionPool_ = new ArrayList<>();
     private final HashMap<Thread, DbConnection> threadConnections_ = new HashMap<>();
-
-    private final ReadWriteLock lock_ = new ReentrantReadWriteLock();
-    private final Lock readLock_ = lock_.readLock();
-    private final Lock writeLock_ = lock_.writeLock();
 
     /**
      * Create a new ConnectionPool
@@ -45,15 +38,12 @@ public class ConnectionPool implements AutoCloseable {
      * @since 1.0
      */
     void setPoolSize(int poolSize) {
-        writeLock_.lock();
-        try {
+        synchronized (this) {
             if (connectionPool_.size() > 0) {
                 cleanup();
             }
 
             poolSize_ = poolSize;
-        } finally {
-            writeLock_.unlock();
         }
     }
 
@@ -64,12 +54,7 @@ public class ConnectionPool implements AutoCloseable {
      * @since 1.0
      */
     int getPoolSize() {
-        readLock_.lock();
-        try {
-            return poolSize_;
-        } finally {
-            readLock_.unlock();
-        }
+        return poolSize_;
     }
 
     /**
@@ -79,12 +64,7 @@ public class ConnectionPool implements AutoCloseable {
      * @since 1.0
      */
     boolean isInitialized() {
-        readLock_.lock();
-        try {
-            return connectionPool_.size() > 0;
-        } finally {
-            readLock_.unlock();
-        }
+        return connectionPool_.size() > 0;
     }
 
     /**
@@ -99,8 +79,7 @@ public class ConnectionPool implements AutoCloseable {
      */
     void preparePool(Datasource datasource)
     throws DatabaseException {
-        writeLock_.lock();
-        try {
+        synchronized (this) {
             cleanup();
 
             connectionPool_.ensureCapacity(poolSize_);
@@ -110,8 +89,6 @@ public class ConnectionPool implements AutoCloseable {
 
             assert poolSize_ == connectionPool_.size();
             this.notifyAll();
-        } finally {
-            writeLock_.unlock();
         }
     }
 
@@ -125,8 +102,7 @@ public class ConnectionPool implements AutoCloseable {
      */
     public void cleanup()
     throws DatabaseException {
-        writeLock_.lock();
-        try {
+        synchronized (this) {
             if (0 == connectionPool_.size()) {
                 return;
             }
@@ -145,8 +121,6 @@ public class ConnectionPool implements AutoCloseable {
             }
 
             threadConnections_.clear();
-        } finally {
-            writeLock_.unlock();
         }
     }
 
@@ -163,11 +137,8 @@ public class ConnectionPool implements AutoCloseable {
      * @since 1.0
      */
     void registerThreadConnection(Thread thread, DbConnection connection) {
-        writeLock_.lock();
-        try {
+        synchronized (this) {
             threadConnections_.put(thread, connection);
-        } finally {
-            writeLock_.unlock();
         }
     }
 
@@ -179,12 +150,9 @@ public class ConnectionPool implements AutoCloseable {
      * @since 1.0
      */
     void unregisterThreadConnection(Thread thread) {
-        writeLock_.lock();
-        try {
+        synchronized (this) {
             threadConnections_.remove(thread);
             this.notifyAll();
-        } finally {
-            writeLock_.unlock();
         }
     }
 
@@ -196,11 +164,8 @@ public class ConnectionPool implements AutoCloseable {
      * @since 1.0
      */
     boolean hasThreadConnection(Thread thread) {
-        readLock_.lock();
-        try {
+        synchronized (this) {
             return threadConnections_.containsKey(thread);
-        } finally {
-            readLock_.unlock();
         }
     }
 
@@ -214,14 +179,11 @@ public class ConnectionPool implements AutoCloseable {
      */
     void recreateConnection(DbConnection connection)
     throws DatabaseException {
-        writeLock_.lock();
-        try {
+        synchronized (this) {
             if (connectionPool_.remove(connection)) {
                 connectionPool_.add(connection.getDatasource().createConnection());
             }
             connection.cleanup();
-        } finally {
-            writeLock_.unlock();
         }
     }
 
@@ -240,8 +202,7 @@ public class ConnectionPool implements AutoCloseable {
      */
     DbConnection getConnection(Datasource datasource)
     throws DatabaseException {
-        readLock_.lock();
-        try {
+        synchronized (this) {
             // check if the connection threads contains an entry for the
             // current thread so that transactions are treated in a
             // continuous fashion
@@ -277,7 +238,7 @@ public class ConnectionPool implements AutoCloseable {
                             connectionPool_.set(i, connection);
                             break;
                         } else if (null != possible_connection &&
-                            possible_connection.isFree()) {
+                                   possible_connection.isFree()) {
                             connection = possible_connection;
                             break;
                         }
@@ -299,8 +260,6 @@ public class ConnectionPool implements AutoCloseable {
 
                 return connection;
             }
-        } finally {
-            readLock_.unlock();
         }
     }
 
