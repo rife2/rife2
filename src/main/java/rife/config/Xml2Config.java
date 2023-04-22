@@ -22,6 +22,7 @@ class Xml2Config extends Xml2Data {
     private final List<String> finalParameters_;
     private final Map<String, List<String>> lists_;
     private final List<String> finalLists_;
+    private final Stack<String> elementStack_ = new Stack<>();
 
     private StringBuilder characterDataStack_ = null;
 
@@ -146,7 +147,13 @@ class Xml2Config extends Xml2Data {
                     try {
                         Object instance = klass.getDeclaredConstructor().newInstance();
                         if (instance instanceof NameSelector selector) {
-                            characterDataStack_.append(selector.getActiveName());
+                            var name = selector.getActiveName();
+                            if (name != null) {
+                                if (isChildOfInclude()) {
+                                    name = name.replace('.', '_').replace(' ', '_').toLowerCase();
+                                }
+                                characterDataStack_.append(name);
+                            }
                         }
                     } catch (Exception e) {
                         throw new XmlErrorException("Error while obtain the name of selector '" + selector_name + "'.", e);
@@ -155,9 +162,13 @@ class Xml2Config extends Xml2Data {
             }
             default -> throw new XmlErrorException("Unsupported element name '" + qName + "'.");
         }
+
+        elementStack_.push(qName);
     }
 
     public void endElement(String namespaceURI, String localName, String qName) {
+        elementStack_.pop();
+
         switch (qName) {
             case "config", "value" -> {
                 // do nothing
@@ -189,6 +200,10 @@ class Xml2Config extends Xml2Data {
                 }
             }
         }
+    }
+
+    private boolean isChildOfInclude() {
+        return elementStack_.peek().equals("include");
     }
 
     public void characters(char[] ch, int start, int length) {

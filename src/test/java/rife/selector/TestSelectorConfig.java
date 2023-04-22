@@ -7,6 +7,6 @@ package rife.selector;
 public class TestSelectorConfig implements NameSelector {
     @Override
     public String getActiveName() {
-        return "xml2config_selected";
+        return "xml2.config selected";
     }
 }

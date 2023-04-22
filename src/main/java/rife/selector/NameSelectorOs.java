@@ -15,4 +15,8 @@ public class NameSelectorOs implements NameSelector {
     public String getActiveName() {
         return System.getProperty("os.name").toLowerCase();
     }
+
+    public static void main(String[] args) {
+        System.out.println(new NameSelectorOs().getActiveName());
+    }
 }
