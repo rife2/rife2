@@ -67,6 +67,10 @@ public class HelloScheduler extends Site {
                 scheduler.getTaskManager().getAllTasks().size() + " tasks");
     }
 
+    public void destroy() {
+        datasource.close();
+    }
+
     public static void main(String[] args) {
         new Server().start(new HelloScheduler());
     }

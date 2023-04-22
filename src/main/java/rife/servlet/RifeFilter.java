@@ -137,6 +137,6 @@ public class RifeFilter implements Filter {
 
     @Override
     public final void destroy() {
-        Filter.super.destroy();
+        gate_.destroy();
     }
 }

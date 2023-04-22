@@ -42,7 +42,7 @@ import javax.sql.DataSource;
  * @see rife.database.Datasources
  * @since 1.0
  */
-public class Datasource implements Cloneable {
+public class Datasource implements AutoCloseable, Cloneable {
     public static HashMap<String, String> sDriverAliases = new HashMap<>();
     public static HashMap<String, String> sDriverNames = new HashMap<>();
 
@@ -652,6 +652,11 @@ public class Datasource implements Cloneable {
         connectionPool_.cleanup();
     }
 
+    @Override
+    public void close()
+    throws DatabaseException {
+        cleanup();
+    }
 
     /**
      * Retrieves the instance of the connection pool that is provided by this

@@ -51,6 +51,10 @@ public class HelloDependencyInjection extends Site implements MyServiceProvider 
         }
     }
 
+    public void destroy() {
+        properties().getValueTyped("datasource", Datasource.class).close();
+    }
+
     // Site setup
 
     public void setup() {
@@ -60,8 +64,7 @@ public class HelloDependencyInjection extends Site implements MyServiceProvider 
                 get("/service2", ServiceUser2.class);
             }
         }).properties().put("datasource",
-            new Datasource("org.hsqldb.jdbcDriver",
-                "jdbc:hsqldb:.", "sa", "", 5));
+            new Datasource("org.hsqldb.jdbcDriver", "jdbc:hsqldb:.", "sa", "", 5));
     }
 
     // Main
@@ -70,7 +73,6 @@ public class HelloDependencyInjection extends Site implements MyServiceProvider 
         new Server()
             .start(new HelloDependencyInjection(new HelloService()))
             .properties().put("datasource",
-                new Datasource("org.h2.Driver",
-                    "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5));
+                new Datasource("org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5));
     }
 }

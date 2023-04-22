@@ -35,6 +35,15 @@ public class Site extends Router {
     private Config config_ = new Config();
 
     /**
+     * The {@code destroy()} method will be called by RIFE2 when the
+     * web application tears down.
+     *
+     * @since 1.6.1
+     */
+    public void destroy() {
+    }
+
+    /**
      * Looks up the information of the element that is responsible for handling
      * a certain URL and path info.
      *

@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentMap;
  * @see rife.database.Datasource
  * @since 1.0
  */
-public class Datasources {
+public class Datasources implements AutoCloseable {
     private final ConcurrentMap<String, Datasource> map_ = new ConcurrentHashMap<>();
 
     /**
@@ -119,5 +119,11 @@ public class Datasources {
     throws DatabaseException {
         map_.forEach((s, datasource) -> datasource.cleanup());
         map_.clear();
+    }
+
+    @Override
+    public void close()
+    throws DatabaseException {
+        cleanup();
     }
 }

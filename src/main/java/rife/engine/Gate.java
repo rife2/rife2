@@ -48,6 +48,15 @@ public class Gate {
     }
 
     /**
+     * Tears down the gate and the associated {@code Site}.
+     *
+     * @since 1.6.1
+     */
+    public void destroy() {
+        site_.destroy();
+    }
+
+    /**
      * Handle the web request with the provided arguments.
      *
      * @param gateUrl    the part of the URL that corresponds to the root of the gate, typically the webapp context URL

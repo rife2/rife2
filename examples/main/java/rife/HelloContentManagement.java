@@ -71,6 +71,10 @@ public class HelloContentManagement extends Site {
     });
     Route add = getPost("/add", AddNews::new);
 
+    public void destroy() {
+        datasource.close();
+    }
+
     public static void main(String[] args) {
         new Server().start(new HelloContentManagement());
     }
