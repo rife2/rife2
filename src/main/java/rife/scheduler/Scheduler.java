@@ -32,7 +32,7 @@ public class Scheduler implements Runnable {
     /**
      * Creates a new scheduler instance for the provided task manager and task option manager.
      *
-     * @param taskManager the task manager to use for this scheduler
+     * @param taskManager       the task manager to use for this scheduler
      * @param taskOptionManager the task option manager to use for this scheduler
      * @since 1.0
      */
@@ -120,7 +120,7 @@ public class Scheduler implements Runnable {
      *
      * @param executor the executor to add to this scheduler
      * @throws SchedulerException when this executor is already registered with another
-     * scheduler; or when another executor is already registered for this task type
+     *                            scheduler; or when another executor is already registered for this task type
      * @since 1.0
      */
     public void addExecutor(Executor executor)
@@ -247,6 +247,7 @@ public class Scheduler implements Runnable {
         synchronized (this) {
             if (thread_ != null) {
                 thread_.interrupt();
+                notifyAll();
                 thread_ = null;
             }
         }
@@ -264,7 +265,9 @@ public class Scheduler implements Runnable {
                         var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
                         var difference = projected - now;
 
-                        Thread.sleep(difference);
+                        synchronized (this) {
+                            wait(difference);
+                        }
                     } else {
                         break;
                     }

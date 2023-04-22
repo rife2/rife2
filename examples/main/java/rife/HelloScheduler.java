@@ -12,6 +12,7 @@ import rife.scheduler.schedulermanagers.*;
 public class HelloScheduler extends Site {
     Datasource datasource = new Datasource("org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/hello", "sa", "", 5);
     DatabaseScheduling scheduling = DatabaseSchedulingFactory.instance(datasource);
+    Scheduler scheduler = scheduling.createScheduler();
 
     public static class CounterExecutor extends Executor {
         private int counter_ = 0;
@@ -27,8 +28,6 @@ public class HelloScheduler extends Site {
     }
 
     public void setup() {
-        final var scheduler = scheduling.getScheduler();
-
         final var executor = new CounterExecutor();
         scheduler.addExecutor(executor);
 
@@ -68,6 +67,7 @@ public class HelloScheduler extends Site {
     }
 
     public void destroy() {
+        scheduler.stop();
         datasource.close();
     }
 

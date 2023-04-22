@@ -11,5 +11,5 @@ package rife.scheduler;
  * @since 1.0
  */
 public interface SchedulerFactory {
-    Scheduler getScheduler();
+    Scheduler createScheduler();
 }

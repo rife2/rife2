@@ -145,6 +145,7 @@ public class Context {
             // move on to the next one
         } finally {
             route.finalizeElementInstance(element, this);
+            ContinuationConfigRuntime.clearActiveConfigRuntime();
             ContinuationContext.clearActiveContext();
         }
     }

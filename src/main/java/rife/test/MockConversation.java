@@ -56,6 +56,16 @@ public class MockConversation {
     }
 
     /**
+     * Retrieves this conversation's {@code Site}.
+     *
+     * @return this conversation's site
+     * @since 1.6.1
+     */
+    public Site getSite() {
+        return gate_.getSite();
+    }
+
+    /**
      * Perform a request for a particular URL.
      *
      * @param url the url that should be tested

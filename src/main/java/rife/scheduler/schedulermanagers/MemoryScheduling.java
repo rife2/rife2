@@ -10,15 +10,10 @@ import rife.scheduler.taskmanagers.MemoryTasks;
 import rife.scheduler.taskoptionmanagers.MemoryTaskOptions;
 
 public class MemoryScheduling implements SchedulerFactory {
-    private Scheduler scheduler_ = null;
-
     public MemoryScheduling() {
     }
 
-    public Scheduler getScheduler() {
-        if (null == scheduler_) {
-            scheduler_ = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
-        }
-        return scheduler_;
+    public Scheduler createScheduler() {
+        return new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
     }
 }
