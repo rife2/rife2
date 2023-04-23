@@ -61,10 +61,6 @@ public class HelloDatabase extends Site {
         c.print("<a href='" + c.urlFor(list) + "'>List names</a><br>");
     });
 
-    public void destroy() {
-        datasource.close();
-    }
-
     public static void main(String[] args) {
         new Server().start(new HelloDatabase());
     }

@@ -16,8 +16,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 
@@ -45,7 +44,7 @@ import javax.sql.DataSource;
  * @since 1.0
  */
 public class Datasource implements AutoCloseable, Cloneable {
-    public static HashMap<String, String> sDriverAliases = new HashMap<>();
+     public static HashMap<String, String> sDriverAliases = new HashMap<>();
     public static HashMap<String, String> sDriverNames = new HashMap<>();
 
     static {
@@ -64,6 +63,8 @@ public class Datasource implements AutoCloseable, Cloneable {
         sDriverNames.put("PostgreSQL Native Driver", "org.postgresql.Driver");
         sDriverNames.put("PostgreSQL JDBC Driver", "org.postgresql.Driver");
     }
+
+    private static final Set<Datasource> activeDatasources = Collections.newSetFromMap(new WeakHashMap<>());
 
     private WeakReference<Driver> activeDriver_ = null;
     private String driver_ = null;
@@ -209,6 +210,10 @@ public class Datasource implements AutoCloseable, Cloneable {
             try {
                 synchronized (DriverManager.class) {
                     if (activeDriver_ == null || activeDriver_.get() == null) {
+                        synchronized (activeDatasources) {
+                            activeDatasources.add(this);
+                        }
+
                         // keep track of the drivers that were there before
                         final var initial_driver_set = new HashSet<Driver>();
                         DriverManager.getDrivers().asIterator().forEachRemaining(initial_driver_set::add);
@@ -675,6 +680,10 @@ public class Datasource implements AutoCloseable, Cloneable {
         connectionPool_.cleanup();
 
         synchronized (DriverManager.class) {
+            synchronized (activeDatasources) {
+                activeDatasources.remove(this);
+            }
+
             if (activeDriver_ != null) {
                 var driver = activeDriver_.get();
                 if (driver != null) {
@@ -703,6 +712,27 @@ public class Datasource implements AutoCloseable, Cloneable {
      */
     public ConnectionPool getPool() {
         return connectionPool_;
+    }
+
+    /**
+     * Closes all the active datasource.
+     * <p>
+     * This can be used to ensure that no connections or drivers are dangling
+     * when an application shuts down. It's already used by the destroy method
+     * of the {@code RifeFilter}.
+     *
+     * @since 1.6.1
+     */
+    public static void closeAllActiveDatasources() {
+        Set<Datasource> active_datasources;
+        synchronized (activeDatasources) {
+            active_datasources = new HashSet<>(activeDatasources);
+            activeDatasources.clear();
+        }
+
+        for (var datasource : active_datasources) {
+            datasource.cleanup();
+        }
     }
 }
 

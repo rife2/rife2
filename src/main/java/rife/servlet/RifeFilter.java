@@ -8,9 +8,11 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import rife.config.RifeConfig;
+import rife.database.Datasource;
 import rife.engine.Gate;
 import rife.engine.Site;
 import rife.ioc.HierarchicalProperties;
+import rife.scheduler.Scheduler;
 import rife.tools.FileUtils;
 
 import java.io.IOException;
@@ -47,7 +49,7 @@ public class RifeFilter implements Filter {
      * for RIFE2's embedded web server
      *
      * @param properties the properties to use for the site
-     * @param site the site to use for the requests
+     * @param site       the site to use for the requests
      * @since 1.1
      */
     public final void init(HierarchicalProperties properties, Site site) {
@@ -101,7 +103,7 @@ public class RifeFilter implements Filter {
 
                 // check if the url matches one of the pass-through suffixes
                 var pass_through = extension != null &&
-                                   RifeConfig.engine().getPassThroughSuffixes().contains(extension);
+                    RifeConfig.engine().getPassThroughSuffixes().contains(extension);
 
                 // if not passed through, handle the request
                 if (!pass_through) {
@@ -137,6 +139,9 @@ public class RifeFilter implements Filter {
 
     @Override
     public final void destroy() {
+        Scheduler.stopAllActiveSchedulers();
+        Datasource.closeAllActiveDatasources();
+
         gate_.destroy();
     }
 }
