@@ -145,6 +145,10 @@ public class Config implements Cloneable {
 
     /**
      * Creates a new {@code Config} instance that is parsed from an XML file.
+     * <p>
+     * The file will be resolved first against the current working directory and
+     * then against the root of the filesystem. If the file path is already absolute,
+     * it will be treated as such regardless.
      *
      * @param file       the XML file to parse
      * @param properties the hierarchical properties to use
