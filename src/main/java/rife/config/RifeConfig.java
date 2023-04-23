@@ -509,6 +509,7 @@ public class RifeConfig {
             add("png");
             add("jpg");
             add("jpeg");
+            add("svg");
             add("bmp");
             add("ico");
             add("css");
