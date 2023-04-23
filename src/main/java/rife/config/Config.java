@@ -155,7 +155,7 @@ public class Config implements Cloneable {
     public static Config fromXmlFile(File file, HierarchicalProperties properties)
     throws ConfigErrorException {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
-        return fromXmlResource(file.getAbsolutePath(), new ResourceFinderDirectories(new File(System.getProperty("user.dir")), new File("/")), properties);
+        return fromXmlResource(file.getPath(), new ResourceFinderDirectories(new File(System.getProperty("user.dir")), new File("/")), properties);
     }
 
     /**
