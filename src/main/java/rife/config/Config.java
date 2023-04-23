@@ -1304,7 +1304,7 @@ public class Config implements Cloneable {
     }
 
     /**
-     * Adds a new long item to a list.
+     * Adds a new int item to a list.
      *
      * @param list the name of the list
      * @param item the value of the item
@@ -1315,6 +1315,14 @@ public class Config implements Cloneable {
         return putItem(list, String.valueOf(item));
     }
 
+    /**
+     * Adds a new long item to a list.
+     *
+     * @param list the name of the list
+     * @param item the value of the item
+     * @return this config instance
+     * @since 1.6.0
+     */
     public Config putItem(String list, long item) {
         return putItem(list, String.valueOf(item));
     }
