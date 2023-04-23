@@ -130,9 +130,6 @@ public class Config implements Cloneable {
 
     /**
      * Creates a new {@code Config} instance that is parsed from an XML file.
-     * <p>
-     * The file will be resolved first against the current working directory and
-     * then against the root of the filesystem. If the file path is already absolute,
      * it will be treated as such regardless.
      * <p>
      * The {@link HierarchicalProperties#createSystemInstance() system hierarchical properties} will be used.
@@ -149,10 +146,6 @@ public class Config implements Cloneable {
 
     /**
      * Creates a new {@code Config} instance that is parsed from an XML file.
-     * <p>
-     * The file will be resolved first against the current working directory and
-     * then against the root of the filesystem. If the file path is already absolute,
-     * it will be treated as such regardless.
      *
      * @param file       the XML file to parse
      * @param properties the hierarchical properties to use
@@ -163,7 +156,7 @@ public class Config implements Cloneable {
     public static Config fromXmlFile(File file, HierarchicalProperties properties)
     throws ConfigErrorException {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
-        return fromXmlResource(file.getPath(), new ResourceFinderDirectories(new File(System.getProperty("user.dir")), new File("/")), properties);
+        return fromXmlResource(file.getAbsolutePath(), new ResourceFinderDirectories(new File("/")), properties);
     }
 
     /**
