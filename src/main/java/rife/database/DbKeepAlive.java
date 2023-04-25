@@ -1,7 +1,7 @@
 /*
- * Copyright 2001-2008 Steven Grimm <koreth[remove] at midwinter dot com>
+ * Copyright 2001-2023 Steven Grimm (koreth[remove] at midwinter dot com)
+ * Erik C. Thauvin (https://erik.thauvin.net/)
  * Licensed under the Apache License, Version 2.0 (the "License")
- * $Id: DbConnection.java 3442 2006-08-10 09:26:43Z gbevin $
  */
 package rife.database;
 
@@ -35,11 +35,11 @@ import rife.scheduler.Task;
  * @since 1.6.2
  */
 public class DbKeepAlive extends Executor {
-    final Datasource datasource;
+    private final Datasource datasource_;
 
-    public DbKeepAlive(Datasource ddatasource) {
+    public DbKeepAlive(Datasource datasource) {
         super();
-        this.datasource = ddatasource;
+        datasource_ = datasource;
     }
 
     @Override
@@ -66,8 +66,8 @@ public class DbKeepAlive extends Executor {
              * harm in that, and any connection that has an active
              * transaction isn't idle anyway so doesn't need to be probed.
              */
-            for (int i = 0; i < datasource.getPoolSize(); i++) {
-                try (var conn = datasource.getConnection()) {
+            for (int i = 0; i < datasource_.getPoolSize(); i++) {
+                try (var conn = datasource_.getConnection()) {
                     if (null == conn) {
                         throw new DbQueryException("Can't get Datasource connection");
                     }
