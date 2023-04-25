@@ -72,7 +72,10 @@ public class DependencyScopes extends LinkedHashMap<Scope, DependencySet> {
      * @since 1.6
      */
     public DependencySet resolveCompileDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
-        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.provided, Scope.compile}, new Scope[]{Scope.compile}, null);
+        return resolveScopedDependencies(retriever, repositories,
+            new Scope[]{Scope.provided, Scope.compile},
+            new Scope[]{Scope.compile},
+            null);
     }
 
     /**
@@ -84,20 +87,10 @@ public class DependencyScopes extends LinkedHashMap<Scope, DependencySet> {
      * @since 1.6
      */
     public DependencySet resolveRuntimeDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
-        var excluded = new DependencySet();
-        var provided_dependencies = get(Scope.provided);
-        if (provided_dependencies != null) {
-            for (var dependency : provided_dependencies) {
-                excluded.addAll(new DependencyResolver(retriever, repositories, dependency).getAllDependencies(Scope.compile));
-            }
-        }
-        var compile_dependencies = get(Scope.compile);
-        if (compile_dependencies != null) {
-            for (var dependency : compile_dependencies) {
-                excluded.addAll(new DependencyResolver(retriever, repositories, dependency).getAllDependencies(Scope.compile));
-            }
-        }
-        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.provided, Scope.compile, Scope.runtime}, new Scope[]{Scope.compile, Scope.runtime}, excluded);
+        return resolveScopedDependencies(retriever, repositories,
+            new Scope[]{Scope.provided, Scope.compile, Scope.runtime},
+            new Scope[]{Scope.compile, Scope.runtime},
+            resolveCompileDependencies(retriever, repositories));
     }
 
     /**
@@ -109,7 +102,10 @@ public class DependencyScopes extends LinkedHashMap<Scope, DependencySet> {
      * @since 1.6
      */
     public DependencySet resolveStandaloneDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
-        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.standalone}, new Scope[]{Scope.compile, Scope.runtime}, null);
+        return resolveScopedDependencies(retriever, repositories,
+            new Scope[]{Scope.standalone},
+            new Scope[]{Scope.compile, Scope.runtime},
+            null);
     }
 
     /**
@@ -121,7 +117,10 @@ public class DependencyScopes extends LinkedHashMap<Scope, DependencySet> {
      * @since 1.6
      */
     public DependencySet resolveTestDependencies(ArtifactRetriever retriever, List<Repository> repositories) {
-        return resolveScopedDependencies(retriever, repositories, new Scope[]{Scope.test}, new Scope[]{Scope.compile, Scope.runtime}, null);
+        return resolveScopedDependencies(retriever, repositories,
+            new Scope[]{Scope.test},
+            new Scope[]{Scope.compile, Scope.runtime},
+            null);
     }
 
     private DependencySet resolveScopedDependencies(ArtifactRetriever retriever, List<Repository> repositories, Scope[] resolvedScopes, Scope[] transitiveScopes, DependencySet excluded) {
