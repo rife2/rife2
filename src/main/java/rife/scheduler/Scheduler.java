@@ -23,6 +23,8 @@ import java.util.*;
 public class Scheduler implements Runnable {
     public static final int DEFAULT_SLEEP_TIME = 30000; // 30 seconds
 
+    private static final Set<Scheduler> activeSchedulers = Collections.newSetFromMap(new WeakHashMap<>());
+
     private Thread thread_ = null;
     private TaskManager taskManager_ = null;
     private TaskOptionManager taskOptionManager_ = null;
@@ -32,7 +34,7 @@ public class Scheduler implements Runnable {
     /**
      * Creates a new scheduler instance for the provided task manager and task option manager.
      *
-     * @param taskManager the task manager to use for this scheduler
+     * @param taskManager       the task manager to use for this scheduler
      * @param taskOptionManager the task option manager to use for this scheduler
      * @since 1.0
      */
@@ -120,7 +122,7 @@ public class Scheduler implements Runnable {
      *
      * @param executor the executor to add to this scheduler
      * @throws SchedulerException when this executor is already registered with another
-     * scheduler; or when another executor is already registered for this task type
+     *                            scheduler; or when another executor is already registered for this task type
      * @since 1.0
      */
     public void addExecutor(Executor executor)
@@ -218,6 +220,10 @@ public class Scheduler implements Runnable {
             thread_ = new Thread(this, "SCHEDULER_DAEMON");
             thread_.setDaemon(true);
             thread_.start();
+
+            synchronized (activeSchedulers) {
+                activeSchedulers.add(this);
+            }
         }
     }
 
@@ -247,6 +253,7 @@ public class Scheduler implements Runnable {
         synchronized (this) {
             if (thread_ != null) {
                 thread_.interrupt();
+                notifyAll();
                 thread_ = null;
             }
         }
@@ -264,7 +271,9 @@ public class Scheduler implements Runnable {
                         var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
                         var difference = projected - now;
 
-                        Thread.sleep(difference);
+                        synchronized (this) {
+                            wait(difference);
+                        }
                     } else {
                         break;
                     }
@@ -276,6 +285,10 @@ public class Scheduler implements Runnable {
             synchronized (this) {
                 thread_ = null;
                 notifyAll();
+
+                synchronized (activeSchedulers) {
+                    activeSchedulers.remove(this);
+                }
             }
         }
     }
@@ -296,6 +309,27 @@ public class Scheduler implements Runnable {
             }
         } catch (TaskManagerException e) {
             throw new UnableToRetrieveTasksToProcessException(e);
+        }
+    }
+
+    /**
+     * Stops all the active schedulers.
+     * <p>
+     * This can be used to ensure that no schedulers keeps running
+     * when an application shuts down. It's already used by the destroy method
+     * of the {@code RifeFilter}.
+     *
+     * @since 1.6.1
+     */
+    public static void stopAllActiveSchedulers() {
+        Set<Scheduler> active_schedulers;
+        synchronized (activeSchedulers) {
+            active_schedulers = new HashSet<>(activeSchedulers);
+            activeSchedulers.clear();
+        }
+
+        for (var scheduler : active_schedulers) {
+            scheduler.stop();
         }
     }
 }

@@ -242,6 +242,7 @@ public class BasicContinuableRunner {
                         // clear out the continuable object
                         object = null;
                     } finally {
+                        ContinuationConfigRuntime.clearActiveConfigRuntime();
                         ContinuationContext.clearActiveContext();
                     }
                 } catch (InvocationTargetException invocation_target_exception) {

@@ -37,6 +37,13 @@ public class Site extends Router {
     /**
      * The {@code destroy()} method will be called by RIFE2 when the
      * web application tears down.
+     * <p>
+     * RIFE2 tracks active {@code Datasource} and {@code Scheduler}
+     * instances, automatically closing and stopping them when the web
+     * application is being shut down.
+     * <p>
+     * This method can be implemented to close any other application resources
+     * that require it.
      *
      * @since 1.6.1
      */

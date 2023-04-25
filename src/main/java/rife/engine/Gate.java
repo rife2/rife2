@@ -57,6 +57,15 @@ public class Gate {
     }
 
     /**
+     * Retrieves the {@code Site} of this gate.
+     * @return this gate's site
+     * @since 1.6.1
+     */
+    public Site getSite() {
+        return site_;
+    }
+
+    /**
      * Handle the web request with the provided arguments.
      *
      * @param gateUrl    the part of the URL that corresponds to the root of the gate, typically the webapp context URL

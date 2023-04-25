@@ -11,11 +11,12 @@ import rife.database.types.SqlConversion;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.ref.WeakReference;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 
@@ -43,7 +44,7 @@ import javax.sql.DataSource;
  * @since 1.0
  */
 public class Datasource implements AutoCloseable, Cloneable {
-    public static HashMap<String, String> sDriverAliases = new HashMap<>();
+     public static HashMap<String, String> sDriverAliases = new HashMap<>();
     public static HashMap<String, String> sDriverNames = new HashMap<>();
 
     static {
@@ -63,6 +64,9 @@ public class Datasource implements AutoCloseable, Cloneable {
         sDriverNames.put("PostgreSQL JDBC Driver", "org.postgresql.Driver");
     }
 
+    private static final Set<Datasource> activeDatasources = Collections.newSetFromMap(new WeakHashMap<>());
+
+    private WeakReference<Driver> activeDriver_ = null;
     private String driver_ = null;
     private String url_ = null;
     private String user_ = null;
@@ -74,7 +78,7 @@ public class Datasource implements AutoCloseable, Cloneable {
 
     /**
      * Instantiates a new {@code Datasource} object with no connection
-     * information. The setters need to be used afterwards to provide each
+     * information. The setters need to be used afterward to provide each
      * required parameter before the {@code Datasource} can be used.
      *
      * @see #setDriver(String)
@@ -203,12 +207,36 @@ public class Datasource implements AutoCloseable, Cloneable {
                 }
             }
         } else {
-
-            // obtain the jdbc driver instance
             try {
-                Class.forName(driver_).getDeclaredConstructor().newInstance();
-            } catch (InstantiationException | ClassNotFoundException | IllegalAccessException |
-                     NoSuchMethodException | InvocationTargetException e) {
+                synchronized (DriverManager.class) {
+                    if (activeDriver_ == null || activeDriver_.get() == null) {
+                        synchronized (activeDatasources) {
+                            activeDatasources.add(this);
+                        }
+
+                        // keep track of the drivers that were there before
+                        final var initial_driver_set = new HashSet<Driver>();
+                        DriverManager.getDrivers().asIterator().forEachRemaining(initial_driver_set::add);
+
+                        // load the driver class
+                        var driver_class = Class.forName(driver_);
+
+                        // keep track of the drivers that are there afterward
+                        final var post_driver_set = new HashSet<Driver>();
+                        DriverManager.getDrivers().asIterator().forEachRemaining(post_driver_set::add);
+                        // remove all the drivers before
+                        post_driver_set.removeAll(initial_driver_set);
+                        // detect which new driver applies
+                        for (var post_driver : post_driver_set) {
+                            if (driver_class.isAssignableFrom(post_driver.getClass()) &&
+                                post_driver.getClass().getClassLoader() == getClass().getClassLoader()) {
+                                activeDriver_ = new WeakReference<>(post_driver);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (ClassNotFoundException e) {
                 throw new DriverInstantiationErrorException(driver_, e);
             }
 
@@ -644,12 +672,30 @@ public class Datasource implements AutoCloseable, Cloneable {
     /**
      * Cleans up all connections that have been reserved by this datasource.
      *
-     * @throws DatabaseException when an error occured during the cleanup
+     * @throws DatabaseException when an error occurred during the cleanup
      * @since 1.0
      */
     public void cleanup()
     throws DatabaseException {
         connectionPool_.cleanup();
+
+        synchronized (DriverManager.class) {
+            synchronized (activeDatasources) {
+                activeDatasources.remove(this);
+            }
+
+            if (activeDriver_ != null) {
+                var driver = activeDriver_.get();
+                if (driver != null) {
+                    try {
+                        DriverManager.deregisterDriver(driver);
+                    } catch (SQLException e) {
+                        throw new DatabaseException(e);
+                    }
+                }
+                activeDriver_ = null;
+            }
+        }
     }
 
     @Override
@@ -660,12 +706,33 @@ public class Datasource implements AutoCloseable, Cloneable {
 
     /**
      * Retrieves the instance of the connection pool that is provided by this
-     * dtaasource.
+     * datasource.
      *
      * @return the requested instance of {@code ConnectionPool}
      */
     public ConnectionPool getPool() {
         return connectionPool_;
+    }
+
+    /**
+     * Closes all the active datasource.
+     * <p>
+     * This can be used to ensure that no connections or drivers are dangling
+     * when an application shuts down. It's already used by the destroy method
+     * of the {@code RifeFilter}.
+     *
+     * @since 1.6.1
+     */
+    public static void closeAllActiveDatasources() {
+        Set<Datasource> active_datasources;
+        synchronized (activeDatasources) {
+            active_datasources = new HashSet<>(activeDatasources);
+            activeDatasources.clear();
+        }
+
+        for (var datasource : active_datasources) {
+            datasource.cleanup();
+        }
     }
 }
 

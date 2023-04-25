@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestMemoryScheduler {
     @Test
     void testInstantiateScheduler() {
-        var scheduler = new MemoryScheduling().getScheduler();
+        var scheduler = new MemoryScheduling().createScheduler();
         assertNotNull(scheduler);
     }
 
     @Test
     void testStartStopScheduler() {
-        var scheduler = new MemoryScheduling().getScheduler();
+        var scheduler = new MemoryScheduling().createScheduler();
         try {
             scheduler.start();
             synchronized (scheduler) {
@@ -48,7 +48,7 @@ public class TestMemoryScheduler {
 
     @Test
     void testAddExecutor() {
-        var scheduler = new MemoryScheduling().getScheduler();
+        var scheduler = new MemoryScheduling().createScheduler();
         Executor executor = new TestExecutor();
 
         assertNull(scheduler.getExecutor(executor.getHandledTaskType()));
@@ -64,7 +64,7 @@ public class TestMemoryScheduler {
     @Test
     void testOneshotTaskExecution() {
         var sleep_time = 2 * 1000;
-        var scheduler = new MemoryScheduling().getScheduler();
+        var scheduler = new MemoryScheduling().createScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();
@@ -122,7 +122,7 @@ public class TestMemoryScheduler {
         var scheduler_sleep_time = 10 * 1000;                // 10 seconds
         var task_frequency = 20 * 1000;                      // 20 seconds
         var thread_sleep_time = scheduler_sleep_time * 3;    // 30 seconds
-        var scheduler = new MemoryScheduling().getScheduler();
+        var scheduler = new MemoryScheduling().createScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();

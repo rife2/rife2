@@ -39,6 +39,15 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
     }
 
     /**
+     * Removes active runtime configuration for the executing thread.
+     *
+     * @since 1.6.1
+     */
+    public static void clearActiveConfigRuntime() {
+        ACTIVE_CONFIG_RUNTIME.remove();
+    }
+
+    /**
      * Retrieves the active runtime configuration for the executing thread.
      *
      * @return the active runtime configuration

@@ -130,6 +130,7 @@ public class Config implements Cloneable {
 
     /**
      * Creates a new {@code Config} instance that is parsed from an XML file.
+     * it will be treated as such regardless.
      * <p>
      * The {@link HierarchicalProperties#createSystemInstance() system hierarchical properties} will be used.
      *
@@ -155,7 +156,7 @@ public class Config implements Cloneable {
     public static Config fromXmlFile(File file, HierarchicalProperties properties)
     throws ConfigErrorException {
         if (null == file) throw new IllegalArgumentException("file can't be null.");
-        return fromXmlResource(file.getAbsolutePath(), new ResourceFinderDirectories(new File(System.getProperty("user.dir")), new File("/")), properties);
+        return fromXmlResource(file.getAbsolutePath(), new ResourceFinderDirectories(new File("/")), properties);
     }
 
     /**
@@ -1304,7 +1305,7 @@ public class Config implements Cloneable {
     }
 
     /**
-     * Adds a new long item to a list.
+     * Adds a new int item to a list.
      *
      * @param list the name of the list
      * @param item the value of the item
@@ -1315,6 +1316,14 @@ public class Config implements Cloneable {
         return putItem(list, String.valueOf(item));
     }
 
+    /**
+     * Adds a new long item to a list.
+     *
+     * @param list the name of the list
+     * @param item the value of the item
+     * @return this config instance
+     * @since 1.6.0
+     */
     public Config putItem(String list, long item) {
         return putItem(list, String.valueOf(item));
     }

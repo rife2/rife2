@@ -51,10 +51,6 @@ public class HelloDependencyInjection extends Site implements MyServiceProvider 
         }
     }
 
-    public void destroy() {
-        properties().getValueTyped("datasource", Datasource.class).close();
-    }
-
     // Site setup
 
     public void setup() {

@@ -95,10 +95,6 @@ public class HelloValidation extends Site {
         }
     }
 
-    public void destroy() {
-        datasource.close();
-    }
-
     public static void main(String[] args) {
         new Server().start(new HelloValidation());
     }
