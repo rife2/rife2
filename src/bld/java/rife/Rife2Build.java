@@ -60,6 +60,7 @@ public class Rife2Build extends Project {
             .include(dependency("net.sourceforge.htmlunit", "htmlunit", version(2,70,0)))
             .include(dependency("org.postgresql", "postgresql", version(42,6,0)))
             .include(dependency("com.mysql", "mysql-connector-j", version(8,0,32)))
+            .include(dependency("org.mariadb.jdbc", "mariadb-java-client", version(3,1,3)))
             .include(dependency("org.hsqldb", "hsqldb", version(2,7,1)))
             .include(dependency("org.apache.derby", "derby", version("10.16.1.1")))
             .include(dependency("org.apache.derby", "derbytools", version("10.16.1.1")))

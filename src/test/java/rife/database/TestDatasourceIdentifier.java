@@ -1,5 +1,5 @@
 package rife.database;
 
 public enum TestDatasourceIdentifier {
-    NONE, PGSQL, ORACLE, MYSQL, HSQLDB, H2, DERBY
+    NONE, PGSQL, ORACLE, MYSQL, MARIADB, HSQLDB, H2, DERBY
 }

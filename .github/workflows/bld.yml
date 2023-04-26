@@ -36,6 +36,21 @@ jobs:
           --health-timeout=5s
           --health-retries=3
 
+      mariadb:
+        image: mariadb:10.9
+        env:
+          MARIADB_DATABASE: unittests
+          MARIADB_USER: unittests
+          MARIADB_PASSWORD: password
+          MARIADB_ROOT_PASSWORD: root
+        ports:
+          - 3307:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
       postgres:
         image: postgres:15
         env:
@@ -75,6 +90,6 @@ jobs:
       - name: Run tests
         run: >-
           ./bld download compile test
-          -Dtest.postgres=true -Dtest.mysql=true -Dtest.oracle=true
+          -Dtest.postgres=true -Dtest.mysql=true -Dtest.mariadb=true -Dtest.oracle=true
           -DtestsBadgeUrl=https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2
           -DtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}

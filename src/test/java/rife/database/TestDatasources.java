@@ -17,6 +17,7 @@ public class TestDatasources implements ArgumentsProvider {
     public static Datasource HSQLDB = new Datasource("org.hsqldb.jdbcDriver", "jdbc:hsqldb:.", "sa", "", 5);
     public static Datasource PGSQL = new Datasource("org.postgresql.Driver", "jdbc:postgresql://localhost:5432/unittests", "unittests", "password", 5);
     public static Datasource MYSQL = new Datasource("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/unittests", "unittests", "password", 5);
+    public static Datasource MARIADB = new Datasource("org.mariadb.jdbc.Driver", "jdbc:mariadb://localhost:3307/unittests", "unittests", "password", 5);
     // Oracle can be started up on macOS with:
     // docker run --name oracle-xe-slim -p 1521:1521 -e ORACLE_RANDOM_PASSWORD=true -e APP_USER=unittests -e APP_USER_PASSWORD=password gvenzl/oracle-xe:18-slim
     // on Apple Silicon, first install colima (https://github.com/abiosoft/colima#installation) and run it with:
@@ -32,6 +33,7 @@ public class TestDatasources implements ArgumentsProvider {
         if (Boolean.parseBoolean(System.getProperty("test.hsqldb", "true"))) ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.HSQLDB, TestDatasources.HSQLDB);
         if (Boolean.parseBoolean(System.getProperty("test.postgres")))       ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.PGSQL, TestDatasources.PGSQL);
         if (Boolean.parseBoolean(System.getProperty("test.mysql")))          ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.MYSQL, TestDatasources.MYSQL);
+        if (Boolean.parseBoolean(System.getProperty("test.mariadb")))        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.MARIADB, TestDatasources.MARIADB);
         if (Boolean.parseBoolean(System.getProperty("test.oracle")))         ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.ORACLE, TestDatasources.ORACLE);
     }
 

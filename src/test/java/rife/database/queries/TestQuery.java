@@ -13,5 +13,6 @@ public class TestQuery {
     protected static final Datasource HSQLDB = TestDatasources.HSQLDB;
     protected static final Datasource H2 = TestDatasources.H2;
     protected static final Datasource MYSQL = TestDatasources.MYSQL;
+    protected static final Datasource MARIADB = TestDatasources.MARIADB;
     protected static final Datasource DERBY = TestDatasources.DERBY;
 }
