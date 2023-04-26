@@ -2079,8 +2079,8 @@ public class DbQueryManager implements Cloneable {
      *
      * @param query     the query builder instance that needs to be executed
      * @param beanClass the class of the bean
-     * @return {@code true} if a row was retrieved; or
-     * <p>{@code false} if there are no more rows .
+     * @return and instance of the bean if it was retrieved successfully; or
+     * {@code null} if it couldn't be found
      * @throws DatabaseException see {@link DbBeanFetcher} and {@link
      *                           #executeFetchFirst(ReadQuery, DbRowProcessor)}
      * @see #executeFetchFirst(ReadQuery, DbRowProcessor)
@@ -2113,8 +2113,8 @@ public class DbQueryManager implements Cloneable {
      * @param handler   an instance of {@code PreparedStatementHandler}
      *                  that will be used to customize the query execution; or
      *                  {@code null} if you don't want to customize it at all
-     * @return {@code true} if a row was retrieved; or
-     * <p>{@code false} if there are no more rows .
+     * @return and instance of the bean if it was retrieved successfully; or
+     * {@code null} if it couldn't be found
      * @throws DatabaseException see {@link DbBeanFetcher} and {@link
      *                           #executeFetchFirst(ReadQuery, DbRowProcessor)}
      * @see #executeFetchFirst(ReadQuery, DbRowProcessor)
