@@ -135,6 +135,7 @@ public class Rife2Build extends Project {
         propagateJavaProperties(testsBadgeOperation.javaOptions(),
             "test.postgres",
             "test.mysql",
+            "test.mariadb",
             "test.oracle",
             "test.derby",
             "test.hsqldb",

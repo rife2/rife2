@@ -16,8 +16,8 @@ public class TestDatasources implements ArgumentsProvider {
     public static Datasource H2 = new Datasource("org.h2.Driver", "jdbc:h2:./embedded_dbs/h2/unittests", "sa", "", 5);
     public static Datasource HSQLDB = new Datasource("org.hsqldb.jdbcDriver", "jdbc:hsqldb:.", "sa", "", 5);
     public static Datasource PGSQL = new Datasource("org.postgresql.Driver", "jdbc:postgresql://localhost:5432/unittests", "unittests", "password", 5);
-    public static Datasource MYSQL = new Datasource("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/unittests", "unittests", "password", 5);
-    public static Datasource MARIADB = new Datasource("org.mariadb.jdbc.Driver", "jdbc:mariadb://localhost:3307/unittests", "unittests", "password", 5);
+    public static Datasource MYSQL = new Datasource("com.mysql.cj.jdbc.Driver", "jdbc:mysql://localhost:3306/unittests?useServerPrepStmts=true", "unittests", "password", 5);
+    public static Datasource MARIADB = new Datasource("org.mariadb.jdbc.Driver", "jdbc:mariadb://localhost:3307/unittests?useServerPrepStmts=true", "unittests", "password", 5);
     // Oracle can be started up on macOS with:
     // docker run --name oracle-xe-slim -p 1521:1521 -e ORACLE_RANDOM_PASSWORD=true -e APP_USER=unittests -e APP_USER_PASSWORD=password gvenzl/oracle-xe:18-slim
     // on Apple Silicon, first install colima (https://github.com/abiosoft/colima#installation) and run it with:
