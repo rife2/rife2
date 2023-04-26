@@ -145,7 +145,7 @@ public class Gate {
     }
 
     private void handleRequestException(Throwable exception, Context c) {
-        var message = "Error on host " + c.request().getServerName() + ":" + c.request().getServerPort() + "/" + c.request().getContextPath();
+        var message = "Error on host " + c.request().getServerName() + ":" + c.request().getServerPort() + c.request().getContextPath();
         if (RifeConfig.engine().getLogEngineExceptions()) {
             Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(exception));
         }
