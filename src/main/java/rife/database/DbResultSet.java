@@ -348,7 +348,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                     return true;
                 }
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -383,7 +385,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getString(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -418,7 +422,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getBoolean(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -453,7 +459,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getByte(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -488,7 +496,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getShort(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -523,7 +533,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getInt(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -558,7 +570,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getLong(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -593,7 +607,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getFloat(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -628,7 +644,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getDouble(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -663,7 +681,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getBigDecimal(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -699,7 +719,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getBytes(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -735,7 +757,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getDate(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -776,7 +800,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getDate(1, cal);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -812,7 +838,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getTime(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -854,7 +882,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getTime(1, cal);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -890,7 +920,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getTimestamp(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -930,7 +962,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getTimestamp(1, cal);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -966,7 +1000,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getAsciiStream(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -1002,7 +1038,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getCharacterStream(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }
@@ -1038,7 +1076,9 @@ public class DbResultSet implements ResultSet, Cloneable {
                 (isFirst() || (isBeforeFirst() && next()))) {
                 return getBinaryStream(1);
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             statement_.handleException();
             throw new DatabaseException(e);
         }

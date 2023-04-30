@@ -286,7 +286,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new StatementCreationErrorException(datasource_, e);
         }
@@ -329,7 +331,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new StatementCreationErrorException(datasource_, e);
         }
@@ -374,7 +378,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new StatementCreationErrorException(datasource_, e);
         }
@@ -424,7 +430,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_prepared_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new PreparedStatementCreationErrorException(datasource_, e);
         }
@@ -481,7 +489,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_prepared_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new PreparedStatementCreationErrorException(datasource_, e);
         }
@@ -530,7 +540,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_prepared_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new PreparedStatementCreationErrorException(datasource_, e);
         }
@@ -586,7 +598,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_prepared_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new PreparedStatementCreationErrorException(datasource_, e);
         }
@@ -656,7 +670,9 @@ public class DbConnection implements AutoCloseable {
 
                 return db_prepared_statement;
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new PreparedStatementCreationErrorException(datasource_, e);
         }
@@ -716,7 +732,9 @@ public class DbConnection implements AutoCloseable {
                 return TRANSACTIONS_SUPPORTED == supportsTransactions_;
 
             }
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new TransactionSupportCheckErrorException(datasource_, e);
         }
@@ -772,8 +790,9 @@ public class DbConnection implements AutoCloseable {
             detectCleanup();
 
             connection_.setAutoCommit(false);
-        } catch (SQLException e) {
-
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             if (transactionThread_ != null) {
                 transactionThread_ = null;
             }
@@ -837,7 +856,9 @@ public class DbConnection implements AutoCloseable {
 
             connection_.commit();
             connection_.setAutoCommit(true);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new TransactionCommitErrorException(datasource_, e);
         } finally {
@@ -906,7 +927,9 @@ public class DbConnection implements AutoCloseable {
 
             connection_.rollback();
             connection_.setAutoCommit(true);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new TransactionRollbackErrorException(datasource_, e);
         } finally {
@@ -1048,7 +1071,9 @@ public class DbConnection implements AutoCloseable {
             detectCleanup();
 
             return connection_.getMetaData();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ConnectionMetaDataErrorException(datasource_, e);
         }
@@ -1071,7 +1096,9 @@ public class DbConnection implements AutoCloseable {
             detectCleanup();
 
             connection_.setTransactionIsolation(level);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ConnectionMetaDataErrorException(datasource_, e);
         }

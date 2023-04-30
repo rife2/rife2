@@ -177,7 +177,9 @@ public class DbPreparedStatement extends DbStatement {
 
             setResultset(resultset);
             return;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql_, connection_.getDatasource(), e);
         }
@@ -212,7 +214,9 @@ public class DbPreparedStatement extends DbStatement {
             outputTrace(start, getSql());
 
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql_, connection_.getDatasource(), e);
         }
@@ -234,7 +238,9 @@ public class DbPreparedStatement extends DbStatement {
         try {
             ((PreparedStatement) statement_).addBatch();
             traceBatch(sql_);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -292,7 +298,9 @@ public class DbPreparedStatement extends DbStatement {
     throws DatabaseException {
         try {
             return ((PreparedStatement) statement_).getMetaData();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -316,7 +324,9 @@ public class DbPreparedStatement extends DbStatement {
     throws DatabaseException {
         try {
             return ((PreparedStatement) statement_).getParameterMetaData();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -591,7 +601,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setDouble(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -688,7 +700,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setShort(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -788,7 +802,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setNull(parameterIndex, sqlType);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -932,7 +948,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setNull(parameterIndex, sqlType, typeName);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1029,7 +1047,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setBoolean(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1126,7 +1146,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setByte(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1223,7 +1245,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setDate(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1343,7 +1367,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setDate(parameterIndex, x, cal);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1440,7 +1466,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setInt(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1537,7 +1565,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setLong(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1634,7 +1664,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setFloat(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1734,7 +1766,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setBigDecimal(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1837,7 +1871,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setString(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1940,7 +1976,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setBytes(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2090,7 +2128,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setObject(parameterIndex, x, targetSqlType, scale);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2194,7 +2234,9 @@ public class DbPreparedStatement extends DbStatement {
 
         try {
             ((PreparedStatement) statement_).setObject(parameterIndex, x, targetSqlType);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2291,7 +2333,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setTime(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2411,7 +2455,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setTime(parameterIndex, x, cal);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2511,7 +2557,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setTimestamp(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2634,7 +2682,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setTimestamp(parameterIndex, x, cal);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2719,7 +2769,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setAsciiStream(parameterIndex, x, length);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2805,7 +2857,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setCharacterStream(parameterIndex, x, length);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2888,7 +2942,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setBinaryStream(parameterIndex, x, length);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -2956,7 +3012,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setArray(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -3108,7 +3166,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setObject(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -3177,7 +3237,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setRef(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -3246,7 +3308,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setBlob(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -3316,7 +3380,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setClob(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -3412,7 +3478,9 @@ public class DbPreparedStatement extends DbStatement {
         // set the real parameter
         try {
             ((PreparedStatement) statement_).setURL(parameterIndex, x);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -3438,7 +3506,9 @@ public class DbPreparedStatement extends DbStatement {
     throws DatabaseException {
         try {
             ((PreparedStatement) statement_).clearParameters();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }

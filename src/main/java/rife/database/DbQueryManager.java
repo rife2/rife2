@@ -330,7 +330,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -423,7 +425,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -507,7 +511,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -591,7 +597,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -675,7 +683,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -757,7 +767,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -841,7 +853,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -925,7 +939,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1009,7 +1025,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1093,7 +1111,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1177,7 +1197,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1265,7 +1287,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1349,7 +1373,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1437,7 +1463,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1521,7 +1549,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1609,7 +1639,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1705,7 +1737,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1802,7 +1836,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -1899,7 +1935,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -2017,7 +2055,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -2232,7 +2272,9 @@ public class DbQueryManager implements Cloneable {
                 if (full_handler != null) {
                     try {
                         full_handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }
@@ -2413,7 +2455,9 @@ public class DbQueryManager implements Cloneable {
 
                 try {
                     return (ResultType) full_handler.concludeResults(getResultSet(statement));
-                } catch (SQLException e) {
+                } catch (DatabaseException e) {
+                    throw e;
+                } catch (Exception e) {
                     statement.handleException();
                     throw new DatabaseException(e);
                 }
@@ -2477,7 +2521,9 @@ public class DbQueryManager implements Cloneable {
                 if (handler != null) {
                     try {
                         return (ResultType) handler.concludeResults(getResultSet(statement));
-                    } catch (SQLException e) {
+                    } catch (DatabaseException e) {
+                        throw e;
+                    } catch (Exception e) {
                         statement.handleException();
                         throw new DatabaseException(e);
                     }

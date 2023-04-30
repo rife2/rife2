@@ -100,7 +100,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
         try {
             statement_.addBatch(sql);
             traceBatch(sql);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -121,7 +123,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.cancel();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -143,7 +147,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.clearBatch();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -165,7 +171,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.clearWarnings();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -273,7 +281,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             setResultset(statement_.getResultSet());
 
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql, connection_.getDatasource(), e);
         }
@@ -329,7 +339,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             setResultset(statement_.getResultSet());
 
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql, connection_.getDatasource(), e);
         }
@@ -384,7 +396,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             setResultset(statement_.getResultSet());
 
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql, connection_.getDatasource(), e);
         }
@@ -441,7 +455,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             setResultset(statement_.getResultSet());
 
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql, connection_.getDatasource(), e);
         }
@@ -499,7 +515,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             waitForConnection();
 
             return statement_.executeBatch();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new BatchExecutionErrorException(connection_.getDatasource(), e);
         }
@@ -535,7 +553,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             setResultset(statement_.getResultSet());
 
             return;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql, connection_.getDatasource(), e);
         }
@@ -591,7 +611,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             outputTrace(start, sql);
 
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new ExecutionErrorException(sql, connection_.getDatasource(), e);
         }
@@ -643,7 +665,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getFetchDirection();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -669,7 +693,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getFetchSize();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -694,7 +720,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return wrapWithDbResultSet(statement_.getGeneratedKeys());
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -719,7 +747,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             DbResultSet resultset = getGeneratedKeys();
             resultset.next();
             return resultset.getInt(1);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -748,7 +778,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getMaxFieldSize();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -773,7 +805,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getMaxRows();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -808,7 +842,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             boolean result = statement_.getMoreResults();
             setResultset(statement_.getResultSet());
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -849,7 +885,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
             boolean result = statement_.getMoreResults(current);
             setResultset(statement_.getResultSet());
             return result;
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -873,7 +911,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getQueryTimeout();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -902,7 +942,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
 
         try {
             return resultSet_.wasNull();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -925,7 +967,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getResultSetConcurrency();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -948,7 +992,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getResultSetHoldability();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -972,7 +1018,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getResultSetType();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -997,7 +1045,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getUpdateCount();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1029,7 +1079,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             return statement_.getWarnings();
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1074,7 +1126,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.setFetchDirection(direction);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1102,7 +1156,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.setFetchSize(rows);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1131,7 +1187,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.setMaxFieldSize(max);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1155,7 +1213,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.setMaxRows(max);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
@@ -1178,7 +1238,9 @@ public class DbStatement implements Cloneable, AutoCloseable {
     throws DatabaseException {
         try {
             statement_.setQueryTimeout(max);
-        } catch (SQLException e) {
+        } catch (DatabaseException e) {
+            throw e;
+        } catch (Exception e) {
             handleException();
             throw new DatabaseException(e);
         }
