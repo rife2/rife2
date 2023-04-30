@@ -24,7 +24,7 @@ public class TestDatasources implements ArgumentsProvider {
     // colima start --arch x86_64 --memory 4
     // see blog post about this: https://blog.jdriven.com/2022/07/running-oracle-xe-on-apple-silicon/
     public static Datasource ORACLE = new Datasource("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@localhost:1521/XEPDB1", "unittests", "password", 5);
-    public static Datasource ORACLE_FREE = new Datasource("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@localhost:1522/XEPDB1", "unittests", "password", 5);
+    public static Datasource ORACLE_FREE = new Datasource("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@localhost:1522/FREEPDB1", "unittests", "password", 5);
 
     public static Map<TestDatasourceIdentifier, Datasource> ACTIVE_DATASOURCES;
     static {
