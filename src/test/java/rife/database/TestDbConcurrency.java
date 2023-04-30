@@ -13,11 +13,10 @@ import rife.tools.InnerClassException;
 import java.sql.*;
 import java.util.ArrayList;
 
-import static rife.database.TestDatasources.PGSQL;
-
 public class TestDbConcurrency {
     public static boolean VERBOSE = false;
     public static boolean DEBUG = false;
+    public static boolean GENERATE_ERRORS = true;
 
     private static final Object sOutputLock = new Object();
     private static final int sOutputLimit = 60;
@@ -45,10 +44,9 @@ public class TestDbConcurrency {
         display('x');
     }
 
-    @DatasourceEnabledIf(TestDatasourceIdentifier.PGSQL)
-    void testConcurrency() {
-        final var datasource = PGSQL;
-
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testConcurrency(Datasource datasource) {
         var structure = new Structure(datasource);
         try {
             structure.install();
@@ -152,7 +150,7 @@ class Concurrency extends DbQueryManager implements Runnable {
     }
 
     public boolean isAlive() {
-        if (errors_ >= 10 && commits_ >= 10) {
+        if ((!TestDbConcurrency.GENERATE_ERRORS || errors_ >= 10) && commits_ >= 10) {
             return false;
         }
 
@@ -214,7 +212,7 @@ class Concurrency extends DbQueryManager implements Runnable {
                     .fieldParameter("lastname");
                 try (var insert_stmt = getConnection().getPreparedStatement(insert)) {
                     insert_stmt.setString("firstname", "John");
-                    if ((Math.random() * 100) <= 30) {
+                    if (TestDbConcurrency.GENERATE_ERRORS && (Math.random() * 100) <= 30) {
                         insert_stmt.setNull("lastname", Types.VARCHAR);
                     } else {
                         insert_stmt.setString("lastname", "Doe");
@@ -233,7 +231,7 @@ class Concurrency extends DbQueryManager implements Runnable {
                 try (var select_stmt = executeQuery(select)) {
                     var processor = new Processor();
                     while (fetch(select_stmt.getResultSet(), processor) &&
-                           processor.wasSuccessful()) {
+                        processor.wasSuccessful()) {
                         processor.getFirstname();
                         processor.getLastname();
                     }

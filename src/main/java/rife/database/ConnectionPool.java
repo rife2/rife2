@@ -230,15 +230,14 @@ public class ConnectionPool implements AutoCloseable {
                         preparePool(datasource);
                     }
 
-                    for (int i = 0; i < connectionPool_.size() && null == connection; i++) {
+                    for (int i = 0; i < connectionPool_.size(); i++) {
                         possible_connection = connectionPool_.get(i);
                         if (null == possible_connection ||
                             possible_connection.isCleanedUp()) {
                             connection = datasource.createConnection();
                             connectionPool_.set(i, connection);
                             break;
-                        } else if (null != possible_connection &&
-                                   possible_connection.isFree()) {
+                        } else if (possible_connection.isFree()) {
                             connection = possible_connection;
                             break;
                         }
