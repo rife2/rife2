@@ -180,7 +180,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new ExecutionErrorException(sql_, connection_.getDatasource(), e);
         }
     }
@@ -217,7 +217,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new ExecutionErrorException(sql_, connection_.getDatasource(), e);
         }
     }
@@ -241,7 +241,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
     }
@@ -301,7 +301,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
     }
@@ -327,7 +327,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
     }
@@ -450,7 +450,7 @@ public class DbPreparedStatement extends DbStatement {
                 parameter_counter++;
             }
         } catch (BeanUtilsException e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -604,7 +604,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -703,7 +703,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -805,7 +805,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -951,7 +951,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1050,7 +1050,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1149,7 +1149,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1248,7 +1248,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1370,7 +1370,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1469,7 +1469,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1568,7 +1568,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1667,7 +1667,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1769,7 +1769,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1874,7 +1874,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1979,7 +1979,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2131,7 +2131,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2237,7 +2237,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2336,7 +2336,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2458,7 +2458,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2560,7 +2560,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2685,7 +2685,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2772,7 +2772,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2860,7 +2860,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -2945,7 +2945,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3015,7 +3015,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3169,7 +3169,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3240,7 +3240,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3311,7 +3311,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3383,7 +3383,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3481,7 +3481,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -3509,7 +3509,7 @@ public class DbPreparedStatement extends DbStatement {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            handleException();
+            handleException(e);
             throw new DatabaseException(e);
         }
     }

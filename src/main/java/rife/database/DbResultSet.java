@@ -351,7 +351,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -388,7 +388,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -425,7 +425,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -462,7 +462,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -499,7 +499,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -536,7 +536,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -573,7 +573,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -610,7 +610,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -647,7 +647,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -684,7 +684,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -722,7 +722,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -760,7 +760,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -803,7 +803,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -841,7 +841,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -885,7 +885,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -923,7 +923,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -965,7 +965,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1003,7 +1003,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1041,7 +1041,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 
@@ -1079,7 +1079,7 @@ public class DbResultSet implements ResultSet, Cloneable {
         } catch (DatabaseException e) {
             throw e;
         } catch (Exception e) {
-            statement_.handleException();
+            statement_.handleException(e);
             throw new DatabaseException(e);
         }
 

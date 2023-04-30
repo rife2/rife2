@@ -44,24 +44,31 @@ import javax.sql.DataSource;
  * @since 1.0
  */
 public class Datasource implements AutoCloseable, Cloneable {
-     public static HashMap<String, String> sDriverAliases = new HashMap<>();
+    public static HashMap<String, String> sDriverAliases = new HashMap<>();
     public static HashMap<String, String> sDriverNames = new HashMap<>();
 
-    static {
-        sDriverAliases.put("org.gjt.mm.mysql.Driver", "com.mysql.cj.jdbc.Driver");
-        sDriverAliases.put("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver");
-        sDriverAliases.put("org.mariadb.jdbc.Driver", "com.mysql.cj.jdbc.Driver");
-        sDriverAliases.put("oracle.jdbc.OracleDriver", "oracle.jdbc.driver.OracleDriver");
-        sDriverAliases.put("org.apache.derby.jdbc.ClientDriver", "org.apache.derby.jdbc.EmbeddedDriver");
+    public static String DRIVER_NAME_DERBY = "org.apache.derby.jdbc.EmbeddedDriver";
+    public static String DRIVER_NAME_H2 = "org.h2.Driver";
+    public static String DRIVER_NAME_HSQLDB = "org.hsqldb.jdbcDriver";
+    public static String DRIVER_NAME_PGSQL = "org.postgresql.Driver";
+    public static String DRIVER_NAME_MYSQL = "com.mysql.cj.jdbc.Driver";
+    public static String DRIVER_NAME_ORACLE = "oracle.jdbc.driver.OracleDriver";
 
-        sDriverNames.put("Apache Derby Embedded JDBC Driver", "org.apache.derby.jdbc.EmbeddedDriver");
-        sDriverNames.put("Apache Derby Network Client JDBC Driver", "org.apache.derby.jdbc.EmbeddedDriver");
-        sDriverNames.put("H2 JDBC Driver", "org.h2.Driver");
-        sDriverNames.put("HSQL Database Engine Driver", "org.hsqldb.jdbcDriver");
-        sDriverNames.put("MySQL-AB JDBC Driver", "com.mysql.cj.jdbc.Driver");
-        sDriverNames.put("Oracle JDBC driver", "oracle.jdbc.driver.OracleDriver");
-        sDriverNames.put("PostgreSQL Native Driver", "org.postgresql.Driver");
-        sDriverNames.put("PostgreSQL JDBC Driver", "org.postgresql.Driver");
+    static {
+        sDriverAliases.put("org.gjt.mm.mysql.Driver", DRIVER_NAME_MYSQL);
+        sDriverAliases.put("com.mysql.jdbc.Driver", DRIVER_NAME_MYSQL);
+        sDriverAliases.put("org.mariadb.jdbc.Driver", DRIVER_NAME_MYSQL);
+        sDriverAliases.put("oracle.jdbc.OracleDriver", DRIVER_NAME_ORACLE);
+        sDriverAliases.put("org.apache.derby.jdbc.ClientDriver", DRIVER_NAME_DERBY);
+
+        sDriverNames.put("Apache Derby Embedded JDBC Driver", DRIVER_NAME_DERBY);
+        sDriverNames.put("Apache Derby Network Client JDBC Driver", DRIVER_NAME_DERBY);
+        sDriverNames.put("H2 JDBC Driver", DRIVER_NAME_H2);
+        sDriverNames.put("HSQL Database Engine Driver", DRIVER_NAME_HSQLDB);
+        sDriverNames.put("MySQL-AB JDBC Driver", DRIVER_NAME_MYSQL);
+        sDriverNames.put("Oracle JDBC driver", DRIVER_NAME_ORACLE);
+        sDriverNames.put("PostgreSQL Native Driver", DRIVER_NAME_PGSQL);
+        sDriverNames.put("PostgreSQL JDBC Driver", DRIVER_NAME_PGSQL);
     }
 
     private static final Set<Datasource> activeDatasources = Collections.newSetFromMap(new WeakHashMap<>());
