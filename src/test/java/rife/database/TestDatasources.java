@@ -24,6 +24,7 @@ public class TestDatasources implements ArgumentsProvider {
     // colima start --arch x86_64 --memory 4
     // see blog post about this: https://blog.jdriven.com/2022/07/running-oracle-xe-on-apple-silicon/
     public static Datasource ORACLE = new Datasource("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@localhost:1521/XEPDB1", "unittests", "password", 5);
+    public static Datasource ORACLE_FREE = new Datasource("oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@localhost:1522/XEPDB1", "unittests", "password", 5);
 
     public static Map<TestDatasourceIdentifier, Datasource> ACTIVE_DATASOURCES;
     static {
@@ -35,6 +36,7 @@ public class TestDatasources implements ArgumentsProvider {
         if (Boolean.parseBoolean(System.getProperty("test.mysql")))          ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.MYSQL, TestDatasources.MYSQL);
         if (Boolean.parseBoolean(System.getProperty("test.mariadb")))        ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.MARIADB, TestDatasources.MARIADB);
         if (Boolean.parseBoolean(System.getProperty("test.oracle")))         ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.ORACLE, TestDatasources.ORACLE);
+        if (Boolean.parseBoolean(System.getProperty("test.oracle-free")))    ACTIVE_DATASOURCES.put(TestDatasourceIdentifier.ORACLE_FREE, TestDatasources.ORACLE_FREE);
     }
 
     @Override

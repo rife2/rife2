@@ -137,6 +137,7 @@ public class Rife2Build extends Project {
             "test.mysql",
             "test.mariadb",
             "test.oracle",
+            "test.oracle-free",
             "test.derby",
             "test.hsqldb",
             "test.h2");

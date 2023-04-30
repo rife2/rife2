@@ -21,6 +21,20 @@ jobs:
           --health-timeout 5s
           --health-retries 10
 
+      oracle-free:
+        image: gvenzl/oracle-free:latest
+        env:
+          ORACLE_RANDOM_PASSWORD: true
+          APP_USER: unittests
+          APP_USER_PASSWORD: password
+        ports:
+          - 1522:1521
+        options: >-
+          --health-cmd healthcheck.sh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
       mysql:
         image: mysql:8
         env:
@@ -90,6 +104,6 @@ jobs:
       - name: Run tests
         run: >-
           ./bld download compile test
-          -Dtest.postgres=true -Dtest.mysql=true -Dtest.mariadb=true -Dtest.oracle=true
+          -Dtest.postgres=true -Dtest.mysql=true -Dtest.mariadb=true -Dtest.oracle=true -Dtest.oracle-free=true
           -DtestsBadgeUrl=https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2
           -DtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}
