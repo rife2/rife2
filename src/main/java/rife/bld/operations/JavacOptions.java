@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import rife.tools.Convert;
+import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import java.io.File;
@@ -258,9 +259,19 @@ public class JavacOptions extends ArrayList<String> {
      * @return this list of options
      * @since 1.5.18
      */
-    public JavacOptions modulePath(File path) {
+    public JavacOptions modulePath(File... paths) {
+        return modulePath(Arrays.asList(paths));
+    }
+
+    /**
+     * Specify where to find application modules
+     *
+     * @return this list of options
+     * @since 1.6.2
+     */
+    public JavacOptions modulePath(List<File> paths) {
         add("--module-path");
-        add(path.getAbsolutePath());
+        add(FileUtils.joinPaths(paths.stream().map(File::getAbsolutePath).toList()));
         return this;
     }
 
