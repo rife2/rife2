@@ -22,7 +22,7 @@ public class JarJavadocHelp implements CommandHelp {
         return StringUtils.replace("""
             Creates a javadoc jar archive for the project.
             The standard jar-javadoc command will automatically also execute
-            the javadoc command beforehand.
+            the compile and javadoc commands beforehand.
                         
             Usage : ${topic}""", "${topic}", topic);
     }

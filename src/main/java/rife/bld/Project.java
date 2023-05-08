@@ -110,7 +110,6 @@ public class Project extends BaseProject {
     @BuildCommand(help = JavadocHelp.class)
     public void javadoc()
     throws Exception {
-        compile();
         javadocOperation().executeOnce(() -> javadocOperation().fromProject(this));
     }
 
@@ -161,6 +160,7 @@ public class Project extends BaseProject {
     @BuildCommand(value = "jar-javadoc", help = JarJavadocHelp.class)
     public void jarJavadoc()
     throws Exception {
+        compile();
         javadoc();
         jarJavadocOperation().executeOnce(() -> jarJavadocOperation().manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
             .sourceDirectories(List.of(buildJavadocDirectory()))
