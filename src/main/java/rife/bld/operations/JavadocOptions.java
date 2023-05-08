@@ -5,6 +5,7 @@
 package rife.bld.operations;
 
 import rife.tools.Convert;
+import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import java.io.File;
@@ -213,6 +214,62 @@ public class JavadocOptions extends ArrayList<String> {
     public JavadocOptions locale(String name) {
         add("-locale");
         add("name");
+        return this;
+    }
+
+    /**
+     * Document the specified module(s)
+     *
+     * @return this list of options
+     * @since 1.6.3
+     */
+    public JavadocOptions module(String... modules) {
+        return module(Arrays.asList(modules));
+    }
+
+    /**
+     * Document the specified module(s)
+     *
+     * @return this list of options
+     * @since 1.6.3
+     */
+    public JavadocOptions module(List<String> modules) {
+        add("--module");
+        add(StringUtils.join(modules, ","));
+        return this;
+    }
+
+    /**
+     * Specify where to find application modules
+     *
+     * @return this list of options
+     * @since 1.6.3
+     */
+    public JavadocOptions modulePath(File... paths) {
+        return modulePath(Arrays.asList(paths));
+    }
+
+    /**
+     * Specify where to find application modules
+     *
+     * @return this list of options
+     * @since 1.6.3
+     */
+    public JavadocOptions modulePath(List<File> paths) {
+        add("--module-path");
+        add(FileUtils.joinPaths(paths.stream().map(File::getAbsolutePath).toList()));
+        return this;
+    }
+
+    /**
+     * Specify where to find input source files for multiple modules
+     *
+     * @return this list of options
+     * @since 1.6.3
+     */
+    public JavadocOptions moduleSourcePath(File path) {
+        add("--module-source-path");
+        add(path.getAbsolutePath());
         return this;
     }
 

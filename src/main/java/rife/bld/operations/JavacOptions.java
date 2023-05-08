@@ -293,7 +293,7 @@ public class JavacOptions extends ArrayList<String> {
      * @return this list of options
      * @since 1.5.18
      */
-    public JavacOptions moduleSourcePath(String version) {
+    public JavacOptions moduleVersion(String version) {
         add("--module-version");
         add(version);
         return this;
