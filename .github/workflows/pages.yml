@@ -41,7 +41,7 @@ jobs:
           java-version: 17
 
       - name: Build Javadocs
-        run: ./bld download clean javadoc
+        run: ./bld download clean compile javadoc
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
