@@ -140,10 +140,10 @@ public class WarOperation extends AbstractOperation<WarOperation> {
     protected void executeCreateWarArchive(File stagingDirectory)
     throws IOException {
         new JarOperation()
-            .sourceDirectories(List.of(stagingDirectory))
+            .sourceDirectories(stagingDirectory)
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
-            .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))
+            .excluded(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$"))
             .silent(true)
             .execute();
     }

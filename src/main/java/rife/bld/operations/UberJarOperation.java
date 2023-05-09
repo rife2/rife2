@@ -95,7 +95,7 @@ public class UberJarOperation extends AbstractOperation<UberJarOperation> {
             .manifestAttributes(Map.of(
                 Attributes.Name.MANIFEST_VERSION, "1.0",
                 Attributes.Name.MAIN_CLASS, mainClass()))
-            .sourceDirectories(List.of(stagingDirectory))
+            .sourceDirectories(stagingDirectory)
             .destinationDirectory(destinationDirectory())
             .destinationFileName(destinationFileName())
             .excluded(List.of(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$")))

@@ -129,10 +129,10 @@ public class JarOperation extends AbstractOperation<JarOperation> {
      */
     public JarOperation fromProject(BaseProject project) {
         return manifestAttributes(Map.of(Attributes.Name.MANIFEST_VERSION, "1.0"))
-            .sourceDirectories(List.of(project.buildMainDirectory(), project.srcMainResourcesDirectory()))
+            .sourceDirectories(project.buildMainDirectory(), project.srcMainResourcesDirectory())
             .destinationDirectory(project.buildDistDirectory())
             .destinationFileName(project.jarFileName())
-            .excluded(List.of(Pattern.compile("^\\Q" + project.srcMainResourcesTemplatesDirectory().getAbsolutePath() + "\\E.*")));
+            .excluded(Pattern.compile("(?:(?:^.*[/\\\\])|^)\\.DS_Store$"), Pattern.compile("^\\Q" + project.srcMainResourcesTemplatesDirectory().getAbsolutePath() + "\\E.*"));
     }
 
     /**
