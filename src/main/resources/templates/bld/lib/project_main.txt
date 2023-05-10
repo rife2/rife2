@@ -1,7 +1,0 @@
-package {{v package/}};
-
-public class {{v projectMain/}} {
-    public String getMessage() {
-        return "Hello World!";
-    }
-}

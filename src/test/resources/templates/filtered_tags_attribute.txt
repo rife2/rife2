@@ -1,2 +1,0 @@
-This is an attribute value '<!v attribute:attribute1/>'.
-This is another attribute value '{{v attribute:another_attribute/}}'.

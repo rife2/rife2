@@ -4,6 +4,7 @@
  */
 package rife.continuations;
 
+import rife.config.RifeConfig;
 import rife.continuations.exceptions.MissingActiveContinuationConfigRuntimeException;
 
 /**
@@ -25,7 +26,7 @@ import rife.continuations.exceptions.MissingActiveContinuationConfigRuntimeExcep
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public abstract class ContinuationConfigRuntime implements ContinuationConfigRuntimeDefaults {
+public abstract class ContinuationConfigRuntime {
     private static final ThreadLocal<ContinuationConfigRuntime> ACTIVE_CONFIG_RUNTIME = new ThreadLocal<>();
 
     /**
@@ -73,7 +74,7 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
      * @since 1.0
      */
     public long getContinuationDuration() {
-        return DEFAULT_CONTINUATION_DURATION;
+        return RifeConfig.EngineConfig.DEFAULT_CONTINUATION_DURATION;
     }
 
     /**
@@ -89,7 +90,7 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
      * @since 1.0
      */
     public int getContinuationPurgeFrequency() {
-        return DEFAULT_CONTINUATION_PURGE_FREQUENCY;
+        return RifeConfig.EngineConfig.DEFAULT_CONTINUATION_PURGE_FREQUENCY;
     }
 
     /**
@@ -102,7 +103,7 @@ public abstract class ContinuationConfigRuntime implements ContinuationConfigRun
      * @since 1.0
      */
     public int getContinuationPurgeScale() {
-        return DEFAULT_CONTINUATION_PURGE_SCALE;
+        return RifeConfig.EngineConfig.DEFAULT_CONTINUATION_PURGE_SCALE;
     }
 
     /**

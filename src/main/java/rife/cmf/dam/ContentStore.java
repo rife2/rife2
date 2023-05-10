@@ -7,8 +7,9 @@ package rife.cmf.dam;
 import rife.cmf.Content;
 import rife.cmf.ContentInfo;
 import rife.cmf.MimeType;
+import rife.cmf.MimeTypeFormatter;
 import rife.cmf.dam.exceptions.ContentManagerException;
-import rife.cmf.format.Formatter;
+import rife.cmf.format.*;
 import rife.cmf.transform.ContentTransformer;
 import rife.engine.Context;
 import rife.engine.Route;
@@ -81,7 +82,12 @@ public interface ContentStore {
      * @return the corresponding formatter
      * @since 1.0
      */
-    Formatter getFormatter(MimeType mimeType, boolean fragment);
+    default Formatter getFormatter(MimeType mimeType, boolean fragment) {
+        if (!getSupportedMimeTypes().contains(mimeType)) {
+            return null;
+        }
+        return MimeTypeFormatter.getFormatter(mimeType);
+    }
 
     /**
      * Stores the content data for a certain content id.

@@ -1,4 +1,0 @@
-Template without blocks
-=======================
-
-This is a template without blocks.

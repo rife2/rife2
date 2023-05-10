@@ -59,13 +59,6 @@ public abstract class DatabaseTextStore extends DatabaseContentStore {
         return content_type + "; charset=UTF-8";
     }
 
-    public Formatter getFormatter(MimeType mimeType, boolean fragment) {
-        if (!getSupportedMimeTypes().contains(mimeType)) {
-            return null;
-        }
-        return mimeType.getFormatter();
-    }
-
     protected boolean _storeContentData(Insert storeContent, final int id, Content content, ContentTransformer transformer)
     throws ContentManagerException {
         if (id < 0) throw new IllegalArgumentException("id must be positive");

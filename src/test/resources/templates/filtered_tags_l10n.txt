@@ -1,4 +1,0 @@
-This is the localized key '<!v l10n:THE_KEY>default value<!/v>'.
-This is an unknown key '{{v l10n:UNKNOWN_KEY/}}'.
-This is a class key '{{v l10n:THE_CLASS_KEY/}}'.
-This is a key with a bundle '<!v l10n:localization/filtered-tags-l10n:THE_KEY/>'.

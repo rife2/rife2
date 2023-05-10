@@ -71,13 +71,6 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         return null;
     }
 
-    public Formatter getFormatter(MimeType mimeType, boolean fragment) {
-        if (!getSupportedMimeTypes().contains(mimeType)) {
-            return null;
-        }
-        return mimeType.getFormatter();
-    }
-
     public String getContentForHtml(int id, ContentInfo info, Context context, Route route)
     throws ContentManagerException {
         return "";
@@ -168,7 +161,8 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         if (content != null &&
             content.getData() != null &&
             !(content.getData() instanceof InputStream) &&
-            !(content.getData() instanceof byte[])) throw new IllegalArgumentException("the content data must be of type InputStream or byte[]");
+            !(content.getData() instanceof byte[]))
+            throw new IllegalArgumentException("the content data must be of type InputStream or byte[]");
 
         assert storeContentInfo != null;
         assert storeContentChunk != null;

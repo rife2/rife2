@@ -4,8 +4,6 @@
  */
 package rife.cmf.validation;
 
-import rife.validation.Constrained;
-import rife.validation.ConstrainedProperty;
 import rife.validation.ConstrainedUtils;
 import rife.validation.PropertyValidationRule;
 

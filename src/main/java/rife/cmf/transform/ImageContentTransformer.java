@@ -4,8 +4,6 @@
  */
 package rife.cmf.transform;
 
-import rife.cmf.dam.exceptions.ContentManagerException;
-
 import java.awt.Image;
 import java.util.Map;
 
@@ -32,6 +30,5 @@ public interface ImageContentTransformer extends ContentTransformer<Image> {
      * @return the transformed image
      * @since 1.0
      */
-    Image transform(Image data, Map<String, String> attributes)
-    throws ContentManagerException;
+    Image transform(Image data, Map<String, String> attributes);
 }

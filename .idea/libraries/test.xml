@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="file://$PROJECT_DIR$/lib/test" />
       <root url="file://$PROJECT_DIR$/src/test/resources" />
+      <root url="file://$PROJECT_DIR$/core/src/test/resources" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -8,6 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/build/generated" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/core/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/core/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/core/src/main/resources/templates" />
       <excludeFolder url="file://$MODULE_DIR$/src/main/resources/templates" />
     </content>
     <orderEntry type="inheritedJdk" />

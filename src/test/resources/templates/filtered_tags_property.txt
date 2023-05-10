@@ -1,2 +1,0 @@
-This is a property value '<!v property:prop1/>'.
-This is another property value '{{v property:another_property/}}'.

@@ -4,8 +4,6 @@
  */
 package rife.cmf.transform;
 
-import rife.cmf.dam.exceptions.ContentManagerException;
-
 import java.io.InputStream;
 import java.util.Map;
 
@@ -31,6 +29,5 @@ public interface RawContentTransformer extends ContentTransformer<InputStream> {
      * @return the transformed data
      * @since 1.0
      */
-    InputStream transform(InputStream data, Map<String, String> attributes)
-    throws ContentManagerException;
+    InputStream transform(InputStream data, Map<String, String> attributes);
 }

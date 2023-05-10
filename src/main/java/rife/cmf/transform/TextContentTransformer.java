@@ -4,8 +4,6 @@
  */
 package rife.cmf.transform;
 
-import rife.cmf.dam.exceptions.ContentManagerException;
-
 import java.util.Map;
 
 /**
@@ -31,6 +29,5 @@ public interface TextContentTransformer extends ContentTransformer<String> {
      * @return the transformed text
      * @since 1.0
      */
-    String transform(String data, Map<String, String> attributes)
-    throws ContentManagerException;
+    String transform(String data, Map<String, String> attributes);
 }

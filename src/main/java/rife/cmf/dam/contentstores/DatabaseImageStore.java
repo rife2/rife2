@@ -61,13 +61,6 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         return content_type;
     }
 
-    public Formatter getFormatter(MimeType mimeType, boolean fragment) {
-        if (!getSupportedMimeTypes().contains(mimeType)) {
-            return null;
-        }
-        return mimeType.getFormatter();
-    }
-
     public String getContentForHtml(int id, ContentInfo info, Context context, Route route)
     throws ContentManagerException {
         if (null == context) throw new IllegalArgumentException("context can't be null.");

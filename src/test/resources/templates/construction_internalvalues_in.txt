@@ -1,4 +1,0 @@
-<!v level/><!b level>
-<<<<<!v nodes/>
->>>><!/b>{{b node}}
-<!v indent/><!b indent>    <!/b>{{v depth/}}:<!v text/>:<!v level/>{{/b}}

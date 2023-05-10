@@ -1,2 +1,0 @@
-<!v lines/><!b line>the first : <!v first/>, the second : <!v second/>
-<!/b>

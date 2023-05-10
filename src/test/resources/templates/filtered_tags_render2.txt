@@ -1,3 +1,0 @@
-{{v links/}}
-{{b link}}{{v link/}} : {{v render:rife.template.RendererImpl2:link/}}
-{{/b}}

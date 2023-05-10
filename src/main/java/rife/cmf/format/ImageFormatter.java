@@ -235,7 +235,7 @@ public class ImageFormatter implements Formatter<byte[], Image> {
 
         try {
             // retrieve a supported writer
-            var writers = ImageIO.getImageWritersByMIMEType(content.getMimeType().toString());
+            var writers = ImageIO.getImageWritersByMIMEType(content.getMimeType().getIdentifier());
             ImageWriter writer = null;
             ImageWriteParam write_param = null;
             if (writers.hasNext()) {

@@ -1,1 +1,0 @@
-This is a key with a bundle '<!v l10n:loc/bundlenotpresent-l10n:THE_KEY/>}'.

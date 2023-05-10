@@ -1,3 +1,0 @@
-	This is some text
-	-----------------
-	that will be included in the master template

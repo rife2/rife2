@@ -12,7 +12,6 @@ import rife.cmf.dam.contentstores.*;
 import rife.cmf.Content;
 import rife.cmf.ContentRepository;
 import rife.cmf.MimeType;
-import rife.cmf.UnsupportedMimeType;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException;
 import rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException;
@@ -398,25 +397,6 @@ public class TestContentManager {
                 fail();
             } catch (IllegalArgumentException e) {
                 assertTrue(true);
-            }
-        } finally {
-            tearDown(datasource);
-        }
-    }
-
-    @ParameterizedTest
-    @ArgumentsSource(TestDatasources.class)
-    void testStoreContentUnsupportedMimeType(Datasource datasource) {
-        setup(datasource);
-        try {
-            var manager = DatabaseContentFactory.instance(datasource);
-
-            var content = new Content(UnsupportedMimeType.UNSUPPORTED, new Object());
-            try {
-                manager.storeContent("/thepath", content, null);
-                fail();
-            } catch (UnsupportedMimeTypeException e) {
-                assertSame(UnsupportedMimeType.UNSUPPORTED, e.getMimeType());
             }
         } finally {
             tearDown(datasource);

@@ -1,9 +1,0 @@
-This just contains some text to
-verify if
-
-resources can be found
-
-and
-read
-
-correctly.
