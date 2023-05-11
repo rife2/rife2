@@ -5,65 +5,37 @@
 package rife;
 
 import rife.bld.BuildCommand;
-import rife.bld.Project;
-import rife.bld.extension.Antlr4Operation;
-import rife.bld.extension.TestsBadgeOperation;
 import rife.bld.operations.*;
 import rife.bld.publish.*;
 import rife.tools.FileUtils;
-import rife.tools.StringUtils;
 
 import java.io.File;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.regex.Pattern;
 
-import static rife.bld.dependencies.Repository.*;
 import static rife.bld.dependencies.Scope.*;
-import static rife.bld.operations.JavadocOptions.DocLinkOption.NO_MISSING;
 import static rife.bld.operations.TemplateType.*;
 
-public class Rife2Build extends Project {
+public class Rife2Build extends AbstractRife2Build {
     public Rife2Build()
     throws Exception {
         pkg = "rife";
         name = "RIFE2";
         version = version(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
-        javaRelease = 17;
-        downloadSources = true;
-        autoDownloadPurge = true;
-
-        repositories = List.of(MAVEN_CENTRAL, RIFE2_RELEASES);
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", version(1,16,1)))
+            .include(dependency("jakarta.servlet", "jakarta.servlet-api", version(5,0,0)))
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,15)))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,15)))
-            .include(dependency("jakarta.servlet", "jakarta.servlet-api", version(5,0,0)))
             .include(dependency("net.imagej", "ij", version("1.54d")));
         scope(test)
             .include(dependency("org.jsoup", "jsoup", version(1,16,1)))
             .include(dependency("jakarta.servlet", "jakarta.servlet-api", version(5,0,0)))
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,15)))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,15)))
-            .include(dependency("org.slf4j", "slf4j-simple", version(2,0,7)))
-            .include(dependency("net.imagej", "ij", version("1.54d")))
-            .include(dependency("org.junit.jupiter", "junit-jupiter", version(5,9,3)))
-            .include(dependency("org.junit.platform", "junit-platform-console-standalone", version(1,9,3)))
-            .include(dependency("com.h2database", "h2", version(2,1,214)))
-            .include(dependency("net.sourceforge.htmlunit", "htmlunit", version(2,70,0)))
-            .include(dependency("org.postgresql", "postgresql", version(42,6,0)))
-            .include(dependency("com.mysql", "mysql-connector-j", version(8,0,33)))
-            .include(dependency("org.mariadb.jdbc", "mariadb-java-client", version(3,1,4)))
-            .include(dependency("org.hsqldb", "hsqldb", version(2,7,1)))
-            .include(dependency("org.apache.derby", "derby", version("10.16.1.1")))
-            .include(dependency("org.apache.derby", "derbytools", version("10.16.1.1")))
-            .include(dependency("com.oracle.database.jdbc", "ojdbc11", version("23.2.0.0")));
-
-        cleanOperation()
-            .directories(
-                new File(workDirectory(), "embedded_dbs"),
-                new File(workDirectory(), "logs"));
+            .include(dependency("net.imagej", "ij", version("1.54d")));
 
         var core_directory = new File(workDirectory(), "core");
         var core_src_directory = new File(core_directory, "src");
@@ -77,9 +49,7 @@ public class Rife2Build extends Project {
 
         antlr4Operation
             .sourceDirectories(List.of(new File(core_src_main_directory, "antlr")))
-            .outputDirectory(new File(buildDirectory(), "generated/rife/template/antlr"))
-            .visitor()
-            .longMessages();
+            .outputDirectory(new File(buildDirectory(), "generated/rife/template/antlr"));
 
         precompileOperation()
             .sourceDirectories(core_src_main_resources_templates_directory)
@@ -136,35 +106,11 @@ public class Rife2Build extends Project {
             .classpath(core_src_test_resources_directory.getAbsolutePath())
             .javaOptions()
                 .javaAgent(new File(buildDistDirectory(), jarAgentOperation.destinationFileName()));
-        propagateJavaProperties(testsBadgeOperation.javaOptions(),
-            "test.postgres",
-            "test.mysql",
-            "test.mariadb",
-            "test.oracle",
-            "test.oracle-free",
-            "test.derby",
-            "test.hsqldb",
-            "test.h2");
 
         javadocOperation()
             .sourceFiles(FileUtils.getJavaFileList(core_src_main_java_directory))
-            .excluded(
-                "rife/antlr/",
-                "rife/asm/",
-                "rife/.*/databasedrivers/",
-                "rife/.*/imagestoredrivers/",
-                "rife/.*/rawstoredrivers/",
-                "rife/.*/textstoredrivers/",
-                "rife/database/capabilities/"
-            )
             .javadocOptions()
                 .docTitle("<a href=\"https://rife2.com\">RIFE2</a> " + version())
-                .docLint(NO_MISSING)
-                .keywords()
-                .splitIndex()
-                .tag("apiNote", "a", "API Note:")
-                .link("https://jakarta.ee/specifications/servlet/5.0/apidocs/")
-                .link("https://jsoup.org/apidocs/")
                 .overview(new File(srcMainJavaDirectory(), "overview.html"));
 
         publishOperation()
@@ -197,36 +143,6 @@ public class Rife2Build extends Project {
         examples = new ExamplesBuild(this);
     }
 
-    void propagateJavaProperties(JavaOptions options, String... names) {
-        for (var name : names) {
-            if (properties().contains(name)) {
-                options.property(name, properties().getValueString(name));
-            }
-        }
-    }
-
-    final Antlr4Operation antlr4Operation = new Antlr4Operation() {
-        @Override
-        public void execute()
-        throws Exception {
-            super.execute();
-            // replace the package name so that it becomes part of RIFE2
-            FileUtils.transformFiles(outputDirectory(), FileUtils.JAVA_FILE_PATTERN, null, s ->
-                StringUtils.replace(s, "org.antlr.v4.runtime", "rife.antlr.v4.runtime"));
-        }
-    };
-    @BuildCommand(summary = "Generates the grammar Java sources")
-    public void generateGrammar()
-    throws Exception {
-        antlr4Operation.executeOnce();
-    }
-
-    public void compile()
-    throws Exception {
-        generateGrammar();
-        super.compile();
-    }
-
     final JarOperation jarAgentOperation = new JarOperation();
     @BuildCommand(value = "jar-agent", summary = "Creates the agent jar archive")
     public void jarAgent()
@@ -243,14 +159,10 @@ public class Rife2Build extends Project {
         jarContinuationsOperation.executeOnce();
     }
 
-    private final TestsBadgeOperation testsBadgeOperation = new TestsBadgeOperation();
     public void test()
     throws Exception {
         jarAgent();
-        testsBadgeOperation.executeOnce(() -> testsBadgeOperation
-            .url(property("testsBadgeUrl"))
-            .apiKey(property("testsBadgeApiKey"))
-            .fromProject(this));
+        super.test();
     }
 
     @BuildCommand(summary = "Creates all the distribution artifacts")
@@ -267,6 +179,12 @@ public class Rife2Build extends Project {
     throws Exception {
         all();
         super.publish();
+    }
+
+    public void publishLocal()
+    throws Exception {
+        all();
+        super.publishLocal();
     }
 
     final ExamplesBuild examples;
