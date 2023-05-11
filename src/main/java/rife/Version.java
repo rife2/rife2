@@ -4,8 +4,7 @@
  */
 package rife;
 
-import rife.resources.ResourceFinderClasspath;
-import rife.resources.exceptions.ResourceFinderErrorException;
+import rife.tools.FileUtils;
 
 /**
  * Singleton class that provides access to the current RIFE2 version as a string.
@@ -14,22 +13,10 @@ import rife.resources.exceptions.ResourceFinderErrorException;
  * @since 1.0
  */
 public class Version {
-    private String version_;
+    private final String version_;
 
     Version() {
-        ResourceFinderClasspath resource_finder = ResourceFinderClasspath.instance();
-        try {
-            version_ = resource_finder.getContent("RIFE_VERSION");
-        } catch (ResourceFinderErrorException e) {
-            version_ = null;
-        }
-
-        if (version_ != null) {
-            version_ = version_.trim();
-        }
-        if (null == version_) {
-            version_ = "unknown version";
-        }
+        version_ = FileUtils.versionFromResource("RIFE_VERSION");
     }
 
     private String getVersionString() {
