@@ -27,4 +27,3 @@ public class Version {
         return VersionSingleton.INSTANCE.getVersionString();
     }
 }
-
