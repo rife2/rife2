@@ -1836,9 +1836,13 @@ public class Context {
      */
     public List<String> cookieNames() {
         var names = new ArrayList<String>();
-        for (var cookie : request_.getCookies()) {
-            names.add(cookie.getName());
+
+        if (request_.getCookies() != null) {
+            for (var cookie : request_.getCookies()) {
+                names.add(cookie.getName());
+            }
         }
+
         return names;
     }
 
@@ -1874,8 +1878,10 @@ public class Context {
     public Map<String, String> cookieValues() {
         Map<String, String> result = new HashMap<>();
 
-        for (var entry : request_.getCookies()) {
-            result.put(entry.getName(), entry.getValue());
+        if (request_.getCookies() != null) {
+            for (var entry : request_.getCookies()) {
+                result.put(entry.getName(), entry.getValue());
+            }
         }
 
         return result;
