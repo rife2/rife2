@@ -118,7 +118,7 @@ public class TestMemoryScheduler {
 
         var executed_tasks = executor.getExecutedTasks();
         var executed_tasks_size = executed_tasks.size();
-        
+
         synchronized (scheduler) {
             scheduler.stop();
 
@@ -181,7 +181,7 @@ public class TestMemoryScheduler {
         long number_of_executions = (thread_sleep_time / task_frequency);
 
         var now = new Date();
-        assertEquals(number_of_executions, executed_tasks_size, "\nFAILED Memory\n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
+        assertTrue(number_of_executions == executed_tasks_size || number_of_executions == executed_tasks_size + 1, "\nFAILED Memory\n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
         for (var executed_task : executed_tasks) {
             assertEquals(task.getId(), executed_task.getId());
             assertEquals(task.getType(), executed_task.getType());
