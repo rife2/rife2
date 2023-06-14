@@ -56,7 +56,8 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    void testStartStopScheduler(Datasource datasource) {
+    void testStartStopScheduler(Datasource datasource)
+    throws Exception {
         setup(datasource);
 
         var scheduler = DatabaseSchedulingFactory.instance(datasource).createScheduler();
@@ -65,14 +66,8 @@ public class TestDatabaseScheduler {
             synchronized (scheduler) {
                 scheduler.stop();
 
-                try {
-                    scheduler.wait();
-                } catch (InterruptedException e) {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
+                scheduler.wait();
             }
-        } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             tearDown(datasource);
         }
@@ -87,11 +82,7 @@ public class TestDatabaseScheduler {
             Executor executor = new TestExecutor();
 
             assertNull(scheduler.getExecutor(executor.getHandledTaskType()));
-            try {
-                scheduler.addExecutor(executor);
-            } catch (SchedulerException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+            scheduler.addExecutor(executor);
             assertEquals(executor, scheduler.getExecutor(executor.getHandledTaskType()));
             assertTrue(scheduler.removeExecutor(executor));
         } finally {
@@ -101,7 +92,8 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    void testOneshotTaskExecution(Datasource datasource) {
+    void testOneshotTaskExecution(Datasource datasource)
+    throws Exception {
         setup(datasource);
 
         var sleep_time = 2 * 1000;
@@ -110,42 +102,22 @@ public class TestDatabaseScheduler {
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();
 
-        try {
-            task.setPlanned(System.currentTimeMillis());
-            task.setFrequency(null);
-            task.setBusy(false);
-        } catch (FrequencyException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        task.setPlanned(System.currentTimeMillis());
+        task.setFrequency(null);
+        task.setBusy(false);
 
-        try {
-            scheduler.addExecutor(executor);
-        } catch (SchedulerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        scheduler.addExecutor(executor);
         scheduler.setSleepTime(sleep_time);
-        try {
-            task.setId(taskmanager.addTask(task));
-            task = taskmanager.getTask(task.getId());
-        } catch (TaskManagerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        task.setId(taskmanager.addTask(task));
+        task = taskmanager.getTask(task.getId());
 
         try {
             scheduler.start();
-            try {
-                Thread.sleep(sleep_time * 2);
-            } catch (InterruptedException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+            Thread.sleep(sleep_time * 2);
             synchronized (scheduler) {
                 scheduler.stop();
 
-                try {
-                    scheduler.wait();
-                } catch (InterruptedException e) {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
+                scheduler.wait();
             }
 
             var executed_tasks = executor.getExecutedTasks();
@@ -153,8 +125,6 @@ public class TestDatabaseScheduler {
             var executed_task = executed_tasks.iterator().next();
             assertEquals(task, executed_task);
             assertSame(executed_task.getTaskManager(), taskmanager);
-        } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
             tearDown(datasource);
         }
@@ -162,7 +132,8 @@ public class TestDatabaseScheduler {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
-    void testRepeatingTaskExecution(Datasource datasource) {
+    void testRepeatingTaskExecution(Datasource datasource)
+    throws Exception {
         setup(datasource);
 
         var scheduler_sleep_time = 10 * 1000;                // 10 seconds
@@ -173,49 +144,28 @@ public class TestDatabaseScheduler {
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();
 
-        try {
-            // set back a while in the past to test the catch-up rescheduling
-            task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
-            task.setFrequency(Frequency.MINUTELY);
-            task.setBusy(false);
-        } catch (FrequencyException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        // set back a while in the past to test the catch-up rescheduling
+        task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
+        task.setFrequency(Frequency.MINUTELY);
+        task.setBusy(false);
 
         scheduler.setSleepTime(scheduler_sleep_time);
 
-        try {
-            scheduler.addExecutor(executor);
-        } catch (SchedulerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        scheduler.addExecutor(executor);
 
-        try {
-            task.setId(taskmanager.addTask(task));
-            task = taskmanager.getTask(task.getId());
-        } catch (TaskManagerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        task.setId(taskmanager.addTask(task));
+        task = taskmanager.getTask(task.getId());
 
-        Collection<Task> executed_tasks = null;
-        var executed_tasks_size = -1;
         try {
             scheduler.start();
-            try {
-                Thread.sleep(thread_sleep_time);
-                executed_tasks = executor.getExecutedTasks();
-                executed_tasks_size = executed_tasks.size();
-            } catch (InterruptedException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+            Thread.sleep(thread_sleep_time);
+
+            var executed_tasks = executor.getExecutedTasks();
+            var executed_tasks_size = executed_tasks.size();
+
             synchronized (scheduler) {
                 scheduler.stop();
-
-                try {
-                    scheduler.wait();
-                } catch (InterruptedException e) {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
+                scheduler.wait();
             }
 
             // task frequency fits in the thread sleep time
@@ -232,13 +182,7 @@ public class TestDatabaseScheduler {
                 assertSame(executed_task.getTaskManager(), taskmanager);
             }
 
-            try {
-                taskmanager.removeTask(task.getId());
-            } catch (TaskManagerException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
-        } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
+            taskmanager.removeTask(task.getId());
         } finally {
             tearDown(datasource);
         }

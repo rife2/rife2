@@ -30,19 +30,15 @@ public class TestMemoryScheduler {
     @Test
     void testStartStopScheduler() {
         var scheduler = new MemoryScheduling().createScheduler();
-        try {
-            scheduler.start();
-            synchronized (scheduler) {
-                scheduler.stop();
+        scheduler.start();
+        synchronized (scheduler) {
+            scheduler.stop();
 
-                try {
-                    scheduler.wait();
-                } catch (InterruptedException e) {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
+            try {
+                scheduler.wait();
+            } catch (InterruptedException e) {
+                fail(ExceptionUtils.getExceptionStackTrace(e));
             }
-        } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
@@ -52,73 +48,51 @@ public class TestMemoryScheduler {
         Executor executor = new TestExecutor();
 
         assertNull(scheduler.getExecutor(executor.getHandledTaskType()));
-        try {
-            scheduler.addExecutor(executor);
-        } catch (SchedulerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        scheduler.addExecutor(executor);
         assertEquals(executor, scheduler.getExecutor(executor.getHandledTaskType()));
         assertTrue(scheduler.removeExecutor(executor));
     }
 
     @Test
-    void testOneshotTaskExecution() {
+    void testOneshotTaskExecution()
+    throws Exception {
         var sleep_time = 2 * 1000;
         var scheduler = new MemoryScheduling().createScheduler();
         var executor = new TestExecutor();
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();
 
-        try {
-            task.setPlanned(System.currentTimeMillis());
-            task.setFrequency(null);
-            task.setBusy(false);
-        } catch (FrequencyException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        task.setPlanned(System.currentTimeMillis());
+        task.setFrequency(null);
+        task.setBusy(false);
 
-        try {
-            scheduler.addExecutor(executor);
-        } catch (SchedulerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        scheduler.addExecutor(executor);
         scheduler.setSleepTime(sleep_time);
-        try {
-            task.setId(taskmanager.addTask(task));
-            task = taskmanager.getTask(task.getId());
-        } catch (TaskManagerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        task.setId(taskmanager.addTask(task));
+        task = taskmanager.getTask(task.getId());
 
-        try {
-            scheduler.start();
+        scheduler.start();
+        Thread.sleep(sleep_time * 2);
+        synchronized (scheduler) {
+            scheduler.stop();
+
             try {
-                Thread.sleep(sleep_time * 2);
+                scheduler.wait();
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
-            synchronized (scheduler) {
-                scheduler.stop();
-
-                try {
-                    scheduler.wait();
-                } catch (InterruptedException e) {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
-            }
-
-            var executed_tasks = executor.getExecutedTasks();
-            assertEquals(1, executed_tasks.size());
-            var executed_task = executed_tasks.iterator().next();
-            assertEquals(task, executed_task);
-            assertSame(executed_task.getTaskManager(), taskmanager);
-        } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+
+        var executed_tasks = executor.getExecutedTasks();
+        assertEquals(1, executed_tasks.size());
+        var executed_task = executed_tasks.iterator().next();
+        assertEquals(task, executed_task);
+        assertSame(executed_task.getTaskManager(), taskmanager);
     }
 
     @Test
-    void testRepeatingTaskExecution() {
+    void testRepeatingTaskExecution()
+    throws Exception {
         var scheduler_sleep_time = 10 * 1000;                // 10 seconds
         var task_frequency = 20 * 1000;                      // 20 seconds
         var thread_sleep_time = scheduler_sleep_time * 3;    // 30 seconds
@@ -127,73 +101,96 @@ public class TestMemoryScheduler {
         var taskmanager = scheduler.getTaskManager();
         var task = executor.createTask();
 
-        try {
-            // set back a while in the past to test the catch-up rescheduling
-            task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
-            task.setFrequency(Frequency.MINUTELY);
-            task.setBusy(false);
-        } catch (FrequencyException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        // set back a while in the past to test the catch-up rescheduling
+        task.setPlanned(System.currentTimeMillis() - (scheduler_sleep_time * 10));
+        task.setFrequency(Frequency.MINUTELY);
+        task.setBusy(false);
 
         scheduler.setSleepTime(scheduler_sleep_time);
 
-        try {
-            scheduler.addExecutor(executor);
-        } catch (SchedulerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        scheduler.addExecutor(executor);
 
-        try {
-            task.setId(taskmanager.addTask(task));
-            task = taskmanager.getTask(task.getId());
-        } catch (TaskManagerException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
-        }
+        task.setId(taskmanager.addTask(task));
+        task = taskmanager.getTask(task.getId());
 
-        Collection<Task> executed_tasks = null;
-        var executed_tasks_size = -1;
-        try {
-            scheduler.start();
+        scheduler.start();
+        Thread.sleep(thread_sleep_time);
+
+        var executed_tasks = executor.getExecutedTasks();
+        var executed_tasks_size = executed_tasks.size();
+        
+        synchronized (scheduler) {
+            scheduler.stop();
+
             try {
-                Thread.sleep(thread_sleep_time);
-                executed_tasks = executor.getExecutedTasks();
-                executed_tasks_size = executed_tasks.size();
+                scheduler.wait();
             } catch (InterruptedException e) {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
-            synchronized (scheduler) {
-                scheduler.stop();
-
-                try {
-                    scheduler.wait();
-                } catch (InterruptedException e) {
-                    fail(ExceptionUtils.getExceptionStackTrace(e));
-                }
-            }
-
-            // task frequency fits in the thread sleep time
-            long number_of_executions = (thread_sleep_time / task_frequency) + 1;
-
-//			System.out.println("\nMemory\n"+executor.getFirstExecution().getTime().getTime()+" : "+executor.getFirstExecution().getTime().toGMTString()+"\n"+now.getTime()+" : "+now.toGMTString()+"\ntask_frequency = "+task_frequency+"\nnumber_of_executions = "+number_of_executions+"\nexecuted_tasks_size = "+executed_tasks_size);
-            var now = new Date();
-            assertTrue(number_of_executions == executed_tasks_size || number_of_executions == executed_tasks_size + 1, "\nFAILED Memory\n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
-            for (var executed_task : executed_tasks) {
-                assertEquals(task.getId(), executed_task.getId());
-                assertEquals(task.getType(), executed_task.getType());
-                assertEquals(task.getFrequency(), executed_task.getFrequency());
-                assertTrue(task.getPlanned() <= executed_task.getPlanned());
-                assertSame(executed_task.getTaskManager(), taskmanager);
-            }
-
-            try {
-                taskmanager.removeTask(task.getId());
-            } catch (TaskManagerException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
-        } catch (NoExecutorForTasktypeException | UnableToRetrieveTasksToProcessException e) {
-            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+
+        // task frequency fits in the thread sleep time
+        long number_of_executions = (thread_sleep_time / task_frequency) + 1;
+
+        var now = new Date();
+        assertTrue(number_of_executions == executed_tasks_size || number_of_executions == executed_tasks_size + 1, "\nFAILED Memory\n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
+        for (var executed_task : executed_tasks) {
+            assertEquals(task.getId(), executed_task.getId());
+            assertEquals(task.getType(), executed_task.getType());
+            assertEquals(task.getFrequency(), executed_task.getFrequency());
+            assertTrue(task.getPlanned() <= executed_task.getPlanned());
+            assertSame(executed_task.getTaskManager(), taskmanager);
+        }
+
+        taskmanager.removeTask(task.getId());
+    }
+
+    @Test
+    void testRepeatingTaskExecutionNoPlanned()
+    throws Exception {
+        var scheduler_sleep_time = 10 * 1000;
+        var task_frequency = 60 * 1000;
+        var thread_sleep_time = task_frequency * 2;
+        final var scheduler = new MemoryScheduling().createScheduler();
+        var executor = new TestExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = executor.createTask();
+
+        task.setFrequency(Frequency.MINUTELY);
+        task.setBusy(false);
+
+        scheduler.setSleepTime(scheduler_sleep_time);
+
+        scheduler.addExecutor(executor);
+
+        task.setId(taskmanager.addTask(task));
+        task = taskmanager.getTask(task.getId());
+
+        scheduler.start();
+        Thread.sleep(thread_sleep_time);
+
+        var executed_tasks = executor.getExecutedTasks();
+        var executed_tasks_size = executed_tasks.size();
+
+        synchronized (scheduler) {
+            scheduler.stop();
+            scheduler.wait();
+        }
+
+        // task frequency fits in the thread sleep time
+        long number_of_executions = (thread_sleep_time / task_frequency);
+
+        var now = new Date();
+        assertEquals(number_of_executions, executed_tasks_size, "\nFAILED Memory\n" + executor.getFirstExecution().getTime().getTime() + " : " + executor.getFirstExecution().getTime().toGMTString() + "\n" + now.getTime() + " : " + now.toGMTString() + "\ntask_frequency = " + task_frequency + "\nnumber_of_executions = " + number_of_executions + "\nexecuted_tasks_size = " + executed_tasks_size);
+        for (var executed_task : executed_tasks) {
+            assertEquals(task.getId(), executed_task.getId());
+            assertEquals(task.getType(), executed_task.getType());
+            assertEquals(task.getFrequency(), executed_task.getFrequency());
+            assertTrue(task.getPlanned() <= executed_task.getPlanned());
+            assertSame(executed_task.getTaskManager(), taskmanager);
+        }
+
+        taskmanager.removeTask(task.getId());
     }
 
     static class TestExecutor extends Executor {

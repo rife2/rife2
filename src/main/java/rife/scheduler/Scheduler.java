@@ -4,6 +4,7 @@
  */
 package rife.scheduler;
 
+import rife.config.RifeConfig;
 import rife.scheduler.exceptions.*;
 import rife.scheduler.schedulermanagers.*;
 
@@ -267,8 +268,8 @@ public class Scheduler implements Runnable {
                         scheduleStep();
                         // Ensure that the wakeup is always on an even multiplier of the
                         // sleep time, this to ensure that no drift occurs.
-                        var now = System.currentTimeMillis();
-                        var projected = ((System.currentTimeMillis() + sleepTime_) / sleepTime_) * sleepTime_;
+                        var now = RifeConfig.tools().getCalendarInstance().getTimeInMillis();
+                        var projected = ((now + sleepTime_) / sleepTime_) * sleepTime_;
                         var difference = projected - now;
 
                         synchronized (this) {
@@ -300,11 +301,18 @@ public class Scheduler implements Runnable {
         try {
             Executor executor = null;
             for (var task : taskManager_.getTasksToProcess()) {
-                executor = executors_.get(task.getType());
-                if (null != executor) {
-                    executor.startTaskExecution(task);
-                } else {
-                    throw new NoExecutorForTasktypeException(task.getType());
+                if (task.getPlanned() == 0 && task.getFrequency() != null) {
+                    // if no explicit planned date was set and a task frequency was set,
+                    // only process the task the first time the frequency determines that it should
+                    taskManager_.concludeTask(task);
+                }
+                else {
+                    executor = executors_.get(task.getType());
+                    if (null != executor) {
+                        executor.startTaskExecution(task);
+                    } else {
+                        throw new NoExecutorForTasktypeException(task.getType());
+                    }
                 }
             }
         } catch (TaskManagerException e) {
