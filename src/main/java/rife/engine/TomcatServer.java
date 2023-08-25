@@ -56,7 +56,7 @@ public class TomcatServer {
     }
 
     /**
-     * Add the location of the webapp directory, uber jar or war for the root context.
+     * Add the location of the webapp directory or WAR for the root context.
      *
      * @param docBase Base directory for the context, for static file.
      */
@@ -146,7 +146,7 @@ public class TomcatServer {
 
         try {
             tomcat_.start();
-            //tomcat_.getServer().await();
+//            tomcat_.getServer().await();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
