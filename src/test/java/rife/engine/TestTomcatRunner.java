@@ -7,7 +7,7 @@ package rife.engine;
 import rife.ioc.HierarchicalProperties;
 
 public class TestTomcatRunner implements AutoCloseable {
-    final TomcatServer server_ = new TomcatServer().hostname("localhost").port(8181);
+    final TomcatServer server_ = new TomcatServer().hostname("localhost").port(8282);
 
     public TestTomcatRunner(Site site) {
         server_.start(site);
