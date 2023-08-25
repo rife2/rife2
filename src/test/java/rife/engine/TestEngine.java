@@ -57,7 +57,7 @@ public class TestEngine {
             }
         })) {
             try (final var webClient = new WebClient()) {
-                final TextPage page = webClient.getPage("http://localhost:8181/simple/plain");
+                final TextPage page = webClient.getPage("http://localhost:8282/simple/plain");
                 assertEquals("text/plain", page.getWebResponse().getContentType());
                 assertEquals("Just some text on port 8282", page.getContent());
             }
