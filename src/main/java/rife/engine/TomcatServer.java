@@ -32,6 +32,9 @@ public class TomcatServer {
     private Tomcat tomcat_;
     private int port_ = 8080;
 
+    /**
+     * Instantiates a new embedded Tomcat server.
+     */
     public TomcatServer() {
         properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
     }
@@ -53,7 +56,7 @@ public class TomcatServer {
     }
 
     /**
-     * Add the location of the webapp directory, uberjar or war for the root context.
+     * Add the location of the webapp directory, uber jar or war for the root context.
      *
      * @param docBase Base directory for the context, for static file.
      */
@@ -102,9 +105,10 @@ public class TomcatServer {
         if (baseDir_ == null) {
             var tmpDir = new File(RifeConfig.global().getTempPath(), "rife2.tomcat." + port_);
             tmpDir.deleteOnExit();
-            baseDir_ = tmpDir.getAbsolutePath();
+            tomcat_.setBaseDir(tmpDir.getAbsolutePath());
+        } else {
+            tomcat_.setBaseDir(new File(baseDir_).getAbsolutePath());
         }
-        tomcat_.setBaseDir(baseDir_);
 
         var ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
 
