@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2023 Erik C. Thauvin (https://erik.thauvin.net/)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife;
@@ -13,6 +13,6 @@ public class HelloTomcat extends Site {
     }
 
     public static void main(String[] args) {
-        new TomcatServer().addWebapp("examples/test/resources/tomcat-webapp").start();
+        new TomcatServer().addWebapp("examples/test/resources/tomcat-webapp").start(new HelloTomcat());
     }
 }

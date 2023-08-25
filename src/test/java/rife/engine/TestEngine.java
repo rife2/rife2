@@ -6,6 +6,7 @@ package rife.engine;
 
 import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.h2.util.json.JsonConstructorUtils;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.engine.annotations.Parameter;
@@ -40,6 +41,25 @@ public class TestEngine {
                 final TextPage page = webClient.getPage("http://localhost:8181/simple/plain");
                 assertEquals("text/plain", page.getWebResponse().getContentType());
                 assertEquals("Just some text 127.0.0.1:8181:", page.getContent());
+            }
+        }
+    }
+
+    @Test
+    void testTomcatPlain()
+            throws Exception {
+        try (final var server = new TestTomcatRunner(new Site() {
+            public void setup() {
+                get("/simple/plain", c -> {
+                    c.setContentType("text/plain");
+                    c.print("Just some text on port " + c.serverPort());
+                });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final TextPage page = webClient.getPage("http://localhost:8181/simple/plain");
+                assertEquals("text/plain", page.getWebResponse().getContentType());
+                assertEquals("Just some text on port 8181", page.getContent());
             }
         }
     }

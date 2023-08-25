@@ -4,8 +4,13 @@
  */
 package rife.engine;
 
+import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.descriptor.web.FilterDef;
+import org.apache.tomcat.util.descriptor.web.FilterMap;
 import rife.config.RifeConfig;
+import rife.ioc.HierarchicalProperties;
+import rife.servlet.RifeFilter;
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,13 +23,18 @@ import java.util.Map;
  * @since 1.7.1
  */
 public class TomcatServer {
+    private final HierarchicalProperties properties_;
     private final Map<String, String> roles_ = new HashMap<>();
     private final Map<String, String> users_ = new HashMap<>();
-    private final Map<String, String> webapps_ = new HashMap<>();
     private String baseDir_ = null;
+    private String docBase_ = ".";
     private String hostname_ = null;
     private Tomcat tomcat_;
     private int port_ = 8080;
+
+    public TomcatServer() {
+        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
+    }
 
     /**
      * Add a role for a user.
@@ -43,25 +53,12 @@ public class TomcatServer {
     }
 
     /**
-     * Add the location of the webapp directory or war.
+     * Add the location of the webapp directory, uberjar or war for the root context.
      *
-     * @param contextPath The context mapping to use, {@code ""} for root context.
-     * @param docBase     Base directory for the context, for static files. Must exist.
-     * @see #addWebapp(String)
-     */
-    public TomcatServer addWebapp(String contextPath, String docBase) {
-        webapps_.put(contextPath, docBase);
-        return this;
-    }
-
-    /**
-     * Add the location of the webapp directory or war for the root context.
-     *
-     * @param docBase Base directory for the context, for static files. Must exist.
-     * @see #addWebapp(String, String)
+     * @param docBase Base directory for the context, for static file.
      */
     public TomcatServer addWebapp(String docBase) {
-        webapps_.put("", docBase);
+        docBase_ = docBase;
         return this;
     }
 
@@ -90,9 +87,16 @@ public class TomcatServer {
     }
 
     /**
+     * Retrieves the hierarchical properties for this server instance.
+     */
+    public HierarchicalProperties properties() {
+        return properties_;
+    }
+
+    /**
      * Starts the embedded server.
      */
-    public TomcatServer start() {
+    public TomcatServer start(Site site) {
         tomcat_ = new Tomcat();
 
         if (baseDir_ == null) {
@@ -102,7 +106,26 @@ public class TomcatServer {
         }
         tomcat_.setBaseDir(baseDir_);
 
-        webapps_.forEach((c, d) -> tomcat_.addWebapp(c, new File(d).getAbsolutePath()));
+        var ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
+
+        var servletName = "default-servlet";
+        var defaultServlet = new DefaultServlet();
+        Tomcat.addServlet(ctx, servletName, defaultServlet);
+        ctx.addServletMappingDecoded("/*", servletName);
+
+        var filterName = "RIFE2";
+        var rifeFilter = new RifeFilter();
+        rifeFilter.init(properties_, site);
+
+        var filerDef = new FilterDef();
+        filerDef.setFilter(rifeFilter);
+        filerDef.setFilterName(filterName);
+        ctx.addFilterDef(filerDef);
+
+        var filterMap = new FilterMap();
+        filterMap.setFilterName(filterName);
+        filterMap.addURLPattern("/*");
+        ctx.addFilterMap(filterMap);
 
         tomcat_.setPort(port_);
 
@@ -119,7 +142,7 @@ public class TomcatServer {
 
         try {
             tomcat_.start();
-            tomcat_.getServer().await();
+            //tomcat_.getServer().await();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
