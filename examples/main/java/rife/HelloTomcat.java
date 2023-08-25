@@ -13,6 +13,6 @@ public class HelloTomcat extends Site {
     }
 
     public static void main(String[] args) {
-        new TomcatServer().addWebapp("examples/test/resources/tomcat-webapp").start(new HelloTomcat());
+        new TomcatServer().start(new HelloTomcat());
     }
 }

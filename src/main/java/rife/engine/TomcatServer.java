@@ -66,6 +66,14 @@ public class TomcatServer {
     }
 
     /**
+     * Configures the Tomcat base directory on which all others, such as the {@code work} directory, will be derived.
+     */
+    public TomcatServer baseDir(String dir) {
+        baseDir_ = dir;
+        return this;
+    }
+
+    /**
      * Configures the host name the server will be listening on.
      */
     public TomcatServer hostname(String host) {
@@ -78,14 +86,6 @@ public class TomcatServer {
      */
     public TomcatServer port(int port) {
         port_ = port;
-        return this;
-    }
-
-    /**
-     * Configures the base directory location.
-     */
-    public TomcatServer baseDir(String dir) {
-        baseDir_ = dir;
         return this;
     }
 
