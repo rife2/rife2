@@ -194,6 +194,7 @@ public class TomcatServer {
     public void stop() {
         try {
             tomcat_.stop();
+            tomcat_.destroy();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
