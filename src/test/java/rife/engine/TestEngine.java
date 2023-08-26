@@ -45,6 +45,25 @@ public class TestEngine {
     }
 
     @Test
+    void testTomcatPlain()
+    throws Exception {
+        try (final var server = new TestTomcatRunner(new Site() {
+            public void setup() {
+                get("/simple/plain", c -> {
+                    c.setContentType("text/plain");
+                    c.print("Just some text on port " + c.serverPort());
+                });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final TextPage page = webClient.getPage("http://localhost:8282/simple/plain");
+                assertEquals("text/plain", page.getWebResponse().getContentType());
+                assertEquals("Just some text on port 8282", page.getContent());
+            }
+        }
+    }
+
+    @Test
     void testSimpleHtml()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
