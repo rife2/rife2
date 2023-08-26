@@ -46,7 +46,7 @@ public class TestEngine {
 
     @Test
     void testTomcatPlain()
-            throws Exception {
+    throws Exception {
         try (final var server = new TestTomcatRunner(new Site() {
             public void setup() {
                 get("/simple/plain", c -> {

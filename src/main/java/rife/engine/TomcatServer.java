@@ -34,6 +34,8 @@ public class TomcatServer {
 
     /**
      * Instantiates a new embedded Tomcat server.
+     *
+     * @since 1.7.1
      */
     public TomcatServer() {
         properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
@@ -41,6 +43,11 @@ public class TomcatServer {
 
     /**
      * Add a role for a user.
+     *
+     * @param role the role name
+     * @param user the user name
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer addRole(String role, String user) {
         roles_.put(role, user);
@@ -49,6 +56,11 @@ public class TomcatServer {
 
     /**
      * Add a user for the in-memory realm.
+     *
+     * @param user the user name
+     * @param pass the password
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer addUser(String user, String pass) {
         users_.put(user, pass);
@@ -58,7 +70,9 @@ public class TomcatServer {
     /**
      * Add the location of the webapp directory or WAR for the root context.
      *
-     * @param docBase Base directory for the context, for static file.
+     * @param docBase the base directory for the context, for static file.
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer addWebapp(String docBase) {
         docBase_ = docBase;
@@ -67,6 +81,10 @@ public class TomcatServer {
 
     /**
      * Configures the Tomcat base directory on which all others, such as the {@code work} directory, will be derived.
+     *
+     * @param dir the base directory
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer baseDir(String dir) {
         baseDir_ = dir;
@@ -75,6 +93,10 @@ public class TomcatServer {
 
     /**
      * Configures the host name the server will be listening on.
+     *
+     * @param host the default host name
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer hostname(String host) {
         hostname_ = host;
@@ -83,6 +105,10 @@ public class TomcatServer {
 
     /**
      * Configures the port the server will be listening to.
+     *
+     * @param port the port number
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer port(int port) {
         port_ = port;
@@ -91,6 +117,9 @@ public class TomcatServer {
 
     /**
      * Retrieves the hierarchical properties for this server instance.
+     *
+     * @return this server's collection of hierarchical properties
+     * @since 1.7.1
      */
     public HierarchicalProperties properties() {
         return properties_;
@@ -98,6 +127,10 @@ public class TomcatServer {
 
     /**
      * Starts the embedded server.
+     *
+     * @param site the {@code Site} instance that the server will be set up for
+     * @return the instance of the server that's being configured
+     * @since 1.7.1
      */
     public TomcatServer start(Site site) {
         tomcat_ = new Tomcat();
@@ -146,7 +179,6 @@ public class TomcatServer {
 
         try {
             tomcat_.start();
-//            tomcat_.getServer().await();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -156,6 +188,8 @@ public class TomcatServer {
 
     /**
      * Stops the embedded server.
+     *
+     * @since 1.7.1
      */
     public void stop() {
         try {
