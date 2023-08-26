@@ -10,7 +10,6 @@ package rife.test;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpSessionContext;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -127,10 +126,6 @@ class MockSession implements HttpSession {
     }
 
     public ServletContext getServletContext() {
-        return null;
-    }
-
-    public HttpSessionContext getSessionContext() {
         return null;
     }
 

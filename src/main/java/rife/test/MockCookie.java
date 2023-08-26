@@ -39,12 +39,10 @@ public class MockCookie extends Cookie {
      */
     public MockCookie(Cookie cookie) {
         this(cookie.getName(), cookie.getValue());
-        setComment(cookie.getComment());
         if (cookie.getDomain() != null) setDomain(cookie.getDomain());
         setMaxAge(cookie.getMaxAge());
         setPath(cookie.getPath());
         setSecure(cookie.getSecure());
-        setVersion(cookie.getVersion());
         setHttpOnly(cookie.isHttpOnly());
     }
 

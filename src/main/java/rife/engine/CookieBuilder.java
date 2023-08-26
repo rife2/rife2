@@ -44,17 +44,6 @@ public class CookieBuilder {
     }
 
     /**
-     * See {@link Cookie#setComment}
-     *
-     * @return the {@code CookieBuilder} instance
-     * @since 1.0
-     */
-    public CookieBuilder comment(String purpose) {
-        cookie_.setComment(purpose);
-        return this;
-    }
-
-    /**
      * See {@link Cookie#setDomain}
      *
      * @return the {@code CookieBuilder} instance
@@ -106,17 +95,6 @@ public class CookieBuilder {
      */
     public CookieBuilder value(String newValue) {
         cookie_.setValue(newValue);
-        return this;
-    }
-
-    /**
-     * See {@link Cookie#setVersion}
-     *
-     * @return the {@code CookieBuilder} instance
-     * @since 1.0
-     */
-    public CookieBuilder version(int v) {
-        cookie_.setVersion(v);
         return this;
     }
 
