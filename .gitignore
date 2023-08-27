@@ -19,6 +19,7 @@ lib/test/
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/inspectionProfiles/Project_Default.xml
 
 # AWS User-specific
 .idea/**/aws.xml
