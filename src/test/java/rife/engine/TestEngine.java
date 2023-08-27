@@ -9,7 +9,6 @@ import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.UnexpectedPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.engine.annotations.Parameter;
@@ -29,7 +28,7 @@ import java.util.TimeZone;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestEngine {
-    final ContextInfo ctxInfo = new ContextInfo();
+    Context ctx;
 
     @Test
     void testSimplePlain()
@@ -38,16 +37,16 @@ public class TestEngine {
             public void setup() {
                 get("/simple/plain", c -> {
                     c.setContentType("text/plain");
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                 });
             }
         })) {
             try (final var webClient = new WebClient()) {
                 final TextPage page = webClient.getPage("http://localhost:8181/simple/plain");
                 assertEquals("text/plain", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:", ctxInfo.remoteAddr(), ctxInfo.serverPort()),
+                assertEquals(String.format("Just some text %s:%d:", ctx.remoteAddr(), ctx.serverPort()),
                     page.getContent());
             }
         }
@@ -60,15 +59,15 @@ public class TestEngine {
             public void setup() {
                 get("/simple/plain", c -> {
                     c.setContentType("text/plain");
-                    ctxInfo.context(c);
-                    c.print("Just some text on port " + ctxInfo.serverPort());
+                    ctx = c;
+                    c.print("Just some text on port " + ctx.serverPort());
                 });
             }
         })) {
             try (final var webClient = new WebClient()) {
                 final TextPage page = webClient.getPage("http://localhost:8282/simple/plain");
                 assertEquals("text/plain", page.getWebResponse().getContentType());
-                assertEquals("Just some text on port " + ctxInfo.serverPort(), page.getContent());
+                assertEquals("Just some text on port " + ctx.serverPort(), page.getContent());
             }
         }
     }
@@ -79,16 +78,16 @@ public class TestEngine {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
                 get("/simple/html", c -> {
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                 });
             }
         })) {
             try (final var webClient = new WebClient()) {
                 final HtmlPage page = webClient.getPage("http://localhost:8181/simple/html");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:", ctxInfo.remoteAddr(), ctxInfo.serverPort()),
+                assertEquals(String.format("Just some text %s:%d:", ctx.remoteAddr(), ctx.serverPort()),
                     page.asNormalizedText());
             }
         }
@@ -100,9 +99,9 @@ public class TestEngine {
         try (final var server = new TestServerRunner(new Site() {
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> {
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                 });
             }
         })) {
@@ -111,23 +110,23 @@ public class TestEngine {
 
                 page = webClient.getPage("http://localhost:8181/simple/pathinfo/some/path");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8181/simple/pathinfo/");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:", ctxInfo.remoteAddr(), ctxInfo.serverPort()),
+                assertEquals(String.format("Just some text %s:%d:", ctx.remoteAddr(), ctx.serverPort()),
                     page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8181/simple/pathinfo");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:", ctxInfo.remoteAddr(), ctxInfo.serverPort()),
+                assertEquals(String.format("Just some text %s:%d:", ctx.remoteAddr(), ctx.serverPort()),
                     page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8181/simple/pathinfo/another_path_info");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
 
                 try {
                     webClient.getOptions().setPrintContentOnFailingStatusCode(false);
@@ -146,9 +145,9 @@ public class TestEngine {
         try (final var server = new TestTomcatRunner(new Site() {
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> {
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                 });
             }
         })) {
@@ -157,23 +156,23 @@ public class TestEngine {
 
                 page = webClient.getPage("http://localhost:8282/simple/pathinfo/some/path");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8282/simple/pathinfo/");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:", ctxInfo.remoteAddr(), ctxInfo.serverPort()),
+                assertEquals(String.format("Just some text %s:%d:", ctx.remoteAddr(), ctx.serverPort()),
                     page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8282/simple/pathinfo");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:", ctxInfo.remoteAddr(), ctxInfo.serverPort()),
+                assertEquals(String.format("Just some text %s:%d:", ctx.remoteAddr(), ctx.serverPort()),
                     page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8282/simple/pathinfo/another_path_info");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
 
                 try {
                     webClient.getOptions().setPrintContentOnFailingStatusCode(false);
@@ -195,9 +194,9 @@ public class TestEngine {
                     PathInfoHandling.MAP(
                         m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
                     ), c -> {
-                        ctxInfo.context(c);
-                        c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                            + ctxInfo.pathInfo());
+                        ctx = c;
+                        c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                            + ctx.pathInfo());
                         c.print(":" + c.parameter("param1"));
                         c.print(":" + c.parameter("param2"));
                     });
@@ -208,8 +207,8 @@ public class TestEngine {
 
                 page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1/x4321");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:val1:4321", ctxInfo.remoteAddr(),
-                    ctxInfo.serverPort(), ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:val1:4321", ctx.remoteAddr(),
+                    ctx.serverPort(), ctx.pathInfo()), page.asNormalizedText());
 
                 try {
                     webClient.getOptions().setPrintContentOnFailingStatusCode(false);
@@ -232,9 +231,9 @@ public class TestEngine {
                         m -> m.t("text").s().p("param1"),
                         m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
                     ), c -> {
-                        ctxInfo.context(c);
-                        c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                            + ctxInfo.pathInfo());
+                        ctx = c;
+                        c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                            + ctx.pathInfo());
                         c.print(":" + c.parameter("param1"));
                         c.print(":" + c.parameter("param2"));
                     });
@@ -245,13 +244,13 @@ public class TestEngine {
 
                 page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1/x4321");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:val1:4321", ctxInfo.remoteAddr(),
-                    ctxInfo.serverPort(), ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:val1:4321", ctx.remoteAddr(),
+                    ctx.serverPort(), ctx.pathInfo()), page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8181/pathinfo/map/text/val1");
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:val1:null", ctxInfo.remoteAddr(),
-                    ctxInfo.serverPort(), ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:val1:null", ctx.remoteAddr(),
+                    ctx.serverPort(), ctx.pathInfo()), page.asNormalizedText());
 
                 try {
                     webClient.getOptions().setPrintContentOnFailingStatusCode(false);
@@ -272,9 +271,9 @@ public class TestEngine {
                 var path_info = get("/pathinfo/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
                 ), c -> {
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                     c.print(":" + c.parameter("param1"));
                     c.print(":" + c.parameter("param2"));
                 });
@@ -297,8 +296,8 @@ public class TestEngine {
 
                 page = webClient.getPage(page.getWebResponse().getContentAsString());
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:v1:412", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:v1:412", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
             }
         }
     }
@@ -313,9 +312,9 @@ public class TestEngine {
                 form = post("/form/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().t("x").p("param2", "\\d+")
                 ), c -> {
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                     c.print(":" + c.parameter("param1"));
                     c.print(":" + c.parameter("param2"));
                 });
@@ -340,8 +339,8 @@ public class TestEngine {
 
                 page = page.getForms().get(0).getInputsByName("submit").get(0).click();
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:v1:412", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:v1:412", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
             }
         }
     }
@@ -354,9 +353,9 @@ public class TestEngine {
                 final Route target2 = get("/target2/map", PathInfoHandling.MAP(m -> m.t("other").s().t("y").s()
                     .p("param1")
                 ), c -> {
-                    ctxInfo.context(c);
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    ctx = c;
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                     c.print(":" + c.parameter("param1"));
                     c.print(":" + c.parameter("param2"));
                 });
@@ -373,8 +372,8 @@ public class TestEngine {
                 target = get("/target/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().t("x").p("param2", "\\d+")
                 ), c -> {
-                    c.print("Just some text " + ctxInfo.remoteAddr() + ":" + ctxInfo.serverPort() + ":"
-                        + ctxInfo.pathInfo());
+                    c.print("Just some text " + ctx.remoteAddr() + ":" + ctx.serverPort() + ":"
+                        + ctx.pathInfo());
                     c.print(":" + c.parameter("param1"));
                     c.print(":" + c.parameter("param2"));
                 });
@@ -396,8 +395,8 @@ public class TestEngine {
 
                 page = page.getElementsByTagName("a").get(0).click();
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:v1:412", ctxInfo.remoteAddr(),
-                    ctxInfo.serverPort(), ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:v1:412", ctx.remoteAddr(),
+                    ctx.serverPort(), ctx.pathInfo()), page.asNormalizedText());
 
                 page = webClient.getPage("http://localhost:8181/group");
                 assertEquals("text/html", page.getWebResponse().getContentType());
@@ -407,8 +406,8 @@ public class TestEngine {
 
                 page = page.getElementsByTagName("a").get(0).click();
                 assertEquals("text/html", page.getWebResponse().getContentType());
-                assertEquals(String.format("Just some text %s:%d:%s:v2:523", ctxInfo.remoteAddr(), ctxInfo.serverPort(),
-                    ctxInfo.pathInfo()), page.asNormalizedText());
+                assertEquals(String.format("Just some text %s:%d:%s:v2:523", ctx.remoteAddr(), ctx.serverPort(),
+                    ctx.pathInfo()), page.asNormalizedText());
             }
         }
     }
@@ -752,6 +751,13 @@ public class TestEngine {
         }
     }
 
+    static class Routes extends Router {
+        final Route route = route("/route", c -> {
+        });
+        final Route another = route("/another", c -> {
+        });
+    }
+
     @Test
     void testRouterSite() {
         var site = new Site() {
@@ -990,12 +996,5 @@ public class TestEngine {
                     """, page.getWebResponse().getContentAsString());
             }
         }
-    }
-
-    static class Routes extends Router {
-        final Route route = route("/route", c -> {
-        });
-        final Route another = route("/another", c -> {
-        });
     }
 }
