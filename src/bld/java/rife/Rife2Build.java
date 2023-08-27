@@ -26,11 +26,10 @@ public class Rife2Build extends AbstractRife2Build {
 
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", version(1,16,1)))
-            .include(dependency("jakarta.servlet", "jakarta.servlet-api", version(5,0,0)))
             .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,15)).exclude("*", "jetty-jakarta-servlet-api"))
             .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,15)).exclude("*", "jetty-jakarta-servlet-api"))
-            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-core", version(10,1,12)))
-            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-jasper", version(10,1,12)))
+            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-core", version(10,1,13)))
+            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-jasper", version(10,1,13)))
             .include(dependency("net.imagej", "ij", version("1.54d")));
         scope(test)
             .include(dependency("org.jsoup", "jsoup", version(1,16,1)))
