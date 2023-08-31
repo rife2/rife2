@@ -108,7 +108,7 @@ class TypesContext implements Cloneable {
     }
 
     void cloneVars() {
-        vars_ = new HashMap<Integer, String>(vars_);
+        vars_ = new HashMap<>(vars_);
     }
 
     void setSort(int type) {
@@ -136,7 +136,7 @@ class TypesContext implements Cloneable {
     }
 
     TypesContext clone(TypesNode node) {
-        var new_context = new TypesContext(new HashMap<Integer, String>(vars_), (Stack<String>) stack_.clone());
+        var new_context = new TypesContext(new HashMap<>(vars_), (Stack<String>) stack_.clone());
         new_context.setSort(node.getSort());
         return new_context;
     }
@@ -150,7 +150,7 @@ class TypesContext implements Cloneable {
             Logger.getLogger("rife.continuations").severe(ExceptionUtils.getExceptionStackTrace(e));
         }
 
-        new_context.vars_ = new HashMap<Integer, String>(vars_);
+        new_context.vars_ = new HashMap<>(vars_);
         new_context.stack_ = (Stack<String>) stack_.clone();
 
         return new_context;

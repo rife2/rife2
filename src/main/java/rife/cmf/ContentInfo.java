@@ -106,10 +106,7 @@ public class ContentInfo extends Validation {
             return path_;
         }
 
-        var result = new StringBuilder(path_);
-        result.append("/");
-        result.append(name_);
-        return result.toString();
+        return path_ + '/' + name_;
     }
 
     /**

@@ -15,7 +15,6 @@ import rife.cmf.MimeType;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException;
 import rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException;
-import rife.cmf.dam.contentmanagers.exceptions.UnsupportedMimeTypeException;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
@@ -95,9 +94,7 @@ public class TestContentManager {
             var content = new Content(MimeType.APPLICATION_XHTML, data_text);
             assertTrue(manager.storeContent("/textcontent", content, null));
 
-            manager.useContentData("/textcontent", contentData -> {
-                assertEquals(data_text, contentData);
-            });
+            manager.useContentData("/textcontent", contentData -> assertEquals(data_text, contentData));
         } finally {
             tearDown(datasource);
         }

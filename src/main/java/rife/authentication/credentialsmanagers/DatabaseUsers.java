@@ -309,7 +309,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                                 public int performUpdate(DbPreparedStatement statement) {
                                     for (var role : attributes.getRoles()) {
                                         // obtain the role id
-                                        var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<String>(role) {
+                                        var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<>(role) {
                                             public void setParameters(DbPreparedStatement statement) {
                                                 statement.setString("name", data_);
                                             }
@@ -690,7 +690,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                                     public int performUpdate(DbPreparedStatement statement) {
                                         for (var role : attributes.getRoles()) {
                                             // obtain the role id
-                                            var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<String>(role) {
+                                            var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<>(role) {
                                                 public void setParameters(DbPreparedStatement statement) {
                                                     statement.setString("name", data_);
                                                 }

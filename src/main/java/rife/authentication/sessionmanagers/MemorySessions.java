@@ -11,11 +11,7 @@ import rife.authentication.sessionmanagers.exceptions.StartSessionErrorException
 import rife.config.RifeConfig;
 import rife.tools.UniqueIDGenerator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
 
 public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();

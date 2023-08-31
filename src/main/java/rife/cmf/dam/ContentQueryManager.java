@@ -94,7 +94,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      *                     stored
      * @param klass        the class of the bean that will be handled by this
      *                     {@code ContentQueryManager}
-     * @param backendClass the class the will be used by this
+     * @param backendClass the class will be used by this
      *                     {@code ContentQueryManager} to reference data in the backend
      * @since 1.0
      */
@@ -529,16 +529,13 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
             for (var property : properties) {
                 if (property.hasMimeType() &&
                     property.isAutoRetrieved()) {
-                    contentManager_.useContentDataResult(buildCmfPath(constrained, objectId, property.getPropertyName()), new ContentDataUser<>() {
-                        public Object useContentData(Object contentData)
-                        throws InnerClassException {
-                            try {
-                                BeanUtils.setPropertyValue(bean, property.getPropertyName(), contentData);
-                            } catch (BeanUtilsException | ContentManagerException e) {
-                                throw new DatabaseException(e);
-                            }
-                            return null;
+                    contentManager_.useContentDataResult(buildCmfPath(constrained, objectId, property.getPropertyName()), contentData -> {
+                        try {
+                            BeanUtils.setPropertyValue(bean, property.getPropertyName(), contentData);
+                        } catch (BeanUtilsException | ContentManagerException e) {
+                            throw new DatabaseException(e);
                         }
+                        return null;
                     });
                 }
             }
@@ -892,6 +889,6 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     public <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> type) {
-        return new ContentQueryManager(getDatasource(), type, contentManager_);
+        return new ContentQueryManager<>(getDatasource(), type, contentManager_);
     }
 }

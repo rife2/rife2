@@ -4,10 +4,8 @@
  */
 package rife.authentication.elements;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.test.MockConversation;

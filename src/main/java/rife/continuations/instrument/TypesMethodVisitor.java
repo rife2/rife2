@@ -130,8 +130,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
                 // remember the node in which the pause invocation is called
                 currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PAUSE, ++pauseCount_));
-
-                return;
             }
             // not the pause invocation
             else {
@@ -298,205 +296,107 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
         if (currentNode_ != null) {
             switch (opcode) {
-                case RETURN:
-                    currentNode_ = null;
-                    break;
-                case ATHROW:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    break;
-                case ACONST_NULL:
+                case RETURN -> currentNode_ = null;
+                case ATHROW -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+                case ACONST_NULL ->
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.TYPE_NULL));
-                    break;
-                case ICONST_0:
-                case ICONST_1:
-                case ICONST_2:
-                case ICONST_3:
-                case ICONST_4:
-                case ICONST_5:
-                case ICONST_M1:
+                case ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1 ->
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                    break;
-                case FCONST_0:
-                case FCONST_1:
-                case FCONST_2:
+                case FCONST_0, FCONST_1, FCONST_2 ->
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                    break;
-                case LCONST_0:
-                case LCONST_1:
+                case LCONST_0, LCONST_1 ->
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                    break;
-                case DCONST_0:
-                case DCONST_1:
+                case DCONST_0, DCONST_1 ->
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                    break;
-                case AALOAD:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.AALOAD));
-                    break;
-                case IALOAD:
+                case AALOAD -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.AALOAD));
+                case IALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                    break;
-                case FALOAD:
+                }
+                case FALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                    break;
-                case BALOAD:
+                }
+                case BALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
-                    break;
-                case CALOAD:
+                }
+                case CALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
-                    break;
-                case SALOAD:
+                }
+                case SALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
-                    break;
-                case LALOAD:
+                }
+                case LALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                    break;
-                case DALOAD:
+                }
+                case DALOAD -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                    break;
-                case IASTORE:
-                case LASTORE:
-                case FASTORE:
-                case DASTORE:
-                case AASTORE:
-                case BASTORE:
-                case CASTORE:
-                case SASTORE:
+                }
+                case IASTORE, LASTORE, FASTORE, DASTORE, AASTORE, BASTORE, CASTORE, SASTORE -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    break;
-                case POP:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    break;
-                case POP2:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP2));
-                    break;
-                case DUP:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP));
-                    break;
-                case DUP_X1:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX1));
-                    break;
-                case DUP_X2:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX2));
-                    break;
-                case DUP2:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2));
-                    break;
-                case DUP2_X1:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X1));
-                    break;
-                case DUP2_X2:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X2));
-                    break;
-                case SWAP:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SWAP));
-                    break;
-                case IADD:
-                case LADD:
-                case FADD:
-                case DADD:
-                case ISUB:
-                case LSUB:
-                case FSUB:
-                case DSUB:
-                case IMUL:
-                case LMUL:
-                case FMUL:
-                case DMUL:
-                case IDIV:
-                case LDIV:
-                case FDIV:
-                case DDIV:
-                case IREM:
-                case LREM:
-                case FREM:
-                case DREM:
-                case ISHL:
-                case LSHL:
-                case ISHR:
-                case LSHR:
-                case IUSHR:
-                case LUSHR:
-                case IAND:
-                case LAND:
-                case IOR:
-                case LOR:
-                case IXOR:
-                case LXOR:
+                }
+                case POP -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+                case POP2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP2));
+                case DUP -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP));
+                case DUP_X1 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX1));
+                case DUP_X2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX2));
+                case DUP2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2));
+                case DUP2_X1 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X1));
+                case DUP2_X2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X2));
+                case SWAP -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SWAP));
+                case IADD, LADD, FADD, DADD, ISUB, LSUB, FSUB, DSUB, IMUL, LMUL, FMUL, DMUL, IDIV, LDIV, FDIV, DDIV, IREM, LREM, FREM, DREM, ISHL, LSHL, ISHR, LSHR, IUSHR, LUSHR, IAND, LAND, IOR, LOR, IXOR, LXOR ->
                     // just pop one type since the result is the same type as both operands
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    break;
-                case INEG:
-                case LNEG:
-                case FNEG:
-                case DNEG:
-                    // do nothing, the type stack remains the same
-                    break;
-                case I2F:
-                case I2B:
-                case I2C:
-                case I2S:
-                case L2D:
-                case F2I:
-                case D2L:
-                    // do nothing, the type stack remains the same
-                    break;
-                case I2L:
-                case F2L:
+                case INEG, LNEG, FNEG, DNEG -> {
+                }
+                // do nothing, the type stack remains the same
+                case I2F, I2B, I2C, I2S, L2D, F2I, D2L -> {
+                }
+                // do nothing, the type stack remains the same
+                case I2L, F2L -> {
                     // the type widens
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                    break;
-                case I2D:
-                case F2D:
+                }
+                case I2D, F2D -> {
                     // the type widens
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                    break;
-                case L2I:
-                case D2I:
+                }
+                case L2I, D2I -> {
                     // the type shrinks
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                    break;
-                case L2F:
-                case D2F:
+                }
+                case L2F, D2F -> {
                     // the type shrinks
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                    break;
-                case LCMP:
-                case FCMPL:
-                case FCMPG:
-                case DCMPL:
-                case DCMPG:
+                }
+                case LCMP, FCMPL, FCMPG, DCMPL, DCMPG -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                    break;
-                case ARRAYLENGTH:
+                }
+                case ARRAYLENGTH -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                    break;
-                case MONITORENTER:
-                case MONITOREXIT:
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    break;
+                }
+                case MONITORENTER, MONITOREXIT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
             }
         }
     }
@@ -843,7 +743,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         TypesContext exception_context = null;
         for (var instruction : node.getInstructions()) {
             switch (instruction.getOpcode()) {
-                case TypesOpcode.SET: {
+                case TypesOpcode.SET -> {
                     var type = context.peek();
                     if (instruction.getType() != null) {
                         type = instruction.getType();
@@ -855,7 +755,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     if (node.getPredecessor() != null &&
                         context.getVars() == node.getPredecessor().getContext().getVars() &&
                         (null == current_var_type ||
-                         (current_var_type != TypesContext.TYPE_NULL && !current_var_type.equals(type)))) {
+                            (current_var_type != TypesContext.TYPE_NULL && !current_var_type.equals(type)))) {
                         context.cloneVars();
                     }
 
@@ -869,8 +769,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         exception_context = null;
                     }
                 }
-                break;
-                case TypesOpcode.GET: {
+                case TypesOpcode.GET -> {
                     var type = instruction.getType();
                     if (null == type) {
                         type = context.getVar(instruction.getArgument());
@@ -881,18 +780,16 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
                     context.push(type);
                 }
-                break;
-                case TypesOpcode.IINC:
-                    // do nothing
-                    break;
-                case TypesOpcode.POP: {
+                case TypesOpcode.IINC -> {
+                }
+                // do nothing
+                case TypesOpcode.POP -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  POP " + context.peek());
 
                     context.pop();
                 }
-                break;
-                case TypesOpcode.POP2: {
+                case TypesOpcode.POP2 -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  POP2 " + context.peek());
 
@@ -901,14 +798,12 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         context.pop();
                     }
                 }
-                break;
-                case TypesOpcode.PUSH:
+                case TypesOpcode.PUSH -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  PUSH " + instruction.getType());
-
                     context.push(instruction.getType());
-                    break;
-                case TypesOpcode.AALOAD: {
+                }
+                case TypesOpcode.AALOAD -> {
                     context.pop();
                     var array_desc = context.pop();
                     String element_desc = null;
@@ -924,14 +819,12 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
                     context.push(element_desc);
                 }
-                break;
-                case TypesOpcode.DUP:
+                case TypesOpcode.DUP -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  DUP " + context.peek());
-
                     context.push(context.peek());
-                    break;
-                case TypesOpcode.DUPX1: {
+                }
+                case TypesOpcode.DUPX1 -> {
                     var type1 = context.pop();
                     var type2 = context.pop();
 
@@ -942,8 +835,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     context.push(type2);
                     context.push(type1);
                 }
-                break;
-                case TypesOpcode.DUPX2: {
+                case TypesOpcode.DUPX2 -> {
                     var type1 = context.pop();
                     var type2 = context.pop();
 
@@ -964,8 +856,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         }
                     }
                 }
-                break;
-                case TypesOpcode.DUP2: {
+                case TypesOpcode.DUP2 -> {
                     var type1 = context.pop();
                     if (type1.startsWith("2")) {
                         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
@@ -985,8 +876,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         context.push(type1);
                     }
                 }
-                break;
-                case TypesOpcode.DUP2_X1: {
+                case TypesOpcode.DUP2_X1 -> {
                     var type1 = context.pop();
                     var type2 = context.pop();
                     if (type1.startsWith("2")) {
@@ -1008,8 +898,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         context.push(type1);
                     }
                 }
-                break;
-                case TypesOpcode.DUP2_X2: {
+                case TypesOpcode.DUP2_X2 -> {
                     var type1 = context.pop();
                     var type2 = context.pop();
                     if (type1.startsWith("2")) {
@@ -1059,8 +948,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         }
                     }
                 }
-                break;
-                case TypesOpcode.SWAP: {
+                case TypesOpcode.SWAP -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  SWAP");
 
@@ -1069,14 +957,12 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     context.push(type1);
                     context.push(type2);
                 }
-                break;
-                case TypesOpcode.PAUSE:
+                case TypesOpcode.PAUSE -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "PAUSE " + instruction.getArgument());
-
                     pauseContexts_[instruction.getArgument()] = context.clone(node);
-                    break;
-                case TypesOpcode.LABEL: {
+                }
+                case TypesOpcode.LABEL -> {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "LABEL " + instruction.getArgument());
 
@@ -1086,7 +972,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         exception_context = label_context;
                     }
                 }
-                break;
             }
         }
     }

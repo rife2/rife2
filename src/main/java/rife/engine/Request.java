@@ -12,7 +12,6 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import rife.tools.StringUtils;
 
 /**
  * This interface contains all the methods that the web engine needs to be

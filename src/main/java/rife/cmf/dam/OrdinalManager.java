@@ -555,11 +555,9 @@ public class OrdinalManager implements Cloneable {
      * @since 1.0
      */
     public boolean update(final int currentOrdinal, final int newOrdinal) {
-        Boolean result = dbQueryManager_.inTransaction(() -> {
-            return 0 != dbQueryManager_.executeUpdate(freeMoveOrdinal_, s ->
-                s.setInt("current", currentOrdinal)
-                    .setInt("new", newOrdinal));
-        });
+        Boolean result = dbQueryManager_.inTransaction(() -> 0 != dbQueryManager_.executeUpdate(freeMoveOrdinal_, s ->
+            s.setInt("current", currentOrdinal)
+                .setInt("new", newOrdinal)));
 
         return null != result && result;
     }
@@ -579,12 +577,10 @@ public class OrdinalManager implements Cloneable {
      * @since 1.0
      */
     public boolean update(final long restrictId, final int currentOrdinal, final int newOrdinal) {
-        Boolean result = dbQueryManager_.inTransaction(() -> {
-            return 0 != dbQueryManager_.executeUpdate(freeMoveOrdinalRestricted_, s ->
-                s.setLong(restrictColumn_, restrictId)
-                    .setInt("current", currentOrdinal)
-                    .setInt("new", newOrdinal));
-        });
+        Boolean result = dbQueryManager_.inTransaction(() -> 0 != dbQueryManager_.executeUpdate(freeMoveOrdinalRestricted_, s ->
+            s.setLong(restrictColumn_, restrictId)
+                .setInt("current", currentOrdinal)
+                .setInt("new", newOrdinal)));
 
         return null != result && result;
     }

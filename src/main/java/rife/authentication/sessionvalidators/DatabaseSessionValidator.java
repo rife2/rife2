@@ -15,8 +15,6 @@ import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.authentication.sessionmanagers.DatabaseSessionsFactory;
 import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException;
 import rife.database.Datasource;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.Select;

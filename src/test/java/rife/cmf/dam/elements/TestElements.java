@@ -15,7 +15,6 @@ import rife.cmf.dam.ContentImage;
 import rife.cmf.dam.ContentQueryManager;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.elements.ServeContent;
-import rife.cmf.format.ImageFormatter;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;

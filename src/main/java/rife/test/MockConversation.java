@@ -85,7 +85,7 @@ public class MockConversation {
      * Perform a request for a particular URL and request configuration.
      * <p>The request can either be complete with the scheme and hostname, or
      * an absolute path. These two URLs are thus considered the same:
-     * <pre>https://localhost/some/url?name1=value1&amp;name2=value2</pre>
+     * <pre><a href="https://localhost/some/url?name1=value1&amp;name2=value2">...</a></pre>
      * <pre>/some/url?name1=value1&amp;name2=value2</pre>
      * <p>Note that when the complete URL form is used, it should correspond
      * to the scheme, hostname and port configuration of this conversation.

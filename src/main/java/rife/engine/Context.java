@@ -929,7 +929,7 @@ public class Context {
      * Generates a form that corresponds to an empty instance of a bean class.
      * <p>An '<em>empty</em>' instance is an object that has been created by
      * calling the default constructor of the bean class, without making any
-     * additional changes to it afterwards.
+     * additional changes to it afterward.
      * <p>This method delegates all logic to the {@link
      * rife.forms.FormBuilder#generateForm(Template, Class, Map, String)}
      * method of the provided template instance.
@@ -1146,7 +1146,7 @@ public class Context {
     public boolean isParameterEmpty(String name) {
         var parameter = parameter(name);
         return null == parameter ||
-            parameter.trim().equals("");
+            parameter.trim().isEmpty();
     }
 
     /**

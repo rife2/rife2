@@ -297,7 +297,7 @@ class MultipartRequest {
             parameters_.put(field_name, new_values);
         } else {
             // This is a file
-            if (file_name.equals("")) {
+            if (file_name.isEmpty()) {
                 // empty filename, probably an "empty" file param
                 file_name = null;
             }

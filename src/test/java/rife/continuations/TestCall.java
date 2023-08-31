@@ -94,9 +94,7 @@ public class TestCall {
     void testMultipleAnswersWithTryCatch()
     throws Throwable {
         final var test_classes = new String[]{"TestCallMultipleAnswersWithTryCatchSource", "TestCallSimpleCallInterfaceSource"};
-        for (var i = 0; i < test_classes.length; i++) {
-            final var test_class = test_classes[i];
-
+        for (final String test_class : test_classes) {
             var runner = new ContinuableRunnerTest();
 
             var id1 = runner.start(TestCall.class.getPackage().getName() + "." + test_class);

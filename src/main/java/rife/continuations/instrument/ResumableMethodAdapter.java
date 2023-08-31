@@ -435,7 +435,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
 
     /**
      * Restore the local variable stack, first the computation
-     * types of category 1 and afterwards those of category 2
+     * types of category 1 and afterward those of category 2
      */
     private void restoreLocalStack(TypesContext context) {
         for (var i = 1; i <= maxLocalIndex_; i++) {
@@ -461,7 +461,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     methodVisitor_.visitVarInsn(FSTORE, i);
                 }
                 case Type.OBJECT -> {
-                    debugMessage("CONT: restore local : " + i + ", " + context.getVar(i) + "");
+                    debugMessage("CONT: restore local : " + i + ", " + context.getVar(i));
                     var type = context.getVar(i);
                     if (TypesContext.TYPE_NULL.equals(type)) {
                         methodVisitor_.visitInsn(ACONST_NULL);

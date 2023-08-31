@@ -143,7 +143,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             HashMap<String, Integer> roleids = null;
             // get the role ids
             if (attributes.getRoles() != null) {
-                roleids = new HashMap<String, Integer>();
+                roleids = new HashMap<>();
 
                 try (DbPreparedStatement ps_get_roleid = getConnection().getPreparedStatement(getRoleId_)) {
                     int roleid = -1;
@@ -229,7 +229,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             HashMap<String, Integer> roleids = null;
             // get the role ids
             if (attributes.getRoles() != null) {
-                roleids = new HashMap<String, Integer>();
+                roleids = new HashMap<>();
 
                 try (DbPreparedStatement ps_get_roleid = getConnection().getPreparedStatement(getRoleId_)) {
                     int roleid = -1;

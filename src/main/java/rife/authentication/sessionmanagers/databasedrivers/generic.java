@@ -12,7 +12,6 @@ import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class generic extends DatabaseSessions {

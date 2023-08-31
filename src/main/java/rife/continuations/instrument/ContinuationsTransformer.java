@@ -7,7 +7,6 @@ package rife.continuations.instrument;
 import rife.continuations.ContinuationConfigInstrument;
 import rife.instrument.RifeTransformer;
 
-import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
 /**

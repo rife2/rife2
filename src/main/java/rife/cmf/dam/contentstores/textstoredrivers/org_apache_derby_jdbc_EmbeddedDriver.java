@@ -10,7 +10,6 @@ import rife.database.queries.CreateTable;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;

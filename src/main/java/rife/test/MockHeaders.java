@@ -132,7 +132,7 @@ class MockHeaders {
 
     public void addHeader(String name, String value) {
         if (null == headers_) {
-            headers_ = new HashMap<String, List<String>>();
+            headers_ = new HashMap<>();
         }
 
         var headers = headers_.computeIfAbsent(name, k -> new ArrayList<>());
@@ -167,10 +167,10 @@ class MockHeaders {
 
     public void setHeader(String name, final String value) {
         if (null == headers_) {
-            headers_ = new HashMap<String, List<String>>();
+            headers_ = new HashMap<>();
         }
 
-        headers_.put(name, new ArrayList<String>() {{
+        headers_.put(name, new ArrayList<>() {{
             add(value);
         }});
     }

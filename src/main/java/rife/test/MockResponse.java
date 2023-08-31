@@ -798,7 +798,7 @@ public class MockResponse extends AbstractResponse {
                 var c = _string.charAt(_i++);
 
                 switch (state) {
-                    case 0: // Start
+                    case 0 -> { // Start
                         if (_delim.indexOf(c) >= 0) {
                             if (_returnTokens) {
                                 _token.append(c);
@@ -818,8 +818,8 @@ public class MockResponse extends AbstractResponse {
                             state = 1;
                         }
                         continue;
-
-                    case 1: // Token
+                    }
+                    case 1 -> { // Token
                         _hasToken = true;
                         if (_delim.indexOf(c) >= 0) {
                             if (_returnTokens)
@@ -836,9 +836,8 @@ public class MockResponse extends AbstractResponse {
                         } else
                             _token.append(c);
                         continue;
-
-
-                    case 2: // Single Quote
+                    }
+                    case 2 -> { // Single Quote
                         _hasToken = true;
                         if (escape) {
                             escape = false;
@@ -854,9 +853,8 @@ public class MockResponse extends AbstractResponse {
                         } else
                             _token.append(c);
                         continue;
-
-
-                    case 3: // Double Quote
+                    }
+                    case 3 -> { // Double Quote
                         _hasToken = true;
                         if (escape) {
                             escape = false;
@@ -872,6 +870,7 @@ public class MockResponse extends AbstractResponse {
                         } else
                             _token.append(c);
                         continue;
+                    }
                 }
             }
 
@@ -972,7 +971,6 @@ public class MockResponse extends AbstractResponse {
                     continue;
                 }
                 buf.append(c);
-                continue;
             }
             buf.append('"');
         }

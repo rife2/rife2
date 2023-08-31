@@ -4,12 +4,8 @@
  */
 package rife.test;
 
-import com.gargoylesoftware.htmlunit.*;
 import org.junit.jupiter.api.Test;
 import rife.engine.*;
-
-import java.io.IOException;
-import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

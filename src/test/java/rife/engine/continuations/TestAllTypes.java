@@ -206,7 +206,7 @@ public class TestAllTypes implements Element {
         double double5 = -0d;
         double double6 = double3 + double2;
 
-        StringBuffer string_buffer1 = new StringBuffer(createString("some", "value", 6899L));
+        StringBuilder string_buffer1 = new StringBuilder(createString("some", "value", 6899L));
 
         while (int1 < 40) {
             int int7 = 2;

@@ -7,7 +7,6 @@ package rife.engine;
 import rife.config.RifeConfig;
 import rife.engine.annotations.*;
 import rife.tools.Convert;
-import rife.tools.SerializationUtils;
 
 import java.time.Instant;
 import java.util.*;

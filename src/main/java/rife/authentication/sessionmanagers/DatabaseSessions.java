@@ -12,16 +12,10 @@ import rife.authentication.SessionManager;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
-import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
 import rife.tools.UniqueIDGenerator;
 import rife.tools.ExceptionUtils;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public abstract class DatabaseSessions extends DbQueryManager implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();

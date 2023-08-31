@@ -6,11 +6,6 @@ package rife.scheduler.schedulermanagers;
 
 import org.junit.jupiter.api.Test;
 import rife.scheduler.*;
-import rife.scheduler.exceptions.FrequencyException;
-import rife.scheduler.exceptions.NoExecutorForTasktypeException;
-import rife.scheduler.exceptions.SchedulerException;
-import rife.scheduler.exceptions.TaskManagerException;
-import rife.scheduler.exceptions.UnableToRetrieveTasksToProcessException;
 import rife.tools.ExceptionUtils;
 
 import java.util.ArrayList;
@@ -198,7 +193,7 @@ public class TestMemoryScheduler {
         private ArrayList<Task> executedTasks_ = null;
 
         public TestExecutor() {
-            executedTasks_ = new ArrayList<Task>();
+            executedTasks_ = new ArrayList<>();
         }
 
         public boolean executeTask(Task task) {

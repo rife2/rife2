@@ -448,7 +448,7 @@ public class ContinuationContext implements Cloneable {
     /**
      * Retrieves the continuation ID.
      * <p>Note that this ID is not necessarily present in the manager and that
-     * trying to retrieve a continuation afterwards from its ID is never
+     * trying to retrieve a continuation afterward from its ID is never
      * guaranteed to give a result.
      *
      * @return the unique ID of this continuation.
@@ -511,7 +511,7 @@ public class ContinuationContext implements Cloneable {
         writeLock_.lock();
         try {
             if (null == relatedIds_) {
-                relatedIds_ = new ArrayList<String>();
+                relatedIds_ = new ArrayList<>();
             }
             relatedIds_.add(id);
         } finally {

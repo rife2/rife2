@@ -5,7 +5,6 @@
 package rife.cmf.loader.image;
 
 import org.junit.jupiter.api.Test;
-import rife.cmf.MimeType;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 

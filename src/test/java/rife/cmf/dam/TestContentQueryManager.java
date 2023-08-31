@@ -6,19 +6,16 @@ package rife.cmf.dam;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.net.URL;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.cmf.MimeType;
-import rife.cmf.dam.contentmanagers.DatabaseContent;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.dam.exceptions.*;
 import rife.config.RifeConfig;
 import rife.database.*;
 import rife.database.queries.Select;
-import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;

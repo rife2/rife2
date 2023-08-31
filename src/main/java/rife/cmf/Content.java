@@ -337,7 +337,7 @@ public class Content implements Cloneable {
      */
     public Content attribute(String name, String value) {
         if (null == attributes_) {
-            attributes_ = new HashMap<String, String>();
+            attributes_ = new HashMap<>();
         }
 
         attributes_.put(name, value);
@@ -360,7 +360,7 @@ public class Content implements Cloneable {
             return;
         }
 
-        attributes_ = new HashMap<String, String>(attributes);
+        attributes_ = new HashMap<>(attributes);
     }
 
     /**
@@ -579,7 +579,7 @@ public class Content implements Cloneable {
      */
     public Content property(String name, String value) {
         if (null == properties_) {
-            properties_ = new HashMap<String, String>();
+            properties_ = new HashMap<>();
         }
 
         properties_.put(name, value);
@@ -602,7 +602,7 @@ public class Content implements Cloneable {
             return;
         }
 
-        properties_ = new HashMap<String, String>(properties);
+        properties_ = new HashMap<>(properties);
     }
 
     /**

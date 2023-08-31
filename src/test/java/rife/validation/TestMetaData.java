@@ -180,7 +180,7 @@ public class TestMetaData {
         ConstrainedProperty prop = ((Constrained) person_clone).getConstrainedProperty("lastname");
         assertNotNull(prop);
         String[] list_array = prop.getInList();
-        List<String> list_list = new ArrayList<String>(Arrays.asList(list_array));
+        List<String> list_list = new ArrayList<>(Arrays.asList(list_array));
         list_list.add("Chronno");
         prop.inList(list_list);
         ((Constrained) person_clone).addConstraint(prop);

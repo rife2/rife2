@@ -6,7 +6,6 @@ package rife.authentication.sessionmanagers;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.authentication.ListSessions;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;

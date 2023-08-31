@@ -9,7 +9,6 @@ import rife.tools.BeanUtils;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.validation.ValidationError;
 
-import java.awt.Image;
 import java.util.HashSet;
 import java.util.Set;
 

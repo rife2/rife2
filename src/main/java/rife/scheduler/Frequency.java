@@ -858,7 +858,6 @@ public class Frequency {
                     for (byte i = 0; i < allValues.length; i += divider) {
                         result_values[i] = allValues[i];
                     }
-                    continue;
                 }
                 // range
                 else if ((separator = current_part.indexOf("-")) != -1) {
@@ -933,7 +932,6 @@ public class Frequency {
                         result_values[left - begin] = allValues[left - begin];
                         left += divider;
                     }
-                    continue;
                 }
                 // one number
                 else {

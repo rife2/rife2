@@ -15,13 +15,10 @@ import rife.config.RifeConfig;
 import rife.engine.Request;
 import rife.engine.RequestMethod;
 import rife.engine.UploadedFile;
-import rife.engine.exceptions.EngineException;
 import rife.engine.exceptions.MultipartFileTooBigException;
 import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;
 import rife.engine.exceptions.MultipartRequestException;
-import rife.tools.FileUtils;
 import rife.tools.StringUtils;
-import rife.tools.exceptions.FileUtilsErrorException;
 
 /**
  * Provides a {@link Request} implementation that is suitable for testing a
@@ -664,7 +661,7 @@ public class MockRequest implements Request {
 
     public Enumeration<String> getAttributeNames() {
         if (null == attributes_) {
-            return Collections.enumeration(new ArrayList<String>());
+            return Collections.enumeration(new ArrayList<>());
         }
 
         return Collections.enumeration(attributes_.keySet());
@@ -955,13 +952,10 @@ public class MockRequest implements Request {
     }
 
     public Enumeration<Locale> getLocales() {
-        if (null == locales_) {
-            return Collections.enumeration(new ArrayList() {{
-                add(Locale.getDefault());
-            }});
-        }
+        return Collections.enumeration(Objects.requireNonNullElseGet(locales_, () -> new ArrayList() {{
+            add(Locale.getDefault());
+        }}));
 
-        return Collections.enumeration(locales_);
     }
 
     /**
@@ -1199,8 +1193,8 @@ public class MockRequest implements Request {
         // try cookies first
         var cookies = getCookies();
         if (cookies != null && cookies.length > 0) {
-            for (var i = 0; i < cookies.length; i++) {
-                if (MockConversation.SESSION_ID_COOKIE.equalsIgnoreCase(cookies[i].getName())) {
+            for (Cookie cookie : cookies) {
+                if (MockConversation.SESSION_ID_COOKIE.equalsIgnoreCase(cookie.getName())) {
                     if (requestedSessionId_ != null) {
                         // Multiple jsessionid cookies. Probably due to
                         // multiple paths and/or domains. Pick the first
@@ -1210,7 +1204,7 @@ public class MockRequest implements Request {
                         }
                     }
 
-                    requestedSessionId_ = cookies[i].getValue();
+                    requestedSessionId_ = cookie.getValue();
                     sessionIdState_ = SESSIONID_COOKIE;
                 }
             }

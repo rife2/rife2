@@ -173,7 +173,7 @@ public interface SessionManager {
      * @param authId The unique id of the authentication session that needs to
      *               be continued.
      * @return {@code true} if the session was successfully continued; or
-     * <p>{@code false} if this was not possible (ie. the session
+     * <p>{@code false} if this was not possible (i.e. the session
      * couldn't be found).
      * @throws SessionManagerException An undefined number of exceptional
      *                                 cases or error situations can occur when a session is continued. They
@@ -192,7 +192,7 @@ public interface SessionManager {
      * @param authId The unique id of the authentication session that needs to
      *               be erased.
      * @return {@code true} if the session was successfully erased; or
-     * <p>{@code false} if this was not possible (ie. the session
+     * <p>{@code false} if this was not possible (i.e. the session
      * couldn't be found).
      * @throws SessionManagerException An undefined number of exceptional
      *                                 cases or error situations can occur when a session is erased. They are
@@ -232,7 +232,7 @@ public interface SessionManager {
      * @param userId The id that uniquely identifies the user whose sessions
      *               are to be erased.
      * @return {@code true} if the sessions were successfully erased; or
-     * <p>{@code false} if this was not possible (ie. no sessions
+     * <p>{@code false} if this was not possible (i.e. no sessions
      * couldn't be found).
      * @throws SessionManagerException An undefined number of exceptional
      *                                 cases or error situations can occur when a session is erased. They are

@@ -5,7 +5,6 @@
 package rife.continuations.exceptions;
 
 import rife.continuations.ContinuationContext;
-import rife.continuations.ContinuationManager;
 import rife.tools.exceptions.ControlFlowRuntimeException;
 import rife.tools.exceptions.LightweightError;
 

@@ -7,7 +7,6 @@
 package rife.authentication.sessionmanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.authentication.ListSessions;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.tools.ExceptionUtils;
 
