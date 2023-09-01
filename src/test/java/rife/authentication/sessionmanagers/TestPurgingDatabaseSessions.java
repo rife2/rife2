@@ -35,7 +35,7 @@ public class TestPurgingDatabaseSessions {
             assertEquals(1, sessions.countSessions());
 
             assertNotNull(auth_id);
-            assertTrue(!auth_id.isEmpty());
+            assertFalse(auth_id.isEmpty());
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {

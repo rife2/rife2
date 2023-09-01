@@ -51,7 +51,7 @@ public class TestSupportedXhtml {
         bean.setXhtml("<pp>some <b>html</b> here</p>");
         rule.setBean(bean);
         assertFalse(rule.validate());
-        assertTrue(!rule.getLoadingErrors().isEmpty());
+        assertFalse(rule.getLoadingErrors().isEmpty());
         assertNull(property.getCachedLoadedData());
     }
 
@@ -77,7 +77,7 @@ public class TestSupportedXhtml {
         bean.setXhtml("<i><b>error</i>");
         rule.setBean(bean);
         assertFalse(rule.validate());
-        assertTrue(!rule.getLoadingErrors().isEmpty());
+        assertFalse(rule.getLoadingErrors().isEmpty());
         assertNull(property.getCachedLoadedData());
     }
 

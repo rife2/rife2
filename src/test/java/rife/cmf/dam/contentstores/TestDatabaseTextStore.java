@@ -79,7 +79,7 @@ public class TestDatabaseTextStore {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
-            assertTrue(!store.getSupportedMimeTypes().isEmpty());
+            assertFalse(store.getSupportedMimeTypes().isEmpty());
         } finally {
             tearDown(datasource);
         }

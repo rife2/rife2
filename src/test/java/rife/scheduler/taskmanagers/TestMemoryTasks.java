@@ -325,7 +325,7 @@ public class TestMemoryTasks {
             assertEquals(task3_new.getType(), task3.getType());
             assertTrue(task3_new.getPlanned() <= task3.getPlanned());
             assertEquals(task3_new.getFrequency(), task3.getFrequency());
-            assertEquals(task3_new.isBusy(), task3_new.isBusy());
+            assertEquals(task3_new.isBusy(), task3.isBusy());
         } catch (FrequencyException | TaskManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
