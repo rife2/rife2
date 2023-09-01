@@ -28,18 +28,14 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
     private final String className_;
     private final String classNameInternal_;
     private final TypesNode rootNode_;
-
-    private TypesNode currentNode_;
-
     private final HashMap<Label, TypesNode> labelMapping_;
     private final LinkedHashMap<Label, List<Label>> tryCatchHandlers_;
+    private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
+    private TypesNode currentNode_;
     private TypesContext[] pauseContexts_ = null;
     private TypesContext[] labelContexts_ = null;
-
     private int pauseCount_ = -1;
     private int labelCount_ = -1;
-
-    private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
 
     TypesMethodVisitor(ContinuationConfigInstrument config, TypesClassVisitor classVisitor, String className) {
         super(ASM9);
@@ -74,19 +70,27 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         if (currentNode_ != null) {
             switch (opcode) {
                 // store primitive variable
-                case ISTORE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT1_INT));
-                case FSTORE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT1_FLOAT));
-                case LSTORE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT2_LONG));
-                case DSTORE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT2_DOUBLE));
+                case ISTORE ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT1_INT));
+                case FSTORE ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT1_FLOAT));
+                case LSTORE ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT2_LONG));
+                case DSTORE ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, TypesContext.CAT2_DOUBLE));
 
                 // store reference var
                 case ASTORE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SET, var, null));
 
                 // load primitive var
-                case ILOAD -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT1_INT));
-                case FLOAD -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT1_FLOAT));
-                case LLOAD -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT2_LONG));
-                case DLOAD -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT2_DOUBLE));
+                case ILOAD ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT1_INT));
+                case FLOAD ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT1_FLOAT));
+                case LLOAD ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT2_LONG));
+                case DLOAD ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.GET, var, TypesContext.CAT2_DOUBLE));
 
                 // load reference var
                 case ALOAD -> {
@@ -123,8 +127,8 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
             if ((owner_classname.equals(config_.getContinuableSupportClassName()) || className_.equals(owner_classname)) &&
                 ((config_.getPauseMethodName() != null && !config_.getPauseMethodName().isEmpty() && config_.getPauseMethodName().equals(name) && "()V".equals(desc)) ||
-                 (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() && config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) ||
-                 (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() && config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)))) {
+                    (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() && config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) ||
+                    (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() && config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)))) {
                 // pop the element instance reference from the stack
                 currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
 
@@ -156,16 +160,26 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         if (!("<init>".equals(name) && INVOKESPECIAL == opcode)) {
             var type = Type.getReturnType(desc);
             switch (type.getSort()) {
-                case Type.OBJECT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getInternalName()));
-                case Type.ARRAY -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getDescriptor()));
-                case Type.BOOLEAN -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BOOLEAN));
-                case Type.BYTE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
-                case Type.CHAR -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
-                case Type.FLOAT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                case Type.INT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                case Type.SHORT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
-                case Type.DOUBLE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                case Type.LONG -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
+                case Type.OBJECT ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getInternalName()));
+                case Type.ARRAY ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getDescriptor()));
+                case Type.BOOLEAN ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BOOLEAN));
+                case Type.BYTE ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
+                case Type.CHAR ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
+                case Type.FLOAT ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
+                case Type.INT ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
+                case Type.SHORT ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
+                case Type.DOUBLE ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
+                case Type.LONG ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
             }
         }
     }
@@ -296,107 +310,181 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
         if (currentNode_ != null) {
             switch (opcode) {
-                case RETURN -> currentNode_ = null;
-                case ATHROW -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                case ACONST_NULL ->
+                case RETURN:
+                    currentNode_ = null;
+                    break;
+                case ATHROW:
+                case MONITORENTER:
+                case MONITOREXIT:
+                case POP:
+                case IADD:
+                case LADD:
+                case FADD:
+                case DADD:
+                case ISUB:
+                case LSUB:
+                case FSUB:
+                case DSUB:
+                case IMUL:
+                case LMUL:
+                case FMUL:
+                case DMUL:
+                case IDIV:
+                case LDIV:
+                case FDIV:
+                case DDIV:
+                case IREM:
+                case LREM:
+                case FREM:
+                case DREM:
+                case ISHL:
+                case LSHL:
+                case ISHR:
+                case LSHR:
+                case IUSHR:
+                case LUSHR:
+                case IAND:
+                case LAND:
+                case IOR:
+                case LOR:
+                case IXOR:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+                    break;
+                case ACONST_NULL:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.TYPE_NULL));
-                case ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4, ICONST_5, ICONST_M1 ->
+                    break;
+                case ICONST_0:
+                case ICONST_1:
+                case ICONST_2:
+                case ICONST_3:
+                case ICONST_4:
+                case ICONST_5:
+                case ICONST_M1:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                case FCONST_0, FCONST_1, FCONST_2 ->
+                    break;
+                case FCONST_0:
+                case FCONST_1:
+                case FCONST_2:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                case LCONST_0, LCONST_1 ->
+                    break;
+                case LCONST_0:
+                case LCONST_1:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                case DCONST_0, DCONST_1 ->
+                    break;
+                case DCONST_0:
+                case DCONST_1:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                case AALOAD -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.AALOAD));
-                case IALOAD -> {
+                    break;
+                case AALOAD:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.AALOAD));
+                    break;
+                case IALOAD:
+                case LCMP:
+                case FCMPL:
+                case FCMPG:
+                case DCMPL:
+                case DCMPG:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                }
-                case FALOAD -> {
+                    break;
+                case FALOAD:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                }
-                case BALOAD -> {
+                    break;
+                case BALOAD:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
-                }
-                case CALOAD -> {
+                    break;
+                case CALOAD:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
-                }
-                case SALOAD -> {
+                    break;
+                case SALOAD:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
-                }
-                case LALOAD -> {
+                    break;
+                case LALOAD:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                }
-                case DALOAD -> {
+                    break;
+                case DALOAD:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                }
-                case IASTORE, LASTORE, FASTORE, DASTORE, AASTORE, BASTORE, CASTORE, SASTORE -> {
+                    break;
+                case IASTORE:
+                case LASTORE:
+                case FASTORE:
+                case DASTORE:
+                case AASTORE:
+                case BASTORE:
+                case CASTORE:
+                case SASTORE:
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                }
-                case POP -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                case POP2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP2));
-                case DUP -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP));
-                case DUP_X1 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX1));
-                case DUP_X2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX2));
-                case DUP2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2));
-                case DUP2_X1 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X1));
-                case DUP2_X2 -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X2));
-                case SWAP -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SWAP));
-                case IADD, LADD, FADD, DADD, ISUB, LSUB, FSUB, DSUB, IMUL, LMUL, FMUL, DMUL, IDIV, LDIV, FDIV, DDIV, IREM, LREM, FREM, DREM, ISHL, LSHL, ISHR, LSHR, IUSHR, LUSHR, IAND, LAND, IOR, LOR, IXOR, LXOR ->
-                    // just pop one type since the result is the same type as both operands
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                case INEG, LNEG, FNEG, DNEG -> {
-                }
-                // do nothing, the type stack remains the same
-                case I2F, I2B, I2C, I2S, L2D, F2I, D2L -> {
-                }
-                // do nothing, the type stack remains the same
-                case I2L, F2L -> {
+                    break;
+                case POP2:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP2));
+                    break;
+                case DUP:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP));
+                    break;
+                case DUP_X1:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX1));
+                    break;
+                case DUP_X2:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUPX2));
+                    break;
+                case DUP2:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2));
+                    break;
+                case DUP2_X1:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X1));
+                    break;
+                case DUP2_X2:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.DUP2_X2));
+                    break;
+                case SWAP:
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.SWAP));
+                    break;
+                case INEG:
+                case LNEG:
+                case FNEG:
+                case DNEG, I2F, I2B, I2C, I2S, L2D, F2I, D2L:
+                    // do nothing, the type stack remains the same
+                    break;
+                case I2L:
+                case F2L:
                     // the type widens
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
-                }
-                case I2D, F2D -> {
+                    break;
+                case I2D:
+                case F2D:
                     // the type widens
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                }
-                case L2I, D2I -> {
+                    break;
+                case L2I:
+                case D2I:
+                case ARRAYLENGTH:
                     // the type shrinks
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                }
-                case L2F, D2F -> {
+                    break;
+                case L2F:
+                case D2F:
                     // the type shrinks
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                }
-                case LCMP, FCMPL, FCMPG, DCMPL, DCMPG -> {
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                }
-                case ARRAYLENGTH -> {
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
-                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                }
-                case MONITORENTER, MONITOREXIT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+                    break;
             }
         }
     }
@@ -442,16 +530,26 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
                     var type = Type.getType(desc);
                     switch (type.getSort()) {
-                        case Type.OBJECT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getInternalName()));
-                        case Type.ARRAY -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getDescriptor()));
-                        case Type.BOOLEAN -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BOOLEAN));
-                        case Type.BYTE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
-                        case Type.CHAR -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
-                        case Type.FLOAT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
-                        case Type.INT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
-                        case Type.SHORT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
-                        case Type.DOUBLE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
-                        case Type.LONG -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
+                        case Type.OBJECT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getInternalName()));
+                        case Type.ARRAY ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type.getDescriptor()));
+                        case Type.BOOLEAN ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BOOLEAN));
+                        case Type.BYTE ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
+                        case Type.CHAR ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_CHAR));
+                        case Type.FLOAT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_FLOAT));
+                        case Type.INT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
+                        case Type.SHORT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
+                        case Type.DOUBLE ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_DOUBLE));
+                        case Type.LONG ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT2_LONG));
                     }
                 }
                 case PUTFIELD, PUTSTATIC -> {
@@ -480,19 +578,29 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
         if (currentNode_ != null) {
             switch (opcode) {
-                case BIPUSH -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
-                case SIPUSH -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
+                case BIPUSH ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_BYTE));
+                case SIPUSH ->
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_SHORT));
                 case NEWARRAY -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     switch (operand) {
-                        case T_BOOLEAN -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_BOOLEAN));
-                        case T_CHAR -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_CHAR));
-                        case T_FLOAT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_FLOAT));
-                        case T_DOUBLE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_DOUBLE));
-                        case T_BYTE -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_BYTE));
-                        case T_SHORT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_SHORT));
-                        case T_INT -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_INT));
-                        case T_LONG -> currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_LONG));
+                        case T_BOOLEAN ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_BOOLEAN));
+                        case T_CHAR ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_CHAR));
+                        case T_FLOAT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_FLOAT));
+                        case T_DOUBLE ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_DOUBLE));
+                        case T_BYTE ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_BYTE));
+                        case T_SHORT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_SHORT));
+                        case T_INT ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_INT));
+                        case T_LONG ->
+                            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.ARRAY_LONG));
                     }
                 }
             }
@@ -743,7 +851,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         TypesContext exception_context = null;
         for (var instruction : node.getInstructions()) {
             switch (instruction.getOpcode()) {
-                case TypesOpcode.SET -> {
+                case TypesOpcode.SET: {
                     var type = context.peek();
                     if (instruction.getType() != null) {
                         type = instruction.getType();
@@ -755,7 +863,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     if (node.getPredecessor() != null &&
                         context.getVars() == node.getPredecessor().getContext().getVars() &&
                         (null == current_var_type ||
-                            (current_var_type != TypesContext.TYPE_NULL && !current_var_type.equals(type)))) {
+                            (!current_var_type.equals(TypesContext.TYPE_NULL) && !current_var_type.equals(type)))) {
                         context.cloneVars();
                     }
 
@@ -769,7 +877,8 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         exception_context = null;
                     }
                 }
-                case TypesOpcode.GET -> {
+                break;
+                case TypesOpcode.GET: {
                     var type = instruction.getType();
                     if (null == type) {
                         type = context.getVar(instruction.getArgument());
@@ -780,16 +889,18 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
                     context.push(type);
                 }
-                case TypesOpcode.IINC -> {
-                }
-                // do nothing
-                case TypesOpcode.POP -> {
+                break;
+                case TypesOpcode.IINC:
+                    // do nothing
+                    break;
+                case TypesOpcode.POP: {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  POP " + context.peek());
 
                     context.pop();
                 }
-                case TypesOpcode.POP2 -> {
+                break;
+                case TypesOpcode.POP2: {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  POP2 " + context.peek());
 
@@ -798,12 +909,13 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         context.pop();
                     }
                 }
-                case TypesOpcode.PUSH -> {
+                break;
+                case TypesOpcode.PUSH:
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  PUSH " + instruction.getType());
                     context.push(instruction.getType());
-                }
-                case TypesOpcode.AALOAD -> {
+                    break;
+                case TypesOpcode.AALOAD: {
                     context.pop();
                     var array_desc = context.pop();
                     String element_desc = null;
@@ -819,12 +931,13 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
                     context.push(element_desc);
                 }
-                case TypesOpcode.DUP -> {
+                break;
+                case TypesOpcode.DUP:
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  DUP " + context.peek());
                     context.push(context.peek());
-                }
-                case TypesOpcode.DUPX1 -> {
+                    break;
+                case TypesOpcode.DUPX1: {
                     var type1 = context.pop();
                     var type2 = context.pop();
 
@@ -835,7 +948,8 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     context.push(type2);
                     context.push(type1);
                 }
-                case TypesOpcode.DUPX2 -> {
+                break;
+                case TypesOpcode.DUPX2: {
                     var type1 = context.pop();
                     var type2 = context.pop();
 
@@ -856,7 +970,8 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         }
                     }
                 }
-                case TypesOpcode.DUP2 -> {
+                break;
+                case TypesOpcode.DUP2: {
                     var type1 = context.pop();
                     if (type1.startsWith("2")) {
                         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
@@ -876,15 +991,14 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         context.push(type1);
                     }
                 }
-                case TypesOpcode.DUP2_X1 -> {
+                break;
+                case TypesOpcode.DUP2_X1: {
                     var type1 = context.pop();
                     var type2 = context.pop();
                     if (type1.startsWith("2")) {
                         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                             ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  DUP2_X1 " + type1);
 
-                        context.push(type1);
-                        context.push(type2);
                         context.push(type1);
                     } else {
                         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
@@ -894,11 +1008,12 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         context.push(type2);
                         context.push(type1);
                         context.push(type3);
-                        context.push(type2);
-                        context.push(type1);
                     }
+                    context.push(type2);
+                    context.push(type1);
                 }
-                case TypesOpcode.DUP2_X2 -> {
+                break;
+                case TypesOpcode.DUP2_X2: {
                     var type1 = context.pop();
                     var type2 = context.pop();
                     if (type1.startsWith("2")) {
@@ -908,8 +1023,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                                 ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  DUP2_X2 " + type1);
 
                             context.push(type1);
-                            context.push(type2);
-                            context.push(type1);
                         } else                        // form 2
                         {
                             if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
@@ -918,9 +1031,9 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                             var type3 = context.pop();
                             context.push(type1);
                             context.push(type3);
-                            context.push(type2);
-                            context.push(type1);
                         }
+                        context.push(type2);
+                        context.push(type1);
                     } else if (!type2.startsWith("2")) {
                         var type3 = context.pop();
                         if (type3.startsWith("2"))    // form 3
@@ -928,9 +1041,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                             if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                                 ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  DUP2_X2 " + type1 + ", " + type2);
 
-                            context.push(type2);
-                            context.push(type1);
-                            context.push(type3);
                             context.push(type2);
                             context.push(type1);
                         } else                        // form 1
@@ -942,13 +1052,14 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                             context.push(type2);
                             context.push(type1);
                             context.push(type4);
-                            context.push(type3);
-                            context.push(type2);
-                            context.push(type1);
                         }
+                        context.push(type3);
+                        context.push(type2);
+                        context.push(type1);
                     }
                 }
-                case TypesOpcode.SWAP -> {
+                break;
+                case TypesOpcode.SWAP: {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  SWAP");
 
@@ -957,12 +1068,13 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     context.push(type1);
                     context.push(type2);
                 }
-                case TypesOpcode.PAUSE -> {
+                break;
+                case TypesOpcode.PAUSE:
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "PAUSE " + instruction.getArgument());
                     pauseContexts_[instruction.getArgument()] = context.clone(node);
-                }
-                case TypesOpcode.LABEL -> {
+                    break;
+                case TypesOpcode.LABEL: {
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "LABEL " + instruction.getArgument());
 
@@ -972,6 +1084,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         exception_context = label_context;
                     }
                 }
+                break;
             }
         }
     }
