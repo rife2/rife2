@@ -53,6 +53,25 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         rootNode_ = currentNode_;
     }
 
+    private static TypesContext setupContext(TypesNode node) {
+        TypesContext context = null;
+        // if it's the first node, create a new context
+        if (null == node.getPredecessor()) {
+            context = new TypesContext();
+        }
+        // otherwise retrieve the previous context
+        else {
+            var predecessor_context = node.getPredecessor().getContext();
+            // always isolate the context for a successor
+            if (node.getIsSuccessor()) {
+                context = predecessor_context.clone();
+            } else {
+                context = new TypesContext(predecessor_context.getVars(), predecessor_context.getStackClone());
+            }
+        }
+        return context;
+    }
+
     /**
      * Visits a local variable instruction. A local variable instruction is an
      * instruction that loads or stores the value of a local variable.
@@ -828,21 +847,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
     private void processInstructions(TypesNode node) {
         // set up the context for the node
-        TypesContext context = null;
-        // if it's the first node, create a new context
-        if (null == node.getPredecessor()) {
-            context = new TypesContext();
-        }
-        // otherwise retrieve the previous context
-        else {
-            var predecessor_context = node.getPredecessor().getContext();
-            // always isolate the context for a successor
-            if (node.getIsSuccessor()) {
-                context = predecessor_context.clone();
-            } else {
-                context = new TypesContext(predecessor_context.getVars(), predecessor_context.getStackClone());
-            }
-        }
+        TypesContext context = setupContext(node);
         node.setContext(context);
 
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))

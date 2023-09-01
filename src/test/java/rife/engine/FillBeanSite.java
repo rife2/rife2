@@ -69,30 +69,7 @@ public class FillBeanSite extends Site {
                     c.print("</form");
                 }
                 case POST -> {
-                    var bean = new BeanImpl();
-
-                    bean.setEnum(BeanImpl.Day.FRIDAY);
-                    bean.setString("string");
-                    bean.setStringbuffer(new StringBuffer("stringbuffer"));
-                    bean.setInt(999);
-                    bean.setInteger(111);
-                    bean.setChar('a');
-                    bean.setCharacter('b');
-                    bean.setBoolean(false);
-                    bean.setBooleanObject(true);
-                    bean.setByte((byte)22);
-                    bean.setByteObject((byte)33);
-                    bean.setDouble(123.45d);
-                    bean.setDoubleObject(234.56d);
-                    bean.setFloat(321.54f);
-                    bean.setFloatObject(432.65f);
-                    bean.setLong(44L);
-                    bean.setLongObject(55L);
-                    bean.setShort((short)66);
-                    bean.setShortObject((short)77);
-                    bean.setStringFile("stringFile");
-                    bean.setBytesFile(new byte[] {1, 2, 3});
-                    bean.setStreamFile(new ByteArrayInputStream("streamFile".getBytes(StandardCharsets.UTF_8)));
+                    var bean = initBean();
 
                     if (prefix_.isEmpty()) {
                         c.parametersBean(bean);
@@ -178,5 +155,33 @@ public class FillBeanSite extends Site {
                 }
             }
         });
+    }
+
+    private static BeanImpl initBean() {
+        var bean = new BeanImpl();
+
+        bean.setEnum(BeanImpl.Day.FRIDAY);
+        bean.setString("string");
+        bean.setStringbuffer(new StringBuffer("stringbuffer"));
+        bean.setInt(999);
+        bean.setInteger(111);
+        bean.setChar('a');
+        bean.setCharacter('b');
+        bean.setBoolean(false);
+        bean.setBooleanObject(true);
+        bean.setByte((byte)22);
+        bean.setByteObject((byte)33);
+        bean.setDouble(123.45d);
+        bean.setDoubleObject(234.56d);
+        bean.setFloat(321.54f);
+        bean.setFloatObject(432.65f);
+        bean.setLong(44L);
+        bean.setLongObject(55L);
+        bean.setShort((short)66);
+        bean.setShortObject((short)77);
+        bean.setStringFile("stringFile");
+        bean.setBytesFile(new byte[] {1, 2, 3});
+        bean.setStreamFile(new ByteArrayInputStream("streamFile".getBytes(StandardCharsets.UTF_8)));
+        return bean;
     }
 }
