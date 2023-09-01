@@ -67,8 +67,7 @@ public class Authenticated extends Identified implements SessionAttributes {
     protected void sessionNotValid(String authCookieName, String authCookieValue, int validityId) {
     }
 
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         initializeAuthenticated(c);
 
         final var auth_config = getAuthConfig();

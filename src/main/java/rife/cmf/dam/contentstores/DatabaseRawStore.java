@@ -416,7 +416,7 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
     }
 
     protected void serveChunks(DbResultSet resultset, OutputStream os, int size)
-    throws SQLException, IOException {
+    throws SQLException {
         var buffer = new byte[512];
         do {
             var is = resultset.getBinaryStream("chunk");

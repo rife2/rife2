@@ -54,18 +54,15 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             return entityResolver_.resolveEntity(publicId, systemId);
         }
 
-        public void warning(SAXParseException e)
-        throws SAXException {
+        public void warning(SAXParseException e) {
             errorRedirector_.warning(e);
         }
 
-        public void fatalError(SAXParseException e)
-        throws SAXException {
+        public void fatalError(SAXParseException e) {
             errorRedirector_.fatalError(e);
         }
 
-        public void error(SAXParseException e)
-        throws SAXException {
+        public void error(SAXParseException e) {
             errorRedirector_.error(e);
         }
 

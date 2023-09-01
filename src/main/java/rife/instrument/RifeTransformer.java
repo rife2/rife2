@@ -17,8 +17,7 @@ import java.security.ProtectionDomain;
  * @since 1.0
  */
 public abstract class RifeTransformer implements ClassFileTransformer {
-    public final byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)
-    throws IllegalClassFormatException {
+    public final byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         if (className.startsWith("apple/security/") ||
             className.startsWith("jakarta/") ||
             className.startsWith("java/") ||
@@ -69,5 +68,5 @@ public abstract class RifeTransformer implements ClassFileTransformer {
      * @since 1.0
      */
     protected abstract byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer)
-    throws IllegalClassFormatException;
+    ;
 }

@@ -494,7 +494,7 @@ public class TestDatabaseTextStore {
             var content = new Content(MimeType.APPLICATION_XHTML, data).fragment(true);
             try {
                 store.storeContentData(2, content, null);
-                assertTrue("com.mysql.cj.jdbc.Driver".equals(datasource.getAliasedDriver()));
+                assertEquals("com.mysql.cj.jdbc.Driver", datasource.getAliasedDriver());
             } catch (StoreContentDataErrorException e) {
                 assertEquals(2, e.getId());
             }

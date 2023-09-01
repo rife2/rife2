@@ -78,8 +78,7 @@ public class Identified implements Element {
         return authConfig_;
     }
 
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         initializeIdentified(c);
 
         if (!c.hasAttribute(getAuthConfig().identityAttributeName())) {

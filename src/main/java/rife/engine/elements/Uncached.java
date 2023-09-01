@@ -16,8 +16,7 @@ import rife.engine.Element;
  * @since 1.0
  */
 public class Uncached implements Element {
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         c.preventCaching();
     }
 }

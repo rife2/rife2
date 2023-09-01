@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSupportedXhtml {
     @Test
-    void testValidateNull()
-    throws Exception {
+    void testValidateNull() {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();
         var property = new ConstrainedProperty("xhtml").mimeType(MimeType.APPLICATION_XHTML);
@@ -26,8 +25,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateSupportedDocument()
-    throws Exception {
+    void testValidateSupportedDocument() {
         var rule = new SupportedXhtml("xhtml", false);
         var bean = new XhtmlBean();
         var property = new ConstrainedProperty("xhtml").mimeType(MimeType.APPLICATION_XHTML);
@@ -45,8 +43,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateUnsupportedDocument()
-    throws Exception {
+    void testValidateUnsupportedDocument() {
         var rule = new SupportedXhtml("xhtml", false);
         var bean = new XhtmlBean();
         var property = new ConstrainedProperty("xhtml").mimeType(MimeType.APPLICATION_XHTML);
@@ -59,8 +56,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateSupportedFragment()
-    throws Exception {
+    void testValidateSupportedFragment() {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();
         var property = new ConstrainedProperty("xhtml").mimeType(MimeType.APPLICATION_XHTML);
@@ -73,8 +69,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateUnsupportedFragment()
-    throws Exception {
+    void testValidateUnsupportedFragment() {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();
         var property = new ConstrainedProperty("xhtml").mimeType(MimeType.APPLICATION_XHTML);
@@ -87,8 +82,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateNotConstrained()
-    throws Exception {
+    void testValidateNotConstrained() {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBeanNotConstrained();
         bean.setXhtml("<p>some <b>html</b> here</p>");
@@ -98,8 +92,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateNotCmfProperty()
-    throws Exception {
+    void testValidateNotCmfProperty() {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBeanValidation();
         var property = new ConstrainedProperty("xhtml");
@@ -111,8 +104,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testValidateUnknownProperty()
-    throws Exception {
+    void testValidateUnknownProperty() {
         var rule = new SupportedXhtml("xhtml_unknown", true);
         var bean = new XhtmlBean();
         rule.setBean(bean);
@@ -121,8 +113,7 @@ public class TestSupportedXhtml {
     }
 
     @Test
-    void testGetError()
-    throws Exception {
+    void testGetError() {
         var rule = new SupportedXhtml("xhtml", true);
         assertEquals("xhtml", rule.getError().getSubject());
         assertEquals("invalid", rule.getError().getIdentifier());
