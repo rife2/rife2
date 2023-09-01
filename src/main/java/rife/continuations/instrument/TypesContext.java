@@ -72,13 +72,13 @@ class TypesContext implements Cloneable {
 
     int getVarType(int var) {
         var type = getVar(var);
-        if (CAT1_INT == type) {
+        if (CAT1_INT.equals(type)) {
             return Type.INT;
-        } else if (CAT1_FLOAT == type) {
+        } else if (CAT1_FLOAT.equals(type)) {
             return Type.FLOAT;
-        } else if (CAT2_LONG == type) {
+        } else if (CAT2_LONG.equals(type)) {
             return Type.LONG;
-        } else if (CAT2_DOUBLE == type) {
+        } else if (CAT2_DOUBLE.equals(type)) {
             return Type.DOUBLE;
         } else {
             return Type.OBJECT;

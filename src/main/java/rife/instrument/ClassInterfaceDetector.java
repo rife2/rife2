@@ -62,7 +62,7 @@ public class ClassInterfaceDetector {
             }
 
             if (null == visitor.getSuperName() ||
-                OBJECT_NAME == visitor.getSuperName()) {
+                OBJECT_NAME.equals(visitor.getSuperName())) {
                 break;
             }
 
@@ -97,7 +97,7 @@ public class ClassInterfaceDetector {
             }
 
             for (String interface_name : interfaces) {
-                if (interfaceNameInternal_ == interface_name.intern()) {
+                if (interfaceNameInternal_.equals(interface_name.intern())) {
                     isClassOrInterface_ = true;
                     break;
                 }
@@ -105,7 +105,7 @@ public class ClassInterfaceDetector {
 
             if (null == superName) {
                 superName_ = null;
-            } else if (OBJECT_INTERNAL_NAME == superName.intern()) {
+            } else if (OBJECT_INTERNAL_NAME.equals(superName.intern())) {
                 superName_ = OBJECT_NAME;
             } else {
                 superName_ = superName.replace('/', '.').intern();
