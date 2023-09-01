@@ -223,11 +223,11 @@ class MultipartRequest {
         // Content-Transfer-Encoding: binary
         var headers = new ArrayList<String>();
 
-        var line = readLine();
+        StringBuilder line = new StringBuilder(readLine());
         // When no next line could be read, the end was reached.
         // IE4 on Mac sends an empty line at the end; treat that as the ending too.
         if (null == line ||
-            line.isEmpty()) {
+            (line.isEmpty())) {
             // No parts left, we're done
             return false;
         }
@@ -236,7 +236,7 @@ class MultipartRequest {
         // A line starting with whitespace is considered a continuation;
         // that requires a little special logic.
         while (null != line &&
-            !line.isEmpty()) {
+            (!line.isEmpty())) {
             String next_line = null;
             var obtain_next_line = true;
             while (obtain_next_line) {
@@ -245,14 +245,14 @@ class MultipartRequest {
                 if (next_line != null &&
                     (next_line.startsWith(" ") ||
                         next_line.startsWith("\t"))) {
-                    line = line + next_line;
+                    line.append(next_line);
                 } else {
                     obtain_next_line = false;
                 }
             }
             // Add the line to the header list
-            headers.add(line);
-            line = next_line;
+            headers.add(line.toString());
+            line = new StringBuilder(next_line);
         }
 
         // If we got a null above, it's the end
@@ -349,7 +349,7 @@ class MultipartRequest {
         fieldname = dispositionLine.substring(start + FIELD_NAME_PREFIX_LENGTH, end);
 
         // Get the filename, if given
-        start = lowcase_line.indexOf(FILENAME_PREFIX, end + 2); // after quote and space)
+        start = lowcase_line.indexOf(FILENAME_PREFIX, end + 2); // after quote and space
         end = lowcase_line.indexOf(QUOTE, start + FILENAME_PREFIX_LENGTH);
         if (start != -1 &&
             end != -1) {
