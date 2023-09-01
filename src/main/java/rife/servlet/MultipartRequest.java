@@ -223,7 +223,7 @@ class MultipartRequest {
         // Content-Transfer-Encoding: binary
         var headers = new ArrayList<String>();
 
-        StringBuilder line = new StringBuilder(readLine());
+        var line = readLine();
         // When no next line could be read, the end was reached.
         // IE4 on Mac sends an empty line at the end; treat that as the ending too.
         if (null == line ||
@@ -245,14 +245,14 @@ class MultipartRequest {
                 if (next_line != null &&
                     (next_line.startsWith(" ") ||
                         next_line.startsWith("\t"))) {
-                    line.append(next_line);
+                    line = line + next_line;
                 } else {
                     obtain_next_line = false;
                 }
             }
             // Add the line to the header list
-            headers.add(line.toString());
-            line = new StringBuilder(next_line);
+            headers.add(line);
+            line = next_line;
         }
 
         // If we got a null above, it's the end
