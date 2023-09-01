@@ -17,23 +17,8 @@ public class TestAllTypes implements Element {
     private static final int[][] sMultiInts1 = new int[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
     private static final long sLong1 = 3L;
 
-    private static int sInt2 = 0;
-    private static String sString2 = null;
-    private static Long[] sLongs2 = null;
-    private static int[][] sMultiInts2 = null;
-    private static long sLong2 = 0L;
-
-    private final int int1_ = 2;
-    private final String string1_ = "member ok";
     private final Long[] longs1_ = new Long[]{8111L, 8333L};
     private final int[][] multi_ints_ = new int[][]{{31, 32, 33, 34}, {35, 36, 37, 38}};
-    private final long long1_ = 4L;
-
-    private int int2_ = 0;
-    private String string2_ = null;
-    private Long[] longs2_ = null;
-    private int[][] multiInts2_ = null;
-    private long long2_ = 0L;
 
     public int getInt1() {
         int int1 = 9;
@@ -255,8 +240,11 @@ public class TestAllTypes implements Element {
         long[][] longs10 = new long[3][3];
         fillMultiArrayLong(longs10);
 
+        int int1_ = 2;
         int field_int = int1_;
+        long long1_ = 4L;
         long field_long = long1_;
+        String string1_ = "member ok";
         String field_string = string1_;
         Long[] field_longs = longs1_;
         int[][] field_multiints = multi_ints_;
@@ -267,17 +255,17 @@ public class TestAllTypes implements Element {
         Long[] static_longs = sLongs1;
         int[][] static_multiints = sMultiInts1;
 
-        int2_ = field_int * 50;
-        long2_ = field_long * 100;
-        string2_ = field_string + " two";
-        longs2_ = new Long[]{field_longs[1], field_longs[0], 23687L};
-        multiInts2_ = new int[][]{field_multiints[1]};
+        int int2_ = field_int * 50;
+        long long2_ = field_long * 100;
+        String string2_ = field_string + " two";
+        Long[] longs2_ = new Long[]{field_longs[1], field_longs[0], 23687L};
+        int[][] multiInts2_ = new int[][]{field_multiints[1]};
 
-        sInt2 = static_int * 60;
-        sString2 = static_string + " two";
-        sLongs2 = new Long[]{23476L, static_longs[1], static_longs[0], 8334L};
-        sMultiInts2 = new int[][]{static_multiints[2], static_multiints[0]};
-        sLong2 = static_long * 200;
+        int sInt2 = static_int * 60;
+        String sString2 = static_string + " two";
+        Long[] sLongs2 = new Long[]{23476L, static_longs[1], static_longs[0], 8334L};
+        int[][] sMultiInts2 = new int[][]{static_multiints[2], static_multiints[0]};
+        long sLong2 = static_long * 200;
 
         c.print(BEFORE + " a\n" + c.continuationId());
         c.pause();
@@ -330,10 +318,10 @@ public class TestAllTypes implements Element {
                 longs10.length + ":" + StringUtils.join(longs10[0], "|") + "||" + StringUtils.join(longs10[1], "|") + "||" + StringUtils.join(longs10[2], "|") + ",\n" +
                 field_int + "," + field_long + "," + field_string + "," + StringUtils.join(field_longs, "|") + "," + field_multiints.length + ":" + StringUtils.join(field_multiints[0], "|") + "||" + StringUtils.join(field_multiints[1], "|") + ",\n" +
                 static_int + "," + static_long + "," + static_string + "," + StringUtils.join(static_longs, "|") + "," + static_multiints.length + ":" + StringUtils.join(static_multiints[0], "|") + "||" + StringUtils.join(static_multiints[1], "|") + "||" + StringUtils.join(static_multiints[2], "|") + ",\n" +
-                int1_ + "," + long1_ + "," + string1_ + "," + StringUtils.join(longs1_, "|") + "," + multi_ints_.length + ":" + StringUtils.join(multi_ints_[0], "|") + "||" + StringUtils.join(multi_ints_[1], "|") + ",\n" +
+            int1_ + "," + long1_ + "," + string1_ + "," + StringUtils.join(longs1_, "|") + "," + multi_ints_.length + ":" + StringUtils.join(multi_ints_[0], "|") + "||" + StringUtils.join(multi_ints_[1], "|") + ",\n" +
                 sInt1 + "," + sLong1 + "," + sString1 + "," + StringUtils.join(sLongs1, "|") + "," + sMultiInts1.length + ":" + StringUtils.join(sMultiInts1[0], "|") + "||" + StringUtils.join(sMultiInts1[1], "|") + "||" + StringUtils.join(sMultiInts1[2], "|") + ",\n" +
-                int2_ + "," + long2_ + "," + string2_ + "," + StringUtils.join(longs2_, "|") + "," + multiInts2_.length + ":" + StringUtils.join(multiInts2_[0], "|") + ",\n" +
-                sInt2 + "," + sLong2 + "," + sString2 + "," + StringUtils.join(sLongs2, "|") + "," + sMultiInts2.length + ":" + StringUtils.join(sMultiInts2[0], "|") + "||" + StringUtils.join(sMultiInts2[1], "|") + ",\n" +
+            int2_ + "," + long2_ + "," + string2_ + "," + StringUtils.join(longs2_, "|") + "," + multiInts2_.length + ":" + StringUtils.join(multiInts2_[0], "|") + ",\n" +
+            sInt2 + "," + sLong2 + "," + sString2 + "," + StringUtils.join(sLongs2, "|") + "," + sMultiInts2.length + ":" + StringUtils.join(sMultiInts2[0], "|") + "||" + StringUtils.join(sMultiInts2[1], "|") + ",\n" +
                 ints1.length + ":" + ints1[0].length + ":" + ints1[1].length + ":" + StringUtils.join(ints1[0][0], "|") + "||" + StringUtils.join(ints1[0][1], "|") + "||" + StringUtils.join(ints1[0][2], "|") + "|||" + StringUtils.join(ints1[1][0], "|") + "||" + StringUtils.join(ints1[1][1], "|") + "||" + StringUtils.join(ints1[1][2], "|") + ",\n" +
                 ints2.length + ":" + ints2[0].length + ":" + ints2[1].length + ":" + StringUtils.join(ints2[0][0], "|") + "||" + StringUtils.join(ints2[0][1], "|") + "||" + StringUtils.join(ints2[0][2], "|") + "|||" + StringUtils.join(ints2[1][0], "|") + "||" + StringUtils.join(ints2[1][1], "|") + "||" + StringUtils.join(ints2[1][2], "|") + ",\n" +
                 ints3.length + ":" + StringUtils.join(ints3[0], "|") + "||" + StringUtils.join(ints3[1], "|") + "||" + StringUtils.join(ints3[2], "|") + "||" + StringUtils.join(ints3[3], "|") + ",\n" +

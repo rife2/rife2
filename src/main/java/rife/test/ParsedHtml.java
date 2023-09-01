@@ -18,26 +18,24 @@ import java.util.List;
  * @since 1.0
  */
 public class ParsedHtml {
-    private final MockResponse response_;
     private final Document document_;
     private final List<MockForm> forms_ = new ArrayList<>();
     private final List<MockLink> links_ = new ArrayList<>();
 
     private ParsedHtml(MockResponse response, Document document) {
-        response_ = response;
         document_ = document;
 
         // get all the forms
         var forms = document_.select("form");
         for (var element : forms) {
-            var form = new MockForm(response_, element);
+            var form = new MockForm(response, element);
             forms_.add(form);
         }
 
         // get all the links
         var links = document_.select("a[href]");
         for (var element : links) {
-            var link = new MockLink(response_, element);
+            var link = new MockLink(response, element);
             links_.add(link);
         }
     }
