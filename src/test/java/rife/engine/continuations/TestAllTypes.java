@@ -85,7 +85,7 @@ public class TestAllTypes implements Element {
 
         for (int i = 0; i < size1; i++) {
             for (int j = 0; j < size2; j++) {
-                result[i][j] = i * 100 + j;
+                result[i][j] = i * 100L + j;
             }
         }
 
