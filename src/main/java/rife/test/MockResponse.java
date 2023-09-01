@@ -817,7 +817,6 @@ public class MockResponse extends AbstractResponse {
                             _hasToken = true;
                             state = 1;
                         }
-                        continue;
                     }
                     case 1 -> { // Token
                         _hasToken = true;
@@ -835,7 +834,6 @@ public class MockResponse extends AbstractResponse {
                             state = 3;
                         } else
                             _token.append(c);
-                        continue;
                     }
                     case 2 -> { // Single Quote
                         _hasToken = true;
@@ -852,7 +850,6 @@ public class MockResponse extends AbstractResponse {
                             escape = true;
                         } else
                             _token.append(c);
-                        continue;
                     }
                     case 3 -> { // Double Quote
                         _hasToken = true;
@@ -869,7 +866,6 @@ public class MockResponse extends AbstractResponse {
                             escape = true;
                         } else
                             _token.append(c);
-                        continue;
                     }
                 }
             }
