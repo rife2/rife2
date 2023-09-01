@@ -5,7 +5,6 @@
 package rife.authentication.sessionvalidators;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class ProcessSessionValidityBasic extends ProcessSessionValidity {
     private int mValidity = DatabaseSessionValidator.SESSION_INVALID;
