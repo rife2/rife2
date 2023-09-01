@@ -122,7 +122,7 @@ public class TestDatabaseUsers {
     }
 
     class ListDatabaseRoles implements ListRoles {
-        private ArrayList<String> roles_ = new ArrayList<>();
+        private final ArrayList<String> roles_ = new ArrayList<>();
 
         public ArrayList<String> getRoles() {
             return roles_;

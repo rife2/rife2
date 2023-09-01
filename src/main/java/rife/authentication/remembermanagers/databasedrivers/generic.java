@@ -17,16 +17,16 @@ import rife.database.queries.Select;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class generic extends DatabaseRemember {
-    protected CreateTable createRemember_;
+    protected final CreateTable createRemember_;
     protected String createRememberMomentIndex_;
-    protected DropTable removeRemember_;
+    protected final DropTable removeRemember_;
     protected String removeRememberMomentIndex_;
-    protected Insert createRememberId_;
-    protected Delete eraseRememberId_;
-    protected Delete eraseUserRememberIds_;
-    protected Delete eraseAllRememberIds_;
-    protected Select getRememberedUserId_;
-    protected Delete purgeRememberIds_;
+    protected final Insert createRememberId_;
+    protected final Delete eraseRememberId_;
+    protected final Delete eraseUserRememberIds_;
+    protected final Delete eraseAllRememberIds_;
+    protected final Select getRememberedUserId_;
+    protected final Delete purgeRememberIds_;
 
     public generic(Datasource datasource) {
         super(datasource);

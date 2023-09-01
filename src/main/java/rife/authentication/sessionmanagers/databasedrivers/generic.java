@@ -15,22 +15,22 @@ import rife.database.Datasource;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class generic extends DatabaseSessions {
-    protected CreateTable createAuthentication_;
-    protected String createAuthenticationSessStartIndex_;
-    protected Delete purgeSessions_;
-    protected Insert startSession_;
-    protected Select isSessionValid_;
-    protected Select isSessionValidRestrictAuthData_;
-    protected Update continueSession_;
-    protected Delete eraseSession_;
-    protected Select wasRemembered_;
-    protected Delete eraseAllSessions_;
-    protected Delete eraseUserSessions_;
-    protected DropTable removeAuthentication_;
+    protected final CreateTable createAuthentication_;
+    protected final String createAuthenticationSessStartIndex_;
+    protected final Delete purgeSessions_;
+    protected final Insert startSession_;
+    protected final Select isSessionValid_;
+    protected final Select isSessionValidRestrictAuthData_;
+    protected final Update continueSession_;
+    protected final Delete eraseSession_;
+    protected final Select wasRemembered_;
+    protected final Delete eraseAllSessions_;
+    protected final Delete eraseUserSessions_;
+    protected final DropTable removeAuthentication_;
     protected String removeAuthenticationSessStartIndex_;
-    protected Select countSessions_;
-    protected Select getSessionUserId_;
-    protected Select listSessions_;
+    protected final Select countSessions_;
+    protected final Select getSessionUserId_;
+    protected final Select listSessions_;
 
     public generic(Datasource datasource) {
         super(datasource);

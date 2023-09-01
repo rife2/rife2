@@ -9,7 +9,7 @@ import rife.workflow.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class WorkPauseType1 implements Work {
-    private AtomicReference<Event> event_ = new AtomicReference<>();
+    private final AtomicReference<Event> event_ = new AtomicReference<>();
     public void execute(Workflow workflow) {
         event_.set(pauseForEvent(TestEventTypes.TYPE1));
     }

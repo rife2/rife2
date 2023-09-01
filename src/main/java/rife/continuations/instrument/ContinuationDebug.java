@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class ContinuationDebug {
     static boolean sDebug = false;
     static boolean sTrace = false;
-    static Level sLevel = Level.parse("FINEST");
+    static final Level sLevel = Level.parse("FINEST");
 
     /**
      * The logger instance that is used for the debugging.

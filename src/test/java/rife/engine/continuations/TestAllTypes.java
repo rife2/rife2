@@ -11,11 +11,11 @@ import rife.tools.StringUtils;
 public class TestAllTypes implements Element {
     public final static String BEFORE = "before pause";
 
-    private static int sInt1 = 1;
-    private static String sString1 = "static ok";
-    private static Long[] sLongs1 = new Long[]{9111L, 9333L};
-    private static int[][] sMultiInts1 = new int[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
-    private static long sLong1 = 3L;
+    private static final int sInt1 = 1;
+    private static final String sString1 = "static ok";
+    private static final Long[] sLongs1 = new Long[]{9111L, 9333L};
+    private static final int[][] sMultiInts1 = new int[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}};
+    private static final long sLong1 = 3L;
 
     private static int sInt2 = 0;
     private static String sString2 = null;
@@ -23,11 +23,11 @@ public class TestAllTypes implements Element {
     private static int[][] sMultiInts2 = null;
     private static long sLong2 = 0L;
 
-    private int int1_ = 2;
-    private String string1_ = "member ok";
-    private Long[] longs1_ = new Long[]{8111L, 8333L};
-    private int[][] multi_ints_ = new int[][]{{31, 32, 33, 34}, {35, 36, 37, 38}};
-    private long long1_ = 4L;
+    private final int int1_ = 2;
+    private final String string1_ = "member ok";
+    private final Long[] longs1_ = new Long[]{8111L, 8333L};
+    private final int[][] multi_ints_ = new int[][]{{31, 32, 33, 34}, {35, 36, 37, 38}};
+    private final long long1_ = 4L;
 
     private int int2_ = 0;
     private String string2_ = null;

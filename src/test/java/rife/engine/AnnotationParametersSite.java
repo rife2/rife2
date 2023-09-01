@@ -17,8 +17,10 @@ public class AnnotationParametersSite extends Site {
     Route routePathInfo;
 
     public static class ParentInElement implements Element {
-        @Parameter int intParam = -4;
-        @Parameter("param3") int intParam2 = -5;
+        @Parameter
+        final int intParam = -4;
+        @Parameter("param3")
+        final int intParam2 = -5;
         @ParametersBean(prefix = "theBean_") BeanImpl paramsBean;
 
         public void process(Context c) {
@@ -26,8 +28,10 @@ public class AnnotationParametersSite extends Site {
     }
 
     public static class AnnotatedInElement extends ParentInElement {
-        @Parameter String stringParam = "defaultParam";
-        @Parameter("param2") String stringParam2 = "defaultParam2";
+        @Parameter
+        final String stringParam = "defaultParam";
+        @Parameter("param2")
+        final String stringParam2 = "defaultParam2";
         @Parameter("param6") String stringParam3 = "defaultParam3";
 
         public void process(Context c) {
@@ -45,7 +49,8 @@ public class AnnotationParametersSite extends Site {
     public static class ParentOutElement implements Element {
         @Parameter(value = "param2", flow = FlowDirection.OUT) String stringParam2 = "value3";
         @ParametersBean(prefix = "theBean_", flow = FlowDirection.OUT) BeanImpl paramsBean;
-        @Parameter int switchRoute = 0;
+        @Parameter
+        final int switchRoute = 0;
 
         public void process(Context c) {
         }

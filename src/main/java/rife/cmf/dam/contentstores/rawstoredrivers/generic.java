@@ -24,15 +24,15 @@ import java.sql.Blob;
 public class generic extends DatabaseRawStore {
     protected CreateTable createTableContentInfo_;
     protected CreateTable createTableContentChunk_;
-    protected DropTable dropTableContentInfo_;
-    protected DropTable dropTableContentChunk_;
-    protected Insert storeContentInfo_;
-    protected Delete deleteContentInfo_;
-    protected Select retrieveSize_;
-    protected Select hasContentData_;
-    protected Insert storeContentChunk_;
-    protected Delete deleteContentChunk_;
-    protected Select retrieveContentChunks_;
+    protected final DropTable dropTableContentInfo_;
+    protected final DropTable dropTableContentChunk_;
+    protected final Insert storeContentInfo_;
+    protected final Delete deleteContentInfo_;
+    protected final Select retrieveSize_;
+    protected final Select hasContentData_;
+    protected final Insert storeContentChunk_;
+    protected final Delete deleteContentChunk_;
+    protected final Select retrieveContentChunks_;
 
     public generic(Datasource datasource) {
         super(datasource);

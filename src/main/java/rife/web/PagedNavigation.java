@@ -147,29 +147,29 @@ import rife.template.Template;
  * @since 1.1
  */
 public class PagedNavigation {
-    public static String PREFIX_NAV = "nav:";
+    public static final String PREFIX_NAV = "nav:";
 
-    public static String SUFFIX_DISABLED = ":disabled";
+    public static final String SUFFIX_DISABLED = ":disabled";
 
-    public static String ID_ROUTE_OFFSET = PREFIX_NAV + "route";
-    public static String ID_RANGE_COUNT = PREFIX_NAV + "rangeCount";
+    public static final String ID_ROUTE_OFFSET = PREFIX_NAV + "route";
+    public static final String ID_RANGE_COUNT = PREFIX_NAV + "rangeCount";
 
-    public static String ID_ABSOLUTE_RANGE_TEXT = "absoluteRangeText";
+    public static final String ID_ABSOLUTE_RANGE_TEXT = "absoluteRangeText";
 
-    public static String ID_FIRST_RANGE = PREFIX_NAV + "firstRange";
-    public static String ID_PREVIOUS_RANGE = PREFIX_NAV + "previousRange";
-    public static String ID_ABSOLUTE_RANGES = PREFIX_NAV + "absoluteRanges";
-    public static String ID_ABSOLUTE_RANGE = PREFIX_NAV + "absoluteRange";
-    public static String ID_NEXT_RANGE = PREFIX_NAV + "nextRange";
-    public static String ID_LAST_RANGE = PREFIX_NAV + "lastRange";
+    public static final String ID_FIRST_RANGE = PREFIX_NAV + "firstRange";
+    public static final String ID_PREVIOUS_RANGE = PREFIX_NAV + "previousRange";
+    public static final String ID_ABSOLUTE_RANGES = PREFIX_NAV + "absoluteRanges";
+    public static final String ID_ABSOLUTE_RANGE = PREFIX_NAV + "absoluteRange";
+    public static final String ID_NEXT_RANGE = PREFIX_NAV + "nextRange";
+    public static final String ID_LAST_RANGE = PREFIX_NAV + "lastRange";
 
-    public static String ID_FIRST_RANGE_DISABLED = PREFIX_NAV + "firstRange" + SUFFIX_DISABLED;
-    public static String ID_PREVIOUS_RANGE_DISABLED = PREFIX_NAV + "previousRange" + SUFFIX_DISABLED;
-    public static String ID_ABSOLUTE_RANGE_DISABLED = PREFIX_NAV + "absoluteRange" + SUFFIX_DISABLED;
-    public static String ID_NEXT_RANGE_DISABLED = PREFIX_NAV + "nextRange" + SUFFIX_DISABLED;
-    public static String ID_LAST_RANGE_DISABLED = PREFIX_NAV + "lastRange" + SUFFIX_DISABLED;
+    public static final String ID_FIRST_RANGE_DISABLED = PREFIX_NAV + "firstRange" + SUFFIX_DISABLED;
+    public static final String ID_PREVIOUS_RANGE_DISABLED = PREFIX_NAV + "previousRange" + SUFFIX_DISABLED;
+    public static final String ID_ABSOLUTE_RANGE_DISABLED = PREFIX_NAV + "absoluteRange" + SUFFIX_DISABLED;
+    public static final String ID_NEXT_RANGE_DISABLED = PREFIX_NAV + "nextRange" + SUFFIX_DISABLED;
+    public static final String ID_LAST_RANGE_DISABLED = PREFIX_NAV + "lastRange" + SUFFIX_DISABLED;
 
-    public static String DEFAULT_PARAMETER = "offset";
+    public static final String DEFAULT_PARAMETER = "offset";
 
     /**
      * Generates the paged navigation for the given context, template and

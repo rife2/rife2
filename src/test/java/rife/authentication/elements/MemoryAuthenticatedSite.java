@@ -52,31 +52,31 @@ public class MemoryAuthenticatedSite extends Site {
             });
         }
 
-        Route landing;
-        Route logout;
-        Route template;
+        final Route landing;
+        final Route logout;
+        final Route template;
     }
 
-    Route login = route("/login", new Login(config, TemplateFactory.HTML.get("authentication.login")));
-    AuthenticatedSection auth = group(new AuthenticatedSection(config) {
+    final Route login = route("/login", new Login(config, TemplateFactory.HTML.get("authentication.login")));
+    final AuthenticatedSection auth = group(new AuthenticatedSection(config) {
         public void setup() {
             before(new Authenticated(config));
         }
     });
-    Route loginAdmin = route("/loginAdmin", new Login(configAdmin, TemplateFactory.HTML.get("authentication.login")));
-    AuthenticatedSection authAdmin = group("/admin", new AuthenticatedSection(configAdmin) {
+    final Route loginAdmin = route("/loginAdmin", new Login(configAdmin, TemplateFactory.HTML.get("authentication.login")));
+    final AuthenticatedSection authAdmin = group("/admin", new AuthenticatedSection(configAdmin) {
         public void setup() {
             before(new Authenticated(configAdmin));
         }
     });
-    Route loginMaint = route("/loginMaint", new Login(configMaint, TemplateFactory.HTML.get("authentication.login")));
-    AuthenticatedSection authMaint = group("/maint", new AuthenticatedSection(configMaint) {
+    final Route loginMaint = route("/loginMaint", new Login(configMaint, TemplateFactory.HTML.get("authentication.login")));
+    final AuthenticatedSection authMaint = group("/maint", new AuthenticatedSection(configMaint) {
         public void setup() {
             before(new Authenticated(configMaint));
         }
     });
-    Route loginNotEnforced = route("/loginNotEnforced", new Login(configNotEnforced, TemplateFactory.HTML.get("authentication.login")));
-    AuthenticatedSection authNotEnforced = group("/notEnforced", new AuthenticatedSection(configNotEnforced) {
+    final Route loginNotEnforced = route("/loginNotEnforced", new Login(configNotEnforced, TemplateFactory.HTML.get("authentication.login")));
+    final AuthenticatedSection authNotEnforced = group("/notEnforced", new AuthenticatedSection(configNotEnforced) {
         public void setup() {
             before(new Authenticated(configNotEnforced));
         }

@@ -21,12 +21,12 @@ import rife.engine.Context;
 
 public class generic extends DatabaseTextStore {
     protected CreateTable createTableContent_;
-    protected DropTable dropTableContent_;
-    protected Insert storeContentData_;
-    protected Delete deleteContentData_;
-    protected Select retrieveContent_;
-    protected Select retrieveSize_;
-    protected Select hasContentData_;
+    protected final DropTable dropTableContent_;
+    protected final Insert storeContentData_;
+    protected final Delete deleteContentData_;
+    protected final Select retrieveContent_;
+    protected final Select retrieveSize_;
+    protected final Select hasContentData_;
 
     public generic(Datasource datasource) {
         super(datasource);

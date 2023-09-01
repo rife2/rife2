@@ -11,11 +11,11 @@ import rife.engine.*;
 import rife.template.TemplateFactory;
 
 public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
-    DatabaseSessionValidator validator;
-    AuthConfig config;
-    AuthConfig configAdmin;
-    AuthConfig configMaint;
-    AuthConfig configNotEnforced;
+    final DatabaseSessionValidator validator;
+    final AuthConfig config;
+    final AuthConfig configAdmin;
+    final AuthConfig configMaint;
+    final AuthConfig configNotEnforced;
 
     public DatabaseAuthenticatedSite(Datasource datasource) {
         validator = DatabaseSessionValidatorFactory.instance(datasource);
@@ -70,9 +70,9 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
             });
         }
 
-        Route landing;
-        Route logout;
-        Route template;
+        final Route landing;
+        final Route logout;
+        final Route template;
     }
 
     Route login;

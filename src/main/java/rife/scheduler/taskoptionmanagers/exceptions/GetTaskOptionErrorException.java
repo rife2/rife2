@@ -13,7 +13,7 @@ public class GetTaskOptionErrorException extends TaskOptionManagerException {
     @Serial private static final long serialVersionUID = 3920950726058002527L;
 
     private final int taskId_;
-    private String name_;
+    private final String name_;
 
     public GetTaskOptionErrorException(int taskId, String name) {
         this(taskId, name, null);

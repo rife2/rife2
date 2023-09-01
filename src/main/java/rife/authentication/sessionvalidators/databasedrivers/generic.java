@@ -13,10 +13,10 @@ import rife.database.Datasource;
 import rife.database.queries.Select;
 
 public class generic extends DatabaseSessionValidator {
-    protected Select checkValidityNoRole_;
-    protected Select checkValidityNoRoleRestrictAuthData_;
-    protected Select checkValidityRole_;
-    protected Select checkValidityRoleRestrictAuthData_;
+    protected final Select checkValidityNoRole_;
+    protected final Select checkValidityNoRoleRestrictAuthData_;
+    protected final Select checkValidityRole_;
+    protected final Select checkValidityRoleRestrictAuthData_;
 
     public generic(Datasource datasource) {
         super(datasource);
