@@ -503,7 +503,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         return store.getContentForHtml(content_info.getContentId(), content_info, context, route);
     }
 
-    private class ContentAttributesProcessor extends DbRowProcessor {
+    private static class ContentAttributesProcessor extends DbRowProcessor {
         private Map<String, String> attributes_ = null;
 
         public boolean processRow(ResultSet result)
@@ -521,7 +521,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         }
     }
 
-    private class ContentPropertiesProcessor extends DbRowProcessor {
+    private static class ContentPropertiesProcessor extends DbRowProcessor {
         private Map<String, String> properties_ = null;
 
         public boolean processRow(ResultSet result)

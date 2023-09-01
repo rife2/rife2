@@ -17,7 +17,7 @@ public class TestInnerClass implements Element {
         c.print(inner.getOutput());
     }
 
-    class Inner {
+    static class Inner {
         public String getOutput() {
             return "InnerClass's output";
         }
