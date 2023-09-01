@@ -13,8 +13,7 @@ import java.util.Random;
 public class TestNumberGuess implements Element {
     private static final Random RANDOM = new Random();
 
-    @Parameter
-    final int guess = -1;
+    @Parameter int guess = -1;
 
     public void process(Context c) {
         var template = c.template("numberguess");

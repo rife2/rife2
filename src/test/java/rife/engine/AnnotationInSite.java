@@ -16,31 +16,21 @@ public class AnnotationInSite extends Site {
         @ActiveSite AnnotationInSite site;
         @ActiveSite Site baseSite;
         @ActiveSite Number notSite;
-        @Body
-        final int intBody = -1;
-        @Cookie("cookie2")
-        final String stringCookie2 = "defaultCookie2";
+        @Body int intBody = -1;
+        @Cookie("cookie2") String stringCookie2 = "defaultCookie2";
         @FileUpload String fileString;
-        @Parameter
-        final int intParam = -4;
-        @PathInfo
-        final int intPathInfo = -6;
-        @RequestAttribute
-        final int intRequestAttribute = -7;
-        @SessionAttribute
-        final int intSessionAttribute = -9;
-        @Header("header2")
-        final String stringHeader2 = "defaultHeader2";
+        @Parameter int intParam = -4;
+        @PathInfo int intPathInfo = -6;
+        @RequestAttribute int intRequestAttribute = -7;
+        @SessionAttribute int intSessionAttribute = -9;
+        @Header("header2") String stringHeader2 = "defaultHeader2";
         @Property String prop1 = "defaultProp1";
         @Property String prop2 = "defaultProp2";
-        @Property("prop1")
-        final String prop3 = "defaultProp3";
-        @Config
-        final String config1 = "defaultConfig1";
+        @Property("prop1") String prop3 = "defaultProp3";
+        @Config String config1 = "defaultConfig1";
         @Config String config2 = "defaultConfig2";
         @Config("config1") String config3 = "defaultConfig3";
-        @Config
-        final List<String> list1 = List.of("one", "two", "false");
+        @Config List<String> list1 = List.of("one", "two", "false");
         @Config List<Boolean> list2 = List.of(true, false, false);
         @Config List<String> list3 = List.of("one", "two", "false");
         @Config("listint") List<Integer> list4 = List.of(1, 2, 3);
@@ -55,15 +45,11 @@ public class AnnotationInSite extends Site {
 
     public static class AnnotatedElement extends ParentElement {
         @ActiveSite AnnotationInSite childSite;
-        @Body
-        final String stringBody = "defaultBody";
+        @Body String stringBody = "defaultBody";
 
-        @Cookie
-        final String stringCookie = "defaultCookie";
-        @Cookie
-        final int intCookie = -2;
-        @Cookie("cookie3")
-        final int intCookie2 = -3;
+        @Cookie String stringCookie = "defaultCookie";
+        @Cookie int intCookie = -2;
+        @Cookie("cookie3") int intCookie2 = -3;
 
         @FileUpload UploadedFile uploadedFile;
         @FileUpload File file;
@@ -71,56 +57,35 @@ public class AnnotationInSite extends Site {
         @FileUpload("file3") File file2;
         @FileUpload("file4") String fileString2;
 
-        @Parameter
-        final String stringParam = "defaultParam";
-        @Parameter("param2")
-        final String stringParam2 = "defaultParam2";
-        @Parameter("param3")
-        final int intParam2 = -5;
+        @Parameter String stringParam = "defaultParam";
+        @Parameter("param2") String stringParam2 = "defaultParam2";
+        @Parameter("param3") int intParam2 = -5;
 
-        @PathInfo
-        final String stringPathInfo = "defaultPathInfo";
+        @PathInfo String stringPathInfo = "defaultPathInfo";
 
-        @RequestAttribute
-        final String stringRequestAttribute = "defaultRequestAttribute";
-        @RequestAttribute("requestAttr2")
-        final String stringRequestAttribute2 = "defaultRequestAttribute2";
-        @RequestAttribute("requestAttr3")
-        final int intRequestAttribute2 = -8;
+        @RequestAttribute String stringRequestAttribute = "defaultRequestAttribute";
+        @RequestAttribute("requestAttr2") String stringRequestAttribute2 = "defaultRequestAttribute2";
+        @RequestAttribute("requestAttr3") int intRequestAttribute2 = -8;
 
-        @SessionAttribute
-        final String stringSessionAttribute = "defaultSessionAttribute";
-        @SessionAttribute("sessionAttr2")
-        final String stringSessionAttribute2 = "defaultSessionAttribute2";
-        @SessionAttribute("sessionAttr3")
-        final int intSessionAttribute2 = -10;
+        @SessionAttribute String stringSessionAttribute = "defaultSessionAttribute";
+        @SessionAttribute("sessionAttr2") String stringSessionAttribute2 = "defaultSessionAttribute2";
+        @SessionAttribute("sessionAttr3") int intSessionAttribute2 = -10;
 
-        @Header
-        final String stringHeader = "defaultHeader";
-        @Header
-        final int intHeader = -11;
-        @Header("header3")
-        final int intHeader2 = -12;
+        @Header String stringHeader = "defaultHeader";
+        @Header int intHeader = -11;
+        @Header("header3") int intHeader2 = -12;
 
-        @Property
-        final String prop1 = "defaultProp1";
-        @Property
-        final String prop2 = "defaultProp2";
+        @Property String prop1 = "defaultProp1";
+        @Property String prop2 = "defaultProp2";
 
-        @Config
-        final String config2 = "defaultConfig2";
-        @Config("config1")
-        final String config3 = "defaultConfig3";
+        @Config String config2 = "defaultConfig2";
+        @Config("config1") String config3 = "defaultConfig3";
 
-        @Config
-        final List<Boolean> list2 = List.of(true, false, false);
-        @Config
-        final List<String> list3 = List.of("one", "two", "false");
-        @Config("listint")
-        final List<Integer> list4 = List.of(1, 2, 3);
+        @Config List<Boolean> list2 = List.of(true, false, false);
+        @Config List<String> list3 = List.of("one", "two", "false");
+        @Config("listint") List<Integer> list4 = List.of(1, 2, 3);
 
-        @ParametersBean
-        final BeanImpl beanParams = null;
+        @ParametersBean BeanImpl beanParams = null;
 
         public void process(Context c)
         throws Exception {

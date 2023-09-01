@@ -25,7 +25,7 @@ import java.io.IOException;
  * @since 1.0
  */
 public class RifeFilter implements Filter {
-    public static final String RIFE_SITE_CLASS_NAME = "rifeSiteClass";
+    public static String RIFE_SITE_CLASS_NAME = "rifeSiteClass";
 
     private final Gate gate_ = new Gate();
     private String gateUrl_ = null;
