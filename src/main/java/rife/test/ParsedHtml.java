@@ -76,7 +76,7 @@ public class ParsedHtml {
      */
     public String getTitle() {
         var elements = document_.select("title");
-        if (0 == elements.size()) {
+        if (elements.isEmpty()) {
             return null;
         }
 
@@ -109,7 +109,7 @@ public class ParsedHtml {
      */
     public MockForm getFormWithName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var form : forms_) {
             if (name.equals(form.getName())) {
@@ -133,7 +133,7 @@ public class ParsedHtml {
      */
     public MockForm getFormWithId(String id) {
         if (null == id) throw new IllegalArgumentException("id can't be null");
-        if (0 == id.length()) throw new IllegalArgumentException("id can't be empty");
+        if (id.isEmpty()) throw new IllegalArgumentException("id can't be empty");
 
         for (var form : forms_) {
             if (form.getId().equals(id)) {
@@ -175,7 +175,7 @@ public class ParsedHtml {
      */
     public MockLink getLinkWithName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var link : links_) {
             if (link.getName().equals(name)) {
@@ -202,7 +202,7 @@ public class ParsedHtml {
      */
     public MockLink getLinkWithId(String id) {
         if (null == id) throw new IllegalArgumentException("id can't be null");
-        if (0 == id.length()) throw new IllegalArgumentException("id can't be empty");
+        if (id.isEmpty()) throw new IllegalArgumentException("id can't be empty");
 
         for (var link : links_) {
             if (id.equals(link.getId())) {
@@ -259,7 +259,7 @@ public class ParsedHtml {
         for (var link : links_) {
             var element = link.getElement();
             var children = element.children();
-            if (children.size() > 0) {
+            if (!children.isEmpty()) {
                 for (var child : children) {
                     if ("img".equals(child.nodeName())) {
                         var alt_text = getElementAttribute(child, "alt", null);
@@ -291,12 +291,12 @@ public class ParsedHtml {
      */
     public MockLink getLinkWithImageName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var link : links_) {
             var element = link.getElement();
             var children = element.children();
-            if (children.size() > 0) {
+            if (!children.isEmpty()) {
                 for (var child : children) {
                     if ("img".equals(child.nodeName())) {
                         var alt_text = getElementAttribute(child, "name", null);

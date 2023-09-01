@@ -95,7 +95,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
     public MemoryUsers addRole(String role)
     throws CredentialsManagerException {
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 
@@ -124,7 +124,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public boolean containsRole(String role) {
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -139,7 +139,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
     public MemoryUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new AddUserErrorException(login, attributes);
         }
@@ -195,10 +195,10 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
     private void createRoleLinks(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         assert login != null;
-        assert login.length() > 0;
+        assert !login.isEmpty();
 
         if (attributes.getRoles() != null &&
-            attributes.getRoles().size() > 0) {
+            !attributes.getRoles().isEmpty()) {
             ArrayList<String> logins = null;
             readLock_.lock();
             try {
@@ -221,7 +221,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public RoleUserAttributes getAttributes(String login) {
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return null;
         }
 
@@ -249,7 +249,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
         readLock_.lock();
         try {
-            if (0 == roles_.size()) {
+            if (roles_.isEmpty()) {
                 return true;
             }
 
@@ -276,7 +276,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
         readLock_.lock();
         try {
-            if (0 == users_.size()) {
+            if (users_.isEmpty()) {
                 return false;
             }
 
@@ -304,7 +304,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         try {
             if (null == processor ||
                 limit <= 0 ||
-                0 == users_.size()) {
+                users_.isEmpty()) {
                 return false;
             }
 
@@ -340,7 +340,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public boolean containsUser(String login) {
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -359,11 +359,11 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
-        if (0 == users_.size()) {
+        if (users_.isEmpty()) {
             return false;
         }
 
@@ -394,7 +394,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
     public boolean isUserInRole(long userId, String role) {
         if (userId < 0 ||
             null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -437,7 +437,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public long getUserId(String login) {
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return -1;
         }
 
@@ -459,7 +459,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
     public boolean updateUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new UpdateUserErrorException(login, attributes);
         }
@@ -509,7 +509,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public boolean removeUser(String login) {
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -553,7 +553,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public boolean removeRole(String name) {
         if (null == name ||
-            0 == name.length()) {
+            name.isEmpty()) {
             return false;
         }
 
@@ -578,19 +578,19 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     private void removeRoleLinks(String login) {
         assert login != null;
-        assert login.length() > 0;
+        assert !login.isEmpty();
 
         var attributes = users_.get(login);
         if (attributes != null &&
             attributes.getRoles() != null &&
-            attributes.getRoles().size() > 0) {
+            !attributes.getRoles().isEmpty()) {
             // remove the login from the roles it's registered for
             ArrayList<String> logins = null;
             ArrayList<String> roles_to_delete = null;
             for (var role : attributes.getRoles()) {
                 logins = roles_.get(role);
                 logins.remove(login);
-                if (0 == logins.size()) {
+                if (logins.isEmpty()) {
                     if (null == roles_to_delete) {
                         roles_to_delete = new ArrayList<>();
                     }
@@ -632,7 +632,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
                 return false;
             }
 
-            if (0 == roles_.size()) {
+            if (roles_.isEmpty()) {
                 return true;
             }
 

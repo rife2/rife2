@@ -31,7 +31,7 @@ public class TestMemorySessions {
             assertFalse(sessions.wasRemembered(auth_id));
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertTrue(!auth_id.isEmpty());
 
             assertEquals(1, sessions.countSessions());
 
@@ -66,7 +66,7 @@ public class TestMemorySessions {
             assertEquals(1, sessions.countSessions());
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertTrue(!auth_id.isEmpty());
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

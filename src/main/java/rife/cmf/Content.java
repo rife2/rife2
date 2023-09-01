@@ -388,7 +388,7 @@ public class Content implements Cloneable {
      * @since 1.0
      */
     public boolean hasAttributes() {
-        return attributes_ != null && attributes_.size() > 0;
+        return attributes_ != null && !attributes_.isEmpty();
     }
 
     /**
@@ -616,7 +616,7 @@ public class Content implements Cloneable {
      * @since 1.0
      */
     public boolean hasProperties() {
-        return properties_ != null && properties_.size() > 0;
+        return properties_ != null && !properties_.isEmpty();
     }
 
     /**

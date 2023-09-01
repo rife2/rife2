@@ -50,7 +50,7 @@ public class SupportedXhtml extends CmfPropertyValidationRule {
         // is considered invalid
         Set<String> errors = new HashSet<>();
         var loaded = new XhtmlContentLoader().load(value, getFragment(), errors);
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             setLoadingErrors(errors);
         }
         if (null == loaded) {

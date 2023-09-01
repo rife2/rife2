@@ -113,7 +113,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         TaskOption taskoption = null;
 
@@ -162,7 +162,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var result = false;
 

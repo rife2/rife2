@@ -196,7 +196,7 @@ class MultipartRequest {
         while (result == parameterBuffer_.length);
 
         // if nothing was read, the end of the stream must have been reached
-        if (line_buffer.length() == 0) {
+        if (line_buffer.isEmpty()) {
             return null;
         }
 
@@ -227,7 +227,7 @@ class MultipartRequest {
         // When no next line could be read, the end was reached.
         // IE4 on Mac sends an empty line at the end; treat that as the ending too.
         if (null == line ||
-            0 == line.length()) {
+            line.isEmpty()) {
             // No parts left, we're done
             return false;
         }
@@ -236,7 +236,7 @@ class MultipartRequest {
         // A line starting with whitespace is considered a continuation;
         // that requires a little special logic.
         while (null != line &&
-            line.length() > 0) {
+            !line.isEmpty()) {
             String next_line = null;
             var obtain_next_line = true;
             while (obtain_next_line) {
@@ -384,7 +384,7 @@ class MultipartRequest {
                 throw new MultipartCorruptContentTypeException(contentTypeLine);
             }
             result = lower_case_line.substring(separator_location + 1);
-        } else if (lower_case_line.length() != 0) {
+        } else if (!lower_case_line.isEmpty()) {
             // no content type, so should be empty
             throw new MultipartCorruptContentTypeException(contentTypeLine);
         }
@@ -404,7 +404,7 @@ class MultipartRequest {
         }
 
         // nothing read
-        if (0 == result.length()) {
+        if (result.isEmpty()) {
             return null;
         }
 

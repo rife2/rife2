@@ -32,9 +32,9 @@ public class BasicSessionValidator<C extends CredentialsManager, S extends Sessi
     public int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||
-            0 == authId.length() ||
+            authId.isEmpty() ||
             null == authData ||
-            0 == authData.length() ||
+            authData.isEmpty() ||
             null == attributes) {
             return SESSION_INVALID;
         }

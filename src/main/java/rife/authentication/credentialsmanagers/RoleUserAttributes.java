@@ -85,7 +85,7 @@ public class RoleUserAttributes implements Cloneable {
     }
 
     public void setPassword(String password) {
-        if (password != null && 0 == password.length()) throw new IllegalArgumentException("password can't be empty.");
+        if (password != null && password.isEmpty()) throw new IllegalArgumentException("password can't be empty.");
 
         password_ = password;
     }
@@ -149,7 +149,7 @@ public class RoleUserAttributes implements Cloneable {
 
     public boolean isInRole(String role) {
         if (null == role) throw new IllegalArgumentException("role can't be null.");
-        if (0 == role.length()) throw new IllegalArgumentException("role can't be empty.");
+        if (role.isEmpty()) throw new IllegalArgumentException("role can't be empty.");
 
         if (null == roles_) {
             return false;
@@ -160,7 +160,7 @@ public class RoleUserAttributes implements Cloneable {
 
     public boolean isValid(String password) {
         if (null == password) throw new IllegalArgumentException("password can't be null.");
-        if (0 == password.length()) throw new IllegalArgumentException("password can't be empty.");
+        if (password.isEmpty()) throw new IllegalArgumentException("password can't be empty.");
 
         return password.equals(password_);
     }

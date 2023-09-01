@@ -131,7 +131,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         synchronized (this) {
             // get the task options for the same task id
@@ -170,7 +170,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         synchronized (this) {
             // get the task options for the same task id

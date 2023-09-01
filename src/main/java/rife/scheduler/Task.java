@@ -84,7 +84,7 @@ public class Task extends MetaData implements Cloneable {
     public String getTaskOptionValue(String name)
     throws SchedulerException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         if (null == taskManager_) {
             return null;

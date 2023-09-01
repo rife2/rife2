@@ -139,7 +139,7 @@ public abstract class AbstractResponse implements Response {
         }
 
         if (null == deferredContent ||
-            0 == deferredContent.size()) {
+            deferredContent.isEmpty()) {
             return;
         }
 
@@ -230,7 +230,7 @@ public abstract class AbstractResponse implements Response {
 
     public void clearBuffer() {
         if (textBuffer_ != null &&
-            textBuffer_.size() > 0) {
+            !textBuffer_.isEmpty()) {
             textBuffer_.clear();
         }
     }
@@ -238,7 +238,7 @@ public abstract class AbstractResponse implements Response {
     public void flush()
     throws EngineException {
         if (textBuffer_ != null &&
-            textBuffer_.size() > 0) {
+            !textBuffer_.isEmpty()) {
             writeDeferredContent(textBuffer_);
 
             textBuffer_.clear();

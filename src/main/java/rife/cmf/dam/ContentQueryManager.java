@@ -229,7 +229,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     public boolean move(Constrained bean, String propertyName, OrdinalManager.Direction direction) {
         if (null == bean) throw new IllegalArgumentException("constrained can't be null");
         if (null == propertyName) throw new IllegalArgumentException("propertyName can't be null");
-        if (0 == propertyName.length()) throw new IllegalArgumentException("propertyName can't be empty");
+        if (propertyName.isEmpty()) throw new IllegalArgumentException("propertyName can't be empty");
 
         var property = bean.getConstrainedProperty(propertyName);
         if (null == property) {
@@ -335,7 +335,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     public boolean storeEmptyContent(final T bean, String propertyName) {
         if (null == bean) throw new IllegalArgumentException("constrained can't be null");
         if (null == propertyName) throw new IllegalArgumentException("propertyName can't be null");
-        if (0 == propertyName.length()) throw new IllegalArgumentException("propertyName can't be empty");
+        if (propertyName.isEmpty()) throw new IllegalArgumentException("propertyName can't be empty");
 
         var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
         if (null == constrained) {
@@ -710,7 +710,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
         var path = new StringBuilder();
         if (repository != null &&
-            repository.length() > 0) {
+            !repository.isEmpty()) {
             path.append(repository);
             path.append(":");
         }

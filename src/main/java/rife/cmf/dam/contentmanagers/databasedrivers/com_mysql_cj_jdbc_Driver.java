@@ -109,7 +109,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean createRepository(final String name)
     throws ContentManagerException {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         Boolean result = null;
 

@@ -71,7 +71,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
     public DatabaseUsers addRole(final String role)
     throws CredentialsManagerException {
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 

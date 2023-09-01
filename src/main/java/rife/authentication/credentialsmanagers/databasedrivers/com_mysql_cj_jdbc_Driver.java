@@ -89,7 +89,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public DatabaseUsers addRole(final String role)
     throws CredentialsManagerException {
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 
@@ -121,7 +121,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public DatabaseUsers addUser(final String login, final RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new AddUserErrorException(login, attributes);
         }
@@ -220,7 +220,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean updateUser(final String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new UpdateUserErrorException(login, attributes);
         }
@@ -315,7 +315,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean removeUser(final String login)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -389,7 +389,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean removeRole(final String name)
     throws CredentialsManagerException {
         if (null == name ||
-            0 == name.length()) {
+            name.isEmpty()) {
             return false;
         }
 

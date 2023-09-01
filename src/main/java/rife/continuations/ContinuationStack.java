@@ -305,7 +305,7 @@ public class ContinuationStack {
 
         var result = new StringBuilder();
         for (var i = 0; i < Array.getLength(array); i++) {
-            if (result.length() > 0) {
+            if (!result.isEmpty()) {
                 result.append(separator);
             }
 

@@ -43,7 +43,7 @@ public class PathInfoMapping {
      * @since 1.0
      */
     public PathInfoMapping t(String literal) {
-        if (literal.length() > 0) {
+        if (!literal.isEmpty()) {
             mappingRegexp_.append(StringUtils.encodeRegexp(literal));
             segments_.add(PathInfoSegment.createTextSegment(literal));
         }

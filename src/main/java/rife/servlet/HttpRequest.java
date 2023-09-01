@@ -101,7 +101,7 @@ public class HttpRequest implements Request {
     @Override
     public boolean hasFile(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         if (null == getFiles()) {
             return false;
@@ -130,7 +130,7 @@ public class HttpRequest implements Request {
     @Override
     public UploadedFile getFile(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         if (null == getFiles()) {
             return null;
@@ -147,7 +147,7 @@ public class HttpRequest implements Request {
     @Override
     public UploadedFile[] getFiles(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         if (null == getFiles()) {
             return null;
@@ -159,7 +159,7 @@ public class HttpRequest implements Request {
     @Override
     public boolean hasCookie(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         var cookies = request_.getCookies();
 
@@ -179,7 +179,7 @@ public class HttpRequest implements Request {
     @Override
     public Cookie getCookie(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         var cookies = request_.getCookies();
 

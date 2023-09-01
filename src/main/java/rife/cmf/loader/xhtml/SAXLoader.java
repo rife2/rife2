@@ -134,7 +134,7 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
 
             if (sax_parse_exception ||
                 (errors != null &&
-                 errors.size() > 0) ||
+                    !errors.isEmpty()) ||
                 (errorRedirector_.hasErrors() ||
                  errorRedirector_.hasFatalErrors())) {
                 return null;
@@ -163,14 +163,14 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             }
 
             if (e.getPublicId() != null) {
-                if (formatted.length() > 0) {
+                if (!formatted.isEmpty()) {
                     formatted.append(", ");
                 }
                 formatted.append(e.getPublicId());
             }
 
             if (e.getLineNumber() >= 0) {
-                if (formatted.length() > 0) {
+                if (!formatted.isEmpty()) {
                     formatted.append(", ");
                 }
                 formatted.append("line ");
@@ -182,14 +182,14 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             }
 
             if (e.getColumnNumber() >= 0) {
-                if (formatted.length() > 0) {
+                if (!formatted.isEmpty()) {
                     formatted.append(", ");
                 }
                 formatted.append("col ");
                 formatted.append(e.getColumnNumber());
             }
 
-            if (formatted.length() > 0) {
+            if (!formatted.isEmpty()) {
                 formatted.append(" : ");
             }
             formatted.append(e.getMessage());

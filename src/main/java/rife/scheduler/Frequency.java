@@ -746,7 +746,7 @@ public class Frequency {
     void parse(String frequency)
     throws FrequencyException {
         if (null == frequency) throw new IllegalArgumentException("frequency can't be null");
-        if (0 == frequency.length()) throw new IllegalArgumentException("frequency can't be empty");
+        if (frequency.isEmpty()) throw new IllegalArgumentException("frequency can't be empty");
 
         reset();
 
@@ -807,7 +807,7 @@ public class Frequency {
     private byte[] processParts(List<String> parts, byte[] allValues, boolean deferOverflowProcessing, byte[] underflowStorage, byte[] overflowStorage)
     throws FrequencyException {
         assert parts != null;
-        assert parts.size() > 0;
+        assert !parts.isEmpty();
         assert allValues != null;
         assert allValues.length > 0;
         assert !deferOverflowProcessing || (deferOverflowProcessing && underflowStorage != null && overflowStorage != null);

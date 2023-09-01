@@ -85,7 +85,7 @@ public class Gate {
 
         // ensure a valid element url
         if (null == elementUrl ||
-            0 == elementUrl.length()) {
+            elementUrl.isEmpty()) {
             elementUrl = "/";
         }
 

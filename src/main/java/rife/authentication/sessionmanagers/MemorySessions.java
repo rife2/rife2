@@ -71,7 +71,7 @@ public class MemorySessions implements SessionManager {
     throws SessionManagerException {
         if (userId < 0 ||
             null == authData ||
-            0 == authData.length()) {
+            authData.isEmpty()) {
             throw new StartSessionErrorException(userId, authData);
         }
 
@@ -91,9 +91,9 @@ public class MemorySessions implements SessionManager {
     public boolean isSessionValid(String authId, String authData)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length() ||
+            authId.isEmpty() ||
             null == authData ||
-            0 == authData.length()) {
+            authData.isEmpty()) {
             return false;
         }
 
@@ -121,7 +121,7 @@ public class MemorySessions implements SessionManager {
     public boolean continueSession(String authId)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -134,7 +134,7 @@ public class MemorySessions implements SessionManager {
     public boolean eraseSession(String authId)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -144,7 +144,7 @@ public class MemorySessions implements SessionManager {
     public boolean wasRemembered(String authId)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 

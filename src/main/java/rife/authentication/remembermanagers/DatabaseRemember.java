@@ -120,7 +120,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         assert eraseRememberId != null;
 
         if (null == rememberId ||
-            0 == rememberId.length()) {
+            rememberId.isEmpty()) {
             return false;
         }
 
@@ -187,7 +187,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         assert getRememberedUserId != null;
 
         if (null == rememberId ||
-            0 == rememberId.length()) {
+            rememberId.isEmpty()) {
             return -1;
         }
 

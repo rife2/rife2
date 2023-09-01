@@ -10,7 +10,7 @@ public class RoleUserIdentity implements Cloneable {
 
     public RoleUserIdentity(String login, RoleUserAttributes attributes) {
         if (null == login) throw new IllegalArgumentException("login can't be null.");
-        if (0 == login.length()) throw new IllegalArgumentException("login can't be empty.");
+        if (login.isEmpty()) throw new IllegalArgumentException("login can't be empty.");
         if (null == attributes) throw new IllegalArgumentException("attributes can't be null.");
 
         login_ = login;

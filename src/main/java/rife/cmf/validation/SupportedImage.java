@@ -48,7 +48,7 @@ public class SupportedImage extends CmfPropertyValidationRule {
         // is considered invalid
         Set<String> errors = new HashSet<>();
 		var loaded = new ImageContentLoader().load(value, getFragment(), errors);
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             setLoadingErrors(errors);
         }
         if (null == loaded) {

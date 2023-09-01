@@ -514,7 +514,7 @@ public class Context {
     public Template template(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.HTML.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -568,7 +568,7 @@ public class Context {
     public Template templateTxt(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.TXT.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -622,7 +622,7 @@ public class Context {
     public Template templateXml(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.XML.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -676,7 +676,7 @@ public class Context {
     public Template templateJson(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.JSON.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -730,7 +730,7 @@ public class Context {
     public Template templateSvg(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.SVG.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -794,7 +794,7 @@ public class Context {
             webapp_root.append("/");
         }
         webapp_root.append(gate_url);
-        if (gate_url.length() > 0 &&
+        if (!gate_url.isEmpty() &&
             !gate_url.endsWith("/")) {
             webapp_root.append("/");
         }
@@ -848,7 +848,7 @@ public class Context {
     public Collection<String> selectParameter(Template template, String name, String[] values) {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var form_builder = template.getFormBuilder();
         if (null == form_builder) {
@@ -1678,7 +1678,7 @@ public class Context {
                 parameter_values = parameterValues(parameter_name);
                 if (null == empty_bean &&
                     (null == parameter_values ||
-                        0 == parameter_values[0].length())) {
+                        parameter_values[0].isEmpty())) {
                     empty_bean = getNewBeanInstance(bean.getClass());
                 }
 

@@ -91,7 +91,7 @@ class TypesContext implements Cloneable {
 
     String pop() {
         String result = null;
-        if (stack_.size() > 0) {
+        if (!stack_.isEmpty()) {
             result = stack_.pop();
         }
         printStack();
@@ -121,7 +121,7 @@ class TypesContext implements Cloneable {
 
     void printStack() {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST)) {
-            if (0 == stack_.size()) {
+            if (stack_.isEmpty()) {
                 ContinuationDebug.LOGGER.finest(debugIndent_ + "  | empty");
             } else {
                 for (var i = 0; i < stack_.size(); i++) {

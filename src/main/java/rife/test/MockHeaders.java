@@ -88,7 +88,7 @@ class MockHeaders {
 
         var headers = headers_.get(name);
         if (null == headers ||
-            0 == headers.size()) {
+            headers.isEmpty()) {
             return null;
         }
 
@@ -110,7 +110,7 @@ class MockHeaders {
 
         var headers = headers_.get(name);
         if (null == headers ||
-            0 == headers.size()) {
+            headers.isEmpty()) {
             return Collections.emptyList();
         }
 

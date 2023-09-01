@@ -106,7 +106,7 @@ public class TestDatabaseRawStore {
         setup(datasource);
         try {
             var store = DatabaseRawStoreFactory.instance(datasource);
-            assertTrue(store.getSupportedMimeTypes().size() > 0);
+            assertTrue(!store.getSupportedMimeTypes().isEmpty());
         } finally {
             tearDown(datasource);
         }

@@ -116,7 +116,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
     protected boolean _createRepository(final SequenceValue getContentRepositoryId, final Insert storeContentRepository, final String name)
     throws ContentManagerException {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         assert getContentRepositoryId != null;
         assert storeContentRepository != null;
@@ -147,7 +147,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         assert containsContentRepository != null;
 
         final String repository;
-        if (0 == name.length()) {
+        if (name.isEmpty()) {
             repository = ContentRepository.DEFAULT;
         } else {
             repository = name;

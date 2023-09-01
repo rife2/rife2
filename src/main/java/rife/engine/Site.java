@@ -64,7 +64,7 @@ public class Site extends Router {
     throws EngineException {
         if (null == url) throw new IllegalArgumentException("url can't be null;");
 
-        if (0 == url.length()) {
+        if (url.isEmpty()) {
             url = "/";
         }
 
@@ -113,7 +113,7 @@ public class Site extends Router {
     throws EngineException {
         var routes = pathInfoRoutes_.get(url);
         if (null == routes ||
-            0 == routes.size()) {
+            routes.isEmpty()) {
             return null;
         }
 
@@ -144,7 +144,7 @@ public class Site extends Router {
 
     private Route resolveFallback(String url) {
         String best_match = null;
-        if (0 == url.length()) {
+        if (url.isEmpty()) {
             url = "/";
         }
 

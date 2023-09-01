@@ -32,7 +32,7 @@ public class UrlBuilder {
     public record Segments(String path, Map<String, String[]> parameters, String fragment) {
         public void appendQueryParameters(StringBuilder url) {
             // generate the query parameters that are available
-            if (parameters.size() > 0) {
+            if (!parameters.isEmpty()) {
                 var query_parameters = new StringBuilder("?");
 
                 for (var parameter_entry : parameters.entrySet()) {
@@ -62,7 +62,7 @@ public class UrlBuilder {
 
         public void appendFormInputParameters(StringBuilder url) {
             // generate the query parameters that are available
-            if (parameters.size() > 0) {
+            if (!parameters.isEmpty()) {
                 var input_parameters = new StringBuilder();
 
                 for (var parameter_entry : parameters.entrySet()) {

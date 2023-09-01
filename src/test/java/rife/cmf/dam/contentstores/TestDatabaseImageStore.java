@@ -126,7 +126,7 @@ public class TestDatabaseImageStore {
         setup(datasource);
         try {
             var store = DatabaseImageStoreFactory.instance(datasource);
-            assertTrue(store.getSupportedMimeTypes().size() > 0);
+            assertTrue(!store.getSupportedMimeTypes().isEmpty());
         } finally {
             tearDown(datasource);
         }

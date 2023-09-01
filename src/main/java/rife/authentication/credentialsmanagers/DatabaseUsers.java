@@ -160,7 +160,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert addRole != null;
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 
@@ -200,7 +200,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert containsRole != null;
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -258,7 +258,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert addRoleLink != null;
 
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new AddUserErrorException(login, attributes);
         }
@@ -352,7 +352,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getUserRoles != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return null;
         }
 
@@ -404,7 +404,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert containsUser != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -468,7 +468,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getUserId != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return -1;
         }
 
@@ -496,7 +496,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getPassword != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return null;
         }
 
@@ -569,7 +569,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         if (userId < 0 ||
             null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -599,7 +599,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         }
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -628,7 +628,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert addRoleLink != null;
 
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new UpdateUserErrorException(login, attributes);
         }
@@ -740,7 +740,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert removeUserByLogin != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -793,7 +793,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert removeRole != null;
 
         if (null == name ||
-            0 == name.length()) {
+            name.isEmpty()) {
             return false;
         }
 
