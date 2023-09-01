@@ -85,7 +85,7 @@ public class MockConversation {
      * Perform a request for a particular URL and request configuration.
      * <p>The request can either be complete with the scheme and hostname, or
      * an absolute path. These two URLs are thus considered the same:
-     * <pre><a href="https://localhost/some/url?name1=value1&amp;name2=value2">...</a></pre>
+     * <pre>https://localhost/some/url?name1=value1&amp;name2=value2</pre>
      * <pre>/some/url?name1=value1&amp;name2=value2</pre>
      * <p>Note that when the complete URL form is used, it should correspond
      * to the scheme, hostname and port configuration of this conversation.
@@ -332,7 +332,7 @@ public class MockConversation {
      */
     public boolean hasCookie(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var cookie : cookies_.values()) {
             if (cookie.getName().equals(name) && !cookie.isExpired()) {
@@ -358,7 +358,7 @@ public class MockConversation {
      */
     public Cookie getCookie(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var cookie : cookies_.values()) {
             if (cookie.getName().equals(name) && !cookie.isExpired()) {
@@ -384,7 +384,7 @@ public class MockConversation {
      */
     public String getCookieValue(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         var cookie = getCookie(name);
         if (null == cookie) {
@@ -407,7 +407,7 @@ public class MockConversation {
      * @since 1.0
      */
     public Cookie[] getCookies() {
-        if (0 == cookies_.size()) {
+        if (cookies_.isEmpty()) {
             return null;
         }
 
@@ -453,7 +453,7 @@ public class MockConversation {
      */
     public void addCookie(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         addCookie(new MockCookie(name, value));
     }

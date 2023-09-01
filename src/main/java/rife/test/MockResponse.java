@@ -401,8 +401,7 @@ public class MockResponse extends AbstractResponse {
         // complete
     }
 
-    protected OutputStream _getOutputStream()
-    throws IOException {
+    protected OutputStream _getOutputStream() {
         return mockOutputStream_;
     }
 
@@ -738,11 +737,11 @@ public class MockResponse extends AbstractResponse {
     static class QuotedStringTokenizer
         extends StringTokenizer {
         private static final String __delim = "\t\n\r";
-        private String _string;
+        private final String _string;
+        private final StringBuilder _token;
         private String _delim = __delim;
         private boolean _returnQuotes = false;
         private boolean _returnTokens = false;
-        private StringBuilder _token;
         private boolean _hasToken = false;
         private int _i = 0;
         private int _lastStart = 0;
@@ -927,7 +926,7 @@ public class MockResponse extends AbstractResponse {
         public static String quote(String s, String delim) {
             if (s == null)
                 return null;
-            if (s.length() == 0)
+            if (s.isEmpty())
                 return "\"\"";
 
 
