@@ -73,10 +73,8 @@ public class MemorySession {
 
     public boolean equals(Object object) {
         if (object instanceof MemorySession other_session) {
-            if (null != other_session &&
-                other_session.getAuthId().equals(getAuthId())) {
-                return true;
-            }
+            return null != other_session &&
+                other_session.getAuthId().equals(getAuthId());
         }
 
         return false;
