@@ -29,8 +29,7 @@ public class ClassCallTargetRetriever implements CallTargetRetriever {
     public Object getCallTarget(Object target, CallState state) {
         try {
             var target_class = (Class) target;
-            var target_instance = target_class.getDeclaredConstructor().newInstance();
-            return target_instance;
+            return target_class.getDeclaredConstructor().newInstance();
         } catch (Throwable e) {
             throw new CallTargetNotFoundException(target, e);
         }

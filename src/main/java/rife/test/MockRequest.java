@@ -1183,8 +1183,7 @@ public class MockRequest implements Request {
     }
 
     public HttpSession getSession() {
-        var session = getSession(true);
-        return session;
+        return getSession(true);
     }
 
     void setRequestedSessionId(String pathParams) {

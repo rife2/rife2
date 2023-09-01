@@ -229,23 +229,18 @@ public class TestAllTypes implements Element {
 
         long[] longs5 = createArrayLong(2);
         longs5[0] = -98;
-        long[] longs6 = longs5;
-        longs6[1] = 97;
+        longs5[1] = 97;
         long[] longs7 = new long[]{98L, 23L, 11L};
         longs7[0] = -longs5[0];
 
         long[][] longs8 = createMultiArrayLong(2, 5);
-        long[][] longs9 = longs8;
-        longs9[1][3] = -89L;
+        longs8[1][3] = -89L;
         long[][] longs10 = new long[3][3];
         fillMultiArrayLong(longs10);
 
         int int1_ = 2;
-        int field_int = int1_;
         long long1_ = 4L;
-        long field_long = long1_;
         String string1_ = "member ok";
-        String field_string = string1_;
         Long[] field_longs = longs1_;
         int[][] field_multiints = multi_ints_;
 
@@ -255,9 +250,9 @@ public class TestAllTypes implements Element {
         Long[] static_longs = sLongs1;
         int[][] static_multiints = sMultiInts1;
 
-        int int2_ = field_int * 50;
-        long long2_ = field_long * 100;
-        String string2_ = field_string + " two";
+        int int2_ = int1_ * 50;
+        long long2_ = long1_ * 100;
+        String string2_ = string1_ + " two";
         Long[] longs2_ = new Long[]{field_longs[1], field_longs[0], 23687L};
         int[][] multiInts2_ = new int[][]{field_multiints[1]};
 
@@ -276,7 +271,6 @@ public class TestAllTypes implements Element {
         ints2[1][2][5] = null;
 
         int[][] ints3 = new int[][]{{1, 3}, {5, 7}, {11, 13}, {17, 19}};
-        int[][] ints4 = ints3;
         ints3[2][1] = -199;
 
         boolean[] booleans1 = new boolean[]{true, false, false};
@@ -312,11 +306,11 @@ public class TestAllTypes implements Element {
                 strings4.length + ":" + StringUtils.join(strings4[0], "|") + "||" + StringUtils.join(strings4[1], "|") + "||" + StringUtils.join(strings4[2], "|") + ",\n" +
                 strings5.length + ":" + StringUtils.join(strings5[0], "|") + "||" + StringUtils.join(strings5[1], "|") + "||" + StringUtils.join(strings5[2], "|") + ",\n" +
                 strings6.length + ":" + StringUtils.join(strings6[0], "|") + "||" + StringUtils.join(strings6[1], "|") + ",\n" +
-                StringUtils.join(longs5, "|") + "," + StringUtils.join(longs6, "|") + "," + StringUtils.join(longs7, "|") + ",\n" +
+                StringUtils.join(longs5, "|") + "," + StringUtils.join(longs5, "|") + "," + StringUtils.join(longs7, "|") + ",\n" +
                 longs8.length + ":" + StringUtils.join(longs8[0], "|") + "||" + StringUtils.join(longs8[1], "|") + ",\n" +
-                longs9.length + ":" + StringUtils.join(longs9[0], "|") + "||" + StringUtils.join(longs9[1], "|") + ",\n" +
+                longs8.length + ":" + StringUtils.join(longs8[0], "|") + "||" + StringUtils.join(longs8[1], "|") + ",\n" +
                 longs10.length + ":" + StringUtils.join(longs10[0], "|") + "||" + StringUtils.join(longs10[1], "|") + "||" + StringUtils.join(longs10[2], "|") + ",\n" +
-                field_int + "," + field_long + "," + field_string + "," + StringUtils.join(field_longs, "|") + "," + field_multiints.length + ":" + StringUtils.join(field_multiints[0], "|") + "||" + StringUtils.join(field_multiints[1], "|") + ",\n" +
+            int1_ + "," + long1_ + "," + string1_ + "," + StringUtils.join(field_longs, "|") + "," + field_multiints.length + ":" + StringUtils.join(field_multiints[0], "|") + "||" + StringUtils.join(field_multiints[1], "|") + ",\n" +
                 static_int + "," + static_long + "," + static_string + "," + StringUtils.join(static_longs, "|") + "," + static_multiints.length + ":" + StringUtils.join(static_multiints[0], "|") + "||" + StringUtils.join(static_multiints[1], "|") + "||" + StringUtils.join(static_multiints[2], "|") + ",\n" +
             int1_ + "," + long1_ + "," + string1_ + "," + StringUtils.join(longs1_, "|") + "," + multi_ints_.length + ":" + StringUtils.join(multi_ints_[0], "|") + "||" + StringUtils.join(multi_ints_[1], "|") + ",\n" +
                 sInt1 + "," + sLong1 + "," + sString1 + "," + StringUtils.join(sLongs1, "|") + "," + sMultiInts1.length + ":" + StringUtils.join(sMultiInts1[0], "|") + "||" + StringUtils.join(sMultiInts1[1], "|") + "||" + StringUtils.join(sMultiInts1[2], "|") + ",\n" +
@@ -325,7 +319,7 @@ public class TestAllTypes implements Element {
                 ints1.length + ":" + ints1[0].length + ":" + ints1[1].length + ":" + StringUtils.join(ints1[0][0], "|") + "||" + StringUtils.join(ints1[0][1], "|") + "||" + StringUtils.join(ints1[0][2], "|") + "|||" + StringUtils.join(ints1[1][0], "|") + "||" + StringUtils.join(ints1[1][1], "|") + "||" + StringUtils.join(ints1[1][2], "|") + ",\n" +
                 ints2.length + ":" + ints2[0].length + ":" + ints2[1].length + ":" + StringUtils.join(ints2[0][0], "|") + "||" + StringUtils.join(ints2[0][1], "|") + "||" + StringUtils.join(ints2[0][2], "|") + "|||" + StringUtils.join(ints2[1][0], "|") + "||" + StringUtils.join(ints2[1][1], "|") + "||" + StringUtils.join(ints2[1][2], "|") + ",\n" +
                 ints3.length + ":" + StringUtils.join(ints3[0], "|") + "||" + StringUtils.join(ints3[1], "|") + "||" + StringUtils.join(ints3[2], "|") + "||" + StringUtils.join(ints3[3], "|") + ",\n" +
-                ints4.length + ":" + StringUtils.join(ints4[0], "|") + "||" + StringUtils.join(ints4[1], "|") + "||" + StringUtils.join(ints4[2], "|") + "||" + StringUtils.join(ints4[3], "|") + ",\n" +
+                ints3.length + ":" + StringUtils.join(ints3[0], "|") + "||" + StringUtils.join(ints3[1], "|") + "||" + StringUtils.join(ints3[2], "|") + "||" + StringUtils.join(ints3[3], "|") + ",\n" +
                 string1 + ",\n" +
                 int7 + "," + int8 + "," + int9 + "," + int10 + "," + int11 + "," + int12
         );
