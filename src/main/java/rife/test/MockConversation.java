@@ -131,7 +131,7 @@ public class MockConversation {
 
         // get the path parameters
         String path_parameters = null;
-        var path_parameters_index = url.indexOf(',');
+        var path_parameters_index = url.indexOf(';');
         if (path_parameters_index != -1) {
             path_parameters = url.substring(0, path_parameters_index);
         }
