@@ -12,7 +12,9 @@ import rife.ioc.HierarchicalProperties;
 import rife.tools.ArrayUtils;
 import rife.tools.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Simulates a conversation between a web browser and a servlet container.

@@ -4,15 +4,17 @@
  */
 package rife.continuations;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.*;
-import java.util.logging.Logger;
-
 import rife.continuations.exceptions.ContinuableLocalVariableUncloneableException;
 import rife.tools.ExceptionUtils;
 import rife.tools.UniqueIDGenerator;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Logger;
 
 /**
  * Contains all contextual data of one particular continuation.

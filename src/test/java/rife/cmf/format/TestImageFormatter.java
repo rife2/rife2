@@ -4,14 +4,6 @@
  */
 package rife.cmf.format;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.util.Map;
-
-import javax.swing.ImageIcon;
-
 import org.junit.jupiter.api.Test;
 import rife.cmf.Content;
 import rife.cmf.MimeType;
@@ -24,6 +16,11 @@ import rife.cmf.loader.ImageContentLoader;
 import rife.cmf.transform.ImageContentTransformer;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

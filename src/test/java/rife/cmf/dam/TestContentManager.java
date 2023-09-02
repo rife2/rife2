@@ -7,14 +7,15 @@ package rife.cmf.dam;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.cmf.dam.contentstores.*;
-
 import rife.cmf.Content;
 import rife.cmf.ContentRepository;
 import rife.cmf.MimeType;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException;
 import rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException;
+import rife.cmf.dam.contentstores.DatabaseImageStoreFactory;
+import rife.cmf.dam.contentstores.DatabaseRawStoreFactory;
+import rife.cmf.dam.contentstores.DatabaseTextStoreFactory;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.database.Datasource;
 import rife.database.TestDatasources;

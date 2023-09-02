@@ -12,11 +12,7 @@ import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.transform.ContentTransformer;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
-import rife.database.queries.CreateTable;
-import rife.database.queries.Delete;
-import rife.database.queries.DropTable;
-import rife.database.queries.Insert;
-import rife.database.queries.Select;
+import rife.database.queries.*;
 import rife.engine.Context;
 
 public class generic extends DatabaseTextStore {

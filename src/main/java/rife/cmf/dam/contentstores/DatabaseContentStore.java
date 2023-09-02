@@ -4,16 +4,12 @@
  */
 package rife.cmf.dam.contentstores;
 
-import rife.database.*;
-
 import rife.cmf.MimeType;
 import rife.cmf.dam.ContentStore;
-import rife.cmf.dam.contentstores.exceptions.DeleteContentDataErrorException;
-import rife.cmf.dam.contentstores.exceptions.HasContentDataErrorException;
-import rife.cmf.dam.contentstores.exceptions.InstallContentStoreErrorException;
-import rife.cmf.dam.contentstores.exceptions.RemoveContentStoreErrorException;
-import rife.cmf.dam.contentstores.exceptions.RetrieveSizeErrorException;
+import rife.cmf.dam.contentstores.exceptions.*;
 import rife.cmf.dam.exceptions.ContentManagerException;
+import rife.database.Datasource;
+import rife.database.DbQueryManager;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Delete;
@@ -25,7 +21,9 @@ import rife.tools.ExceptionUtils;
 import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class DatabaseContentStore extends DbQueryManager implements ContentStore {

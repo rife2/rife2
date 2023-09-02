@@ -4,12 +4,10 @@
  */
 package rife.cmf.dam.contentmanagers.databasedrivers;
 
-import rife.cmf.dam.ContentDataUserWithoutResult;
-import rife.database.queries.*;
-
 import rife.cmf.Content;
 import rife.cmf.ContentRepository;
 import rife.cmf.dam.ContentDataUser;
+import rife.cmf.dam.ContentDataUserWithoutResult;
 import rife.cmf.dam.contentmanagers.DatabaseContent;
 import rife.cmf.dam.contentmanagers.DatabaseContentInfo;
 import rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException;
@@ -19,6 +17,7 @@ import rife.cmf.transform.ContentTransformer;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.engine.Context;
 import rife.engine.Route;
 

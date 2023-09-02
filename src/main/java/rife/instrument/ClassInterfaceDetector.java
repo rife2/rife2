@@ -4,7 +4,8 @@
  */
 package rife.instrument;
 
-import rife.asm.*;
+import rife.asm.ClassReader;
+import rife.asm.ClassVisitor;
 import rife.instrument.exceptions.VisitInterruptionException;
 
 import static rife.asm.Opcodes.ASM9;

@@ -7,7 +7,10 @@ package rife.engine;
 import rife.tools.Convert;
 import rife.tools.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * {@code UrlBuilder} helps creating valid URLs that automatically

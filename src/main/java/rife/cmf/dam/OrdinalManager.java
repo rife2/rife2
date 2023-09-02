@@ -5,7 +5,6 @@
 package rife.cmf.dam;
 
 import rife.database.*;
-
 import rife.database.queries.Select;
 import rife.database.queries.Update;
 import rife.datastructures.EnumClass;

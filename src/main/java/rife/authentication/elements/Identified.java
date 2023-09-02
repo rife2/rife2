@@ -4,7 +4,9 @@
  */
 package rife.authentication.elements;
 
-import rife.authentication.credentialsmanagers.*;
+import rife.authentication.credentialsmanagers.IdentifiableUsersManager;
+import rife.authentication.credentialsmanagers.RoleUserAttributes;
+import rife.authentication.credentialsmanagers.RoleUserIdentity;
 import rife.engine.Context;
 import rife.engine.Element;
 

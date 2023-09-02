@@ -6,7 +6,10 @@
  */
 package rife.authentication.sessionvalidators;
 
-import rife.authentication.*;
+import rife.authentication.CredentialsManager;
+import rife.authentication.RememberManager;
+import rife.authentication.SessionAttributes;
+import rife.authentication.SessionManager;
 import rife.authentication.credentialsmanagers.RoleUsersManager;
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.authentication.exceptions.SessionManagerException;

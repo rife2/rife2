@@ -4,7 +4,8 @@
  */
 package rife.scheduler;
 
-import rife.scheduler.exceptions.*;
+import rife.scheduler.exceptions.FatalTaskExecutionException;
+import rife.scheduler.exceptions.TaskManagerException;
 
 class ExecutorThread implements Runnable {
     private final Executor executor_;

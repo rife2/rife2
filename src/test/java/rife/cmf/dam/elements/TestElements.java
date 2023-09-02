@@ -4,7 +4,9 @@
  */
 package rife.cmf.dam.elements;
 
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.UnexpectedPage;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +20,9 @@ import rife.cmf.elements.ServeContent;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
-import rife.engine.*;
+import rife.engine.PathInfoHandling;
+import rife.engine.Site;
+import rife.engine.TestServerRunner;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 
@@ -26,7 +30,8 @@ import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static rife.cmf.format.ImageFormatter.ContentAttribute.HIDPI;
 
 public class TestElements {

@@ -5,7 +5,8 @@
 package rife;
 
 import rife.bld.BuildCommand;
-import rife.bld.operations.*;
+import rife.bld.operations.JarOperation;
+import rife.bld.operations.JavacOptions;
 import rife.bld.publish.*;
 import rife.tools.FileUtils;
 
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.regex.Pattern;
 
-import static rife.bld.dependencies.Scope.*;
+import static rife.bld.dependencies.Scope.provided;
+import static rife.bld.dependencies.Scope.test;
 import static rife.bld.operations.TemplateType.*;
 
 public class Rife2Build extends AbstractRife2Build {

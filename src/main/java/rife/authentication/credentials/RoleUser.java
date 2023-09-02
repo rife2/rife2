@@ -5,7 +5,8 @@
 package rife.authentication.credentials;
 
 import rife.config.RifeConfig;
-import rife.validation.*;
+import rife.validation.ConstrainedProperty;
+import rife.validation.MetaData;
 
 /**
  * <p>Provides standard {@link RoleUserCredentials} functionalities by

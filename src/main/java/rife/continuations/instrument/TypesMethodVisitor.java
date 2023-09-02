@@ -5,7 +5,6 @@
 package rife.continuations.instrument;
 
 import rife.asm.*;
-
 import rife.continuations.ContinuationConfigInstrument;
 
 import java.util.*;

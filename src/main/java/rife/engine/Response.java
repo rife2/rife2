@@ -4,17 +4,16 @@
  */
 package rife.engine;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import rife.engine.exceptions.EngineException;
-//import rife.template.Template;
+import rife.template.Template;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Locale;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
-import rife.template.Template;
 
 /**
  * This interface contains all the methods that the web engine needs to be

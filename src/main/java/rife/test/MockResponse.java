@@ -6,25 +6,24 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import rife.engine.*;
-
-import java.io.*;
-import java.util.*;
-
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import rife.engine.AbstractResponse;
+import rife.engine.Request;
+import rife.engine.Response;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 
-import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+import java.io.*;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Provides a {@link Response} implementation that is suitable for testing a

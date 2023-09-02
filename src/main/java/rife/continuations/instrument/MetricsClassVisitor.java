@@ -4,8 +4,8 @@
  */
 package rife.continuations.instrument;
 
-import rife.asm.*;
-
+import rife.asm.ClassVisitor;
+import rife.asm.MethodVisitor;
 import rife.continuations.ContinuationConfigInstrument;
 
 import java.util.ArrayList;

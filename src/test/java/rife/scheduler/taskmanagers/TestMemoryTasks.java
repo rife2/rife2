@@ -5,7 +5,10 @@
 package rife.scheduler.taskmanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.scheduler.*;
+import rife.scheduler.Frequency;
+import rife.scheduler.Task;
+import rife.scheduler.TaskManager;
+import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.tools.ExceptionUtils;

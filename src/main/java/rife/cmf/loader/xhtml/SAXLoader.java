@@ -4,6 +4,10 @@
  */
 package rife.cmf.loader.xhtml;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 import rife.cmf.MimeType;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.loader.LoadedContent;
@@ -15,19 +19,15 @@ import rife.xml.XmlEntityResolver;
 import rife.xml.XmlErrorRedirector;
 import rife.xml.exceptions.XmlErrorException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.*;
 
 public class SAXLoader extends XhtmlContentLoaderBackend {
     public LoadedContent<String> loadFromString(String data, boolean fragment, Set<String> errors)

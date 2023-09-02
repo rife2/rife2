@@ -4,12 +4,12 @@
  */
 package rife.test;
 
-import java.util.*;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rife.engine.RequestMethod;
 import rife.tools.ArrayUtils;
+
+import java.util.*;
 
 /**
  * Corresponds to a form in an HTML document after it has been parsed with

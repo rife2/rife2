@@ -4,11 +4,11 @@
  */
 package rife.cmf.dam;
 
-import java.sql.Timestamp;
-
 import org.junit.jupiter.api.Test;
 import rife.cmf.MimeType;
 import rife.cmf.dam.contentmanagers.DatabaseContentInfo;
+
+import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.*;
 

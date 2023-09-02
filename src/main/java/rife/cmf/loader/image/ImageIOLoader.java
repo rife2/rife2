@@ -11,10 +11,11 @@ import rife.cmf.loader.LoadedContent;
 import rife.tools.ExceptionUtils;
 import rife.tools.ImageWaiter;
 
-import java.awt.Image;
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.util.Set;
-import javax.imageio.*;
 
 /**
  * This is an image loader back-end that uses ImageIO to load image files.

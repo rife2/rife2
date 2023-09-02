@@ -5,11 +5,11 @@
 
 package rife.web;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-
 import rife.engine.Context;
 import rife.template.Template;
+
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 
 /**
  * This class provides utility methods to generate navigation for paged lists.

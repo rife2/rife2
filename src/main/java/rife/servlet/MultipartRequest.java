@@ -4,19 +4,17 @@
  */
 package rife.servlet;
 
-import java.io.*;
-
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import rife.config.RifeConfig;
 import rife.engine.UploadedFile;
+import rife.engine.exceptions.*;
 
+import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import rife.engine.exceptions.*;
 
 class MultipartRequest {
     private static final String CONTENT_TYPE_HEADER = "content-type";

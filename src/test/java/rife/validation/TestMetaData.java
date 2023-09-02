@@ -5,11 +5,16 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
-import rife.database.*;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.TestDatasources;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.tools.ObjectUtils;
-import rifetestmodels.*;
+import rifetestmodels.Person;
+import rifetestmodels.PersonAnnotation;
+import rifetestmodels.PersonCallbacks;
+import rifetestmodels.PersonCloneable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

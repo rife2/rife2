@@ -4,15 +4,22 @@
  */
 package rife.workflow;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.*;
-
-import rife.continuations.*;
-import rife.continuations.basic.*;
+import rife.continuations.CallState;
+import rife.continuations.CloneableContinuable;
+import rife.continuations.ContinuationConfigInstrument;
+import rife.continuations.basic.BasicContinuableRunner;
+import rife.continuations.basic.CallTargetRetriever;
 import rife.ioc.HierarchicalProperties;
 import rife.workflow.config.ContinuationInstrument;
+
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Runs work and dispatches events to work that is paused.

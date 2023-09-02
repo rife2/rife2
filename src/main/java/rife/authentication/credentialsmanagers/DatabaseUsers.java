@@ -6,16 +6,15 @@
  */
 package rife.authentication.credentialsmanagers;
 
-import rife.authentication.credentialsmanagers.exceptions.*;
-import rife.database.*;
-import rife.database.queries.*;
-
 import rife.authentication.Credentials;
 import rife.authentication.CredentialsManager;
 import rife.authentication.PasswordEncrypting;
 import rife.authentication.credentials.RoleUserCredentials;
+import rife.authentication.credentialsmanagers.exceptions.*;
 import rife.authentication.exceptions.CredentialsManagerException;
+import rife.database.*;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.tools.InnerClassException;
 import rife.tools.StringEncryptor;
 

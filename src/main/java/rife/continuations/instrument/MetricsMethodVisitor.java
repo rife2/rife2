@@ -4,11 +4,15 @@
  */
 package rife.continuations.instrument;
 
-import rife.asm.*;
-
+import rife.asm.Label;
+import rife.asm.MethodVisitor;
+import rife.asm.Opcodes;
 import rife.continuations.ContinuationConfigInstrument;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class MetricsMethodVisitor extends MethodVisitor implements Opcodes {
     private final ContinuationConfigInstrument config_;

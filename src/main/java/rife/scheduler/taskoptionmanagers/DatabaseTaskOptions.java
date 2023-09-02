@@ -4,22 +4,23 @@
  */
 package rife.scheduler.taskoptionmanagers;
 
-import rife.database.queries.*;
-import rife.scheduler.taskoptionmanagers.exceptions.*;
-
 import rife.database.Datasource;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.scheduler.Scheduler;
 import rife.scheduler.TaskOption;
 import rife.scheduler.TaskOptionManager;
 import rife.scheduler.exceptions.TaskOptionManagerException;
+import rife.scheduler.taskoptionmanagers.exceptions.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class DatabaseTaskOptions extends DbQueryManager implements TaskOptionManager {
     private Scheduler scheduler_ = null;

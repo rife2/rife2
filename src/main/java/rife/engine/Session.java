@@ -6,7 +6,8 @@ package rife.engine;
 
 import jakarta.servlet.http.HttpSession;
 
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Convenience class that wraps around an {@code HttpSession}.

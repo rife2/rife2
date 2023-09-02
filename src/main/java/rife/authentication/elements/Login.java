@@ -9,7 +9,9 @@ import rife.authentication.SessionAttributes;
 import rife.authentication.credentials.RememberMe;
 import rife.authentication.credentials.RoleUserCredentials;
 import rife.authentication.elements.exceptions.UndefinedAuthenticationRememberManagerException;
-import rife.engine.*;
+import rife.engine.Context;
+import rife.engine.CookieBuilder;
+import rife.engine.RequestMethod;
 import rife.template.Template;
 import rife.validation.ValidationError;
 

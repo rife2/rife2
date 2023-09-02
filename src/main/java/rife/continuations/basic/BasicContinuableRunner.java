@@ -4,10 +4,10 @@
  */
 package rife.continuations.basic;
 
-import java.lang.reflect.InvocationTargetException;
-
 import rife.continuations.*;
 import rife.continuations.exceptions.*;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Basic implementation of a 'continuable runner' that will execute the

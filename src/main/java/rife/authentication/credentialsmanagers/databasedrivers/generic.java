@@ -4,8 +4,6 @@
  */
 package rife.authentication.credentialsmanagers.databasedrivers;
 
-import rife.database.queries.*;
-
 import rife.authentication.Credentials;
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.ListRoles;
@@ -17,6 +15,7 @@ import rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdExcepti
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
+import rife.database.queries.*;
 
 public class generic extends DatabaseUsers {
     protected CreateSequence createSequenceRole_;

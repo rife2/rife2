@@ -4,9 +4,10 @@
  */
 package rife.cmf.loader;
 
-import rife.cmf.loader.image.*;
+import rife.cmf.loader.image.ImageIOLoader;
+import rife.cmf.loader.image.ImageJLoader;
 
-import java.awt.Image;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 

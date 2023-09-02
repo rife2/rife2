@@ -6,17 +6,17 @@ package rife.cmf.format;
 
 import rife.cmf.Content;
 import rife.cmf.MimeType;
-import rife.cmf.format.exceptions.FormatException;
-import rife.cmf.format.exceptions.InvalidContentDataTypeException;
-import rife.cmf.format.exceptions.UnexpectedConversionErrorException;
-import rife.cmf.format.exceptions.UnreadableDataFormatException;
-import rife.cmf.format.exceptions.UnsupportedTargetMimeTypeException;
+import rife.cmf.format.exceptions.*;
 import rife.cmf.loader.ImageContentLoader;
 import rife.cmf.loader.LoadedContent;
 import rife.cmf.transform.ContentTransformer;
 import rife.tools.Convert;
 import rife.tools.exceptions.ConversionException;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
@@ -24,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import javax.imageio.*;
 
 /**
  * Formats raw {@code Content} data as an image.

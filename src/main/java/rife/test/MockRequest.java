@@ -4,10 +4,6 @@
  */
 package rife.test;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.util.*;
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +16,13 @@ import rife.engine.exceptions.MultipartFileTooBigException;
 import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;
 import rife.engine.exceptions.MultipartRequestException;
 import rife.tools.StringUtils;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.util.*;
 
 /**
  * Provides a {@link Request} implementation that is suitable for testing a

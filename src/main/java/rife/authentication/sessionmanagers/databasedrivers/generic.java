@@ -4,13 +4,12 @@
  */
 package rife.authentication.sessionmanagers.databasedrivers;
 
-import rife.database.queries.*;
-
 import rife.authentication.ListSessions;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
+import rife.database.queries.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 

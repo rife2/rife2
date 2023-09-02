@@ -4,6 +4,10 @@
  */
 package rife.servlet;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.Request;
 import rife.engine.RequestMethod;
@@ -14,12 +18,10 @@ import rife.tools.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
-
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class HttpRequest implements Request {
     private final HttpServletRequest request_;

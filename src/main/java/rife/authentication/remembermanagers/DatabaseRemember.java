@@ -4,24 +4,19 @@
  */
 package rife.authentication.remembermanagers;
 
-import rife.authentication.remembermanagers.exceptions.*;
-
 import rife.authentication.RememberManager;
 import rife.authentication.exceptions.RememberManagerException;
+import rife.authentication.remembermanagers.exceptions.*;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.exceptions.DatabaseException;
-import rife.database.queries.CreateTable;
-import rife.database.queries.Delete;
-import rife.database.queries.DropTable;
-import rife.database.queries.Insert;
-import rife.database.queries.Select;
+import rife.database.queries.*;
+import rife.tools.ExceptionUtils;
 import rife.tools.StringEncryptor;
 import rife.tools.UniqueIDGenerator;
-import rife.tools.ExceptionUtils;
 
 import java.security.NoSuchAlgorithmException;
 

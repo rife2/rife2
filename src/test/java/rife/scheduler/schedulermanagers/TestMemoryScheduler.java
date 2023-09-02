@@ -5,7 +5,10 @@
 package rife.scheduler.schedulermanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.scheduler.*;
+import rife.scheduler.Executor;
+import rife.scheduler.Frequency;
+import rife.scheduler.Task;
+import rife.scheduler.TestTasktypes;
 import rife.tools.ExceptionUtils;
 
 import java.util.ArrayList;

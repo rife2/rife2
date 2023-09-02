@@ -8,7 +8,10 @@ import rife.config.RifeConfig;
 import rife.engine.exceptions.EngineException;
 import rife.resources.ResourceFinderClasspath;
 import rife.resources.exceptions.ResourceFinderErrorException;
-import rife.tools.*;
+import rife.tools.Convert;
+import rife.tools.FileUtils;
+import rife.tools.InnerClassException;
+import rife.tools.InputStreamUser;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.ByteArrayInputStream;

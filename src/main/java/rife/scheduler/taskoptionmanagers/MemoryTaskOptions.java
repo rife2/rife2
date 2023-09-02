@@ -4,8 +4,6 @@
  */
 package rife.scheduler.taskoptionmanagers;
 
-import java.util.*;
-
 import rife.scheduler.Scheduler;
 import rife.scheduler.TaskOption;
 import rife.scheduler.TaskOptionManager;
@@ -15,6 +13,8 @@ import rife.scheduler.taskoptionmanagers.exceptions.AddTaskOptionErrorException;
 import rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException;
 import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
 import rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorException;
+
+import java.util.*;
 
 public class MemoryTaskOptions implements TaskOptionManager {
     private Scheduler scheduler_ = null;

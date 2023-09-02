@@ -4,7 +4,9 @@
  */
 package rifeworkflowtests;
 
-import rife.workflow.*;
+import rife.workflow.Event;
+import rife.workflow.Work;
+import rife.workflow.Workflow;
 
 import java.util.concurrent.atomic.AtomicReference;
 

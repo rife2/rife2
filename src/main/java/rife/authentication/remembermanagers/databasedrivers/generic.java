@@ -8,11 +8,7 @@ import rife.authentication.exceptions.RememberManagerException;
 import rife.authentication.remembermanagers.DatabaseRemember;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
-import rife.database.queries.CreateTable;
-import rife.database.queries.Delete;
-import rife.database.queries.DropTable;
-import rife.database.queries.Insert;
-import rife.database.queries.Select;
+import rife.database.queries.*;
 
 import java.util.concurrent.ThreadLocalRandom;
 

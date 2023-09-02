@@ -5,7 +5,8 @@
 package rife.authentication.elements;
 
 import rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerException;
-import rife.engine.*;
+import rife.engine.Context;
+import rife.engine.Element;
 import rife.template.Template;
 
 /**

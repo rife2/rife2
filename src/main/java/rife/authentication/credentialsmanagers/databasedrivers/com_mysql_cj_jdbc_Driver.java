@@ -4,10 +4,9 @@
  */
 package rife.authentication.credentialsmanagers.databasedrivers;
 
-import rife.authentication.credentialsmanagers.exceptions.*;
-
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.RoleUserAttributes;
+import rife.authentication.credentialsmanagers.exceptions.*;
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;

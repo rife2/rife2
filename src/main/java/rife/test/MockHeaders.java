@@ -4,10 +4,9 @@
  */
 package rife.test;
 
-import java.util.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 class MockHeaders {
     private static final String[] DATE_FORMAT_SYNTAXES =

@@ -15,8 +15,13 @@ import rife.authentication.exceptions.CredentialsManagerException;
 import rife.tools.StringEncryptor;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
-import java.util.concurrent.locks.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MemoryUsers implements CredentialsManager, RoleUsersManager, PasswordEncrypting {
     private final Map<Long, String> userIdMapping_ = new HashMap<>();

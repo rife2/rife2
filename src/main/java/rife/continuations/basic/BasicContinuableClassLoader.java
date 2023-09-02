@@ -5,7 +5,9 @@
 package rife.continuations.basic;
 
 import rife.continuations.ContinuationConfigInstrument;
-import rife.continuations.instrument.*;
+import rife.continuations.instrument.ContinuableDetector;
+import rife.continuations.instrument.ContinuationsAgent;
+import rife.continuations.instrument.ContinuationsBytecodeTransformer;
 import rife.instrument.ClassBytesProvider;
 import rife.tools.ClassBytesLoader;
 

@@ -4,7 +4,9 @@
  */
 package rife.cmf.dam.contentstores.rawstoredrivers;
 
-import rife.database.*;
+import rife.database.Datasource;
+import rife.database.DbConnection;
+import rife.database.DbPreparedStatement;
 import rife.database.queries.Query;
 
 import java.sql.ResultSet;
