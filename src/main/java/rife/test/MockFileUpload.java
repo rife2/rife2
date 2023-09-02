@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 /**
  * An instance of this class provides all the data that is needed to simulate
@@ -86,7 +87,7 @@ public class MockFileUpload {
     InputStream getInputStream()
     throws IOException {
         if (null == inputStream_) {
-            inputStream_ = new FileInputStream(file_);
+            inputStream_ = Files.newInputStream(file_.toPath());
         }
         return inputStream_;
     }

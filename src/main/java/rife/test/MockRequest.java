@@ -5,6 +5,7 @@
 package rife.test;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 import jakarta.servlet.RequestDispatcher;
@@ -503,7 +504,7 @@ public class MockRequest implements Request {
 
             try {
                 var tmp_file = File.createTempFile("upl", ".tmp", uploadDirectory_);
-                var output_stream = new FileOutputStream(tmp_file);
+                var output_stream = Files.newOutputStream(tmp_file.toPath());
                 var output = new BufferedOutputStream(output_stream, 8 * 1024); // 8K
 
                 var input_stream = files[i].getInputStream();
@@ -618,15 +619,15 @@ public class MockRequest implements Request {
 
     public String getServerRootUrl(int port) {
         var server_root = new StringBuilder();
-        server_root.append(getScheme());
-        server_root.append("://");
-        server_root.append(getServerName());
+        server_root.append(getScheme())
+            .append("://")
+            .append(getServerName());
         if (port <= -1) {
             port = getServerPort();
         }
         if (port != 80) {
-            server_root.append(":");
-            server_root.append(port);
+            server_root.append(':')
+                .append(port);
         }
         return server_root.toString();
     }
