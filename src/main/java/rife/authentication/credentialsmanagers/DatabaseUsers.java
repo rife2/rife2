@@ -488,7 +488,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         return result;
     }
 
-    public abstract String getPassword(final String login)
+    public abstract String getPassword(String login)
     throws CredentialsManagerException;
 
     protected String _getPassword(Select getPassword, final String login)
