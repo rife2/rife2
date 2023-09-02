@@ -214,7 +214,7 @@ public class PagedNavigation {
      * @since 1.1
      */
     public static void generate(Context context, Template template, long count, int limit, long offset, int span, String parameter) {
-        var range_count = (long) Math.ceil(((double) count) / limit);
+        var range_count = (long) ceil(((double) count) / limit);
         if (range_count < 0) {
             range_count = 0;
         }

@@ -41,8 +41,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
     private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
 
     private void debugMessage(String message) {
-        if (ContinuationDebug.sTrace &&
-            ContinuationDebug.LOGGER.isLoggable(Level.FINEST)) {
+        if (sTrace && ContinuationDebug.LOGGER.isLoggable(Level.FINEST)) {
             methodVisitor_.visitFieldInsn(GETSTATIC, "rife/continuations/instrument/ContinuationDebug", "LOGGER", "Ljava/util/logging/Logger;");
             methodVisitor_.visitLdcInsn(message);
             methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "java/util/logging/Logger", "finest", "(Ljava/lang/String;)V", false);
