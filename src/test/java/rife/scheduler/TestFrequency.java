@@ -13,10 +13,14 @@ import rife.tools.ExceptionUtils;
 import rife.tools.Localization;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneOffset;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
+import static java.util.Calendar.MILLISECOND;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFrequency {
@@ -1539,6 +1543,82 @@ public class TestFrequency {
     }
 
     @Test
+    void testNextDateHours2() {
+        try {
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            calendar.set(2023, Calendar.SEPTEMBER, 2, 0, 0, 0);
+            calendar.set(MILLISECOND, 0);
+            var calendar_time = calendar.getTimeInMillis();
+            long previous = 0;
+            long next = 0;
+            Frequency frequency = null;
+
+            var minute = 60 * 1000;
+            var hour = 60 * minute;
+
+            frequency = new Frequency("0 */2 * * *");
+            previous = calendar_time;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 02:00
+            assertEquals("20230902020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 04:00
+            assertEquals("20230902040000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 06:00
+            assertEquals("20230902060000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 08:00
+            assertEquals("20230902080000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 10:00
+            assertEquals("20230902100000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 12:00
+            assertEquals("20230902120000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 14:00
+            assertEquals("20230902140000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 16:00
+            assertEquals("20230902160000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 18:00
+            assertEquals("20230902180000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 20:00
+            assertEquals("20230902200000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 22:00
+            assertEquals("20230902220000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 0:00
+            assertEquals("20230903000000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 2:00
+            assertEquals("20230903020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(2 * hour, next - previous);        // 2023/09/02 4:00
+            assertEquals("20230903040000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+        } catch (FrequencyException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
     void testNextDateDates() {
         try {
             var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
@@ -1839,6 +1919,55 @@ public class TestFrequency {
             previous = next;
             next = frequency.getNextTimestamp(previous);
             assertEquals(5 * day, next - previous);                        // 2004/01/25 19:20
+        } catch (FrequencyException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
+        }
+    }
+
+    @Test
+    void testNextDateDates2() {
+        try {
+            var calendar = Calendar.getInstance(RifeConfig.tools().getDefaultTimeZone(), Localization.getLocale());
+            calendar.set(2023, Calendar.SEPTEMBER, 2, 17, 33, 0);
+            calendar.set(MILLISECOND, 0);
+            var calendar_time = calendar.getTimeInMillis();
+            long previous = 0;
+            long next = 0;
+            Frequency frequency = null;
+
+            long minute = 60 * 1000;
+            var hour = 60 * minute;
+            var day = 24 * hour;
+
+            frequency = new Frequency("0 2 * * *");
+            previous = calendar_time;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(27 * minute + 8 * hour, next - previous);  // 2023/09/03 02:00
+            assertEquals("20230903020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(day, next - previous);                     // 2023/09/04 02:00
+            assertEquals("20230904020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(day, next - previous);                     // 2023/09/05 02:00
+            assertEquals("20230905020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(day, next - previous);                     // 2023/09/06 02:00
+            assertEquals("20230906020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(day, next - previous);                     // 2023/09/07 02:00
+            assertEquals("20230907020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(day, next - previous);                     // 2023/09/08 02:00
+            assertEquals("20230908020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
+            previous = next;
+            next = frequency.getNextTimestamp(previous);
+            assertEquals(day, next - previous);                     // 2023/09/09 02:00
+            assertEquals("20230909020000000+0200", RifeConfig.tools().getConcisePreciseDateFormat().format(new Date(next)));
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
