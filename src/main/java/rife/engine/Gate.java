@@ -90,7 +90,7 @@ public class Gate {
         }
 
         // strip away the optional path parameters
-        var path_parameters_index = elementUrl.indexOf(";");
+        var path_parameters_index = elementUrl.indexOf(',');
         if (path_parameters_index != -1) {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }

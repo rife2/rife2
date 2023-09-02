@@ -129,13 +129,13 @@ public class MockConversation {
 
         // get the path parameters
         String path_parameters = null;
-        var path_parameters_index = url.indexOf(";");
+        var path_parameters_index = url.indexOf(',');
         if (path_parameters_index != -1) {
             path_parameters = url.substring(0, path_parameters_index);
         }
 
         // remove the query string
-        var index_query = url.indexOf("?");
+        var index_query = url.indexOf('?');
         if (index_query != -1) {
             url = url.substring(0, index_query);
         }
@@ -519,8 +519,8 @@ public class MockConversation {
             return null;
         }
 
-        var index_query = url.indexOf("?");
-        var index_anchor = url.indexOf("#");
+        var index_query = url.indexOf('?');
+        var index_anchor = url.indexOf('#');
 
         if (-1 == index_query) {
             return null;

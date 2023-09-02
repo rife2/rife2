@@ -622,9 +622,9 @@ public class MockResponse extends AbstractResponse {
         // Already encoded
         var prefix = url.indexOf(MockConversation.SESSION_URL_PREFIX);
         if (prefix != -1) {
-            var suffix = url.indexOf("?", prefix);
+            var suffix = url.indexOf('?', prefix);
             if (suffix < 0) {
-                suffix = url.indexOf("#", prefix);
+                suffix = url.indexOf('#', prefix);
             }
 
             if (suffix <= prefix) {

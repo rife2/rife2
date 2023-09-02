@@ -9,6 +9,7 @@ import java.io.*;
 import rife.config.RifeConfig;
 import rife.engine.UploadedFile;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -329,7 +330,7 @@ class MultipartRequest {
 
         // Get the content disposition, should be "form-data"
         var start = lowcase_line.indexOf(CONTENT_DISPOSITION_PREFIX);
-        var end = lowcase_line.indexOf(";");
+        var end = lowcase_line.indexOf(',');
         if (-1 == start ||
             -1 == end) {
             throw new MultipartCorruptContentDispositionException(dispositionLine);
@@ -418,7 +419,7 @@ class MultipartRequest {
         assert file != null;
 
         File tmp_file = null;
-        FileOutputStream output_stream = null;
+        OutputStream output_stream = null;
         BufferedOutputStream output = null;
 
         try {
@@ -427,8 +428,8 @@ class MultipartRequest {
             throw new MultipartFileErrorException(name, e);
         }
         try {
-            output_stream = new FileOutputStream(tmp_file);
-        } catch (FileNotFoundException e) {
+            output_stream = Files.newOutputStream(tmp_file.toPath());
+        } catch (IOException e) {
             throw new MultipartFileErrorException(name, e);
         }
         output = new BufferedOutputStream(output_stream, 8 * 1024); // 8K

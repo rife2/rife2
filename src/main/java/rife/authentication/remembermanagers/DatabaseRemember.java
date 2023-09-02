@@ -124,7 +124,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
             return false;
         }
 
-        final int remember_id_slash = rememberId.indexOf("|");
+        final int remember_id_slash = rememberId.indexOf('|');
         if (-1 == remember_id_slash) {
             return false;
         }
@@ -191,7 +191,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
             return -1;
         }
 
-        final int rememberid_slash = rememberId.indexOf("|");
+        final int rememberid_slash = rememberId.indexOf('|');
         if (-1 == rememberid_slash) {
             return -1;
         }

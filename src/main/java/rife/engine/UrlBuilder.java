@@ -240,7 +240,7 @@ public class UrlBuilder {
         // handle an explicit path info
         if (pathInfo_ != null) {
             if (path.charAt(path.length() - 1) != '/') {
-                path.append("/");
+                path.append('/');
             }
             path.append(StringUtils.encodeUrl(pathInfo_, "/~"));
         }
@@ -287,7 +287,7 @@ public class UrlBuilder {
                     var path_info = builder.toString();
                     if (!path_info.isEmpty()) {
                         if (path_info.charAt(0) != '/' && path.charAt(path.length() - 1) != '/') {
-                            path.append("/");
+                            path.append('/');
                         }
                         path.append(path_info);
                     }

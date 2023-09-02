@@ -20,7 +20,7 @@ public record ContentLocation(String repository, String path) {
         if (null == location) throw new IllegalArgumentException("location can't be null");
         if (location.isEmpty()) throw new IllegalArgumentException("location can't be empty");
 
-        var colon_index = location.indexOf(":");
+        var colon_index = location.indexOf(':');
 
         String repository = null;
         String path;
