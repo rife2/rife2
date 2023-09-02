@@ -84,9 +84,9 @@ public class PathInfoMapping {
 
         parameters_.add(name);
 
-        mappingRegexp_.append("(");
+        mappingRegexp_.append('(');
         mappingRegexp_.append(regex);
-        mappingRegexp_.append(")");
+        mappingRegexp_.append(')');
         segments_.add(PathInfoSegment.createRegexpSegment(pattern));
 
         regexp_ = null;
