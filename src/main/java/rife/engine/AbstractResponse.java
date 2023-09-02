@@ -214,9 +214,9 @@ public abstract class AbstractResponse implements Response {
 
             // write the content to the output stream
             for (CharSequence charsequence : deferredContent) {
-                if (charsequence instanceof rife.template.InternalString) {
+                if (charsequence instanceof InternalString) {
                     outputStream_.write(((InternalString) charsequence).getBytes(encoding));
-                } else if (charsequence instanceof java.lang.String) {
+                } else if (charsequence instanceof String) {
                     outputStream_.write(((String) charsequence).getBytes(encoding));
                 }
             }

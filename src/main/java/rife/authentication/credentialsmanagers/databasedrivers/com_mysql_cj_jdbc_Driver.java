@@ -108,7 +108,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 if (message.contains("DUPLICATE") &&
                     (message.contains("FOR KEY 'AUTHROLE.AUTHROLE_NAME_UQ'") /* MySQL */ ||
                      message.contains("FOR KEY 'AUTHROLE_NAME_UQ'"))) /* MariaDB */ {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -202,11 +202,11 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 if (message.contains("DUPLICATE")) {
                     if (message.contains("FOR KEY 'AUTHUSER.PRIMARY'") /* MySQL */ ||
                         message.contains("FOR KEY 'PRIMARY'")) /* MariaDB */ {
-                        throw new DuplicateUserIdException(attributes.getUserId());
+                        throw new DuplicateUserIdException(attributes.getUserId(), e);
                     }
                     if (message.contains("FOR KEY 'AUTHUSER.AUTHUSER_LOGIN_UQ'") /* MySQL */ ||
                         message.contains("FOR KEY 'AUTHUSER_LOGIN_UQ'")) /* MariaDB */ {
-                        throw new DuplicateLoginException(login);
+                        throw new DuplicateLoginException(login, e);
                     }
                 }
             }

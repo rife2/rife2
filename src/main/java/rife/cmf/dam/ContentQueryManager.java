@@ -249,7 +249,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
             }
             ordinal = (Integer) ordinal_object;
         } catch (BeanUtilsException e) {
-            throw new UnknownOrdinalException(bean.getClass(), propertyName);
+            throw new UnknownOrdinalException(bean.getClass(), propertyName, e);
         }
 
         OrdinalManager ordinals = null;
@@ -272,7 +272,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                 }
                 restriction = ((Number) restriction_object).longValue();
             } catch (BeanUtilsException e) {
-                throw new UnknownOrdinalRestrictionException(bean.getClass(), propertyName, restriction_name);
+                throw new UnknownOrdinalRestrictionException(bean.getClass(), propertyName, restriction_name, e);
             }
 
             // obtain a new ordinal, taking the restriction value into account
@@ -433,7 +433,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                                             }
                                             restriction = ((Number) restriction_object).longValue();
                                         } catch (BeanUtilsException e) {
-                                            throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name);
+                                            throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name, e);
                                         }
 
                                         // obtain a new ordinal, taking the restriction value into account
@@ -563,7 +563,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
             deletedBean_.set(bean);
             try {
-                if (ContentQueryManager.super.delete(objectId)) {
+                if (super.delete(objectId)) {
                     return true;
                 }
             } finally {
@@ -711,17 +711,17 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
         var path = new StringBuilder();
         if (repository != null &&
             !repository.isEmpty()) {
-            path.append(repository);
-            path.append(":");
+            path.append(repository)
+                .append(':');
         }
-        path.append("/");
+        path.append('/');
         var classname = backendClass_.getName();
         classname = classname.substring(classname.lastIndexOf(".") + 1);
-        path.append(StringUtils.encodeUrl(classname));
-        path.append("/");
-        path.append(objectId);
-        path.append("/");
-        path.append(StringUtils.encodeUrl(propertyName));
+        path.append(StringUtils.encodeUrl(classname))
+            .append('/')
+            .append(objectId)
+            .append('/')
+            .append(StringUtils.encodeUrl(propertyName));
 
         return path.toString().toLowerCase();
     }
@@ -873,7 +873,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                                 }
                                 restriction = ((Number) restriction_object).longValue();
                             } catch (BeanUtilsException e) {
-                                throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name);
+                                throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name, e);
                             }
 
                             // tighten the remaining ordinals, taking the restriction value into account

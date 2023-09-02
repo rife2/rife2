@@ -14,7 +14,11 @@ public class InexistentTaskIdException extends TaskOptionManagerException {
     private final int taskID_;
 
     public InexistentTaskIdException(int taskid) {
-        super("The task id '" + taskid + "' doesn't exist.");
+        this(taskid, null);
+    }
+
+    public InexistentTaskIdException(int taskid, Throwable e) {
+        super("The task id '" + taskid + "' doesn't exist.", e);
         taskID_ = taskid;
     }
 

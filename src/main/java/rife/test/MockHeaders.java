@@ -126,7 +126,7 @@ class MockHeaders {
         try {
             return Integer.parseInt(header);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(header);
+            throw new IllegalArgumentException(header, e);
         }
     }
 

@@ -88,7 +88,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             if (null != e.getCause()) {
                 String message = e.getCause().getMessage().toUpperCase();
                 if (message.contains("AUTHROLE_NAME_UQ")) {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -107,10 +107,10 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains("AUTHUSER_LOGIN_UQ")) {
-                    throw new DuplicateLoginException(login);
+                    throw new DuplicateLoginException(login, e);
                 }
                 if (message.contains("AUTHUSER_PK")) {
-                    throw new DuplicateUserIdException(attributes.getUserId());
+                    throw new DuplicateUserIdException(attributes.getUserId(), e);
                 }
             }
 

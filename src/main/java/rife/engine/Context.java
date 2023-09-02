@@ -791,12 +791,12 @@ public class Context {
         webapp_root.append(serverRootUrl(port));
         var gate_url = gateUrl();
         if (!gate_url.startsWith("/")) {
-            webapp_root.append("/");
+            webapp_root.append('/');
         }
         webapp_root.append(gate_url);
         if (!gate_url.isEmpty() &&
             !gate_url.endsWith("/")) {
-            webapp_root.append("/");
+            webapp_root.append('/');
         }
 
         return webapp_root.toString();
@@ -1146,7 +1146,7 @@ public class Context {
     public boolean isParameterEmpty(String name) {
         var parameter = parameter(name);
         return null == parameter ||
-            parameter.trim().isEmpty();
+            parameter.isBlank();
     }
 
     /**

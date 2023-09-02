@@ -67,7 +67,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 if (e.getCause().getCause().getMessage().toLowerCase().contains("duplicate")) {
-                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName(), e);
                 }
             }
 
@@ -106,7 +106,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             if (null != e.getCause() &&
                 null != e.getCause().getCause()) {
                 if (e.getCause().getCause().getMessage().toLowerCase().contains("duplicate")) {
-                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName(), e);
                 }
             }
 

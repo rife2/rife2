@@ -277,7 +277,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
                 result = true;
             }
         } catch (DatabaseException e) {
-            throw new ActivateTaskErrorException(id);
+            throw new ActivateTaskErrorException(id, e);
         }
 
         return result;
@@ -325,7 +325,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
             try {
                 task_.setFrequencySpecification(resultSet.getString("frequency"));
             } catch (FrequencyException e) {
-                throw new SQLException(e.getMessage());
+                throw new SQLException(e.getMessage(), e);
             }
             task_.setBusy(resultSet.getBoolean("busy"));
             task_.setTaskManager(DatabaseTasks.this);

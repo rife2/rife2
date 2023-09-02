@@ -94,9 +94,9 @@ public class generic extends DatabaseTaskOptions {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableTaskOption_.getForeignKeys().get(0).getName())) {
-                    throw new InexistentTaskIdException(taskOption.getTaskId());
+                    throw new InexistentTaskIdException(taskOption.getTaskId(), e);
                 } else if (message.contains(createTableTaskOption_.getPrimaryKeys().get(0).getName())) {
-                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName(), e);
                 }
             }
 
@@ -120,9 +120,9 @@ public class generic extends DatabaseTaskOptions {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableTaskOption_.getForeignKeys().get(0).getName())) {
-                    throw new InexistentTaskIdException(taskOption.getTaskId());
+                    throw new InexistentTaskIdException(taskOption.getTaskId(), e);
                 } else if (message.contains(createTableTaskOption_.getPrimaryKeys().get(0).getName())) {
-                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName());
+                    throw new DuplicateTaskOptionException(taskOption.getTaskId(), taskOption.getName(), e);
                 }
             }
 

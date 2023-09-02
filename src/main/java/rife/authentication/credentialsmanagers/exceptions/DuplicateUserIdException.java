@@ -14,7 +14,11 @@ public class DuplicateUserIdException extends CredentialsManagerException {
     private final long userId_;
 
     public DuplicateUserIdException(long userId) {
-        super("The user id '" + userId + "' is already present.");
+        this(userId, null);
+    }
+
+    public DuplicateUserIdException(long userId, Throwable e) {
+        super("The user id '" + userId + "' is already present.", e);
 
         userId_ = userId;
     }

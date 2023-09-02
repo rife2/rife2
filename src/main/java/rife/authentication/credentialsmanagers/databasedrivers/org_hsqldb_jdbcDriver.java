@@ -25,10 +25,10 @@ public class org_hsqldb_jdbcDriver extends generic {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableUser_.getUniqueConstraints().get(0).getName())) {
-                    throw new DuplicateLoginException(login);
+                    throw new DuplicateLoginException(login, e);
                 }
                 if (message.contains("UNIQUE")) {
-                    throw new DuplicateUserIdException(attributes.getUserId());
+                    throw new DuplicateUserIdException(attributes.getUserId(), e);
                 }
             }
 

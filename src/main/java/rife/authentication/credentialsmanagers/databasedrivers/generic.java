@@ -281,7 +281,7 @@ public class generic extends DatabaseUsers {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableRole_.getUniqueConstraints().get(0).getName())) {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -315,10 +315,10 @@ public class generic extends DatabaseUsers {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableUser_.getPrimaryKeys().get(0).getName())) {
-                    throw new DuplicateUserIdException(attributes.getUserId());
+                    throw new DuplicateUserIdException(attributes.getUserId(), e);
                 }
                 if (message.contains(createTableUser_.getUniqueConstraints().get(0).getName())) {
-                    throw new DuplicateLoginException(login);
+                    throw new DuplicateLoginException(login, e);
                 }
             }
 

@@ -14,7 +14,11 @@ public class DuplicateRoleException extends CredentialsManagerException {
     private final String role_;
 
     public DuplicateRoleException(String role) {
-        super("The role '" + role + "' is already present.");
+        this(role, null);
+    }
+
+    public DuplicateRoleException(String role, Throwable e) {
+        super("The role '" + role + "' is already present.", e);
 
         role_ = role;
     }
