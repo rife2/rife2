@@ -67,9 +67,9 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         if (null == route) throw new IllegalArgumentException("route can't be null.");
 
         var result = new StringBuilder();
-        result.append("<img src=\"");
-        result.append(StringUtils.encodeHtml(context.urlFor(route).pathInfo(info.getPath()).toString()));
-        result.append("\"");
+        result.append("<img src=\"")
+            .append(StringUtils.encodeHtml(context.urlFor(route).pathInfo(info.getPath()).toString()))
+            .append('"');
         var properties = info.getProperties();
         if (properties != null) {
             var width = properties.get(ImageFormatter.CmfProperty.WIDTH);
@@ -83,7 +83,7 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
                     }
                     result.append(" width=\"");
                     result.append(width_attribute);
-                    result.append("\"");
+                    result.append('"');
                 } catch (ConversionException e) {
                     throw new RuntimeException(e);
                 }
@@ -96,7 +96,7 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
                     }
                     result.append(" height=\"");
                     result.append(height_attribute);
-                    result.append("\"");
+                    result.append('"');
                 } catch (ConversionException e) {
                     throw new RuntimeException(e);
                 }

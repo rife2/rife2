@@ -339,15 +339,15 @@ public class HttpRequest implements Request {
         }
 
         var server_root = new StringBuilder();
-        server_root.append(getScheme());
-        server_root.append("://");
-        server_root.append(getServerName());
+        server_root.append(getScheme())
+            .append("://")
+            .append(getServerName());
         if (port <= -1) {
             port = getServerPort();
         }
         if (port != 80 && port != 443) {
-            server_root.append(":");
-            server_root.append(port);
+            server_root.append(':')
+                .append(port);
         }
         return server_root.toString();
     }
