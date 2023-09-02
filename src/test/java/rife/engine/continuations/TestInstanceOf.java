@@ -8,6 +8,7 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestInstanceOf implements Element {
+    @Override
     public void process(Context c) {
         String before = "before instanceof pause";
         Object after = "after instanceof pause";

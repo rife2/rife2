@@ -13,6 +13,7 @@ public class TestContentDataUser {
     @Test
     void testInstantiation() {
         var user = new ContentDataUser<>() {
+            @Override
             public Object useContentData(Object contentData)
             throws InnerClassException {
                 return null;
@@ -25,6 +26,7 @@ public class TestContentDataUser {
     @Test
     void testData() {
         var user = new ContentDataUser<String>() {
+            @Override
             public String useContentData(Object contentData)
             throws InnerClassException {
                 return contentData + " some string";
@@ -37,6 +39,7 @@ public class TestContentDataUser {
     @Test
     void testException() {
         var user = new ContentDataUser<>() {
+            @Override
             public Object useContentData(Object contentData)
             throws InnerClassException {
                 throwException(new Exception(contentData.toString()));

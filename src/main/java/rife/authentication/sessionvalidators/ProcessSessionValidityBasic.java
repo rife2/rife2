@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 public class ProcessSessionValidityBasic extends ProcessSessionValidity {
     private int mValidity = DatabaseSessionValidator.SESSION_INVALID;
 
+    @Override
     public boolean processRow(ResultSet resultSet) {
         assert resultSet != null;
 
@@ -17,6 +18,7 @@ public class ProcessSessionValidityBasic extends ProcessSessionValidity {
         return true;
     }
 
+    @Override
     public int getValidity() {
         return mValidity;
     }

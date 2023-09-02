@@ -32,6 +32,7 @@ public class PrintTemplate implements Element {
         return c.template(templateName_);
     }
 
+    @Override
     public void process(Context c) {
         c.print(getTemplate(c));
     }

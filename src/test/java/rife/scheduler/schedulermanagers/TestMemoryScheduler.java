@@ -199,6 +199,7 @@ public class TestMemoryScheduler {
             executedTasks_ = new ArrayList<>();
         }
 
+        @Override
         public boolean executeTask(Task task) {
             synchronized (this) {
                 if (null == firstExecution_) {
@@ -223,10 +224,12 @@ public class TestMemoryScheduler {
             }
         }
 
+        @Override
         public String getHandledTaskType() {
             return TestTasktypes.UPLOAD_GROUPS;
         }
 
+        @Override
         protected long getRescheduleDelay() {
             return 100;
         }

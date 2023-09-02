@@ -32,6 +32,7 @@ class MetricsMethodVisitor extends MethodVisitor implements Opcodes {
         className_ = className;
     }
 
+    @Override
     public void visitMaxs(int maxStack, int maxLocals) {
         // go over all the labels in their order of appearance and check if
         // they are exception labels with thus an initial exception
@@ -48,6 +49,7 @@ class MetricsMethodVisitor extends MethodVisitor implements Opcodes {
         classVisitor_.setExceptionTypes(exception_labels_types);
     }
 
+    @Override
     public void visitMethodInsn(int opcode, String owner, String methodName, String desc, final boolean isInterface) {
         var owner_classname = owner.replace('/', '.');
 
@@ -61,6 +63,7 @@ class MetricsMethodVisitor extends MethodVisitor implements Opcodes {
         }
     }
 
+    @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
         // store the types of the exception labels so that the exception
         // instance can be cast to it when restoring the local
@@ -72,6 +75,7 @@ class MetricsMethodVisitor extends MethodVisitor implements Opcodes {
         exceptionTypes_.put(handler, type);
     }
 
+    @Override
     public void visitLabel(Label label) {
         // remember the order of the labels
         labelsOrder_.add(label);

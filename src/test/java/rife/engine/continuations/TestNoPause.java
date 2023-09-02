@@ -8,6 +8,7 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestNoPause implements Element {
+    @Override
     public void process(Context c) {
         var before = "before simple pause";
         assert before != null;

@@ -16,6 +16,7 @@ public class TestProcessedTemplates {
     void testTemplatePropertiesHtml()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 properties().put("prop1", "value1");
                 get("/template/html", c -> c.print(c.template("filtered_tags_property")));
@@ -35,6 +36,7 @@ public class TestProcessedTemplates {
     void testTemplatePropertiesTxt()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 properties().put("prop1", "value1");
                 get("/template/txt", c -> c.print(c.templateTxt("filtered_tags_property")));
@@ -54,6 +56,7 @@ public class TestProcessedTemplates {
     void testTemplateAttributesHtml()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 before(c -> {
                     c.setAttribute("attribute1", "value1");
@@ -82,6 +85,7 @@ public class TestProcessedTemplates {
     void testTemplateAttributesTxt()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 before(c -> {
                     c.setAttribute("attribute1", "value1");
@@ -110,6 +114,7 @@ public class TestProcessedTemplates {
     void testTemplateConfigHtml()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 config().put("param1", "value1");
                 get("/template/html", c -> c.print(c.template("filtered_tags_config")));
@@ -128,6 +133,7 @@ public class TestProcessedTemplates {
     void testTemplateConfigTxt()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 config().put("param1", "value1");
                 get("/template/txt", c -> c.print(c.templateTxt("filtered_tags_config")));

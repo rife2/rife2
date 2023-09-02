@@ -17,6 +17,7 @@ public class TestTomcatRunner implements AutoCloseable {
         return server_.properties();
     }
 
+    @Override
     public void close() {
         server_.stop();
     }

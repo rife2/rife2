@@ -55,11 +55,13 @@ public class BasicContinuableClassLoader extends ClassLoader implements ClassByt
         continuableDetector_ = new ContinuableDetector(config_, this);
     }
 
+    @Override
     public byte[] getClassBytes(String className, boolean reloadAutomatically)
     throws ClassNotFoundException {
         return bytesLoader_.getClassBytes(className.replace('.', '/') + ".class");
     }
 
+    @Override
     public Class loadClass(String name)
     throws ClassNotFoundException {
         // disable this classloader and delegate to the parent if the continuations

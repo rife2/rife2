@@ -208,6 +208,7 @@ public class ContinuationManager {
     }
 
     private class PurgeContinuations extends Thread {
+        @Override
         public void run() {
             purge();
         }

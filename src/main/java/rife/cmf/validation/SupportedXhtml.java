@@ -32,6 +32,7 @@ public class SupportedXhtml extends CmfPropertyValidationRule {
         super(propertyName, fragment);
     }
 
+    @Override
     public boolean validate() {
         Object value = null;
         try {
@@ -62,6 +63,7 @@ public class SupportedXhtml extends CmfPropertyValidationRule {
         return true;
     }
 
+    @Override
     public ValidationError getError() {
         return new ValidationError.INVALID(getSubject());
     }

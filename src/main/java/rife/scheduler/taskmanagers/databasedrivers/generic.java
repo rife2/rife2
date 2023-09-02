@@ -106,19 +106,23 @@ public class generic extends DatabaseTasks {
             .whereParameter("id", "=");
     }
 
+    @Override
     public boolean install()
     throws TaskManagerException {
         return install_(createSequenceTask_, createTableTask_);
     }
 
+    @Override
     public boolean remove()
     throws TaskManagerException {
         return remove_(dropSequenceTask_, dropTableTask_);
     }
 
+    @Override
     public int addTask(final Task task)
     throws TaskManagerException {
         return addTask_(getTaskId_, addTask_, new DbPreparedStatementHandler() {
+            @Override
             public void setParameters(DbPreparedStatement statement) {
                 statement
                     .setBean(task);
@@ -126,9 +130,11 @@ public class generic extends DatabaseTasks {
         }, task);
     }
 
+    @Override
     public boolean updateTask(final Task task)
     throws TaskManagerException {
         return updateTask_(updateTask_, new DbPreparedStatementHandler() {
+            @Override
             public void setParameters(DbPreparedStatement statement) {
                 statement
                     .setBean(task);
@@ -136,46 +142,55 @@ public class generic extends DatabaseTasks {
         }, task);
     }
 
+    @Override
     public Task getTask(int id)
     throws TaskManagerException {
         return getTask_(getTask_, new ProcessTask(), id);
     }
 
+    @Override
     public Collection<Task> getAllTasks()
     throws TaskManagerException {
         return getAllTasks_(getAllTasks_, new ProcessTask());
     }
 
+    @Override
     public Collection<Task> getTasksToProcess()
     throws TaskManagerException {
         return getTasksToProcess_(getTasksToProcess_, new ProcessTask());
     }
 
+    @Override
     public Collection<Task> getScheduledTasks()
     throws TaskManagerException {
         return getScheduledTasks_(getScheduledTasks_, new ProcessTask());
     }
 
+    @Override
     public boolean removeTask(int id)
     throws TaskManagerException {
         return removeTask_(removeTask_, id);
     }
 
+    @Override
     public boolean rescheduleTask(Task task, long planned, Frequency frequency)
     throws TaskManagerException {
         return rescheduleTask_(task, planned, frequency);
     }
 
+    @Override
     public boolean concludeTask(Task task)
     throws TaskManagerException {
         return concludeTask_(task);
     }
 
+    @Override
     public boolean activateTask(int id)
     throws TaskManagerException {
         return activateTask_(activateTask_, id);
     }
 
+    @Override
     public boolean deactivateTask(int id)
     throws TaskManagerException {
         return deactivateTask_(deactivateTask_, id);

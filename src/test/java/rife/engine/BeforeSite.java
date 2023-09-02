@@ -5,6 +5,7 @@
 package rife.engine;
 
 public class BeforeSite extends Site {
+    @Override
     public void setup() {
         get("/one", c -> c.print(c.route().path()));
         get("/two", c -> c.print(c.route().path()));

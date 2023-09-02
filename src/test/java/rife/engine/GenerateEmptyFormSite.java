@@ -8,6 +8,7 @@ import rife.template.Template;
 import rifetestmodels.ConstrainedBeanImpl;
 
 public class GenerateEmptyFormSite extends Site {
+    @Override
     public void setup() {
         get("/form_empty", c -> {
             if (c.hasParameterValue("prefix")) {

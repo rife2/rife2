@@ -12,6 +12,7 @@ public class TestPrivateMethod implements Element {
         return 1234;
     }
 
+    @Override
     public void process(Context c) {
         int result = getInt();
 

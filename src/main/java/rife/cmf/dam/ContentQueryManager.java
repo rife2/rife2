@@ -382,9 +382,11 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * <p>{@code false} otherwise
      * @since 1.0
      */
+    @Override
     public int save(final T bean)
     throws DatabaseException {
         return dbQueryManager_.inTransaction(new DbTransactionUser<Integer, Object>() {
+            @Override
             public Integer useTransaction()
             throws InnerClassException {
                 var id = -1;
@@ -465,6 +467,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * <p>{@code null} if it couldn't be found
      * @since 1.0
      */
+    @Override
     public T restore(int objectId)
     throws DatabaseException {
         return super.restore(objectId);
@@ -481,6 +484,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * <p>{@code null} if no beans could be found
      * @since 1.0
      */
+    @Override
     public T restoreFirst(RestoreQuery query)
     throws DatabaseException {
         return super.restoreFirst(query);
@@ -496,6 +500,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * <p>{@code null} if no beans could be found
      * @since 1.0
      */
+    @Override
     public List<T> restore()
     throws DatabaseException {
         return super.restore();
@@ -512,6 +517,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * <p>{@code null} if no beans could be found
      * @since 1.0
      */
+    @Override
     public List<T> restore(RestoreQuery query)
     throws DatabaseException {
         return super.restore(query);
@@ -548,6 +554,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      * <p>{@code false} if it couldn't be found
      * @since 1.0
      */
+    @Override
     public boolean delete(final int objectId)
     throws DatabaseException {
         Boolean result = dbQueryManager_.inTransaction(() -> {
@@ -772,6 +779,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      *
      * @since 1.0
      */
+    @Override
     public Object clone() {
         try {
             return super.clone();
@@ -783,16 +791,20 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     class Listener implements GenericQueryManagerListener<T> {
+        @Override
         public void installed() {
         }
 
+        @Override
         public void removed() {
         }
 
+        @Override
         public void inserted(T bean) {
             saved(bean);
         }
 
+        @Override
         public void updated(T bean) {
             saved(bean);
         }
@@ -832,10 +844,12 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
             }
         }
 
+        @Override
         public void restored(T bean) {
             restoreContent(getIdentifierValue(bean), bean);
         }
 
+        @Override
         public void deleted(int objectId) {
             var bean = deletedBean_.get();
             if (null == bean) {
@@ -883,6 +897,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
         }
     }
 
+    @Override
     public <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> type) {
         return new ContentQueryManager<>(getDatasource(), type, contentManager_);
     }

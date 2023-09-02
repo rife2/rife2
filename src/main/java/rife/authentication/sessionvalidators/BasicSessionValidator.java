@@ -28,10 +28,12 @@ import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErro
  * @since 1.0
  */
 public class BasicSessionValidator<C extends CredentialsManager, S extends SessionManager, R extends RememberManager> extends AbstractSessionValidator<C, S, R> {
+    @Override
     public boolean isAccessAuthorized(int id) {
         return SESSION_VALID == id;
     }
 
+    @Override
     public int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||

@@ -66,46 +66,55 @@ public class generic extends DatabaseTextStore {
             .whereAnd("contentSize", "!=", 0);
     }
 
+    @Override
     public boolean install()
     throws ContentManagerException {
         return _install(createTableContent_);
     }
 
+    @Override
     public boolean remove()
     throws ContentManagerException {
         return _remove(dropTableContent_);
     }
 
+    @Override
     public boolean storeContentData(int id, Content content, ContentTransformer transformer)
     throws ContentManagerException {
         return _storeContentData(storeContentData_, id, content, transformer);
     }
 
+    @Override
     public boolean deleteContentData(int id)
     throws ContentManagerException {
         return _deleteContentData(deleteContentData_, id);
     }
 
+    @Override
     public void useContentData(int id, ContentDataUserWithoutResult user)
     throws ContentManagerException {
         _useContentData(retrieveContent_, id, user);
     }
 
+    @Override
     public <ResultType> ResultType useContentDataResult(int id, ContentDataUser<ResultType> user)
     throws ContentManagerException {
         return _useContentDataResult(retrieveContent_, id, user);
     }
 
+    @Override
     public int getSize(int id)
     throws ContentManagerException {
         return _getSize(retrieveSize_, id);
     }
 
+    @Override
     public boolean hasContentData(int id)
     throws ContentManagerException {
         return _hasContentData(hasContentData_, id);
     }
 
+    @Override
     public void serveContentData(Context context, int id)
     throws ContentManagerException {
         _serveContentData(retrieveContent_, context, id);

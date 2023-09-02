@@ -385,6 +385,7 @@ public class TestImageFormatter {
     }
 
     static class TransparentImageTransformer implements ImageContentTransformer {
+        @Override
         public Image transform(Image data, Map<String, String> attributes)
         throws ContentManagerException {
             // retrieve the rife logo to stamp on top of it

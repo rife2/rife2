@@ -84,22 +84,27 @@ public abstract class AbstractResponse implements Response {
         return request_;
     }
 
+    @Override
     public void setLastElement(Element element) {
         lastElement_ = element;
     }
 
+    @Override
     public Element getLastElement() {
         return lastElement_;
     }
 
+    @Override
     public boolean isContentTypeSet() {
         return contentType_ != null;
     }
 
+    @Override
     public String getContentType() {
         return contentType_;
     }
 
+    @Override
     public void setContentType(String contentType) {
         if (null == contentType) {
             return;
@@ -113,6 +118,7 @@ public abstract class AbstractResponse implements Response {
         _setContentType(contentType);
     }
 
+    @Override
     public void enableTextBuffer(boolean enabled) {
         if (textBufferEnabled_ != enabled) {
             flush();
@@ -121,10 +127,12 @@ public abstract class AbstractResponse implements Response {
         textBufferEnabled_ = enabled;
     }
 
+    @Override
     public boolean isTextBufferEnabled() {
         return textBufferEnabled_;
     }
 
+    @Override
     public void print(Template template)
     throws EngineException {
         if (null == template) return;
@@ -132,6 +140,7 @@ public abstract class AbstractResponse implements Response {
         print(template.getDeferredContent());
     }
 
+    @Override
     public void print(Collection<CharSequence> deferredContent)
     throws EngineException {
         if (!isContentTypeSet()) {
@@ -161,6 +170,7 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
+    @Override
     public void print(Object value)
     throws EngineException {
         if (!isContentTypeSet()) {
@@ -228,6 +238,7 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
+    @Override
     public void clearBuffer() {
         if (textBuffer_ != null &&
             !textBuffer_.isEmpty()) {
@@ -235,6 +246,7 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
+    @Override
     public void flush()
     throws EngineException {
         if (textBuffer_ != null &&
@@ -254,6 +266,7 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
+    @Override
     public void close()
     throws EngineException {
         flush();
@@ -291,6 +304,7 @@ public abstract class AbstractResponse implements Response {
         }
     }
 
+    @Override
     public OutputStream getOutputStream()
     throws EngineException {
         ensureOutputStream();

@@ -19,6 +19,7 @@ import java.security.ProtectionDomain;
  * @since 1.0
  */
 public class LazyLoadTransformer extends RifeTransformer {
+    @Override
     protected byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         String classname_dotted_interned = classNameInternal.replace('/', '.').intern();
 

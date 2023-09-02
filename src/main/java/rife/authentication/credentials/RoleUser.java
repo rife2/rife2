@@ -27,6 +27,7 @@ public class RoleUser extends MetaData implements RoleUserCredentials, RememberM
     public RoleUser() {
     }
 
+    @Override
     public void activateMetaData() {
         addConstraint(new ConstrainedProperty("login")
             .notNull(true)
@@ -49,6 +50,7 @@ public class RoleUser extends MetaData implements RoleUserCredentials, RememberM
         setRole(role);
     }
 
+    @Override
     public String getLogin() {
         return login_;
     }
@@ -59,10 +61,12 @@ public class RoleUser extends MetaData implements RoleUserCredentials, RememberM
         return this;
     }
 
+    @Override
     public void setLogin(String login) {
         login_ = login;
     }
 
+    @Override
     public String getPassword() {
         return password_;
     }
@@ -73,10 +77,12 @@ public class RoleUser extends MetaData implements RoleUserCredentials, RememberM
         return this;
     }
 
+    @Override
     public void setPassword(String password) {
         password_ = password;
     }
 
+    @Override
     public String getRole() {
         return role_;
     }
@@ -87,10 +93,12 @@ public class RoleUser extends MetaData implements RoleUserCredentials, RememberM
         return this;
     }
 
+    @Override
     public void setRole(String role) {
         role_ = role;
     }
 
+    @Override
     public boolean getRemember() {
         return remember_;
     }
@@ -101,6 +109,7 @@ public class RoleUser extends MetaData implements RoleUserCredentials, RememberM
         return this;
     }
 
+    @Override
     public void setRemember(boolean remember) {
         remember_ = remember;
     }

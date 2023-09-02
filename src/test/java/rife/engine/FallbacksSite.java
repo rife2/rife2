@@ -5,21 +5,26 @@
 package rife.engine;
 
 public class FallbacksSite extends Site {
+    @Override
     public void setup() {
         fallback(c -> c.print("fallback1"));
         get("/one", c -> c.print(c.route().path()));
         get("/two", PathInfoHandling.CAPTURE, c -> c.print(c.route().path()));
         group("/prefix1", new Router() {
+            @Override
             public void setup() {
                 get("/three", c -> c.print(c.route().path()));
                 group("/prefix2", new Router() {
+                    @Override
                     public void setup() {
                         get("/four", c -> c.print(c.route().path()));
                         fallback(c -> c.print("fallback2"));
                         group(new Router() {
+                            @Override
                             public void setup() {
                                 fallback(c -> c.print("fallback3"));
                                 group("/prefix3", new Router() {
+                                    @Override
                                     public void setup() {
                                         fallback(c -> c.print("fallback4"));
                                         get("/five", c -> c.print(c.route().path()));
@@ -34,6 +39,7 @@ public class FallbacksSite extends Site {
             }
         });
         group(new Router() {
+            @Override
             public void setup() {
                 get("/seven", c -> c.print(c.route().path()));
             }

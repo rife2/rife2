@@ -52,6 +52,7 @@ class TypesClassVisitor extends ClassVisitor {
         return labelContexts_[labelContextCounter_++];
     }
 
+    @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         if (entryMethodName_.equals(name) &&
             entryMethodDesc_.equals(desc)) {

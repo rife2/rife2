@@ -25,6 +25,7 @@ public class CustomCredentialsManager implements CredentialsManager {
         return id_;
     }
 
+    @Override
     public long verifyCredentials(Credentials credentials) {
         return 0;
     }

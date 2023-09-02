@@ -5,6 +5,7 @@
 package rife.engine;
 
 public class RoutingComboSite extends Site {
+    @Override
     public void setup() {
         get("/combo1", RoutingGetSite.GetElement.class);
         get("/combo2", PathInfoHandling.CAPTURE, RoutingGetSite.GetPathInfoElement.class);

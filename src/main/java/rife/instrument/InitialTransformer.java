@@ -17,6 +17,7 @@ import java.security.ProtectionDomain;
  * @since 1.0
  */
 public class InitialTransformer extends RifeTransformer {
+    @Override
     protected byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined,
                                    ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         InstrumentationUtils.dumpClassBytes("initial", classNameInternal, classfileBuffer);

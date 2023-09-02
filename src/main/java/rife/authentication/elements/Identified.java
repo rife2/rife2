@@ -80,6 +80,7 @@ public class Identified implements Element {
         return authConfig_;
     }
 
+    @Override
     public void process(Context c) {
         initializeIdentified(c);
 

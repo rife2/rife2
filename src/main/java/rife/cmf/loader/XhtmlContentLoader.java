@@ -25,6 +25,7 @@ public class XhtmlContentLoader extends ContentLoader<String> {
         sBackends.add(new SAXLoader());
     }
 
+    @Override
     public List<ContentLoaderBackend<String>> getBackends() {
         return sBackends;
     }

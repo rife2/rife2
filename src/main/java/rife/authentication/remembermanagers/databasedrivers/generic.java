@@ -68,16 +68,19 @@ public class generic extends DatabaseRemember {
             .whereParameter("moment", "<=");
     }
 
+    @Override
     public boolean install()
     throws RememberManagerException {
         return _install(createRemember_, createRememberMomentIndex_);
     }
 
+    @Override
     public boolean remove()
     throws RememberManagerException {
         return _remove(removeRemember_, removeRememberMomentIndex_);
     }
 
+    @Override
     public String createRememberId(long userId)
     throws RememberManagerException {
         int purge_decision = ThreadLocalRandom.current().nextInt(getRememberPurgeScale());
@@ -88,26 +91,31 @@ public class generic extends DatabaseRemember {
         return _createRememberId(createRememberId_, userId);
     }
 
+    @Override
     public boolean eraseRememberId(String rememberId)
     throws RememberManagerException {
         return _eraseRememberId(eraseRememberId_, rememberId);
     }
 
+    @Override
     public boolean eraseUserRememberIds(long userId)
     throws RememberManagerException {
         return _eraseUserRememberIds(eraseUserRememberIds_, userId);
     }
 
+    @Override
     public void eraseAllRememberIds()
     throws RememberManagerException {
         _eraseAllRememberIds(eraseAllRememberIds_);
     }
 
+    @Override
     public long getRememberedUserId(String rememberId)
     throws RememberManagerException {
         return _getRememberedUserId(getRememberedUserId_, rememberId);
     }
 
+    @Override
     public void purgeRememberIds()
     throws RememberManagerException {
         _purgeRememberIds(purgeRememberIds_);

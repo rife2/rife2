@@ -8,6 +8,7 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestNullReference implements Element {
+    @Override
     public void process(Context c) {
         String string = null;
         c.print(c.continuationId());

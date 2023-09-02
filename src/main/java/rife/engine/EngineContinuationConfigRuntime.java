@@ -15,22 +15,27 @@ class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
         site_ = site;
     }
 
+    @Override
     public ContinuationManager getContinuationManager(Object executingContinuable) {
         return site_.continuationManager_;
     }
 
+    @Override
     public boolean cloneContinuations(Object executingContinuable) {
         return false;
     }
 
+    @Override
     public long getContinuationDuration() {
         return RifeConfig.engine().getContinuationDuration();
     }
 
+    @Override
     public int getContinuationPurgeFrequency() {
         return RifeConfig.engine().getContinuationPurgeFrequency();
     }
 
+    @Override
     public int getContinuationPurgeScale() {
         return RifeConfig.engine().getContinuationPurgeScale();
     }

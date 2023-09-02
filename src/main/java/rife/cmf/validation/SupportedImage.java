@@ -30,6 +30,7 @@ public class SupportedImage extends CmfPropertyValidationRule {
         super(propertyName, false);
     }
 
+    @Override
     public boolean validate() {
         Object value = null;
         try {
@@ -60,6 +61,7 @@ public class SupportedImage extends CmfPropertyValidationRule {
         return true;
     }
 
+    @Override
     public ValidationError getError() {
         return new ValidationError.INVALID(getSubject());
     }

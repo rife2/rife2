@@ -40,6 +40,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * @param credentialsManager the {@code CredentialsManager} instance
      * @since 1.0
      */
+    @Override
     public void setCredentialsManager(C credentialsManager) {
         credentialsManager_ = credentialsManager;
     }
@@ -51,6 +52,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * {@code null} if none has been set up yet
      * @since 1.0
      */
+    @Override
     public C getCredentialsManager() {
         return credentialsManager_;
     }
@@ -61,6 +63,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * @param sessionManager the {@code SessionManager} instance
      * @since 1.0
      */
+    @Override
     public void setSessionManager(S sessionManager) {
         sessionManager_ = sessionManager;
     }
@@ -72,6 +75,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * {@code null} if none has been set up yet
      * @since 1.0
      */
+    @Override
     public S getSessionManager() {
         return sessionManager_;
     }
@@ -82,6 +86,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * @param rememberManager the {@code RememberManager} instance
      * @since 1.0
      */
+    @Override
     public void setRememberManager(R rememberManager) {
         rememberManager_ = rememberManager;
     }
@@ -93,6 +98,7 @@ public abstract class AbstractSessionValidator<C extends CredentialsManager, S e
      * {@code null} if none has been set up yet
      * @since 1.0
      */
+    @Override
     public R getRememberManager() {
         return rememberManager_;
     }

@@ -38,6 +38,7 @@ public class Task extends MetaData implements Cloneable {
     public Task() {
     }
 
+    @Override
     public void activateMetaData() {
         addRule(new ValidationRuleNotNull("type"));
         addRule(new ValidationRuleNotEmpty("planned"));
@@ -403,6 +404,7 @@ public class Task extends MetaData implements Cloneable {
         return busy_;
     }
 
+    @Override
     public Task clone()
     throws CloneNotSupportedException {
         return (Task) super.clone();
@@ -430,6 +432,7 @@ public class Task extends MetaData implements Cloneable {
     }
 
     public class InvalidPlanned implements ValidationRule {
+        @Override
         public boolean validate() {
             if (0 == planned_) {
                 return true;
@@ -441,22 +444,27 @@ public class Task extends MetaData implements Cloneable {
             return planned_ >= current_calendar.getTimeInMillis();
         }
 
+        @Override
         public String getSubject() {
             return "planned";
         }
 
+        @Override
         public ValidationError getError() {
             return new ValidationError.INVALID(getSubject());
         }
 
+        @Override
         public Object getBean() {
             return null;
         }
 
+        @Override
         public <T extends ValidationRule> T setBean(Object bean) {
             return (T) this;
         }
 
+        @Override
         public Object clone() {
             return this;
         }

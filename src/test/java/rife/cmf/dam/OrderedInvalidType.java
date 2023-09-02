@@ -12,6 +12,7 @@ public class OrderedInvalidType extends Validation {
     private String name_ = null;
     private String priority_ = null;
 
+    @Override
     protected void activateValidation() {
         addConstraint(new ConstrainedProperty("name").maxLength(64).notNull(true).notEmpty(true));
         addConstraint(new ConstrainedProperty("priority").rangeBegin(0).ordinal(true));

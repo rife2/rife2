@@ -7,10 +7,12 @@ package rife.continuations;
 public class TestPauseInWhileInterface implements CloneableContinuable, ContinuableSupportAware {
     private ContinuableSupport support_;
 
+    @Override
     public void setContinuableSupport(ContinuableSupport support) {
         support_ = support;
     }
 
+    @Override
     public Object clone()
     throws CloneNotSupportedException {
         return super.clone();

@@ -38,6 +38,7 @@ public class ContentInfo extends Validation {
     public ContentInfo() {
     }
 
+    @Override
     public void activateValidation() {
         addConstraint(new ConstrainedProperty("path")
             .notNull(true)

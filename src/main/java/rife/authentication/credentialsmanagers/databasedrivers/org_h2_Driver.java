@@ -17,6 +17,7 @@ public class org_h2_Driver extends generic {
         super(datasource);
     }
 
+    @Override
     public DatabaseUsers addRole(String role)
     throws CredentialsManagerException {
         try {
@@ -36,6 +37,7 @@ public class org_h2_Driver extends generic {
         return this;
     }
 
+    @Override
     public DatabaseUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         try {

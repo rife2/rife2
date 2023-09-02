@@ -31,6 +31,7 @@ public abstract class ImageContentLoaderBackend implements ContentLoaderBackend<
     protected abstract LoadedContent<Image> loadFromBytes(byte[] data, Set<String> errors)
     throws ContentManagerException;
 
+    @Override
     public LoadedContent<Image> load(Object data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
         if (data instanceof byte[] bytes) {

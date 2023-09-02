@@ -91,46 +91,55 @@ public class generic extends DatabaseRawStore {
             .orderBy("ordinal");
     }
 
+    @Override
     public boolean install()
     throws ContentManagerException {
         return _install(createTableContentInfo_, createTableContentChunk_);
     }
 
+    @Override
     public boolean remove()
     throws ContentManagerException {
         return _remove(dropTableContentInfo_, dropTableContentChunk_);
     }
 
+    @Override
     public boolean storeContentData(int id, Content content, ContentTransformer transformer)
     throws ContentManagerException {
         return _storeContentData(storeContentInfo_, storeContentChunk_, id, content, transformer);
     }
 
+    @Override
     public boolean deleteContentData(int id)
     throws ContentManagerException {
         return _deleteContentData(deleteContentInfo_, deleteContentChunk_, id);
     }
 
+    @Override
     public void useContentData(int id, ContentDataUserWithoutResult user)
     throws ContentManagerException {
         _useContentData(retrieveContentChunks_, id, user);
     }
 
+    @Override
     public <ResultType> ResultType useContentDataResult(int id, ContentDataUser<ResultType> user)
     throws ContentManagerException {
         return _useContentDataResult(retrieveContentChunks_, id, user);
     }
 
+    @Override
     public int getSize(int id)
     throws ContentManagerException {
         return _getSize(retrieveSize_, id);
     }
 
+    @Override
     public boolean hasContentData(int id)
     throws ContentManagerException {
         return _hasContentData(hasContentData_, id);
     }
 
+    @Override
     public void serveContentData(Context context, int id)
     throws ContentManagerException {
         _serveContentData(retrieveContentChunks_, context, id);

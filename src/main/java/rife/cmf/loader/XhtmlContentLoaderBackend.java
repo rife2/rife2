@@ -34,6 +34,7 @@ public abstract class XhtmlContentLoaderBackend implements ContentLoaderBackend<
     protected abstract LoadedContent<String> loadFromString(String data, boolean fragment, Set<String> errors)
     throws ContentManagerException;
 
+    @Override
     public LoadedContent<String> load(Object data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
         if (data instanceof String str) {

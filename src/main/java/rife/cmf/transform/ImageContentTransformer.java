@@ -30,5 +30,6 @@ public interface ImageContentTransformer extends ContentTransformer<Image> {
      * @return the transformed image
      * @since 1.0
      */
+    @Override
     Image transform(Image data, Map<String, String> attributes);
 }

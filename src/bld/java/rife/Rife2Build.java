@@ -162,6 +162,7 @@ public class Rife2Build extends AbstractRife2Build {
         jarContinuationsOperation.executeOnce();
     }
 
+    @Override
     public void test()
     throws Exception {
         jarAgent();
@@ -178,12 +179,14 @@ public class Rife2Build extends AbstractRife2Build {
         jarContinuations();
     }
 
+    @Override
     public void publish()
     throws Exception {
         all();
         super.publish();
     }
 
+    @Override
     public void publishLocal()
     throws Exception {
         all();

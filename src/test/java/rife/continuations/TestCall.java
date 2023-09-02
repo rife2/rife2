@@ -36,6 +36,7 @@ public class TestCall {
             final var ids = new String[2];
 
             var thread1 = new Thread() {
+                @Override
                 public void run() {
                     try {
                         var id = runner.start(TestCall.class.getPackage().getName() + "." + test_class);
@@ -56,6 +57,7 @@ public class TestCall {
             };
 
             var thread2 = new Thread() {
+                @Override
                 public void run() {
                     try {
                         var id = runner.run(ids[0]);

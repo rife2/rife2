@@ -16,6 +16,7 @@ public class TestPagedNavigation {
     void testDefaults()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/defaults", c -> {
                     var t = c.template("paged_navigation");
@@ -192,6 +193,7 @@ public class TestPagedNavigation {
     void testNegativeOffset()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/defaults", c -> {
                     var t = c.template("paged_navigation");
@@ -213,6 +215,7 @@ public class TestPagedNavigation {
     void testOffsetEqualToCount()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/defaults", c -> {
                     var t = c.template("paged_navigation");
@@ -234,6 +237,7 @@ public class TestPagedNavigation {
     void testOffsetLargerThanCount()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/defaults", c -> {
                     var t = c.template("paged_navigation");
@@ -255,6 +259,7 @@ public class TestPagedNavigation {
     void testCustom()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/custom", c -> {
                     var t = c.template("paged_navigation");
@@ -282,6 +287,7 @@ public class TestPagedNavigation {
     void testNegativeCount()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/negativecount", c -> {
                     var t = c.template("paged_navigation");
@@ -303,6 +309,7 @@ public class TestPagedNavigation {
     void testNoRangeCount()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/norangecount", c -> {
                     var t = c.template("paged_navigation_norangecount");

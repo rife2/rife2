@@ -30,6 +30,7 @@ public class FillBeanSite extends Site {
         prefix_ = prefix;
     }
 
+    @Override
     public void setup() {
         route("/bean/fill", c -> {
             switch (c.method()) {
@@ -112,6 +113,7 @@ public class FillBeanSite extends Site {
 
                     try {
                         byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
+                            @Override
                             public byte[] useInputStream(InputStream stream)
                             throws InnerClassException {
                                 try {

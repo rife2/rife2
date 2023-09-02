@@ -8,6 +8,7 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestFormSubmission implements Element {
+    @Override
     public void process(Context c) {
         var template = c.template("engine_continuation_form_submission");
 

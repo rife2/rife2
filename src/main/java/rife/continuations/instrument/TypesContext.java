@@ -141,6 +141,7 @@ class TypesContext implements Cloneable {
         return new_context;
     }
 
+    @Override
     public TypesContext clone() {
         TypesContext new_context = null;
         try {

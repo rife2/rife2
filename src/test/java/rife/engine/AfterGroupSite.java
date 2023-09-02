@@ -5,8 +5,10 @@
 package rife.engine;
 
 public class AfterGroupSite extends Site {
+    @Override
     public void setup() {
         group(new Router() {
+            @Override
             public void setup() {
                 get("/three", c -> c.print(c.route().path()));
                 after(c -> c.print("after1"), c -> c.print("after2"));

@@ -474,10 +474,12 @@ public class BasicContinuableRunner {
     }
 
     private class BasicConfigRuntime extends ContinuationConfigRuntime {
+        @Override
         public ContinuationManager getContinuationManager(Object executingInstance) {
             return manager_;
         }
 
+        @Override
         public boolean cloneContinuations(Object executingContinuable) {
             return cloneContinuations_;
         }

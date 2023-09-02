@@ -8,6 +8,7 @@ import rife.workflow.Work;
 import rife.workflow.Workflow;
 
 public class WorkDep2 implements Work {
+    @Override
     public void execute(Workflow workflow) {
         workflow.inform(TestEventTypes.BEGIN);
 

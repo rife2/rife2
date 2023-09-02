@@ -92,6 +92,7 @@ public class ClassInterfaceDetector {
             return superName_;
         }
 
+        @Override
         public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
             if (null == superName) {
                 return;

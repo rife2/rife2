@@ -5,18 +5,23 @@
 package rife.engine;
 
 public class GroupsMultiLevelSite extends Site {
+    @Override
     public void setup() {
         get("/one", c -> c.print(c.route().path()));
         get("/two", c -> c.print(c.route().path()));
         group("/prefix1", new Router() {
+            @Override
             public void setup() {
                 get("/three", c -> c.print(c.route().path()));
                 group("/prefix2", new Router() {
+                    @Override
                     public void setup() {
                         get("/five", c -> c.print(c.route().path()));
                         group(new Router() {
+                            @Override
                             public void setup() {
                                 group("/prefix3", new Router() {
+                                    @Override
                                     public void setup() {
                                         get("/eleven", c -> c.print(c.route().path()));
                                         get("/twelve", c -> c.print(c.route().path()));
@@ -33,6 +38,7 @@ public class GroupsMultiLevelSite extends Site {
             }
         });
         group(new Router() {
+            @Override
             public void setup() {
                 get("/seven", c -> c.print(c.route().path()));
                 get("/eight", c -> c.print(c.route().path()));

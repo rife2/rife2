@@ -104,6 +104,7 @@ public class Logout implements Element {
     protected void loggedOut(Template template) {
     }
 
+    @Override
     public void process(Context c) {
         initializeLogout(c);
 

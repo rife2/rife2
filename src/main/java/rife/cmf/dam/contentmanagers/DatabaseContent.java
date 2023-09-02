@@ -57,6 +57,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         }
     }
 
+    @Override
     public abstract DatabaseContentInfo getContentInfo(String location)
     throws ContentManagerException;
 
@@ -183,6 +184,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
 
         try {
             result = inTransaction(new DbTransactionUser<>() {
+                @Override
                 public Boolean useTransaction()
                 throws InnerClassException {
                     // get new content id
@@ -271,9 +273,11 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
 
         try {
             result = inTransaction(new DbTransactionUser<>() {
+                @Override
                 public Boolean useTransaction()
                 throws InnerClassException {
                     return executeFetchAll(getContentInfo, new DbRowProcessor() {
+                        @Override
                         public boolean processRow(ResultSet resultSet)
                         throws SQLException {
                             final var content_id = resultSet.getInt("contentId");
@@ -511,6 +515,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
     private static class ContentAttributesProcessor extends DbRowProcessor {
         private Map<String, String> attributes_ = null;
 
+        @Override
         public boolean processRow(ResultSet result)
         throws SQLException {
             if (null == attributes_) {
@@ -529,6 +534,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
     private static class ContentPropertiesProcessor extends DbRowProcessor {
         private Map<String, String> properties_ = null;
 
+        @Override
         public boolean processRow(ResultSet result)
         throws SQLException {
             if (null == properties_) {

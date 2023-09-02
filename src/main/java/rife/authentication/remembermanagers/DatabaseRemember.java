@@ -29,26 +29,32 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         super(datasource);
     }
 
+    @Override
     public long getRememberDuration() {
         return rememberDuration_;
     }
 
+    @Override
     public void setRememberDuration(long milliseconds) {
         rememberDuration_ = milliseconds;
     }
 
+    @Override
     public int getRememberPurgeFrequency() {
         return rememberPurgeFrequency_;
     }
 
+    @Override
     public void setRememberPurgeFrequency(int frequency) {
         rememberPurgeFrequency_ = frequency;
     }
 
+    @Override
     public int getRememberPurgeScale() {
         return rememberPurgeScale_;
     }
 
+    @Override
     public void setRememberPurgeScale(int scale) {
         rememberPurgeScale_ = scale;
     }
@@ -127,6 +133,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         boolean result = false;
         try {
             if (0 != executeUpdate(eraseRememberId, new DbPreparedStatementHandler<>() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("rememberId", rememberId.substring(remember_id_slash + 1));
@@ -152,6 +159,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
         boolean result = false;
         try {
             if (0 != executeUpdate(eraseUserRememberIds, new DbPreparedStatementHandler<>() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userId);
@@ -198,6 +206,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
 
         try {
             result = executeGetFirstLong(getRememberedUserId, new DbPreparedStatementHandler<>() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("rememberId", real_rememberid);
@@ -222,6 +231,7 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
     throws RememberManagerException {
         try {
             executeUpdate(purgeRememberIds, new DbPreparedStatementHandler<>() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement.setLong(1, System.currentTimeMillis() - getRememberDuration());
                 }

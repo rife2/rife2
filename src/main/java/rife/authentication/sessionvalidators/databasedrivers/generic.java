@@ -45,6 +45,7 @@ public class generic extends DatabaseSessionValidator {
             .whereParameterAnd(RifeConfig.authentication().getTableAuthentication() + ".authData", "=");
     }
 
+    @Override
     public int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException {
         return _validateSession(checkValidityNoRole_, checkValidityNoRoleRestrictAuthData_, checkValidityRole_, checkValidityRoleRestrictAuthData_, new ProcessSessionValidityBasic(), authId, authData, attributes);

@@ -24,6 +24,7 @@ import java.util.Set;
  * @since 1.0
  */
 public class ImageIOLoader extends ImageContentLoaderBackend {
+    @Override
     public LoadedContent<Image> loadFromBytes(byte[] data, Set<String> errors)
     throws ContentManagerException {
         var input = new ByteArrayInputStream(data);
@@ -81,6 +82,7 @@ public class ImageIOLoader extends ImageContentLoaderBackend {
         return new LoadedContent<>(mime_type, image);
     }
 
+    @Override
     public boolean isBackendPresent() {
         return true;
     }

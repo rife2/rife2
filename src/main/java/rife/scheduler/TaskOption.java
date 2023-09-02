@@ -30,6 +30,7 @@ public class TaskOption extends Validation implements Cloneable {
     public TaskOption() {
     }
 
+    @Override
     protected void activateValidation() {
         addRule(new ValidationRuleRange("taskId", 0, null));
         addRule(new ValidationRuleNotNull("name"));
@@ -135,6 +136,7 @@ public class TaskOption extends Validation implements Cloneable {
         return value_;
     }
 
+    @Override
     public TaskOption clone()
     throws CloneNotSupportedException {
         return (TaskOption) super.clone();

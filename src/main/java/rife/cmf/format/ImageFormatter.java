@@ -67,6 +67,7 @@ public class ImageFormatter implements Formatter<byte[], Image> {
         public static final String HIDPI = "cmf:hidpi";
     }
 
+    @Override
     public byte[] format(Content content, ContentTransformer<Image> transformer)
     throws FormatException {
         byte[] content_bytes;

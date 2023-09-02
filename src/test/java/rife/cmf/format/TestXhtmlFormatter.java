@@ -98,6 +98,7 @@ public class TestXhtmlFormatter {
     }
 
     static class XhtmlTransformer implements TextContentTransformer {
+        @Override
         public String transform(String data, Map<String, String> attributes)
         throws ContentManagerException {
             return StringUtils.replace(data, "there", "at home");

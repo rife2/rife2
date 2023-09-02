@@ -18,6 +18,7 @@ import rife.cmf.transform.ContentTransformer;
  * @since 1.0
  */
 public class PlainTextFormatter implements Formatter<String, String> {
+    @Override
     public String format(Content content, ContentTransformer<String> transformer)
     throws FormatException {
         if (!(content.getData() instanceof String data)) {

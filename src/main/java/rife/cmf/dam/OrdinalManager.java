@@ -247,6 +247,7 @@ public class OrdinalManager implements Cloneable {
      */
     public boolean up(final int ordinal) {
         Boolean result = dbQueryManager_.inTransaction(new DbTransactionUser() {
+            @Override
             public Boolean useTransaction()
             throws InnerClassException {
                 if (!free(ordinal - 1)) {
@@ -279,6 +280,7 @@ public class OrdinalManager implements Cloneable {
      */
     public boolean up(final long restrictId, final int ordinal) {
         Boolean result = dbQueryManager_.inTransaction(new DbTransactionUser() {
+            @Override
             public Boolean useTransaction()
             throws InnerClassException {
                 if (!free(restrictId, ordinal - 1)) {
@@ -309,6 +311,7 @@ public class OrdinalManager implements Cloneable {
      */
     public boolean down(final int ordinal) {
         Boolean result = dbQueryManager_.inTransaction(new DbTransactionUser() {
+            @Override
             public Boolean useTransaction()
             throws InnerClassException {
                 if (!free(ordinal + 2)) {
@@ -341,6 +344,7 @@ public class OrdinalManager implements Cloneable {
      */
     public boolean down(final long restrictId, final int ordinal) {
         Boolean result = dbQueryManager_.inTransaction(new DbTransactionUser() {
+            @Override
             public Boolean useTransaction()
             throws InnerClassException {
                 if (!free(restrictId, ordinal + 2)) {
@@ -374,6 +378,7 @@ public class OrdinalManager implements Cloneable {
      */
     public boolean move(final int fromOrdinal, final int toOrdinal) {
         Boolean result = dbQueryManager_.inTransaction(new DbTransactionUser() {
+            @Override
             public Boolean useTransaction()
             throws InnerClassException {
                 if (!free(toOrdinal)) {
@@ -416,6 +421,7 @@ public class OrdinalManager implements Cloneable {
         }
 
         Boolean result = dbQueryManager_.inTransaction(new DbTransactionUser() {
+            @Override
             public Boolean useTransaction()
             throws InnerClassException {
                 if (!free(restrictId, toOrdinal)) {
@@ -645,6 +651,7 @@ public class OrdinalManager implements Cloneable {
      */
     public boolean tighten(final long restrictId) {
         final TightenResultSetHandlerRestricted handler = new TightenResultSetHandlerRestricted(restrictId) {
+            @Override
             public void setParameters(DbPreparedStatement statement) {
                 statement
                     .setLong(restrictColumn_, restrictId);
@@ -720,6 +727,7 @@ public class OrdinalManager implements Cloneable {
      *
      * @since 1.0
      */
+    @Override
     public Object clone() {
         try {
             return super.clone();
@@ -736,6 +744,7 @@ public class OrdinalManager implements Cloneable {
         public TightenResultSetHandler() {
         }
 
+        @Override
         public Object concludeResults(DbResultSet resultSet)
         throws SQLException {
             while (resultSet.next()) {
@@ -760,6 +769,7 @@ public class OrdinalManager implements Cloneable {
             mRestrictId = restrictId;
         }
 
+        @Override
         public Object concludeResults(DbResultSet resultset)
         throws SQLException {
             while (resultset.next()) {

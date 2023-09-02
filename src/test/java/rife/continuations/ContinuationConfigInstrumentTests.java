@@ -5,42 +5,52 @@
 package rife.continuations;
 
 public class ContinuationConfigInstrumentTests implements ContinuationConfigInstrument {
+    @Override
     public String getContinuableMarkerInterfaceName() {
         return "rife.continuations.CloneableContinuable";
     }
 
+    @Override
     public String getContinuableSupportClassName() {
         return "rife.continuations.ContinuableSupport";
     }
 
+    @Override
     public String getEntryMethodName() {
         return "execute";
     }
 
+    @Override
     public String getEntryMethodDescriptor() {
         return "()V";
     }
 
+    @Override
     public String getPauseMethodName() {
         return "pause";
     }
 
+    @Override
     public String getStepBackMethodName() {
         return "stepBack";
     }
 
+    @Override
     public String getCallMethodName() {
         return "call";
     }
 
+    @Override
     public String getCallMethodReturnTypeName() {
         return "java/lang/Object";
     }
 
+    @Override
     public String getCallMethodDescriptor() {
         return "(Ljava/lang/Class;)Ljava/lang/Object;";
     }
 
+    @Override
     public String getAnswerMethodName() {
         return "answer";
     }

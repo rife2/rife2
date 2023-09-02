@@ -24,6 +24,7 @@ public class DatabaseContentInfo extends ContentInfo {
     public DatabaseContentInfo() {
     }
 
+    @Override
     public void activateValidation() {
         super.activateValidation();
 

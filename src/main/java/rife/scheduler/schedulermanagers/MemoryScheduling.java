@@ -13,6 +13,7 @@ public class MemoryScheduling implements SchedulerFactory {
     public MemoryScheduling() {
     }
 
+    @Override
     public Scheduler createScheduler() {
         return new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
     }

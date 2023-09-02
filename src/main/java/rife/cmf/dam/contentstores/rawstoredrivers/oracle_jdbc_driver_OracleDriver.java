@@ -16,6 +16,7 @@ public class oracle_jdbc_driver_OracleDriver extends generic {
         super(datasource);
     }
 
+    @Override
     protected DbPreparedStatement getStreamPreparedStatement(Query query, DbConnection connection) {
         var statement = connection.getPreparedStatement(query, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, ResultSet.HOLD_CURSORS_OVER_COMMIT);
         statement.setFetchDirection(ResultSet.FETCH_FORWARD);

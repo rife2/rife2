@@ -81,6 +81,7 @@ public class MockRequest implements Request {
         mockResponse_ = response;
     }
 
+    @Override
     public RequestMethod getMethod() {
         return requestMethod_;
     }
@@ -146,6 +147,7 @@ public class MockRequest implements Request {
      * @see #parameter(String, Object...)
      * @since 1.0
      */
+    @Override
     public Map<String, String[]> getParameters() {
         return parameters_;
     }
@@ -319,6 +321,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getBody() {
         if (body_ == null) {
             body_ = StringUtils.toString(getBodyAsBytes(), getCharacterEncoding());
@@ -361,14 +364,17 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public byte[] getBodyAsBytes() {
         return bodyAsBytes_;
     }
 
+    @Override
     public Map<String, UploadedFile[]> getFiles() {
         return files_;
     }
 
+    @Override
     public boolean hasFile(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
@@ -397,6 +403,7 @@ public class MockRequest implements Request {
         return false;
     }
 
+    @Override
     public UploadedFile getFile(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
@@ -413,6 +420,7 @@ public class MockRequest implements Request {
         return files[0];
     }
 
+    @Override
     public UploadedFile[] getFiles(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
@@ -620,6 +628,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getServerRootUrl(int port) {
         var server_root = new StringBuilder();
         server_root.append(getScheme())
@@ -635,18 +644,22 @@ public class MockRequest implements Request {
         return server_root.toString();
     }
 
+    @Override
     public boolean hasCookie(String name) {
         return mockConversation_.hasCookie(name);
     }
 
+    @Override
     public Cookie getCookie(String name) {
         return mockConversation_.getCookie(name);
     }
 
+    @Override
     public Cookie[] getCookies() {
         return mockConversation_.getCookies();
     }
 
+    @Override
     public Object getAttribute(String name) {
         if (null == attributes_) {
             return null;
@@ -655,6 +668,7 @@ public class MockRequest implements Request {
         return attributes_.get(name);
     }
 
+    @Override
     public boolean hasAttribute(String name) {
         if (null == attributes_) {
             return false;
@@ -663,6 +677,7 @@ public class MockRequest implements Request {
         return attributes_.containsKey(name);
     }
 
+    @Override
     public Enumeration<String> getAttributeNames() {
         if (null == attributes_) {
             return Collections.enumeration(new ArrayList<>());
@@ -671,6 +686,7 @@ public class MockRequest implements Request {
         return Collections.enumeration(attributes_.keySet());
     }
 
+    @Override
     public void removeAttribute(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
@@ -682,6 +698,7 @@ public class MockRequest implements Request {
         attributes_.remove(name);
     }
 
+    @Override
     public void setAttribute(String name, Object object) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
@@ -693,6 +710,7 @@ public class MockRequest implements Request {
         attributes_.put(name, object);
     }
 
+    @Override
     public String getCharacterEncoding() {
         return characterEncoding_;
     }
@@ -723,6 +741,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getContentType() {
         return contentType_;
     }
@@ -753,22 +772,27 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public long getDateHeader(String name) {
         return headers_.getDateHeader(name);
     }
 
+    @Override
     public String getHeader(String name) {
         return headers_.getHeader(name);
     }
 
+    @Override
     public Enumeration<String> getHeaderNames() {
         return Collections.enumeration(headers_.getHeaderNames());
     }
 
+    @Override
     public Enumeration<String> getHeaders(String name) {
         return Collections.enumeration(headers_.getHeaders(name));
     }
 
+    @Override
     public int getIntHeader(String name) {
         return headers_.getIntHeader(name);
     }
@@ -946,6 +970,7 @@ public class MockRequest implements Request {
         headers_.removeHeader(name);
     }
 
+    @Override
     public Locale getLocale() {
         if (null == locales_ ||
             locales_.isEmpty()) {
@@ -955,6 +980,7 @@ public class MockRequest implements Request {
         return locales_.get(0);
     }
 
+    @Override
     public Enumeration<Locale> getLocales() {
         return Collections.enumeration(Objects.requireNonNullElseGet(locales_, () -> new ArrayList() {{
             add(Locale.getDefault());
@@ -993,6 +1019,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getProtocol() {
         return protocol_;
     }
@@ -1024,6 +1051,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getRemoteAddr() {
         return remoteAddr_;
     }
@@ -1055,6 +1083,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getRemoteUser() {
         return remoteUser_;
     }
@@ -1086,6 +1115,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getRemoteHost() {
         return remoteHost_;
     }
@@ -1117,22 +1147,27 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public String getScheme() {
         return mockConversation_.getScheme();
     }
 
+    @Override
     public String getServerName() {
         return mockConversation_.getServerName();
     }
 
+    @Override
     public int getServerPort() {
         return mockConversation_.getServerPort();
     }
 
+    @Override
     public String getContextPath() {
         return mockConversation_.getContextPath();
     }
 
+    @Override
     public boolean isSecure() {
         return secure_;
     }
@@ -1163,6 +1198,7 @@ public class MockRequest implements Request {
         return this;
     }
 
+    @Override
     public HttpSession getSession(boolean create) {
         if (session_ != null && session_.isValid()) {
             return session_;
@@ -1186,6 +1222,7 @@ public class MockRequest implements Request {
         return session_;
     }
 
+    @Override
     public HttpSession getSession() {
         return getSession(true);
     }
@@ -1247,10 +1284,12 @@ public class MockRequest implements Request {
         return SESSIONID_COOKIE.equals(sessionIdState_);
     }
 
+    @Override
     public RequestDispatcher getRequestDispatcher(String url) {
         return null;
     }
 
+    @Override
     public HttpServletRequest getHttpServletRequest() {
         return null;
     }

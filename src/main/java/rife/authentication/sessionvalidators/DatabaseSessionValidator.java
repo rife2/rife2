@@ -35,36 +35,43 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
         rememberManager_ = DatabaseRememberFactory.instance(datasource);
     }
 
+    @Override
     public void setCredentialsManager(DatabaseUsers credentialsManager) {
         assert credentialsManager != null;
 
         credentialsManager_ = credentialsManager;
     }
 
+    @Override
     public DatabaseUsers getCredentialsManager() {
         return credentialsManager_;
     }
 
+    @Override
     public void setSessionManager(DatabaseSessions sessionManager) {
         assert sessionManager != null;
 
         sessionManager_ = sessionManager;
     }
 
+    @Override
     public DatabaseSessions getSessionManager() {
         return sessionManager_;
     }
 
+    @Override
     public void setRememberManager(DatabaseRemember rememberManager) {
         assert rememberManager != null;
 
         rememberManager_ = rememberManager;
     }
 
+    @Override
     public DatabaseRemember getRememberManager() {
         return rememberManager_;
     }
 
+    @Override
     public boolean isAccessAuthorized(int id) {
         return SESSION_VALID == id;
     }

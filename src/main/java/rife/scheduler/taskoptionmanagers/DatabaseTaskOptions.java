@@ -29,10 +29,12 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
         super(datasource);
     }
 
+    @Override
     public void setScheduler(Scheduler scheduler) {
         scheduler_ = scheduler;
     }
 
+    @Override
     public Scheduler getScheduler() {
         return scheduler_;
     }
@@ -191,6 +193,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
             collection_ = collection;
         }
 
+        @Override
         public boolean processRow(ResultSet resultSet)
         throws SQLException {
             assert resultSet != null;

@@ -24,11 +24,13 @@ import java.util.Set;
  * @since 1.0
  */
 public class ImageJLoader extends ImageContentLoaderBackend {
+    @Override
     public LoadedContent<Image> loadFromBytes(byte[] data, Set<String> errors)
     throws ContentManagerException {
         return new LoaderDelegate().load(data, errors);
     }
 
+    @Override
     public boolean isBackendPresent() {
         try {
             return null != Class.forName("ij.io.Opener");

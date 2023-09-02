@@ -15,6 +15,7 @@ public class org_hsqldb_jdbcDriver extends generic {
         super(datasource);
     }
 
+    @Override
     protected int storeChunks(Insert storeContentChunk, final int id, InputStream data)
     throws IOException {
         return storeChunksNoStream(storeContentChunk, id, data);

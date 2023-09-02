@@ -67,20 +67,24 @@ public class generic extends DatabaseTaskOptions {
             .whereParameterAnd("name", "=");
     }
 
+    @Override
     public boolean install()
     throws TaskOptionManagerException {
         return install_(createTableTaskOption_);
     }
 
+    @Override
     public boolean remove()
     throws TaskOptionManagerException {
         return remove_(dropTableTaskOption_);
     }
 
+    @Override
     public boolean addTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
         try {
             return _addTaskOption(addTaskOption_, new DbPreparedStatementHandler() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("task_id", taskOption.getTaskId())
@@ -103,10 +107,12 @@ public class generic extends DatabaseTaskOptions {
         }
     }
 
+    @Override
     public boolean updateTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
         try {
             return _updateTaskOption(updateTaskOption_, new DbPreparedStatementHandler() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("task_id", taskOption.getTaskId())
@@ -129,21 +135,25 @@ public class generic extends DatabaseTaskOptions {
         }
     }
 
+    @Override
     public TaskOption getTaskOption(int taskId, String name)
     throws TaskOptionManagerException {
         return _getTaskOption(getTaskOption_, new ProcessTaskOption(), taskId, name);
     }
 
+    @Override
     public Collection<TaskOption> getTaskOptions(int taskId)
     throws TaskOptionManagerException {
         return _getTaskOptions(getTaskOptions_, new ProcessTaskOption(), taskId);
     }
 
+    @Override
     public boolean removeTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
         return _removeTaskOption(removeTaskOption_, taskOption);
     }
 
+    @Override
     public boolean removeTaskOption(int taskId, String name)
     throws TaskOptionManagerException {
         return _removeTaskOption(removeTaskOption_, taskId, name);

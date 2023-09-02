@@ -26,6 +26,7 @@ public class ClassCallTargetRetriever implements CallTargetRetriever {
      * response to this call
      * @since 1.0
      */
+    @Override
     public Object getCallTarget(Object target, CallState state) {
         try {
             var target_class = (Class) target;

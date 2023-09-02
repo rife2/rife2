@@ -111,21 +111,25 @@ public class generic extends DatabaseSessions {
             .whereParameter("sessStart", ">");
     }
 
+    @Override
     public boolean install()
     throws SessionManagerException {
         return _install(createAuthentication_, createAuthenticationSessStartIndex_);
     }
 
+    @Override
     public boolean remove()
     throws SessionManagerException {
         return _remove(removeAuthentication_, removeAuthenticationSessStartIndex_);
     }
 
+    @Override
     public void purgeSessions()
     throws SessionManagerException {
         _purgeSessions(purgeSessions_);
     }
 
+    @Override
     public String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException {
         int purge_decision = ThreadLocalRandom.current().nextInt(getSessionPurgeScale());
@@ -136,46 +140,55 @@ public class generic extends DatabaseSessions {
         return _startSession(startSession_, userId, authData, remembered);
     }
 
+    @Override
     public boolean isSessionValid(String authId, String authData)
     throws SessionManagerException {
         return _isSessionValid(isSessionValid_, isSessionValidRestrictAuthData_, authId, authData);
     }
 
+    @Override
     public boolean continueSession(String authId)
     throws SessionManagerException {
         return _continueSession(continueSession_, authId);
     }
 
+    @Override
     public boolean eraseSession(String authId)
     throws SessionManagerException {
         return _eraseSession(eraseSession_, authId);
     }
 
+    @Override
     public boolean wasRemembered(String authId)
     throws SessionManagerException {
         return _wasRemembered(wasRemembered_, authId);
     }
 
+    @Override
     public void eraseAllSessions()
     throws SessionManagerException {
         _eraseAllSessions(eraseAllSessions_);
     }
 
+    @Override
     public boolean eraseUserSessions(long userId)
     throws SessionManagerException {
         return _eraseUserSessions(eraseUserSessions_, userId);
     }
 
+    @Override
     public long countSessions()
     throws SessionManagerException {
         return _countSessions(countSessions_);
     }
 
+    @Override
     public long getSessionUserId(String authId)
     throws SessionManagerException {
         return _getSessionUserId(getSessionUserId_, authId);
     }
 
+    @Override
     public boolean listSessions(ListSessions processor)
     throws SessionManagerException {
         return _listSessions(listSessions_, processor);

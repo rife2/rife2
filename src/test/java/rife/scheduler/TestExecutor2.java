@@ -5,10 +5,12 @@
 package rife.scheduler;
 
 public class TestExecutor2 extends Executor {
+    @Override
     public boolean executeTask(Task task) {
         return true;
     }
 
+    @Override
     public String getHandledTaskType() {
         return "test_executor2";
     }

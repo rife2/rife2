@@ -36,6 +36,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             .whereParameter("id", "=");
     }
 
+    @Override
     public boolean addTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
         if (null == taskOption) throw new IllegalArgumentException("taskoption can't be null.");
@@ -43,6 +44,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         // simulate TaskID foreign key
         try {
             if (!executeHasResultRows(taskIdExists_, new DbPreparedStatementHandler() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("id", taskOption.getTaskId());
@@ -56,6 +58,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             return _addTaskOption(addTaskOption_, new DbPreparedStatementHandler() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("task_id", taskOption.getTaskId())
@@ -75,6 +78,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         }
     }
 
+    @Override
     public boolean updateTaskOption(final TaskOption taskOption)
     throws TaskOptionManagerException {
         if (null == taskOption) throw new IllegalArgumentException("taskoption can't be null.");
@@ -82,6 +86,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         // simulate TaskID foreign key
         try {
             if (!executeHasResultRows(taskIdExists_, new DbPreparedStatementHandler() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("id", taskOption.getTaskId());
@@ -95,6 +100,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             return _updateTaskOption(updateTaskOption_, new DbPreparedStatementHandler() {
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("task_id", taskOption.getTaskId())

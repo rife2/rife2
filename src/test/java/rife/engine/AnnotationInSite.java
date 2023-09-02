@@ -35,6 +35,7 @@ public class AnnotationInSite extends Site {
         @Config List<String> list3 = List.of("one", "two", "false");
         @Config("listint") List<Integer> list4 = List.of(1, 2, 3);
 
+        @Override
         public void process(Context c)
         throws Exception {
             if (site == null) throw new RuntimeException("site should be filled");
@@ -87,6 +88,7 @@ public class AnnotationInSite extends Site {
 
         @ParametersBean BeanImpl beanParams = null;
 
+        @Override
         public void process(Context c)
         throws Exception {
             super.process(c);
@@ -172,6 +174,7 @@ public class AnnotationInSite extends Site {
         }
     }
 
+    @Override
     public void setup() {
         properties().put("prop1", "propval1");
         config().put("config1", "configval1");

@@ -47,10 +47,12 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         mimeTypes_.add(mimeType);
     }
 
+    @Override
     public Collection<MimeType> getSupportedMimeTypes() {
         return mimeTypes_;
     }
 
+    @Override
     public String getContentType(ContentInfo contentInfo) {
         var mimeType = MimeType.getMimeType(contentInfo.getMimeType());
         if (!getSupportedMimeTypes().contains(mimeType)) {
@@ -70,6 +72,7 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         return null;
     }
 
+    @Override
     public String getContentForHtml(int id, ContentInfo info, Context context, Route route)
     throws ContentManagerException {
         return "";
@@ -198,6 +201,7 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         // store the data
         try {
             Boolean success = inTransaction(new DbTransactionUser<>() {
+                @Override
                 public Object useTransaction()
                 throws InnerClassException {
                     try {
@@ -376,15 +380,18 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
 
         try {
             Boolean success = executeQuery(retrieveContentChunks, new DbPreparedStatementHandler<>() {
+                @Override
                 public DbPreparedStatement getPreparedStatement(Query query, DbConnection connection) {
                     return getStreamPreparedStatement(query, connection);
                 }
 
+                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("contentId", id);
                 }
 
+                @Override
                 public Object concludeResults(DbResultSet resultSet)
                 throws SQLException {
                     if (!resultSet.next()) {

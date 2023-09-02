@@ -87,6 +87,7 @@ public class Workflow {
         properties_ = new HierarchicalProperties().parent(properties);
 
         runner_ = new BasicContinuableRunner(CONFIG_INSTRUMENT, new Class[]{Workflow.class}) {
+            @Override
             public void executeContinuable(Object object)
             throws Throwable {
                 var method = object.getClass().getMethod(
@@ -391,6 +392,7 @@ public class Workflow {
     }
 
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
+        @Override
         public CloneableContinuable getCallTarget(Object type, CallState state) {
             // keeps track of the continuation ID for this event type
             eventsMapping_.compute(type, (eventType, ids) -> {

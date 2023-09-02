@@ -47,6 +47,7 @@ public class MemoryAuthenticatedSite extends Site {
             template = get("/template", c -> c.print(c.template("filtered_tags_auth")));
             get("/username", c -> c.print(config.identityAttribute(c) != null ? config.identityAttribute(c).getLogin() : "not logged in"));
             group(new Router() {
+                @Override
                 public void setup() {
                     before(new Logout(config));
                     get("/beforelogout", c -> c.print("logged out"));
@@ -61,29 +62,34 @@ public class MemoryAuthenticatedSite extends Site {
 
     final Route login = route("/login", new Login(config, TemplateFactory.HTML.get("authentication.login")));
     final AuthenticatedSection auth = group(new AuthenticatedSection(config) {
+        @Override
         public void setup() {
             before(new Authenticated(config));
         }
     });
     final Route loginAdmin = route("/loginAdmin", new Login(configAdmin, TemplateFactory.HTML.get("authentication.login")));
     final AuthenticatedSection authAdmin = group("/admin", new AuthenticatedSection(configAdmin) {
+        @Override
         public void setup() {
             before(new Authenticated(configAdmin));
         }
     });
     final Route loginMaint = route("/loginMaint", new Login(configMaint, TemplateFactory.HTML.get("authentication.login")));
     final AuthenticatedSection authMaint = group("/maint", new AuthenticatedSection(configMaint) {
+        @Override
         public void setup() {
             before(new Authenticated(configMaint));
         }
     });
     final Route loginNotEnforced = route("/loginNotEnforced", new Login(configNotEnforced, TemplateFactory.HTML.get("authentication.login")));
     final AuthenticatedSection authNotEnforced = group("/notEnforced", new AuthenticatedSection(configNotEnforced) {
+        @Override
         public void setup() {
             before(new Authenticated(configNotEnforced));
         }
     });
 
+    @Override
     public void setup() {
         config
             .loginRoute(login)

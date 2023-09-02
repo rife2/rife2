@@ -25,6 +25,7 @@ import java.util.Set;
  * @since 1.0
  */
 public class XhtmlFormatter implements Formatter<String, String> {
+    @Override
     public String format(Content content, ContentTransformer<String> transformer)
     throws FormatException {
         if (!(content.getData() instanceof String)) {

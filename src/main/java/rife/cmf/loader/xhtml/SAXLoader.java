@@ -30,11 +30,13 @@ import java.util.Collection;
 import java.util.Set;
 
 public class SAXLoader extends XhtmlContentLoaderBackend {
+    @Override
     public LoadedContent<String> loadFromString(String data, boolean fragment, Set<String> errors)
     throws ContentManagerException {
         return new LoaderDelegate().load(data, fragment, errors);
     }
 
+    @Override
     public boolean isBackendPresent() {
         return true;
     }
@@ -50,18 +52,22 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             .addToCatalog("http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent", "/dtd/cmf/xhtml-special.ent")
             .restrictToCatalog(true);
 
+        @Override
         public InputSource resolveEntity(String publicId, String systemId) {
             return entityResolver_.resolveEntity(publicId, systemId);
         }
 
+        @Override
         public void warning(SAXParseException e) {
             errorRedirector_.warning(e);
         }
 
+        @Override
         public void fatalError(SAXParseException e) {
             errorRedirector_.fatalError(e);
         }
 
+        @Override
         public void error(SAXParseException e) {
             errorRedirector_.error(e);
         }

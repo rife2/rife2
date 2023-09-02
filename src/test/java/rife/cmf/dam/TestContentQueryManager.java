@@ -353,6 +353,7 @@ public class TestContentQueryManager {
                 assertEquals(MimeType.RAW.toString(), info.getMimeType());
 
                 content_manager.useContentData(path, new ContentDataUserWithoutResult() {
+                    @Override
                     public void useContentData(Object contentData)
                     throws InnerClassException {
                         try {

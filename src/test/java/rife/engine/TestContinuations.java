@@ -14,6 +14,7 @@ public class TestContinuations {
     void testNoPause()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/nopause", TestNoPause::new);
             }
@@ -31,6 +32,7 @@ public class TestContinuations {
     void testSimplePause()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/simple", TestSimplePause::new);
             }
@@ -53,6 +55,7 @@ public class TestContinuations {
     void testNull()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/null", TestNull::new);
             }
@@ -75,6 +78,7 @@ public class TestContinuations {
     void testNullReference()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/null_reference", TestNullReference::new);
             }
@@ -94,6 +98,7 @@ public class TestContinuations {
     void testNullConditional()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/null_conditional", TestNullConditional::new);
             }
@@ -114,6 +119,7 @@ public class TestContinuations {
     void testConditional()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/conditional", TestConditional::new);
             }
@@ -160,6 +166,7 @@ public class TestContinuations {
     void testMemberMethod()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/member_method", TestMemberMethod::new);
             }
@@ -182,6 +189,7 @@ public class TestContinuations {
     void testPrivateMethod()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/private_method", TestPrivateMethod::new);
             }
@@ -198,6 +206,7 @@ public class TestContinuations {
     void testSynchronization()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 get("/synchronization", TestSynchronization::new);
             }
@@ -235,6 +244,7 @@ public class TestContinuations {
     void testThrow()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/throw", TestThrow::new);
             }
@@ -281,6 +291,7 @@ public class TestContinuations {
     void testTryCatch()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/try_catch", TestTryCatch::new);
             }
@@ -344,6 +355,7 @@ public class TestContinuations {
     void testFinally()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/finally", TestFinally::new);
             }
@@ -384,6 +396,7 @@ public class TestContinuations {
     void testInstanceOf()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/instanceof", TestInstanceOf::new);
             }
@@ -406,6 +419,7 @@ public class TestContinuations {
     void testInnerClass()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/innerclass", TestInnerClass::new);
             }
@@ -428,6 +442,7 @@ public class TestContinuations {
     void testAllTypes()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/alltypes", TestAllTypes::new);
             }
@@ -504,6 +519,7 @@ public class TestContinuations {
     void testFormSubmission()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/form_submission", TestFormSubmission::new);
             }
@@ -538,6 +554,7 @@ public class TestContinuations {
     void testUniqueIDPerRequest()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/unique", TestFormSubmission::new);
             }
@@ -604,6 +621,7 @@ public class TestContinuations {
     void testNumberGuess()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
+            @Override
             public void setup() {
                 route("/numberguess", TestNumberGuess::new);
             }

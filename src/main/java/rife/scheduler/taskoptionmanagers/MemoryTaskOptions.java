@@ -24,14 +24,17 @@ public class MemoryTaskOptions implements TaskOptionManager {
         taskOptionsMapping_ = new HashMap<>();
     }
 
+    @Override
     public void setScheduler(Scheduler scheduler) {
         scheduler_ = scheduler;
     }
 
+    @Override
     public Scheduler getScheduler() {
         return scheduler_;
     }
 
+    @Override
     public boolean addTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
         if (null == taskOption) throw new IllegalArgumentException("taskOption can't be null.");
@@ -77,6 +80,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
         }
     }
 
+    @Override
     public boolean updateTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
         if (null == taskOption) throw new IllegalArgumentException("taskOption can't be null.");
@@ -127,6 +131,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
         }
     }
 
+    @Override
     public TaskOption getTaskOption(int taskId, String name)
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
@@ -150,6 +155,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
         return null;
     }
 
+    @Override
     public Collection<TaskOption> getTaskOptions(int taskId)
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
@@ -159,6 +165,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
         }
     }
 
+    @Override
     public boolean removeTaskOption(TaskOption taskOption)
     throws TaskOptionManagerException {
         if (null == taskOption) throw new IllegalArgumentException("taskOption can't be null.");
@@ -166,6 +173,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
         return removeTaskOption(taskOption.getTaskId(), taskOption.getName());
     }
 
+    @Override
     public boolean removeTaskOption(int taskId, String name)
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");

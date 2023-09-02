@@ -26,34 +26,42 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         super(datasource);
     }
 
+    @Override
     public long getSessionDuration() {
         return sessionDuration_;
     }
 
+    @Override
     public void setSessionDuration(long milliseconds) {
         sessionDuration_ = milliseconds;
     }
 
+    @Override
     public boolean getRestrictAuthData() {
         return restrictAuthData_;
     }
 
+    @Override
     public void setRestrictAuthData(boolean flag) {
         restrictAuthData_ = flag;
     }
 
+    @Override
     public int getSessionPurgeFrequency() {
         return sessionPurgeFrequency_;
     }
 
+    @Override
     public void setSessionPurgeFrequency(int frequency) {
         sessionPurgeFrequency_ = frequency;
     }
 
+    @Override
     public int getSessionPurgeScale() {
         return sessionPurgeScale_;
     }
 
+    @Override
     public void setSessionPurgeScale(int scale) {
         sessionPurgeScale_ = scale;
     }
@@ -64,6 +72,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
     public abstract boolean remove()
     throws SessionManagerException;
 
+    @Override
     public abstract long countSessions()
     throws SessionManagerException;
 

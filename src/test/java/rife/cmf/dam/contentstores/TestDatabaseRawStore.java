@@ -195,6 +195,7 @@ public class TestDatabaseRawStore {
             assertTrue(store.storeContentData(id[0], content, null));
 
             store.useContentData(id[0], new ContentDataUserWithoutResult() {
+                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {
@@ -254,6 +255,7 @@ public class TestDatabaseRawStore {
             assertTrue(store.storeContentData(id[0], content, null));
 
             store.useContentData(id[0], new ContentDataUserWithoutResult() {
+                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {
@@ -313,6 +315,7 @@ public class TestDatabaseRawStore {
             assertTrue(store.storeContentData(id[0], content, null));
 
             store.useContentData(id[0], new ContentDataUserWithoutResult() {
+                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {
@@ -371,6 +374,7 @@ public class TestDatabaseRawStore {
             assertTrue(store.storeContentData(id[0], content, null));
 
             store.useContentData(id[0], new ContentDataUserWithoutResult() {
+                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {
@@ -522,6 +526,7 @@ public class TestDatabaseRawStore {
             assertTrue(store.storeContentData(id[0], content, null));
 
             store.useContentData(id[0], new ContentDataUserWithoutResult() {
+                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {
@@ -597,6 +602,7 @@ public class TestDatabaseRawStore {
             var store = DatabaseRawStoreFactory.instance(datasource);
 
             store.useContentData(content_info.getContentId(), new ContentDataUserWithoutResult() {
+                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {
