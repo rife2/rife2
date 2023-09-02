@@ -133,7 +133,7 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
                 (errors != null &&
                     !errors.isEmpty()) ||
                 (errorRedirector_.hasErrors() ||
-                 errorRedirector_.hasFatalErrors())) {
+                    errorRedirector_.hasFatalErrors())) {
                 return null;
             }
 

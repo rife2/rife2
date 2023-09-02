@@ -179,7 +179,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
         return result;
     }
 
-    protected static class ProcessTaskOption extends DbRowProcessor {
+    protected class ProcessTaskOption extends DbRowProcessor {
         protected Collection<TaskOption> collection_ = null;
         protected TaskOption taskOption_ = null;
 
