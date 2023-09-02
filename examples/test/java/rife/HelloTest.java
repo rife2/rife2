@@ -14,6 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HelloTest {
     @Test
+    void verifyHelloTomcat() {
+        var m = new MockConversation(new HelloTomcat());
+        assertEquals("Hello Tomcat", m.doRequest("/hello").getText());
+    }
+
+    @Test
     void verifyHelloWorld() {
         var m = new MockConversation(new HelloWorld());
         assertEquals("Hello World", m.doRequest("/hello").getText());
