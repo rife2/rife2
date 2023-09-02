@@ -330,7 +330,7 @@ class MultipartRequest {
 
         // Get the content disposition, should be "form-data"
         var start = lowcase_line.indexOf(CONTENT_DISPOSITION_PREFIX);
-        var end = lowcase_line.indexOf(',');
+        var end = lowcase_line.indexOf(";");
         if (-1 == start ||
             -1 == end) {
             throw new MultipartCorruptContentDispositionException(dispositionLine);
