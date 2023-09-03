@@ -15,7 +15,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         super(datasource);
     }
 
-    @Override
     protected int storeChunks(Insert storeContentChunk, final int id, InputStream data)
     throws IOException {
         return storeChunksNoStream(storeContentChunk, id, data);

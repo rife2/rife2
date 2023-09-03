@@ -11,7 +11,6 @@ public class TestSynchronization implements Element {
     private final Object monitorMember_ = new Object();
     private static final Object sMonitorStatic = new Object();
 
-    @Override
     public void process(Context c) {
         synchronized (this) {
         }

@@ -67,7 +67,6 @@ public class Authenticated extends Identified implements SessionAttributes {
     protected void sessionNotValid(String authCookieName, String authCookieValue, int validityId) {
     }
 
-    @Override
     public void process(Context c) {
         initializeAuthenticated(c);
 
@@ -117,12 +116,10 @@ public class Authenticated extends Identified implements SessionAttributes {
         }
     }
 
-    @Override
     public boolean hasAttribute(String key) {
         return key.equals("role") && getAuthConfig().role() != null;
     }
 
-    @Override
     public String getAttribute(String key) {
         if (key.equals("role")) {
             return getAuthConfig().role();

@@ -25,60 +25,49 @@ public class MemorySessions implements SessionManager {
     public MemorySessions() {
     }
 
-    @Override
     public long getSessionDuration() {
         return sessionDuration_;
     }
 
-    @Override
     public void setSessionDuration(long milliseconds) {
         sessionDuration_ = milliseconds;
     }
 
-    @Override
     public boolean getRestrictAuthData() {
         return restrictAuthData_;
     }
 
-    @Override
     public void setRestrictAuthData(boolean flags) {
         restrictAuthData_ = flags;
     }
 
-    @Override
     public int getSessionPurgeFrequency() {
         return sessionPurgeFrequency_;
     }
 
-    @Override
     public void setSessionPurgeFrequency(int frequency) {
         sessionPurgeFrequency_ = frequency;
     }
 
-    @Override
     public int getSessionPurgeScale() {
         return sessionPurgeScale_;
     }
 
-    @Override
     public void setSessionPurgeScale(int scale) {
         sessionPurgeScale_ = scale;
     }
 
-    @Override
     public void purgeSessions() {
         new PurgeSessions().start();
     }
 
     private class PurgeSessions extends Thread {
-        @Override
         public void run() {
             var expiration = System.currentTimeMillis() - getSessionDuration();
             sessions_.values().removeIf(session -> session.getStart() <= expiration);
         }
     }
 
-    @Override
     public String startSession(long userId, String authData, boolean remembered)
     throws SessionManagerException {
         if (userId < 0 ||
@@ -100,7 +89,6 @@ public class MemorySessions implements SessionManager {
         return auth_id_string;
     }
 
-    @Override
     public boolean isSessionValid(String authId, String authData)
     throws SessionManagerException {
         if (null == authId ||
@@ -120,7 +108,6 @@ public class MemorySessions implements SessionManager {
         return false;
     }
 
-    @Override
     public long getSessionUserId(String authId)
     throws SessionManagerException {
         var session = sessions_.get(authId);
@@ -132,7 +119,6 @@ public class MemorySessions implements SessionManager {
         return session.getUserId();
     }
 
-    @Override
     public boolean continueSession(String authId)
     throws SessionManagerException {
         if (null == authId ||
@@ -146,7 +132,6 @@ public class MemorySessions implements SessionManager {
         });
     }
 
-    @Override
     public boolean eraseSession(String authId)
     throws SessionManagerException {
         if (null == authId ||
@@ -157,7 +142,6 @@ public class MemorySessions implements SessionManager {
         return sessions_.remove(authId) != null;
     }
 
-    @Override
     public boolean wasRemembered(String authId)
     throws SessionManagerException {
         if (null == authId ||
@@ -173,7 +157,6 @@ public class MemorySessions implements SessionManager {
         return session.getRemembered();
     }
 
-    @Override
     public boolean eraseUserSessions(long userId)
     throws SessionManagerException {
         if (userId < 0) {
@@ -183,7 +166,6 @@ public class MemorySessions implements SessionManager {
         return sessions_.values().removeIf(session -> userId == session.getUserId());
     }
 
-    @Override
     public void eraseAllSessions()
     throws SessionManagerException {
         sessions_.clear();
@@ -193,7 +175,6 @@ public class MemorySessions implements SessionManager {
         return sessions_.get(authId);
     }
 
-    @Override
     public long countSessions() {
         var expiration = System.currentTimeMillis() - getSessionDuration();
         return sessions_.reduceToLong(1,
@@ -201,7 +182,6 @@ public class MemorySessions implements SessionManager {
             0, Long::sum);
     }
 
-    @Override
     public boolean listSessions(ListSessions processor) {
         if (null == processor) throw new IllegalArgumentException("processor can't be null");
 

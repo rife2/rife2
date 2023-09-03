@@ -37,7 +37,6 @@ public abstract class DatabaseContentStore extends DbQueryManager implements Con
         mimeTypes_.add(mimeType);
     }
 
-    @Override
     public Collection<MimeType> getSupportedMimeTypes() {
         return mimeTypes_;
     }

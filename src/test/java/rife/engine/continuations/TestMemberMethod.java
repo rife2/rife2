@@ -12,7 +12,6 @@ public class TestMemberMethod implements Element {
         return first + " " + second + " " + number;
     }
 
-    @Override
     public void process(Context c) {
         var string_buffer1 = new StringBuilder(createString("some", "value", 6899L));
 

@@ -216,7 +216,6 @@ public class generic extends DatabaseContent {
             .whereParameter("contentId", "=");
     }
 
-    @Override
     public boolean install()
     throws ContentManagerException {
         boolean result = _install(createSequenceContentRepository_, createSequenceContentInfo_,
@@ -230,7 +229,6 @@ public class generic extends DatabaseContent {
         return result;
     }
 
-    @Override
     public boolean remove()
     throws ContentManagerException {
         try {
@@ -243,61 +241,51 @@ public class generic extends DatabaseContent {
             dropTableContentRepository_, dropTableContentInfo_, dropTableContentAttribute_, dropTableContentProperties_);
     }
 
-    @Override
     public boolean createRepository(String name)
     throws ContentManagerException {
         return _createRepository(getNewContentRepositoryId_, storeContentRepository_, name);
     }
 
-    @Override
     public boolean containsRepository(String name)
     throws ContentManagerException {
         return _containsRepository(containsContentRepository_, name);
     }
 
-    @Override
     public boolean storeContent(String location, Content content, ContentTransformer transformer)
     throws ContentManagerException {
         return _storeContent(getNewContentId_, getContentRepositoryId_, storeContentInfo_, storeContentAttribute_, storeContentProperty_, location, content, transformer);
     }
 
-    @Override
     public boolean deleteContent(String location)
     throws ContentManagerException {
         return _deleteContent(getContentInfo_, deleteContentInfo_, deleteContentAttributes_, deleteContentProperties_, location);
     }
 
-    @Override
     public void useContentData(String location, ContentDataUserWithoutResult user)
     throws ContentManagerException {
         _useContentData(getLatestContentInfo_, location, user);
     }
 
-    @Override
     public <ResultType> ResultType useContentDataResult(String location, ContentDataUser<ResultType> user)
     throws ContentManagerException {
         return _useContentDataResult(getLatestContentInfo_, location, user);
     }
 
-    @Override
     public boolean hasContentData(String location)
     throws ContentManagerException {
         return _hasContentData(getLatestContentInfo_, location);
     }
 
-    @Override
     public void serveContentData(Context context, String location)
     throws ContentManagerException {
         _serveContentData(context, location);
     }
 
-    @Override
     public DatabaseContentInfo getContentInfo(String location)
     throws ContentManagerException {
         return _getContentInfo(getLatestContentInfo_, getContentAttributes_, getContentProperties_, location);
     }
 
-    @Override
     public String getContentForHtml(String location, Context context, Route route)
     throws ContentManagerException {
         return _getContentForHtml(location, context, route);

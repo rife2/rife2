@@ -16,7 +16,6 @@ public class AnnotationInOutSite extends Site {
         @SessionAttribute(value = "sessionAttr2", flow = IN_OUT) String stringSessionAttribute2 = "defaultSessionAttribute2";
         @Header(flow = IN_OUT) int intHeader = -8;
 
-        @Override
         public void process(Context c) {
         }
     }
@@ -40,7 +39,6 @@ public class AnnotationInOutSite extends Site {
         @Header(value = "header2", flow = IN_OUT) String stringHeader2 = "defaultHeader2";
         @Header(value = "header3", flow = IN_OUT) int intHeader2 = -9;
 
-        @Override
         public void process(Context c) {
             super.process(c);
 
@@ -90,7 +88,6 @@ public class AnnotationInOutSite extends Site {
         }
     }
 
-    @Override
     public void setup() {
         before(c -> {
             if (c.parameterBoolean("generateIn")) {

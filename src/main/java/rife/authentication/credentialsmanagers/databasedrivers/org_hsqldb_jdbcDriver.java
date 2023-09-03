@@ -16,7 +16,6 @@ public class org_hsqldb_jdbcDriver extends generic {
         super(datasource);
     }
 
-    @Override
     public DatabaseUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         try {

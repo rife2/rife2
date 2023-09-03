@@ -256,25 +256,21 @@ public class generic extends DatabaseUsers {
             .table(createTableRoleLink_.getTable());
     }
 
-    @Override
     public boolean install()
     throws CredentialsManagerException {
         return _install(createSequenceRole_, createTableRole_, createTableUser_, createTableRoleLink_);
     }
 
-    @Override
     public boolean remove()
     throws CredentialsManagerException {
         return _remove(dropSequenceRole_, dropTableRole_, dropTableUser_, dropTableRoleLink_);
     }
 
-    @Override
     public long verifyCredentials(Credentials credentials)
     throws CredentialsManagerException {
         return _verifyCredentials(verifyCredentialsNoRole_, verifyCredentialsRole_, credentials);
     }
 
-    @Override
     public DatabaseUsers addRole(String role)
     throws CredentialsManagerException {
         try {
@@ -294,25 +290,21 @@ public class generic extends DatabaseUsers {
         return this;
     }
 
-    @Override
     public boolean containsRole(String role)
     throws CredentialsManagerException {
         return _containsRole(containsRole_, role);
     }
 
-    @Override
     public long countRoles()
     throws CredentialsManagerException {
         return _countRoles(countRoles_);
     }
 
-    @Override
     public boolean listRoles(ListRoles processor)
     throws CredentialsManagerException {
         return _listRoles(listRoles_, processor);
     }
 
-    @Override
     public DatabaseUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         try {
@@ -335,97 +327,81 @@ public class generic extends DatabaseUsers {
         return this;
     }
 
-    @Override
     public RoleUserAttributes getAttributes(String login)
     throws CredentialsManagerException {
         return _getAttributes(getAttributes_, getUserRoles_, login);
     }
 
-    @Override
     public boolean containsUser(String login)
     throws CredentialsManagerException {
         return _containsUser(containsUser_, login);
     }
 
-    @Override
     public long countUsers()
     throws CredentialsManagerException {
         return _countUsers(countUsers_);
     }
 
-    @Override
     public String getLogin(long userId)
     throws CredentialsManagerException {
         return _getLogin(getLogin_, userId);
     }
 
-    @Override
     public long getUserId(String login)
     throws CredentialsManagerException {
         return _getUserId(getUserId_, login);
     }
 
-    @Override
     public String getPassword(String login)
     throws CredentialsManagerException {
         return _getPassword(getPassword_, login);
     }
 
-    @Override
     public boolean listUsers(ListUsers processor)
     throws CredentialsManagerException {
         return _listUsers(listUsers_, processor);
     }
 
-    @Override
     public boolean listUsers(ListUsers processor, int limit, int offset)
     throws CredentialsManagerException {
         return _listUsers(listUsersRanged_, processor, limit, offset);
     }
 
-    @Override
     public boolean isUserInRole(long userId, String role)
     throws CredentialsManagerException {
         return _isUserInRole(isUserInRole_, userId, role);
     }
 
-    @Override
     public boolean listUsersInRole(ListUsers processor, String role)
     throws CredentialsManagerException {
         return _listUsersInRole(listUsersInRole_, processor, role);
     }
 
-    @Override
     public boolean updateUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         return _updateUser(updateUser_, removeRoleLinksByUserId_, getRoleId_, addRoleLink_, login, attributes);
     }
 
-    @Override
     public boolean removeUser(String login)
     throws CredentialsManagerException {
         return _removeUser(removeUserByLogin_, login);
     }
 
-    @Override
     public boolean removeUser(long userId)
     throws CredentialsManagerException {
         return _removeUser(removeUserByUserId_, userId);
     }
 
-    @Override
     public boolean removeRole(String name)
     throws CredentialsManagerException {
         return _removeRole(removeRole_, name);
     }
 
-    @Override
     public void clearUsers()
     throws CredentialsManagerException {
         _clearUsers(clearUsers_);
     }
 
-    @Override
     public boolean listUserRoles(String login, ListRoles processor)
     throws CredentialsManagerException {
         return _listUserRoles(listUserRoles_, login, processor);

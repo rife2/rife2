@@ -71,7 +71,6 @@ public class TestRawFormatter {
     }
 
     static class TransparentRawTransformer implements RawContentTransformer {
-        @Override
         public InputStream transform(InputStream data, Map<String, String> attributes)
         throws ContentManagerException {
             try {

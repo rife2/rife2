@@ -40,7 +40,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     }
 
 
-    @Override
     public boolean install()
     throws TaskManagerException {
         try {
@@ -52,7 +51,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public boolean remove()
     throws TaskManagerException {
         try {
@@ -64,7 +62,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public int addTask(final Task task)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
@@ -73,7 +70,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             result = reserveConnection(new DbConnectionUser() {
-                @Override
                 public Integer useConnection(DbConnection connection) {
                     try {
                         if (0 == executeUpdate(addTask_, s -> s

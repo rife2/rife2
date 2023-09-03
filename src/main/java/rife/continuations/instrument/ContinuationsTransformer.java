@@ -34,7 +34,6 @@ public class ContinuationsTransformer extends RifeTransformer {
         property_ = property;
     }
 
-    @Override
     protected byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         System.getProperties().setProperty(property_, Boolean.TRUE.toString());
 

@@ -32,7 +32,6 @@ public class TestEngine {
     void testSimplePlain()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/simple/plain", c -> {
                     c.setContentType("text/plain");
@@ -52,7 +51,6 @@ public class TestEngine {
     void testTomcatPlain()
     throws Exception {
         try (final var server = new TestTomcatRunner(new Site() {
-            @Override
             public void setup() {
                 get("/simple/plain", c -> {
                     c.setContentType("text/plain");
@@ -72,7 +70,6 @@ public class TestEngine {
     void testSimpleHtml()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/simple/html", c -> c.print("Just some text " + c.serverPort() + ':' + c.pathInfo()));
             }
@@ -89,7 +86,6 @@ public class TestEngine {
     void testSimplePathInfo()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> c.print("Just some text " + c.serverPort()
                     + ':' + c.pathInfo()));
@@ -129,7 +125,6 @@ public class TestEngine {
     void testTomcatSimplePathInfo()
     throws Exception {
         try (final var server = new TestTomcatRunner(new Site() {
-            @Override
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c ->
                     c.print("Just some text " + c.serverPort() + ':' + c.pathInfo()));
@@ -169,7 +164,6 @@ public class TestEngine {
     void testPathInfoMapping()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/pathinfo/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
@@ -202,7 +196,6 @@ public class TestEngine {
     void testPathInfoMappingMultiple()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/pathinfo/map",
                     PathInfoHandling.MAP(
@@ -241,7 +234,6 @@ public class TestEngine {
     void testPathInfoMappingUrlGeneration()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 var path_info = get("/pathinfo/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")
@@ -280,7 +272,6 @@ public class TestEngine {
         try (final var server = new TestServerRunner(new Site() {
             Route form;
 
-            @Override
             public void setup() {
                 form = post("/form/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().t("x").p("param2", "\\d+")
@@ -336,7 +327,6 @@ public class TestEngine {
             });
             Route target;
 
-            @Override
             public void setup() {
                 target = get("/target/map", PathInfoHandling.MAP(
                     m -> m.t("text").s().t("x").p("param2", "\\d+")
@@ -382,7 +372,6 @@ public class TestEngine {
     void testHeaders()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/headers", c -> {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
@@ -411,7 +400,6 @@ public class TestEngine {
     void testTomcatHeaders()
     throws Exception {
         try (final var server = new TestTomcatRunner(new Site() {
-            @Override
             public void setup() {
                 get("/headers", c -> {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
@@ -440,7 +428,6 @@ public class TestEngine {
     void testCookies()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/cookies1", c -> {
                     var names = c.cookieNames();
@@ -491,7 +478,6 @@ public class TestEngine {
     void testTomcatCookies()
     throws IOException {
         try (final var server = new TestTomcatRunner(new Site() {
-            @Override
             public void setup() {
                 get("/cookies1", c -> {
                     var names = c.cookieNames();
@@ -542,7 +528,6 @@ public class TestEngine {
     void testContentlength()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/contentlength", c -> {
                     var out = "this goes out";
@@ -564,7 +549,6 @@ public class TestEngine {
     void testDynamicContenttype()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/dynamiccontenttype", c -> {
                     switch (c.parameter("switch")) {
@@ -587,7 +571,6 @@ public class TestEngine {
     void testTomcatDynamicContenttype()
     throws Exception {
         try (final var server = new TestTomcatRunner(new Site() {
-            @Override
             public void setup() {
                 get("/dynamiccontenttype", c -> {
                     switch (c.parameter("switch")) {
@@ -610,7 +593,6 @@ public class TestEngine {
     void testBinary()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
             }
@@ -629,7 +611,6 @@ public class TestEngine {
     void testTomcatBinary()
     throws Exception {
         try (final var server = new TestTomcatRunner(new Site() {
-            @Override
             public void setup() {
                 get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
             }
@@ -648,7 +629,6 @@ public class TestEngine {
     void testPrintAndWriteBuffer()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/printandwrite_buffer", c -> {
                     c.enableTextBuffer(true);
@@ -671,7 +651,6 @@ public class TestEngine {
     void testPrintAndWriteNoBuffer()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 get("/printandwrite_nobuffer", c -> {
                     c.enableTextBuffer(false);
@@ -906,13 +885,11 @@ public class TestEngine {
         RifeConfig.engine().setPrettyEngineExceptions(false);
         try {
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/route", new Element() {
                         @Parameter
                         String parameter;
 
-                        @Override
                         public void process(Context c) {
                         }
                     });
@@ -933,7 +910,6 @@ public class TestEngine {
     void testConfigResource()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 properties().put("config.property.test", "property-engine-value");
 
@@ -979,7 +955,6 @@ public class TestEngine {
     void testConfigFile()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {
-            @Override
             public void setup() {
                 properties().put("config.property.test", "property-engine-value");
 

@@ -39,7 +39,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         return passwordEncryptor_;
     }
 
-    @Override
     public void setPasswordEncryptor(StringEncryptor passwordEncryptor) {
         passwordEncryptor_ = passwordEncryptor;
     }
@@ -112,7 +111,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
             var process_verify_credentials = new ProcessVerifyCredentials();
 
             if (executeFetchFirst(query, process_verify_credentials, new DbPreparedStatementHandler<>(role_user) {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement.setString("login", data_.getLogin());
 
@@ -168,7 +166,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         try {
             try {
                 inTransaction(new DbTransactionUserWithoutResult<>() {
-                    @Override
                     public void useTransactionWithoutResult()
                     throws InnerClassException {
                         // get the id of the new role
@@ -179,7 +176,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
                         // store the new role with the obtained id
                         if (0 == executeUpdate(addRole, new DbPreparedStatementHandler<>() {
-                            @Override
                             public void setParameters(DbPreparedStatement statement) {
                                 statement
                                     .setInt("roleId", role_id)
@@ -211,7 +207,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeHasResultRows(containsRole, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("name", role);
@@ -270,7 +265,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         try {
             try {
                 inTransaction(new DbTransactionUserWithoutResult<>() {
-                    @Override
                     public void useTransactionWithoutResult()
                     throws InnerClassException {
                         // ensure that the password is encoded if an encoder has been set
@@ -295,7 +289,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                             }
 
                             if (0 == executeUpdate(addUserWithId, new DbPreparedStatementHandler<>() {
-                                @Override
                                 public void setParameters(DbPreparedStatement statement) {
                                     statement
                                         .setLong("userId", attributes.getUserId())
@@ -312,12 +305,10 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
                             // insert the role link
                             if (0 == executeUpdate(addRoleLink, new DbPreparedStatementHandler<>() {
-                                @Override
                                 public int performUpdate(DbPreparedStatement statement) {
                                     for (var role : attributes.getRoles()) {
                                         // obtain the role id
                                         var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<>(role) {
-                                            @Override
                                             public void setParameters(DbPreparedStatement statement) {
                                                 statement.setString("name", data_);
                                             }
@@ -368,7 +359,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             attributes = executeFetchFirstBean(getAttributes, RoleUserAttributes.class, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -380,7 +370,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
                 var fetcher = new RoleFetcher(attributes);
                 executeFetchAll(getUserRoles, fetcher, new DbPreparedStatementHandler<>() {
-                    @Override
                     public void setParameters(DbPreparedStatement statement) {
                         statement
                             .setLong("userId", userid);
@@ -401,7 +390,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
             attributes_ = attributes;
         }
 
-        @Override
         public boolean processRow(ResultSet resultSet)
         throws SQLException {
             attributes_.addRole(resultSet.getString("name"));
@@ -423,7 +411,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeHasResultRows(containsUser, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -463,7 +450,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeGetFirstString(getLogin, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userId);
@@ -489,7 +475,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeGetFirstLong(getUserId, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -518,7 +503,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeGetFirstString(getPassword, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -565,7 +549,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         try {
             var row_processor = new ListDatabaseUsers(processor);
             result = executeFetchAll(listUsersRangedQuery, row_processor, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("limit", limit)
@@ -593,7 +576,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeHasResultRows(isUserInRole, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userId)
@@ -625,7 +607,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         try {
             var row_processor = new ListDatabaseUsers(processor);
             result = executeFetchAll(listUsersInRole, row_processor, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("role", role);
@@ -655,7 +636,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         try {
             try {
                 result = inTransaction(new DbTransactionUser<>() {
-                    @Override
                     public Boolean useTransaction()
                     throws InnerClassException {
                         // obtain the user id
@@ -684,7 +664,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                                 // update the user password
                                 final var adapted_password = password;
                                 if (0 == executeUpdate(updateUser, new DbPreparedStatementHandler<>() {
-                                    @Override
                                     public void setParameters(DbPreparedStatement statement) {
                                         statement
                                             .setString("passwd", adapted_password)
@@ -698,7 +677,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
                             // remove the previous roles
                             executeUpdate(removeRoleLinksByUser, new DbPreparedStatementHandler<>() {
-                                @Override
                                 public void setParameters(DbPreparedStatement statement) {
                                     statement
                                         .setLong("userId", userid);
@@ -708,12 +686,10 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                             // assign the correct roles to the user
                             if (attributes.getRoles() != null) {
                                 if (0 == executeUpdate(addRoleLink, new DbPreparedStatementHandler<>() {
-                                    @Override
                                     public int performUpdate(DbPreparedStatement statement) {
                                         for (var role : attributes.getRoles()) {
                                             // obtain the role id
                                             var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<>(role) {
-                                                @Override
                                                 public void setParameters(DbPreparedStatement statement) {
                                                     statement.setString("name", data_);
                                                 }
@@ -771,7 +747,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             if (0 != executeUpdate(removeUserByLogin, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -798,7 +773,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             if (0 != executeUpdate(removeUserByUserId, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userId);
@@ -826,7 +800,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             if (0 != executeUpdate(removeRole, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("role", name);
@@ -864,7 +837,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         try {
             result = executeFetchAll(listUserRolesQuery, new ListDatabaseRoles(processor), new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -880,7 +852,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
     protected static class ProcessVerifyCredentials extends DbRowProcessor {
         private long userId_ = -1;
 
-        @Override
         public boolean processRow(ResultSet resultSet)
         throws SQLException {
             assert resultSet != null;
@@ -902,7 +873,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
             listRoles_ = listRoles;
         }
 
-        @Override
         public boolean processRow(ResultSet resultSet)
         throws SQLException {
             return listRoles_.foundRole(resultSet.getString("name"));
@@ -916,7 +886,6 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
             listUsers_ = listUsers;
         }
 
-        @Override
         public boolean processRow(ResultSet resultSet)
         throws SQLException {
             return listUsers_.foundUser(resultSet.getLong("userId"), resultSet.getString("login"), resultSet.getString("passwd"));

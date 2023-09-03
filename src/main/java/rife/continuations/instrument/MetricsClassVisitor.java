@@ -78,7 +78,6 @@ class MetricsClassVisitor extends ClassVisitor {
         return pauseCount_ > 0 || answerCount_ > 0;
     }
 
-    @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         if (entryMethodName_.equals(name) &&
             entryMethodDesc_.equals(desc)) {

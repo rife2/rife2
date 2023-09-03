@@ -20,7 +20,6 @@ import java.io.InputStream;
  * @since 1.0
  */
 public class RawFormatter implements Formatter<InputStream, InputStream> {
-    @Override
     public InputStream format(Content content, ContentTransformer<InputStream> transformer)
     throws FormatException {
         if (!(content.getData() instanceof InputStream data)) {

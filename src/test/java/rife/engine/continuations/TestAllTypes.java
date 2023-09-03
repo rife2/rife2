@@ -136,7 +136,6 @@ public class TestAllTypes implements Element {
         return result;
     }
 
-    @Override
     public void process(Context c) {
         int int1 = 0;
         int1 = 1209967;

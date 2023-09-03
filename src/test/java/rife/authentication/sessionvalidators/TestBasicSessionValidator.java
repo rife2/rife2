@@ -105,24 +105,20 @@ public class TestBasicSessionValidator {
     }
 
     static class DummyAttributes implements SessionAttributes {
-        @Override
         public boolean hasAttribute(String key) {
             return false;
         }
 
-        @Override
         public String getAttribute(String key) {
             return null;
         }
     }
 
     static class RoleMaintAttributes implements SessionAttributes {
-        @Override
         public boolean hasAttribute(String key) {
             return key.equals("role");
         }
 
-        @Override
         public String getAttribute(String key) {
             if (key.equals("role")) {
                 return "maint";
@@ -133,12 +129,10 @@ public class TestBasicSessionValidator {
     }
 
     static class RoleAdminAttributes implements SessionAttributes {
-        @Override
         public boolean hasAttribute(String key) {
             return key.equals("role");
         }
 
-        @Override
         public String getAttribute(String key) {
             if (key.equals("role")) {
                 return "admin";

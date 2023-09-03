@@ -13,7 +13,6 @@ public class org_postgresql_Driver extends generic {
         super(datasource);
     }
 
-    @Override
     protected int getNullSqlType() {
         return Types.LONGVARBINARY;
     }

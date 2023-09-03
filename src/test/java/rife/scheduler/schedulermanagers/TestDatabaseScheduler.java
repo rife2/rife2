@@ -198,7 +198,6 @@ public class TestDatabaseScheduler {
             executedTasks_ = new ArrayList<>();
         }
 
-        @Override
         public boolean executeTask(Task task) {
             synchronized (this) {
                 if (null == firstExecution_) {
@@ -223,12 +222,10 @@ public class TestDatabaseScheduler {
             }
         }
 
-        @Override
         public String getHandledTaskType() {
             return TestTasktypes.UPLOAD_GROUPS;
         }
 
-        @Override
         protected long getRescheduleDelay() {
             return 100;
         }

@@ -26,7 +26,6 @@ public class ContentRepository extends Validation {
     public ContentRepository() {
     }
 
-    @Override
     public void activateValidation() {
         addConstraint(new ConstrainedProperty("name")
             .notNull(true)

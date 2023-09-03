@@ -19,7 +19,6 @@ public class TestMocksEngine {
     @Test
     void testSimplePlain() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/simple/plain", c -> {
                     c.setContentType("text/plain");
@@ -37,7 +36,6 @@ public class TestMocksEngine {
     @Test
     void testSimpleHtml() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo()));
             }
@@ -52,7 +50,6 @@ public class TestMocksEngine {
     @Test
     void testSimplePathInfo() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/simple/pathinfo", PathInfoHandling.CAPTURE, c -> c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo()));
             }
@@ -87,7 +84,6 @@ public class TestMocksEngine {
     @Test
     void testPathInfoMapping() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
@@ -111,7 +107,6 @@ public class TestMocksEngine {
     @Test
     void testPathInfoMappingMultiple() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/pathinfo/map",
                     PathInfoHandling.MAP(
@@ -144,7 +139,6 @@ public class TestMocksEngine {
     @Test
     void testPathInfoMappingUrlGeneration() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 var path_info = get("/pathinfo/map", PathInfoHandling.MAP(m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")), c -> {
                     c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
@@ -173,7 +167,6 @@ public class TestMocksEngine {
     @Test
     void testHeaders() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/headers", c -> {
                     c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
@@ -199,7 +192,6 @@ public class TestMocksEngine {
     @Test
     void testWrongServerRootUrl() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/simple/html", c -> c.print("Just some text " + c.remoteAddr() + ":" + c.remoteHost() + ":" + c.pathInfo()));
             }
@@ -211,7 +203,6 @@ public class TestMocksEngine {
     @Test
     void testCookies() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/cookies1", c -> {
                     if (c.hasCookie("cookie1") &&
@@ -247,7 +238,6 @@ public class TestMocksEngine {
     @Test
     void testContentlength() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/contentlength", c -> {
                     var out = "this goes out";
@@ -266,7 +256,6 @@ public class TestMocksEngine {
     @Test
     void testDynamicContenttype() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/dynamiccontenttype", c -> {
                     switch (c.parameter("switch")) {
@@ -284,7 +273,6 @@ public class TestMocksEngine {
     @Test
     void testBinary() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
             }
@@ -298,7 +286,6 @@ public class TestMocksEngine {
     @Test
     void testPrintAndWriteBuffer() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/printandwrite_buffer", c -> {
                     c.enableTextBuffer(true);
@@ -317,7 +304,6 @@ public class TestMocksEngine {
     @Test
     void testPrintAndWriteNoBuffer() {
         var conversation = new MockConversation(new Site() {
-            @Override
             public void setup() {
                 get("/printandwrite_nobuffer", c -> {
                     c.enableTextBuffer(false);

@@ -169,7 +169,6 @@ public class RoleUserAttributes implements Cloneable {
         return isValid(password) && isInRole(role);
     }
 
-    @Override
     public RoleUserAttributes clone() {
         RoleUserAttributes new_attributes = null;
         try {

@@ -64,7 +64,6 @@ public class TestElements {
             manager.storeContent("/rawdata", content, null);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                 }
@@ -104,7 +103,6 @@ public class TestElements {
             manager.storeContent("/imagegif", content, null);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                 }
@@ -146,7 +144,6 @@ public class TestElements {
             manager.storeContent("/textxhtml", content, null);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                 }
@@ -185,7 +182,6 @@ public class TestElements {
             manager.storeContent("nondefault:/textxhtml", content, null);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve_repository", PathInfoHandling.CAPTURE, new ServeContent(datasource, "nondefault"));
                 }
@@ -223,7 +219,6 @@ public class TestElements {
         setup(datasource);
         try {
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                 }
@@ -247,7 +242,6 @@ public class TestElements {
         setup(datasource);
         try {
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                 }
@@ -282,7 +276,6 @@ public class TestElements {
             var id = manager.save(content);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     var serve = get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                     get("/contentforhtml", c -> {
@@ -326,7 +319,6 @@ public class TestElements {
             var id = manager.save(content);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     var serve = get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                     get("/contentforhtml", c -> {
@@ -367,7 +359,6 @@ public class TestElements {
             manager.storeContent("/textxhtml", content, null);
 
             try (final var server = new TestServerRunner(new Site() {
-                @Override
                 public void setup() {
                     get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
                 }

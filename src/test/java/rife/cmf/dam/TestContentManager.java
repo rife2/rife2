@@ -216,7 +216,6 @@ public class TestContentManager {
             assertTrue(manager.storeContent("/rawdata", content, null));
 
             manager.useContentData("/rawdata", new ContentDataUserWithoutResult() {
-                @Override
                 public void useContentData(Object contentData)
                 throws InnerClassException {
                     try {

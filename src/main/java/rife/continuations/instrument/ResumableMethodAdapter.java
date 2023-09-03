@@ -118,7 +118,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param var    the operand of the instruction to be visited. This operand is
      *               the index of a local variable.
      */
-    @Override
     public void visitVarInsn(int opcode, int var) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitVarInsn            (" + OPCODES[opcode] + ", " + var + ")");
@@ -229,7 +228,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param desc        the method's descriptor (see {@link Type Type}).
      * @param isInterface if the method's owner class is an interface.
      */
-    @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, final boolean isInterface) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitMethodInsn         (" + OPCODES[opcode] + ", \"" + owner + "\", \"" + name + "\", \"" + desc + "\")");
@@ -424,7 +422,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *                                 Type}, {@link Handle} or {@link ConstantDynamic} value. This method is allowed to modify
      *                                 the content of the array so a caller should expect that this array may change.
      */
-    @Override
     public void visitInvokeDynamicInsn(final String name, final String descriptor, final Handle bootstrapMethodHandle, final Object... bootstrapMethodArguments) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitInvokeDynamicInsn  (\"" + name + "\", \"" + descriptor + "\", " + bootstrapMethodHandle + ", " + Arrays.toString(bootstrapMethodArguments) + ")");
@@ -625,7 +622,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *               must be a fully qualified class name in internal form, or the type
      *               descriptor of an array type (see {@link Type Type}).
      */
-    @Override
     public void visitTypeInsn(int opcode, String desc) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitTypeInsn           (" + OPCODES[opcode] + ", \"" + desc + "\")");
@@ -643,7 +639,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *            Float}, a {@link java.lang.Long Long}, a {@link java.lang.Double
      *            Double} or a {@link String String}.
      */
-    @Override
     public void visitLdcInsn(Object cst) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitLdcInsn            (" + cst + ")");
@@ -659,7 +654,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param desc an array type descriptor (see {@link Type Type}).
      * @param dims number of dimensions of the array to allocate.
      */
-    @Override
     public void visitMultiANewArrayInsn(String desc, int dims) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitMultiANewArrayInsn (\"" + desc + "\", " + dims + ")");
@@ -701,7 +695,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *               <p>
      *               MONITORENTER, or MONITOREXIT.
      */
-    @Override
     public void visitInsn(int opcode) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitInsn               (" + OPCODES[opcode] + ")");
@@ -740,7 +733,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param var       index of the local variable to be incremented.
      * @param increment amount to increment the local variable by.
      */
-    @Override
     public void visitIincInsn(int var, int increment) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitIincInsn           (" + var + ", " + increment + ")");
@@ -782,7 +774,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param name   the field's name.
      * @param desc   the field's descriptor (see {@link Type Type}).
      */
-    @Override
     public void visitFieldInsn(int opcode, String owner, String name, String desc) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitFieldInsn          (" + OPCODES[opcode] + ", \"" + owner + "\", \"" + name + "\", \"" + desc + "\")");
@@ -799,7 +790,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *                either BIPUSH, SIPUSH or NEWARRAY.
      * @param operand the operand of the instruction to be visited.
      */
-    @Override
     public void visitIntInsn(int opcode, int operand) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitIntInsn            (" + OPCODES[opcode] + ", " + operand + ")");
@@ -821,7 +811,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *                                  visited by this visitor (by the {@link #visitLabel visitLabel}
      *                                  method).
      */
-    @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitTryCatchBlock      (" + start + ", " + end + ", " + handler + ", \"" + type + "\")");
@@ -839,7 +828,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param labels beginnings of the handler blocks. <tt>labels[i]</tt> is the
      *               beginning of the handler block for the <tt>keys[i]</tt> key.
      */
-    @Override
     public void visitLookupSwitchInsn(Label dflt, int[] keys, Label[] labels) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitLookupSwitchInsn   (" + dflt + ", " + (null == keys ? null : join(keys, ",")) + ", " + (null == labels ? null : join(labels, ",")) + ")");
@@ -861,7 +849,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *               a label that designates the instruction to which the jump instruction
      *               may jump.
      */
-    @Override
     public void visitJumpInsn(int opcode, Label label) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitJumpInsn           (" + OPCODES[opcode] + ", " + label + ")");
@@ -877,7 +864,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *
      * @param label a {@link Label Label} object.
      */
-    @Override
     public void visitLabel(Label label) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitLabel              (" + label + ")");
@@ -900,7 +886,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param labels beginnings of the handler blocks. <tt>labels[i]</tt> is the
      *               beginning of the handler block for the <tt>min + i</tt> key.
      */
-    @Override
     public void visitTableSwitchInsn(int min, int max, Label dflt, Label[] labels) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitTableSwitchInsn    (" + min + ", " + max + ", " + dflt + ", " + (null == labels ? null : join(labels, ",")) + ")");
@@ -917,7 +902,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      * @param maxStack  maximum stack size of the method.
      * @param maxLocals maximum number of local variables for the method.
      */
-    @Override
     public void visitMaxs(int maxStack, int maxLocals) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitMaxs               (" + maxStack + ", " + maxLocals + ")");
@@ -943,7 +927,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *                                  visited by this visitor (by the {@link #visitLabel visitLabel}
      *                                  method).
      */
-    @Override
     public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitLocalVariable      (\"" + name + "\", \"" + desc + ", \"" + signature + "\", " + start + ", " + end + ", " + index + ")");
@@ -963,7 +946,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *                                  visited by this visitor (by the {@link #visitLabel visitLabel}
      *                                  method).
      */
-    @Override
     public void visitLineNumber(int line, Label start) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitLineNumber         (" + line + ", " + start + ")");
@@ -979,7 +961,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
      *
      * @param attr a non-standard code attribute. Must not be <tt>null</tt>.
      */
-    @Override
     public void visitAttribute(Attribute attr) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitAttribute          (" + attr + ")");
@@ -989,7 +970,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         }
     }
 
-    @Override
     public void visitCode() {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitCode               ()");
@@ -999,7 +979,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         }
     }
 
-    @Override
     public AnnotationVisitor visitAnnotationDefault() {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitAnnotationDefault  ()");
@@ -1011,7 +990,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         return annotationVisitor_;
     }
 
-    @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitAnnotation         (\"" + desc + "\", " + visible + ")");
@@ -1023,7 +1001,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         return annotationVisitor_;
     }
 
-    @Override
     public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitAnnotation         (" + parameter + ", \"" + desc + "\", " + visible + ")");
@@ -1035,7 +1012,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         return annotationVisitor_;
     }
 
-    @Override
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitFrame              (" + type + ", " + nLocal + ", " + Arrays.toString(local) + ", " + nStack + ", " + Arrays.toString(stack) + ")");
@@ -1045,7 +1021,6 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         }
     }
 
-    @Override
     public void visitEnd() {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitEnd                ()");

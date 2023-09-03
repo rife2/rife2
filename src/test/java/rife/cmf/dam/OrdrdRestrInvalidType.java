@@ -17,7 +17,6 @@ public class OrdrdRestrInvalidType extends Validation {
         priority_ = 0;
     }
 
-    @Override
     protected void activateValidation() {
         addConstraint(new ConstrainedProperty("name").maxLength(64).notNull(true).notEmpty(true));
         addConstraint(new ConstrainedProperty("restricted").rangeBegin(0));

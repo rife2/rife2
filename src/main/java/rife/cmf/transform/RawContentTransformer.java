@@ -29,6 +29,5 @@ public interface RawContentTransformer extends ContentTransformer<InputStream> {
      * @return the transformed data
      * @since 1.0
      */
-    @Override
     InputStream transform(InputStream data, Map<String, String> attributes);
 }

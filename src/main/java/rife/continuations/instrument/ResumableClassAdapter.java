@@ -37,7 +37,6 @@ class ResumableClassAdapter extends ClassVisitor {
         adapt_ = (classVisitor != null);
     }
 
-    @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visit                   (" + access + ", \"" + name + "\", \"" + signature + "\", \"" + superName + "\", " + (null == interfaces ? null : join(interfaces, ",")) + ")");
@@ -47,7 +46,6 @@ class ResumableClassAdapter extends ClassVisitor {
         }
     }
 
-    @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitField              (" + access + ", \"" + name + "\", \"" + desc + "\", " + signature + ", " + value + ")");
@@ -59,7 +57,6 @@ class ResumableClassAdapter extends ClassVisitor {
         return null;
     }
 
-    @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitMethod             (" + access + ", \"" + name + "\", \"" + desc + "\", \"" + signature + "\", " + (null == exceptions ? null : join(exceptions, ",")) + ")");
@@ -85,7 +82,6 @@ class ResumableClassAdapter extends ClassVisitor {
         }
     }
 
-    @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitInnerClass         (\"" + name + "\", \"" + outerName + "\", \"" + innerName + ", " + access + ")");
@@ -95,7 +91,6 @@ class ResumableClassAdapter extends ClassVisitor {
         }
     }
 
-    @Override
     public void visitAttribute(Attribute attr) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitAttribute          (" + attr + ")");
@@ -105,7 +100,6 @@ class ResumableClassAdapter extends ClassVisitor {
         }
     }
 
-    @Override
     public void visitSource(String source, String debug) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitSource             (\"" + source + "\", \"" + debug + "\")");
@@ -115,7 +109,6 @@ class ResumableClassAdapter extends ClassVisitor {
         }
     }
 
-    @Override
     public void visitOuterClass(String owner, String name, String desc) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitOuterClass         (\"" + owner + "\", \"" + name + "\", \"" + desc + "\")");
@@ -125,7 +118,6 @@ class ResumableClassAdapter extends ClassVisitor {
         }
     }
 
-    @Override
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitAnnotation         (\"" + desc + "\", " + visible + ")");
@@ -137,7 +129,6 @@ class ResumableClassAdapter extends ClassVisitor {
         return annotationVisitor_;
     }
 
-    @Override
     public void visitEnd() {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest("Class:visitEnd                ()");

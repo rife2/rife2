@@ -24,17 +24,14 @@ public class MemoryTasks implements TaskManager {
         taskMapping_ = new HashMap<>();
     }
 
-    @Override
     public void setScheduler(Scheduler scheduler) {
         scheduler_ = scheduler;
     }
 
-    @Override
     public Scheduler getScheduler() {
         return scheduler_;
     }
 
-    @Override
     public int addTask(Task task)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
@@ -54,7 +51,6 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    @Override
     public boolean updateTask(Task task)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
@@ -74,7 +70,6 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    @Override
     public Task getTask(int id)
     throws TaskManagerException {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
@@ -84,7 +79,6 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    @Override
     public Collection<Task> getAllTasks()
     throws TaskManagerException {
         synchronized (this) {
@@ -92,7 +86,6 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    @Override
     public Collection<Task> getTasksToProcess()
     throws TaskManagerException {
         var tasks_to_process = new ArrayList<Task>();
@@ -109,7 +102,6 @@ public class MemoryTasks implements TaskManager {
         return Collections.unmodifiableCollection(tasks_to_process);
     }
 
-    @Override
     public Collection<Task> getScheduledTasks()
     throws TaskManagerException {
         var scheduled_tasks = new ArrayList<Task>();
@@ -126,7 +118,6 @@ public class MemoryTasks implements TaskManager {
         return Collections.unmodifiableCollection(scheduled_tasks);
     }
 
-    @Override
     public boolean removeTask(int id)
     throws TaskManagerException {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
@@ -136,7 +127,6 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    @Override
     public boolean rescheduleTask(Task task, long planned, Frequency frequency)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
@@ -163,7 +153,6 @@ public class MemoryTasks implements TaskManager {
         return result;
     }
 
-    @Override
     public boolean concludeTask(Task task)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
@@ -188,7 +177,6 @@ public class MemoryTasks implements TaskManager {
         return false;
     }
 
-    @Override
     public boolean activateTask(int id)
     throws TaskManagerException {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");
@@ -203,7 +191,6 @@ public class MemoryTasks implements TaskManager {
         }
     }
 
-    @Override
     public boolean deactivateTask(int id)
     throws TaskManagerException {
         if (id < 0) throw new IllegalArgumentException("the task id can't be negative.");

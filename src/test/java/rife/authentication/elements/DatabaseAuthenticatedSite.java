@@ -55,7 +55,6 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
 
     }
 
-    @Override
     public void close() {
         remove();
     }
@@ -67,7 +66,6 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
             template = get("/template", c -> c.print(c.template("filtered_tags_auth")));
             get("/username", c -> c.print(config.identityAttribute(c) != null ? config.identityAttribute(c).getLogin() : "not logged in"));
             group(new Router() {
-                @Override
                 public void setup() {
                     before(new Logout(config));
                     get("/beforelogout", c -> c.print("logged out"));
@@ -104,39 +102,33 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
         }
     }
 
-    @Override
     public void setup() {
         login = route("/login", new Login(config, TemplateFactory.HTML.get("authentication.login")));
         auth = group(new AuthenticatedSection(config) {
-            @Override
             public void setup() {
                 before(new Authenticated(config));
             }
         });
         loginAdmin = route("/loginAdmin", new Login(configAdmin, TemplateFactory.HTML.get("authentication.login")));
         authAdmin = group("/admin", new AuthenticatedSection(configAdmin) {
-            @Override
             public void setup() {
                 before(new Authenticated(configAdmin));
             }
         });
         loginMaint = route("/loginMaint", new Login(configMaint, TemplateFactory.HTML.get("authentication.login")));
         authMaint = group("/maint", new AuthenticatedSection(configMaint) {
-            @Override
             public void setup() {
                 before(new Authenticated(configMaint));
             }
         });
         loginNotEnforced = route("/loginNotEnforced", new Login(configNotEnforced, TemplateFactory.HTML.get("authentication.login")));
         authNotEnforced = group("/notEnforced", new AuthenticatedSection(configNotEnforced) {
-            @Override
             public void setup() {
                 before(new Authenticated(configNotEnforced));
             }
         });
         Route loginRemember = route("/loginRemember", new Login(config, TemplateFactory.HTML.get("authentication.loginRemember")));
         MemoryAuthenticatedSite.AuthenticatedSection authRemember = group(new MemoryAuthenticatedSite.AuthenticatedSection(config) {
-            @Override
             public void setup() {
                 before(new Authenticated(config));
             }

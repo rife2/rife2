@@ -37,7 +37,6 @@ public class ExamplesBuild extends WebProject {
             .javaOptions().javaAgent(new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName()));
     }
 
-    @Override
     public void compile()
     throws Exception {
         super.compile();

@@ -154,7 +154,6 @@ public class Login extends Identified implements SessionAttributes {
         credentials.addValidationError(new ValidationError.UNEXPECTED("sessioncreation"));
     }
 
-    @Override
     public void process(Context c) {
         initializeLogin(c);
 
@@ -280,12 +279,10 @@ public class Login extends Identified implements SessionAttributes {
         return false;
     }
 
-    @Override
     public boolean hasAttribute(String key) {
         return key.equals("role") && getAuthConfig().role() != null;
     }
 
-    @Override
     public String getAttribute(String key) {
         if (key.equals("role")) {
             return getAuthConfig().role();

@@ -15,7 +15,6 @@ public class ContentRaw extends Validation {
     private String name_ = null;
     private InputStream raw_ = null;
 
-    @Override
     protected void activateValidation() {
         addConstraint(new ConstrainedProperty("name")
             .maxLength(64)

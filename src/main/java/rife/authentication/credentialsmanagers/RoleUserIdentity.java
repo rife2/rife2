@@ -25,7 +25,6 @@ public class RoleUserIdentity implements Cloneable {
         return attributes_;
     }
 
-    @Override
     public RoleUserIdentity clone() {
         RoleUserIdentity new_identity = null;
         try {

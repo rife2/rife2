@@ -65,7 +65,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             .fieldParameter("created");
     }
 
-    @Override
     public boolean install()
     throws ContentManagerException {
         try {
@@ -89,7 +88,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public boolean remove()
     throws ContentManagerException {
         try {
@@ -111,7 +109,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public boolean createRepository(final String name)
     throws ContentManagerException {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -129,7 +126,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return result != null && result;
     }
 
-    @Override
     public boolean storeContent(String location, final Content content, final ContentTransformer transformer)
     throws ContentManagerException {
         if (null == content) throw new IllegalArgumentException("content can't be null");
@@ -161,12 +157,10 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             // store the content
             final var ids_array = new int[1];
             if (executeUpdate(storeContentInfo_, new DbPreparedStatementHandler<>() {
-                @Override
                 public DbPreparedStatement getPreparedStatement(Query query, DbConnection connection) {
                     return connection.getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS);
                 }
 
-                @Override
                 public int performUpdate(DbPreparedStatement statement) {
                     statement
                         .setString("path", split_location.path())

@@ -13,25 +13,20 @@ class NoOpAnnotationVisitor extends AnnotationVisitor {
         super(ASM9);
     }
 
-    @Override
     public void visit(String name, Object value) {
     }
 
-    @Override
     public void visitEnum(String name, String desc, String value) {
     }
 
-    @Override
     public AnnotationVisitor visitAnnotation(String name, String desc) {
         return this;
     }
 
-    @Override
     public AnnotationVisitor visitArray(String name) {
         return this;
     }
 
-    @Override
     public void visitEnd() {
     }
 }

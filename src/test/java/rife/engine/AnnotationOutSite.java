@@ -16,7 +16,6 @@ public class AnnotationOutSite extends Site {
         @SessionAttribute(flow = OUT) String stringSessionAttribute = "defaultSessionAttribute";
         @Header(value = "header3", flow = OUT) int intHeader2 = -9;
 
-        @Override
         public void process(Context c)
         throws Exception {
         }
@@ -41,7 +40,6 @@ public class AnnotationOutSite extends Site {
         @Header(flow = OUT) int intHeader = -8;
         @Header(value = "header2", flow = OUT) String stringHeader2 = "defaultHeader2";
 
-        @Override
         public void process(Context c)
         throws Exception {
             super.process(c);
@@ -69,7 +67,6 @@ public class AnnotationOutSite extends Site {
         }
     }
 
-    @Override
     public void setup() {
         get("/get", AnnotatedElement.class);
         after(c -> {

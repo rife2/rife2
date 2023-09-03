@@ -63,7 +63,6 @@ public class BeanImpl extends Validation {
 
         try {
             byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
-                @Override
                 public byte[] useInputStream(InputStream stream)
                 throws InnerClassException {
                     try {
@@ -132,7 +131,6 @@ public class BeanImpl extends Validation {
         }
     }
     
-    @Override
     public void activateValidation() {
         addConstraint(new ConstrainedProperty("character").editable(false));
         addConstraint(new ConstrainedProperty("byte").editable(false));

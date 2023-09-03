@@ -6,20 +6,17 @@ package rife.engine;
 
 public class RoutingGetPostSite extends Site {
     public static class GetPostElement implements Element {
-        @Override
         public void process(Context c) {
             c.print("class GetPostElement");
         }
     }
 
     public static class GetPostPathInfoElement implements Element {
-        @Override
         public void process(Context c) {
             c.print("class GetPostPathInfoElement:" + c.pathInfo());
         }
     }
 
-    @Override
     public void setup() {
         getPost(GetPostElement.class);
         getPost(PathInfoHandling.CAPTURE, GetPostPathInfoElement.class);
@@ -28,7 +25,6 @@ public class RoutingGetPostSite extends Site {
         getPost("/getPost5", c -> c.print("getPost element"));
         getPost("/getPost6", PathInfoHandling.CAPTURE, c -> c.print("getPost element path info:" + c.pathInfo()));
         group("/supplier", new Router() {
-                @Override
                 public void setup() {
                     getPost(GetPostElement::new);
                     getPost(PathInfoHandling.CAPTURE, GetPostPathInfoElement::new);

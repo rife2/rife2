@@ -41,7 +41,6 @@ public abstract class DatabaseTextStore extends DatabaseContentStore {
         addMimeType(MimeType.TEXT_XML);
     }
 
-    @Override
     public String getContentType(ContentInfo contentInfo) {
         var mimeType = MimeType.getMimeType(contentInfo.getMimeType());
         if (!getSupportedMimeTypes().contains(mimeType)) {
@@ -145,7 +144,6 @@ public abstract class DatabaseTextStore extends DatabaseContentStore {
         }
     }
 
-    @Override
     public String getContentForHtml(int id, final ContentInfo info, Context context, Route route)
     throws ContentManagerException {
         return useContentDataResult(id, contentData -> {
@@ -163,7 +161,6 @@ public abstract class DatabaseTextStore extends DatabaseContentStore {
         });
     }
 
-    @Override
     protected void outputContentColumn(ResultSet resultSet, OutputStream os)
     throws SQLException {
         var text_reader = resultSet.getCharacterStream("content");

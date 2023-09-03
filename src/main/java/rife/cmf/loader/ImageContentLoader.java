@@ -28,7 +28,6 @@ public class ImageContentLoader extends ContentLoader<Image> {
         sBackends.add(new ImageJLoader());
     }
 
-    @Override
     public List<ContentLoaderBackend<Image>> getBackends() {
         return sBackends;
     }

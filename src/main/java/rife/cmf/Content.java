@@ -739,7 +739,6 @@ public class Content implements Cloneable {
      *
      * @since 1.0
      */
-    @Override
     public Content clone() {
         try {
             return (Content) super.clone();

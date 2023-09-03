@@ -14,7 +14,6 @@ public class GetBeanSite extends Site {
         prefix_ = prefix;
     }
 
-    @Override
     public void setup() {
         route("/bean/get", c -> {
             switch (c.method()) {

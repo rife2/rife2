@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class WorkPauseType1 implements Work {
     private final AtomicReference<Event> event_ = new AtomicReference<>();
-    @Override
     public void execute(Workflow workflow) {
         event_.set(pauseForEvent(TestEventTypes.TYPE1));
     }

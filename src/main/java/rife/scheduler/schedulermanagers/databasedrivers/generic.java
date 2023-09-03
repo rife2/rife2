@@ -13,13 +13,11 @@ public class generic extends DatabaseScheduling {
         super(datasource);
     }
 
-    @Override
     public boolean install()
     throws SchedulerManagerException {
         return install_();
     }
 
-    @Override
     public boolean remove()
     throws SchedulerManagerException {
         return remove_();

@@ -8,7 +8,6 @@ import rife.template.Template;
 import rifetestmodels.ConstrainedBeanImpl;
 
 public class GenerateFormSite extends Site {
-    @Override
     public void setup() {
         get("/form", c -> {
             ConstrainedBeanImpl bean = new ConstrainedBeanImpl();

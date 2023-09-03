@@ -26,7 +26,6 @@ public class AnnotationParametersSite extends Site {
         @Parameter("param3") int intParam2 = -5;
         @ParametersBean(prefix = "theBean_") BeanImpl paramsBean;
 
-        @Override
         public void process(Context c) {
         }
     }
@@ -36,7 +35,6 @@ public class AnnotationParametersSite extends Site {
         @Parameter("param2") String stringParam2 = "defaultParam2";
         @Parameter("param6") String stringParam3 = "defaultParam3";
 
-        @Override
         public void process(Context c) {
             super.process(c);
 
@@ -54,7 +52,6 @@ public class AnnotationParametersSite extends Site {
         @ParametersBean(prefix = "theBean_", flow = FlowDirection.OUT) BeanImpl paramsBean;
         @Parameter int switchRoute = 0;
 
-        @Override
         public void process(Context c) {
         }
     }
@@ -67,7 +64,6 @@ public class AnnotationParametersSite extends Site {
         @Parameter(value = "param3", flow = FlowDirection.OUT) int intParam2 = 444;
         @Parameter(value = "param5", flow = FlowDirection.OUT) String stringParam3 = "value5";
 
-        @Override
         public void process(Context c) {
             super.process(c);
 
@@ -125,7 +121,6 @@ public class AnnotationParametersSite extends Site {
         }
     }
 
-    @Override
     public void setup() {
         routeOut = get("/out", AnnotatedOutElement.class);
         routeIn = get("/in", AnnotatedInElement.class);

@@ -22,7 +22,6 @@ public class TestServerRunner implements AutoCloseable {
         return server_.properties();
     }
 
-    @Override
     public void close() {
         server_.stop();
     }

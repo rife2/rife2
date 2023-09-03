@@ -75,7 +75,6 @@ public class TestBeans {
                 string_file.setData("this is some html content".getBytes(StandardCharsets.UTF_8));
 
                 byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
-                    @Override
                     public byte[] useInputStream(InputStream stream)
                     throws InnerClassException {
                         try {
@@ -203,7 +202,6 @@ public class TestBeans {
                 string_file.setData("this is some html content".getBytes(StandardCharsets.UTF_8));
 
                 byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
-                    @Override
                     public byte[] useInputStream(InputStream stream)
                     throws InnerClassException {
                         try {
@@ -335,7 +333,6 @@ public class TestBeans {
                 string_file.setData("this is some html content".getBytes(StandardCharsets.UTF_8));
 
                 byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
-                    @Override
                     public byte[] useInputStream(InputStream stream)
                     throws InnerClassException {
                         try {
@@ -469,7 +466,6 @@ public class TestBeans {
                 string_file.setData("this is some html content".getBytes(StandardCharsets.UTF_8));
 
                 byte[] image_bytes = ResourceFinderClasspath.instance().useStream("uwyn.png", new InputStreamUser<>() {
-                    @Override
                     public byte[] useInputStream(InputStream stream)
                     throws InnerClassException {
                         try {

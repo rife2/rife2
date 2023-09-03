@@ -41,7 +41,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             .from(createTableUser_.getTable());
     }
 
-    @Override
     public boolean install()
     throws CredentialsManagerException {
         try {
@@ -55,7 +54,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return true;
     }
 
-    @Override
     public boolean remove()
     throws CredentialsManagerException {
         try {
@@ -69,7 +67,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return true;
     }
 
-    @Override
     public DatabaseUsers addRole(final String role)
     throws CredentialsManagerException {
         if (null == role ||
@@ -79,7 +76,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
 
         try {
             if (0 == executeUpdate(addRole_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("name", role);
@@ -101,7 +97,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return this;
     }
 
-    @Override
     public DatabaseUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         try {

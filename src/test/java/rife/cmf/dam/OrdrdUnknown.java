@@ -16,7 +16,6 @@ public class OrdrdUnknown extends Validation {
         priority_ = 0;
     }
 
-    @Override
     protected void activateValidation() {
         addConstraint(new ConstrainedProperty("name").maxLength(64).notNull(true).notEmpty(true));
         addConstraint(new ConstrainedProperty("unknown").rangeBegin(0).ordinal(true));

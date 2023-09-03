@@ -5,26 +5,21 @@
 package rife.engine;
 
 public class BeforeAfterGroupsMultiLevelSite extends Site {
-    @Override
     public void setup() {
         get("/one", c -> c.print(c.route().path()));
         get("/two", c -> c.print(c.route().path()));
         group("/prefix1", new Router() {
-            @Override
             public void setup() {
                 get("/three", c -> c.print(c.route().path()));
                 before(c -> c.print("before1"));
                 group("/prefix2", new Router() {
-                    @Override
                     public void setup() {
                         after(c -> c.print("after1"), c -> c.print("after2"));
                         get("/five", c -> c.print(c.route().path()));
                         group(new Router() {
-                            @Override
                             public void setup() {
                                 before(c -> c.print("before3"), c -> c.print("before4"));
                                 group("/prefix3", new Router() {
-                                    @Override
                                     public void setup() {
                                         after(c -> c.print("after3"));
                                         get("/eleven", c -> c.print(c.route().path()));
@@ -44,7 +39,6 @@ public class BeforeAfterGroupsMultiLevelSite extends Site {
             }
         });
         group(new Router() {
-            @Override
             public void setup() {
                 get("/seven", c -> c.print(c.route().path()));
                 before(c -> c.print("before5"));

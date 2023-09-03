@@ -16,7 +16,6 @@ class ExecutorThread implements Runnable {
         task_ = task;
     }
 
-    @Override
     public void run() {
         assert task_ != null;
 

@@ -28,7 +28,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             .foreignKey("FK_CONTENTTEXT", RifeConfig.cmf().getTableContentInfo(), "contentId", "contentId");
     }
 
-    @Override
     protected void outputContentColumn(ResultSet resultSet, OutputStream os)
     throws SQLException {
         var clob = resultSet.getClob("content");

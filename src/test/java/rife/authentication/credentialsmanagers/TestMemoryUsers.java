@@ -319,7 +319,6 @@ public class TestMemoryUsers {
             return roles_;
         }
 
-        @Override
         public boolean foundRole(String name) {
             roles_.add(name);
 
@@ -334,7 +333,6 @@ public class TestMemoryUsers {
             return users_;
         }
 
-        @Override
         public boolean foundUser(long userId, String login, String password) {
             users_.add(userId + "," + login + "," + password);
 

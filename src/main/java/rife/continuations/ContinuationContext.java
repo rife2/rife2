@@ -637,7 +637,6 @@ public class ContinuationContext implements Cloneable {
      * @return a clone of this continuation for use as a child continuation
      * @since 1.0
      */
-    @Override
     public ContinuationContext clone()
     throws CloneNotSupportedException {
         ContinuationContext new_continuationcontext = null;

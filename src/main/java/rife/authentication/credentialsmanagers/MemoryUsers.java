@@ -42,12 +42,10 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return passwordEncryptor_;
     }
 
-    @Override
     public void setPasswordEncryptor(StringEncryptor passwordEncryptor) {
         passwordEncryptor_ = passwordEncryptor;
     }
 
-    @Override
     public long verifyCredentials(Credentials credentials)
     throws CredentialsManagerException {
         RoleUserCredentials role_user = null;
@@ -99,7 +97,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return -1;
     }
 
-    @Override
     public MemoryUsers addRole(String role)
     throws CredentialsManagerException {
         if (null == role ||
@@ -121,7 +118,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return this;
     }
 
-    @Override
     public long countRoles() {
         readLock_.lock();
         try {
@@ -131,7 +127,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean containsRole(String role) {
         if (null == role ||
             role.isEmpty()) {
@@ -146,7 +141,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public MemoryUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
@@ -230,7 +224,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public RoleUserAttributes getAttributes(String login) {
         if (null == login ||
             login.isEmpty()) {
@@ -245,7 +238,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public long countUsers() {
         readLock_.lock();
         try {
@@ -255,7 +247,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean listRoles(ListRoles processor) {
         if (null == processor) {
             return false;
@@ -283,7 +274,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean listUsers(ListUsers processor) {
         if (null == processor) {
             return false;
@@ -314,7 +304,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean listUsers(ListUsers processor, int limit, int offset) {
         readLock_.lock();
         try {
@@ -354,7 +343,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean containsUser(String login) {
         if (null == login ||
             login.isEmpty()) {
@@ -369,7 +357,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean listUsersInRole(ListUsers processor, String role)
     throws CredentialsManagerException {
         if (null == processor) {
@@ -409,7 +396,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return result;
     }
 
-    @Override
     public boolean isUserInRole(long userId, String role) {
         if (userId < 0 ||
             null == role ||
@@ -437,7 +423,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public String getLogin(long userId) {
         if (userId < 0) {
             return null;
@@ -455,7 +440,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return login;
     }
 
-    @Override
     public long getUserId(String login) {
         if (null == login ||
             login.isEmpty()) {
@@ -477,7 +461,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return userid;
     }
 
-    @Override
     public boolean updateUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
@@ -529,7 +512,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         return true;
     }
 
-    @Override
     public boolean removeUser(String login) {
         if (null == login ||
             login.isEmpty()) {
@@ -548,7 +530,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean removeUser(long userId) {
         if (userId < 0) {
             return false;
@@ -575,7 +556,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean removeRole(String name) {
         if (null == name ||
             name.isEmpty()) {
@@ -633,7 +613,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public void clearUsers() {
         writeLock_.lock();
         try {
@@ -646,7 +625,6 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
         }
     }
 
-    @Override
     public boolean listUserRoles(String login, ListRoles processor)
     throws CredentialsManagerException {
         readLock_.lock();

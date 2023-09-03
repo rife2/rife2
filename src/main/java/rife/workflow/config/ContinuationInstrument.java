@@ -14,32 +14,26 @@ import rife.continuations.ContinuationConfigInstrument;
  * @since 1.0
  */
 public class ContinuationInstrument implements ContinuationConfigInstrument {
-    @Override
     public String getContinuableMarkerInterfaceName() {
         return "rife.continuations.CloneableContinuable";
     }
 
-    @Override
     public String getEntryMethodName() {
         return "execute";
     }
 
-    @Override
     public String getEntryMethodDescriptor() {
         return "(Lrife/workflow/Workflow;)V";
     }
 
-    @Override
     public String getCallMethodName() {
         return "pauseForEvent";
     }
 
-    @Override
     public String getCallMethodDescriptor() {
         return "(Ljava/lang/Object;)Lrife/workflow/Event;";
     }
 
-    @Override
     public String getCallMethodReturnTypeName() {
         return "rife/workflow/Event";
     }

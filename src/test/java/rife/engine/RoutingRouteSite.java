@@ -6,20 +6,17 @@ package rife.engine;
 
 public class RoutingRouteSite extends Site {
     public static class RouteElement implements Element {
-        @Override
         public void process(Context c) {
             c.print("class RouteElement");
         }
     }
 
     public static class RoutePathInfoElement implements Element {
-        @Override
         public void process(Context c) {
             c.print("class RoutePathInfoElement:" + c.pathInfo());
         }
     }
 
-    @Override
     public void setup() {
         route(RouteElement.class);
         route(PathInfoHandling.CAPTURE, RoutePathInfoElement.class);
@@ -28,7 +25,6 @@ public class RoutingRouteSite extends Site {
         route("/route5", c -> c.print("route element"));
         route("/route6", PathInfoHandling.CAPTURE, c -> c.print("route element path info:" + c.pathInfo()));
         group("/supplier", new Router() {
-                @Override
                 public void setup() {
                     route(RouteElement::new);
                     route(PathInfoHandling.CAPTURE, RoutePathInfoElement::new);

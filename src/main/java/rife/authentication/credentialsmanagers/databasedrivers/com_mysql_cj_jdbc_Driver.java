@@ -59,7 +59,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             .whereParameter("roleId", "=");
     }
 
-    @Override
     public boolean install()
     throws CredentialsManagerException {
         try {
@@ -73,7 +72,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public boolean remove()
     throws CredentialsManagerException {
         try {
@@ -87,7 +85,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public DatabaseUsers addRole(final String role)
     throws CredentialsManagerException {
         if (null == role ||
@@ -97,7 +94,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             if (0 == executeUpdate(addRole_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("name", role);
@@ -121,7 +117,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return this;
     }
 
-    @Override
     public DatabaseUsers addUser(final String login, final RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
@@ -176,7 +171,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 }
 
                 if (0 == executeUpdate(addUserWithId_, new DbPreparedStatementHandler<>() {
-                    @Override
                     public void setParameters(DbPreparedStatement statement) {
                         statement
                             .setLong("userId", attributes.getUserId())
@@ -222,7 +216,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return this;
     }
 
-    @Override
     public boolean updateUser(final String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
@@ -279,7 +272,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 // update the user password
                 final String adapted_password = password;
                 if (0 == executeUpdate(updateUser_, new DbPreparedStatementHandler<>() {
-                    @Override
                     public void setParameters(DbPreparedStatement statement) {
                         statement
                             .setString("passwd", adapted_password)
@@ -292,7 +284,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
             // remove the previous roles
             executeUpdate(removeRoleLinksByUserId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userid);
@@ -320,7 +311,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return true;
     }
 
-    @Override
     public boolean removeUser(final String login)
     throws CredentialsManagerException {
         if (null == login ||
@@ -332,7 +322,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             final long userid = executeGetFirstLong(getUserId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -340,7 +329,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             });
 
             if (0 != executeUpdate(removeUserByLogin_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("login", login);
@@ -350,7 +338,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             }
 
             if (0 != executeUpdate(removeRoleLinksByUserId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userid);
@@ -365,7 +352,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return result;
     }
 
-    @Override
     public boolean removeUser(final long userId)
     throws CredentialsManagerException {
         if (userId < 0) {
@@ -376,7 +362,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             if (0 != executeUpdate(removeUserByUserId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userId);
@@ -386,7 +371,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             }
 
             if (0 != executeUpdate(removeRoleLinksByUserId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setLong("userId", userId);
@@ -401,7 +385,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
         return result;
     }
 
-    @Override
     public boolean removeRole(final String name)
     throws CredentialsManagerException {
         if (null == name ||
@@ -413,7 +396,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
         try {
             final int roleid = executeGetFirstInt(getRoleId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("role", name);
@@ -421,7 +403,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             });
 
             if (0 != executeUpdate(removeRole_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setString("role", name);
@@ -431,7 +412,6 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             }
 
             if (0 != executeUpdate(removeRoleLinksByRoleId_, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("roleId", roleid);

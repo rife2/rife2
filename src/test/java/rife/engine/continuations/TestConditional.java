@@ -8,7 +8,6 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestConditional implements Element {
-    @Override
     public void process(Context c) {
         var stop = c.parameterBoolean("stop", false);
         var answer = c.parameterBoolean("answer", false);

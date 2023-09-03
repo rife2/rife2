@@ -29,6 +29,5 @@ public interface TextContentTransformer extends ContentTransformer<String> {
      * @return the transformed text
      * @since 1.0
      */
-    @Override
     String transform(String data, Map<String, String> attributes);
 }

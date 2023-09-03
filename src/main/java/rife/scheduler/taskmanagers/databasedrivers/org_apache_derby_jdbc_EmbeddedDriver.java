@@ -46,7 +46,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
     }
 
 
-    @Override
     public boolean install()
     throws TaskManagerException {
         try {
@@ -58,7 +57,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return true;
     }
 
-    @Override
     public boolean remove()
     throws TaskManagerException {
         try {
@@ -70,7 +68,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return true;
     }
 
-    @Override
     public int addTask(final Task task)
     throws TaskManagerException {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
@@ -79,18 +76,15 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
 
         try {
             if (0 == executeUpdate(addTask_, new DbPreparedStatementHandler() {
-                @Override
                 public DbPreparedStatement getPreparedStatement(Query query, DbConnection connection) {
                     return connection.getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS);
                 }
 
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setBean(task);
                 }
 
-                @Override
                 public int performUpdate(DbPreparedStatement statement) {
                     setParameters(statement);
                     int query_result = statement.executeUpdate();

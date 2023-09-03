@@ -29,7 +29,6 @@ public class RawContentStream extends InputStream {
         assert resultSet_ != null;
     }
 
-    @Override
     public int read()
     throws IOException {
         if (null == resultSet_) {
@@ -60,7 +59,6 @@ public class RawContentStream extends InputStream {
         return result;
     }
 
-    @Override
     public void close()
     throws IOException {
         if (null == statement_) {

@@ -8,7 +8,6 @@ import rife.engine.Context;
 import rife.engine.Element;
 
 public class TestInnerClass implements Element {
-    @Override
     public void process(Context c) {
         Inner inner = new Inner();
         String before = "before pause";

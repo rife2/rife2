@@ -17,7 +17,6 @@ import java.security.ProtectionDomain;
  * @since 1.0
  */
 public class MetaDataTransformer extends RifeTransformer {
-    @Override
     protected byte[] transformRife(ClassLoader loader, String classNameInternal, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) {
         return MetaDataInstrumenter.instrument(loader, classNameInternal.replace('/', '.'), classfileBuffer);
     }

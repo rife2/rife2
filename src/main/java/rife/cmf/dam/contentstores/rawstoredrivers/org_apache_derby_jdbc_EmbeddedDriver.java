@@ -33,7 +33,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             .foreignKey("FK_CONTENTCHUNK", RifeConfig.cmf().getTableContentInfo(), "contentId", "contentId");
     }
 
-    @Override
     protected int storeChunks(Insert storeContentChunk, final int id, InputStream data)
     throws IOException {
         return storeChunksNoStream(storeContentChunk, id, data);

@@ -13,7 +13,6 @@ public class ContentImageRepository extends Validation {
     private String name_ = null;
     private byte[] image_ = null;
 
-    @Override
     protected void activateValidation() {
         addConstraint(new ConstrainedProperty("name")
             .maxLength(64)

@@ -20,7 +20,6 @@ public abstract class DatabaseScheduling extends DbQueryManager implements Sched
         super(datasource);
     }
 
-    @Override
     public Scheduler createScheduler() {
         return new Scheduler(DatabaseTasksFactory.instance(getDatasource()), DatabaseTaskOptionsFactory.instance(getDatasource()));
     }

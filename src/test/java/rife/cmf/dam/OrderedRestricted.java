@@ -17,7 +17,6 @@ public class OrderedRestricted extends Validation {
         priority_ = 0;
     }
 
-    @Override
     protected void activateValidation() {
         addConstraint(new ConstrainedProperty("priority").rangeBegin(0));
         addConstraint(new ConstrainedProperty("name").maxLength(64).notNull(true).notEmpty(true));

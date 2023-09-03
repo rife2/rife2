@@ -34,70 +34,60 @@ class MockSession implements HttpSession {
         mockConversation_ = conversation;
     }
 
-    @Override
     public long getCreationTime() {
         if (invalid_) throw new IllegalStateException();
 
         return creationTime_;
     }
 
-    @Override
     public String getId() {
         if (invalid_) throw new IllegalStateException();
 
         return mId;
     }
 
-    @Override
     public long getLastAccessedTime() {
         if (invalid_) throw new IllegalStateException();
 
         return lastAccessTime_;
     }
 
-    @Override
     public void setMaxInactiveInterval(int interval) {
         if (invalid_) throw new IllegalStateException();
 
         maxInactiveInterval_ = interval;
     }
 
-    @Override
     public int getMaxInactiveInterval() {
         if (invalid_) throw new IllegalStateException();
 
         return maxInactiveInterval_;
     }
 
-    @Override
     public Object getAttribute(String name) {
         if (invalid_) throw new IllegalStateException();
 
         return attributes_.get(name);
     }
 
-    @Override
     public Enumeration getAttributeNames() {
         if (invalid_) throw new IllegalStateException();
 
         return Collections.enumeration(attributes_.keySet());
     }
 
-    @Override
     public void setAttribute(String name, Object value) {
         if (invalid_) throw new IllegalStateException();
 
         attributes_.put(name, value);
     }
 
-    @Override
     public void removeAttribute(String name) {
         if (invalid_) throw new IllegalStateException();
 
         attributes_.remove(name);
     }
 
-    @Override
     public void invalidate() {
         mockConversation_.removeSession(mId);
         invalid_ = true;
@@ -105,7 +95,6 @@ class MockSession implements HttpSession {
         mId = null;
     }
 
-    @Override
     public boolean isNew() {
         return isNew_;
     }
@@ -136,7 +125,6 @@ class MockSession implements HttpSession {
         removeAttribute(name);
     }
 
-    @Override
     public ServletContext getServletContext() {
         return null;
     }

@@ -5,11 +5,9 @@
 package rife.engine;
 
 public class BeforeGroupSite extends Site {
-    @Override
     public void setup() {
         get("/one", c -> c.print(c.route().path()));
         group(new Router() {
-            @Override
             public void setup() {
                 get("/three", c -> c.print(c.route().path()));
                 before(c -> c.print("before1"), c -> c.print("before2"));

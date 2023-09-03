@@ -46,7 +46,6 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         addMimeType(MimeType.IMAGE_PNG);
     }
 
-    @Override
     public String getContentType(ContentInfo contentInfo) {
         var mimeType = MimeType.getMimeType(contentInfo.getMimeType());
         if (!getSupportedMimeTypes().contains(mimeType)) {
@@ -65,7 +64,6 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         return content_type;
     }
 
-    @Override
     public String getContentForHtml(int id, ContentInfo info, Context context, Route route)
     throws ContentManagerException {
         if (null == context) throw new IllegalArgumentException("context can't be null.");
@@ -179,13 +177,11 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
 
         try {
             user.useContentData(executeQuery(retrieveContent, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("contentId", id);
                 }
 
-                @Override
                 public Object concludeResults(DbResultSet resultSet)
                 throws SQLException {
                     if (!resultSet.next()) {
@@ -209,13 +205,11 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
 
         try {
             return user.useContentData(executeQuery(retrieveContent, new DbPreparedStatementHandler<>() {
-                @Override
                 public void setParameters(DbPreparedStatement statement) {
                     statement
                         .setInt("contentId", id);
                 }
 
-                @Override
                 public Object concludeResults(DbResultSet resultSet)
                 throws SQLException {
                     if (!resultSet.next()) {
@@ -230,7 +224,6 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         }
     }
 
-    @Override
     protected void outputContentColumn(ResultSet resultSet, OutputStream os)
     throws SQLException {
         var is = resultSet.getBinaryStream("content");

@@ -5,11 +5,9 @@
 package rife.engine;
 
 public class BeforeAfterGroupNextSite extends Site {
-    @Override
     public void setup() {
         get("/one", c -> c.print(c.route().path()));
         group(new Router() {
-            @Override
             public void setup() {
                 get("/three", c -> {
                     if (c.parameterBoolean("next3")) {

@@ -16,7 +16,6 @@ import rife.engine.Element;
  * @since 1.0
  */
 public class Defer implements Element {
-    @Override
     public void process(Context c) {
         c.defer();
     }

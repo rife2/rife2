@@ -127,7 +127,6 @@ public class MockResponse extends AbstractResponse {
         return ParsedHtml.parse(this);
     }
 
-    @Override
     public String getContentType() {
         return getHeader(HEADER_CONTENT_TYPE);
     }
@@ -326,7 +325,6 @@ public class MockResponse extends AbstractResponse {
         return xpath.evaluate(expression, context, returnType);
     }
 
-    @Override
     public void print(Template template)
     throws EngineException {
         template_ = template;
@@ -334,7 +332,6 @@ public class MockResponse extends AbstractResponse {
         super.print(template);
     }
 
-    @Override
     protected void _setContentType(String contentType) {
         if (contentType == null) {
             contentType_ = null;
@@ -381,12 +378,10 @@ public class MockResponse extends AbstractResponse {
         setHeader(HEADER_CONTENT_TYPE, contentType);
     }
 
-    @Override
     public String getCharacterEncoding() {
         return characterEncoding_;
     }
 
-    @Override
     public void setContentLength(int length) {
         setIntHeader(HEADER_CONTENT_LENGTH, length);
     }
@@ -395,7 +390,6 @@ public class MockResponse extends AbstractResponse {
         return getIntHeader(HEADER_CONTENT_LENGTH);
     }
 
-    @Override
     public void sendRedirect(String location) {
         clearBuffer();
 
@@ -406,12 +400,10 @@ public class MockResponse extends AbstractResponse {
         // complete
     }
 
-    @Override
     protected OutputStream _getOutputStream() {
         return mockOutputStream_;
     }
 
-    @Override
     public void addCookie(Cookie cookie) {
         newCookies_.put(MockConversation.buildCookieId(cookie), cookie);
         mockConversation_.addCookie(cookie);
@@ -529,37 +521,30 @@ public class MockResponse extends AbstractResponse {
         return headers_.getIntHeader(name);
     }
 
-    @Override
     public void addHeader(String name, String value) {
         headers_.addHeader(name, value);
     }
 
-    @Override
     public void addDateHeader(String name, long date) {
         headers_.addDateHeader(name, date);
     }
 
-    @Override
     public void addIntHeader(String name, int integer) {
         headers_.addIntHeader(name, integer);
     }
 
-    @Override
     public boolean containsHeader(String name) {
         return headers_.containsHeader(name);
     }
 
-    @Override
     public void setDateHeader(String name, long date) {
         headers_.setDateHeader(name, date);
     }
 
-    @Override
     public void setHeader(String name, String value) {
         headers_.setHeader(name, value);
     }
 
-    @Override
     public void setIntHeader(String name, int value) {
         headers_.setIntHeader(name, value);
     }
@@ -595,25 +580,21 @@ public class MockResponse extends AbstractResponse {
         return reason_;
     }
 
-    @Override
     public void setStatus(int statusCode) {
         status_ = statusCode;
     }
 
-    @Override
     public void sendError(int statusCode)
     throws EngineException {
         sendError(statusCode, null);
     }
 
-    @Override
     public void sendError(int statusCode, String message)
     throws EngineException {
         status_ = statusCode;
         reason_ = message;
     }
 
-    @Override
     public String encodeURL(String url) {
         var request = (MockRequest) getRequest();
 
@@ -665,7 +646,6 @@ public class MockResponse extends AbstractResponse {
         return url.substring(0, suffix) + MockConversation.SESSION_URL_PREFIX + id + url.substring(suffix);
     }
 
-    @Override
     public void setLocale(Locale locale) {
         if (null == locale) {
             return;
@@ -675,7 +655,6 @@ public class MockResponse extends AbstractResponse {
         setHeader(HEADER_CONTENT_LANGUAGE, locale.toString().replace('_', '-'));
     }
 
-    @Override
     public Locale getLocale() {
         if (null == locale_) {
             return Locale.getDefault();
@@ -684,7 +663,6 @@ public class MockResponse extends AbstractResponse {
         return locale_;
     }
 
-    @Override
     public PrintWriter getWriter()
     throws IOException {
         mockOutputStream_.flush();
@@ -725,7 +703,6 @@ public class MockResponse extends AbstractResponse {
         }
     }
 
-    @Override
     public HttpServletResponse getHttpServletResponse() {
         return null;
     }
@@ -806,7 +783,6 @@ public class MockResponse extends AbstractResponse {
         }
 
         /* ------------------------------------------------------------ */
-        @Override
         public boolean hasMoreTokens() {
             // Already found a token
             if (_hasToken)
@@ -896,7 +872,6 @@ public class MockResponse extends AbstractResponse {
         }
 
         /* ------------------------------------------------------------ */
-        @Override
         public String nextToken()
         throws NoSuchElementException {
             if (!hasMoreTokens() || _token == null)
@@ -908,7 +883,6 @@ public class MockResponse extends AbstractResponse {
         }
 
         /* ------------------------------------------------------------ */
-        @Override
         public String nextToken(String delim)
         throws NoSuchElementException {
             _delim = delim;
@@ -919,13 +893,11 @@ public class MockResponse extends AbstractResponse {
         }
 
         /* ------------------------------------------------------------ */
-        @Override
         public boolean hasMoreElements() {
             return hasMoreTokens();
         }
 
         /* ------------------------------------------------------------ */
-        @Override
         public Object nextElement()
         throws NoSuchElementException {
             return nextToken();
@@ -936,7 +908,6 @@ public class MockResponse extends AbstractResponse {
         /**
          * Not implemented.
          */
-        @Override
         public int countTokens() {
             return -1;
         }

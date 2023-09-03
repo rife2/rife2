@@ -96,7 +96,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             .orderBy("version", Select.DESC);
     }
 
-    @Override
     public boolean install()
     throws ContentManagerException {
         try {
@@ -120,7 +119,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return true;
     }
 
-    @Override
     public boolean remove()
     throws ContentManagerException {
         try {
@@ -142,7 +140,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return true;
     }
 
-    @Override
     public boolean createRepository(final String name)
     throws ContentManagerException {
         if (null == name) throw new IllegalArgumentException("name can't be null");
@@ -160,7 +157,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         return result != null && result;
     }
 
-    @Override
     public boolean storeContent(String location, final Content content, final ContentTransformer transformer)
     throws ContentManagerException {
         if (null == content) throw new IllegalArgumentException("content can't be null");
@@ -176,7 +172,6 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
 
         try {
             result = inTransaction(new DbTransactionUser<>() {
-                @Override
                 public Boolean useTransaction()
                 throws InnerClassException {
                     // get repository id
@@ -191,12 +186,10 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
                     // store the content
                     final var ids_array = new int[1];
                     if (executeUpdate(storeContentInfo_, new DbPreparedStatementHandler<>() {
-                        @Override
                         public DbPreparedStatement getPreparedStatement(Query query, DbConnection connection) {
                             return connection.getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS);
                         }
 
-                        @Override
                         public int performUpdate(DbPreparedStatement statement) {
                             statement
                                 .setInt("repositoryId", repository_id)
