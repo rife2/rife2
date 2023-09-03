@@ -6,7 +6,10 @@
  */
 package rife.authentication.sessionvalidators;
 
-import rife.authentication.*;
+import rife.authentication.CredentialsManager;
+import rife.authentication.RememberManager;
+import rife.authentication.SessionAttributes;
+import rife.authentication.SessionManager;
 import rife.authentication.credentialsmanagers.RoleUsersManager;
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.authentication.exceptions.SessionManagerException;
@@ -32,9 +35,9 @@ public class BasicSessionValidator<C extends CredentialsManager, S extends Sessi
     public int validateSession(String authId, String authData, SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||
-            0 == authId.length() ||
+            authId.isEmpty() ||
             null == authData ||
-            0 == authData.length() ||
+            authData.isEmpty() ||
             null == attributes) {
             return SESSION_INVALID;
         }

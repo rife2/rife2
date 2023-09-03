@@ -31,7 +31,7 @@ public class TestPurgingMemorySessions {
             auth_id = sessions.startSession(user_id, auth_data, false);
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertFalse(auth_id.isEmpty());
 
             assertEquals(1, sessions.countSessions());
         } catch (SessionManagerException e) {

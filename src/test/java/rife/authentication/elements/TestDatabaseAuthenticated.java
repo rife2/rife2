@@ -4,10 +4,8 @@
  */
 package rife.authentication.elements;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.test.MockConversation;
@@ -682,7 +680,7 @@ public class TestDatabaseAuthenticated {
             response = conversation.doRequest("http://localhost/logout");
             assertEquals(response.getStatus(), 200);
             assertTrue(response.getText().contains("Logged out"));
-            assertEquals(conversation.getCookieValue("authId"), null);
+            assertNull(conversation.getCookieValue("authId"));
 
             // verify user is logged out
             response = conversation.doRequest("http://localhost/landing");
@@ -718,7 +716,7 @@ public class TestDatabaseAuthenticated {
             response = conversation.doRequest("http://localhost/beforelogout");
             assertEquals(response.getStatus(), 200);
             assertEquals(response.getText(), "logged out");
-            assertEquals(conversation.getCookieValue("authId"), null);
+            assertNull(conversation.getCookieValue("authId"));
 
             // verify user is logged out
             response = conversation.doRequest("http://localhost/landing");

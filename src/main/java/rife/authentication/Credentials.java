@@ -16,7 +16,7 @@ import rife.validation.Validated;
  * to validate the contents of the provided data. For example enforce limits
  * on the length of passwords, verify the accepted characters in logins, check
  * the numeric requirements of identifiers, and so on.
- * <p>This is different from the validation of the credentials themselves (ie.
+ * <p>This is different from the validation of the credentials themselves (i.e.
  * checking if they're known by the system and can be authenticated) since
  * that is performed by a {@code CredentialsManager}.
  *

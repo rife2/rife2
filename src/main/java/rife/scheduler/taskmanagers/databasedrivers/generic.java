@@ -4,12 +4,11 @@
  */
 package rife.scheduler.taskmanagers.databasedrivers;
 
-import rife.database.queries.*;
-
 import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
+import rife.database.queries.*;
 import rife.scheduler.Frequency;
 import rife.scheduler.Task;
 import rife.scheduler.exceptions.TaskManagerException;

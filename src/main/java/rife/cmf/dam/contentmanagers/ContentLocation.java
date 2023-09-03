@@ -18,9 +18,9 @@ public record ContentLocation(String repository, String path) {
      */
     public static ContentLocation split(String location) {
         if (null == location) throw new IllegalArgumentException("location can't be null");
-        if (0 == location.length()) throw new IllegalArgumentException("location can't be empty");
+        if (location.isEmpty()) throw new IllegalArgumentException("location can't be empty");
 
-        var colon_index = location.indexOf(":");
+        var colon_index = location.indexOf(':');
 
         String repository = null;
         String path;
@@ -32,11 +32,11 @@ public record ContentLocation(String repository, String path) {
         }
 
         if (null == repository ||
-            0 == repository.length()) {
+            repository.isEmpty()) {
             repository = ContentRepository.DEFAULT;
         }
 
-        if (0 == path.length()) throw new IllegalArgumentException("path can't be empty");
+        if (path.isEmpty()) throw new IllegalArgumentException("path can't be empty");
         if (!path.startsWith("/")) throw new IllegalArgumentException("path needs to be absolute");
 
         return new ContentLocation(repository, path);

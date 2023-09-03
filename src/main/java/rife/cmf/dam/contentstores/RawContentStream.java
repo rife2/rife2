@@ -53,9 +53,7 @@ public class RawContentStream extends InputStream {
                 hasRow_ = resultSet_.next();
             }
         } catch (SQLException e) {
-            var e2 = new IOException("Unexpected error while reading the next bytes.");
-            e2.initCause(e);
-            throw e2;
+            throw new IOException("Unexpected error while reading the next bytes.", e);
         }
 
         return result;
@@ -70,9 +68,7 @@ public class RawContentStream extends InputStream {
         try {
             statement_.close();
         } catch (DatabaseException e) {
-            var e2 = new IOException("Unable to close prepared statement.");
-            e2.initCause(e);
-            throw e2;
+            throw new IOException("Unable to close prepared statement.", e);
         } finally {
             statement_ = null;
             resultSet_ = null;

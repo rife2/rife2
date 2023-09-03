@@ -7,7 +7,6 @@ package rife.test;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +18,24 @@ import java.util.List;
  * @since 1.0
  */
 public class ParsedHtml {
-    private final MockResponse response_;
     private final Document document_;
     private final List<MockForm> forms_ = new ArrayList<>();
     private final List<MockLink> links_ = new ArrayList<>();
 
     private ParsedHtml(MockResponse response, Document document) {
-        response_ = response;
         document_ = document;
 
         // get all the forms
         var forms = document_.select("form");
         for (var element : forms) {
-            var form = new MockForm(response_, element);
+            var form = new MockForm(response, element);
             forms_.add(form);
         }
 
         // get all the links
         var links = document_.select("a[href]");
         for (var element : links) {
-            var link = new MockLink(response_, element);
+            var link = new MockLink(response, element);
             links_.add(link);
         }
     }
@@ -77,7 +74,7 @@ public class ParsedHtml {
      */
     public String getTitle() {
         var elements = document_.select("title");
-        if (0 == elements.size()) {
+        if (elements.isEmpty()) {
             return null;
         }
 
@@ -110,7 +107,7 @@ public class ParsedHtml {
      */
     public MockForm getFormWithName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var form : forms_) {
             if (name.equals(form.getName())) {
@@ -134,7 +131,7 @@ public class ParsedHtml {
      */
     public MockForm getFormWithId(String id) {
         if (null == id) throw new IllegalArgumentException("id can't be null");
-        if (0 == id.length()) throw new IllegalArgumentException("id can't be empty");
+        if (id.isEmpty()) throw new IllegalArgumentException("id can't be empty");
 
         for (var form : forms_) {
             if (form.getId().equals(id)) {
@@ -176,7 +173,7 @@ public class ParsedHtml {
      */
     public MockLink getLinkWithName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var link : links_) {
             if (link.getName().equals(name)) {
@@ -203,7 +200,7 @@ public class ParsedHtml {
      */
     public MockLink getLinkWithId(String id) {
         if (null == id) throw new IllegalArgumentException("id can't be null");
-        if (0 == id.length()) throw new IllegalArgumentException("id can't be empty");
+        if (id.isEmpty()) throw new IllegalArgumentException("id can't be empty");
 
         for (var link : links_) {
             if (id.equals(link.getId())) {
@@ -260,7 +257,7 @@ public class ParsedHtml {
         for (var link : links_) {
             var element = link.getElement();
             var children = element.children();
-            if (children.size() > 0) {
+            if (!children.isEmpty()) {
                 for (var child : children) {
                     if ("img".equals(child.nodeName())) {
                         var alt_text = getElementAttribute(child, "alt", null);
@@ -292,12 +289,12 @@ public class ParsedHtml {
      */
     public MockLink getLinkWithImageName(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var link : links_) {
             var element = link.getElement();
             var children = element.children();
-            if (children.size() > 0) {
+            if (!children.isEmpty()) {
                 for (var child : children) {
                     if ("img".equals(child.nodeName())) {
                         var alt_text = getElementAttribute(child, "name", null);

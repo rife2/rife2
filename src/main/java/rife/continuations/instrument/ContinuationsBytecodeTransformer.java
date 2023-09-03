@@ -8,10 +8,6 @@ import rife.asm.ClassReader;
 import rife.asm.ClassVisitor;
 import rife.asm.ClassWriter;
 import rife.continuations.ContinuationConfigInstrument;
-import rife.continuations.instrument.ContinuationDebug;
-import rife.continuations.instrument.MetricsClassVisitor;
-import rife.continuations.instrument.ResumableClassAdapter;
-import rife.continuations.instrument.TypesClassVisitor;
 
 import java.util.logging.Level;
 

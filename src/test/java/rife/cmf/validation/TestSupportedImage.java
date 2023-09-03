@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSupportedImage {
     @Test
-    void testValidateNull()
-    throws Exception {
+    void testValidateNull() {
         var rule = new SupportedImage("image");
         var bean = new ImageBean();
         var property = new ConstrainedProperty("image").mimeType(MimeType.IMAGE_PNG);
@@ -44,8 +43,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    void testValidateUnsupported()
-    throws Exception {
+    void testValidateUnsupported() {
         var rule = new SupportedImage("image");
         var bean = new ImageBean();
         var property = new ConstrainedProperty("image").mimeType(MimeType.IMAGE_PNG);
@@ -88,8 +86,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    void testValidateUnknownProperty()
-    throws Exception {
+    void testValidateUnknownProperty() {
         var rule = new SupportedImage("image_unknown");
         var bean = new ImageBean();
         rule.setBean(bean);
@@ -98,8 +95,7 @@ public class TestSupportedImage {
     }
 
     @Test
-    void testGetError()
-    throws Exception {
+    void testGetError() {
         var rule = new SupportedImage("image");
         assertEquals("image", rule.getError().getSubject());
         assertEquals("invalid", rule.getError().getIdentifier());

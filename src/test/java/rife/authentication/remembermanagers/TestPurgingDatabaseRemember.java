@@ -36,7 +36,7 @@ public class TestPurgingDatabaseRemember {
             remember_id = remember.createRememberId(user_id);
 
             assertNotNull(remember_id);
-            assertTrue(remember_id.length() > 0);
+            assertFalse(remember_id.isEmpty());
 
             assertEquals(user_id, remember.getRememberedUserId(remember_id));
         } catch (RememberManagerException e) {

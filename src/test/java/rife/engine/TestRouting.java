@@ -4,7 +4,9 @@
  */
 package rife.engine;
 
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.HttpMethod;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

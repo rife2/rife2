@@ -9,7 +9,6 @@ import rife.tools.BeanUtils;
 import rife.tools.exceptions.BeanUtilsException;
 import rife.validation.ValidationError;
 
-import java.awt.Image;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ public class SupportedImage extends CmfPropertyValidationRule {
         // is considered invalid
         Set<String> errors = new HashSet<>();
 		var loaded = new ImageContentLoader().load(value, getFragment(), errors);
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             setLoadingErrors(errors);
         }
         if (null == loaded) {

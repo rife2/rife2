@@ -15,7 +15,11 @@ public class DuplicateTaskOptionException extends TaskOptionManagerException {
     private final String taskoptionName_;
 
     public DuplicateTaskOptionException(int taskid, String taskoptionName) {
-        super("The task option with task id '" + taskid + "' and name '" + taskoptionName + "' already exists.");
+        this(taskid, taskoptionName, null);
+    }
+
+    public DuplicateTaskOptionException(int taskid, String taskoptionName, Throwable e) {
+        super("The task option with task id '" + taskid + "' and name '" + taskoptionName + "' already exists.", e);
 
         taskID_ = taskid;
         taskoptionName_ = taskoptionName;

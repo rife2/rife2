@@ -85,12 +85,12 @@ public class Gate {
 
         // ensure a valid element url
         if (null == elementUrl ||
-            0 == elementUrl.length()) {
+            elementUrl.isEmpty()) {
             elementUrl = "/";
         }
 
         // strip away the optional path parameters
-        var path_parameters_index = elementUrl.indexOf(";");
+        var path_parameters_index = elementUrl.indexOf(';');
         if (path_parameters_index != -1) {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }

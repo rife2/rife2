@@ -12,7 +12,9 @@ import rife.ioc.HierarchicalProperties;
 import rife.tools.ArrayUtils;
 import rife.tools.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Simulates a conversation between a web browser and a servlet container.
@@ -129,13 +131,13 @@ public class MockConversation {
 
         // get the path parameters
         String path_parameters = null;
-        var path_parameters_index = url.indexOf(";");
+        var path_parameters_index = url.indexOf(';');
         if (path_parameters_index != -1) {
             path_parameters = url.substring(0, path_parameters_index);
         }
 
         // remove the query string
-        var index_query = url.indexOf("?");
+        var index_query = url.indexOf('?');
         if (index_query != -1) {
             url = url.substring(0, index_query);
         }
@@ -332,7 +334,7 @@ public class MockConversation {
      */
     public boolean hasCookie(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var cookie : cookies_.values()) {
             if (cookie.getName().equals(name) && !cookie.isExpired()) {
@@ -358,7 +360,7 @@ public class MockConversation {
      */
     public Cookie getCookie(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         for (var cookie : cookies_.values()) {
             if (cookie.getName().equals(name) && !cookie.isExpired()) {
@@ -384,7 +386,7 @@ public class MockConversation {
      */
     public String getCookieValue(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         var cookie = getCookie(name);
         if (null == cookie) {
@@ -407,7 +409,7 @@ public class MockConversation {
      * @since 1.0
      */
     public Cookie[] getCookies() {
-        if (0 == cookies_.size()) {
+        if (cookies_.isEmpty()) {
             return null;
         }
 
@@ -453,7 +455,7 @@ public class MockConversation {
      */
     public void addCookie(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         addCookie(new MockCookie(name, value));
     }
@@ -519,8 +521,8 @@ public class MockConversation {
             return null;
         }
 
-        var index_query = url.indexOf("?");
-        var index_anchor = url.indexOf("#");
+        var index_query = url.indexOf('?');
+        var index_anchor = url.indexOf('#');
 
         if (-1 == index_query) {
             return null;

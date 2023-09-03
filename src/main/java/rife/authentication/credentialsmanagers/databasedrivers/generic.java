@@ -4,8 +4,6 @@
  */
 package rife.authentication.credentialsmanagers.databasedrivers;
 
-import rife.database.queries.*;
-
 import rife.authentication.Credentials;
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.ListRoles;
@@ -17,6 +15,7 @@ import rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdExcepti
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
+import rife.database.queries.*;
 
 public class generic extends DatabaseUsers {
     protected CreateSequence createSequenceRole_;
@@ -281,7 +280,7 @@ public class generic extends DatabaseUsers {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableRole_.getUniqueConstraints().get(0).getName())) {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -315,10 +314,10 @@ public class generic extends DatabaseUsers {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains(createTableUser_.getPrimaryKeys().get(0).getName())) {
-                    throw new DuplicateUserIdException(attributes.getUserId());
+                    throw new DuplicateUserIdException(attributes.getUserId(), e);
                 }
                 if (message.contains(createTableUser_.getUniqueConstraints().get(0).getName())) {
-                    throw new DuplicateLoginException(login);
+                    throw new DuplicateLoginException(login, e);
                 }
             }
 

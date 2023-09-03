@@ -9,7 +9,7 @@ import rife.cmf.ContentInfo;
 import rife.cmf.MimeType;
 import rife.cmf.MimeTypeFormatter;
 import rife.cmf.dam.exceptions.ContentManagerException;
-import rife.cmf.format.*;
+import rife.cmf.format.Formatter;
 import rife.cmf.transform.ContentTransformer;
 import rife.engine.Context;
 import rife.engine.Route;

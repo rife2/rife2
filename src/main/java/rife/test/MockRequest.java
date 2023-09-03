@@ -4,9 +4,6 @@
  */
 package rife.test;
 
-import java.io.*;
-import java.util.*;
-
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,13 +12,17 @@ import rife.config.RifeConfig;
 import rife.engine.Request;
 import rife.engine.RequestMethod;
 import rife.engine.UploadedFile;
-import rife.engine.exceptions.EngineException;
 import rife.engine.exceptions.MultipartFileTooBigException;
 import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;
 import rife.engine.exceptions.MultipartRequestException;
-import rife.tools.FileUtils;
 import rife.tools.StringUtils;
-import rife.tools.exceptions.FileUtilsErrorException;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.util.*;
 
 /**
  * Provides a {@link Request} implementation that is suitable for testing a
@@ -207,7 +208,7 @@ public class MockRequest implements Request {
      */
     public void setParameter(String name, String... values) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == values) throw new IllegalArgumentException("values can't be null");
 
         parameters_.put(name, values);
@@ -230,7 +231,7 @@ public class MockRequest implements Request {
      */
     public void setParameter(String name, Object... values) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == values) throw new IllegalArgumentException("values can't be null");
 
         final var strings = new String[values.length];
@@ -370,7 +371,7 @@ public class MockRequest implements Request {
 
     public boolean hasFile(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         if (null == getFiles()) {
             return false;
@@ -398,7 +399,7 @@ public class MockRequest implements Request {
 
     public UploadedFile getFile(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         if (null == getFiles()) {
             return null;
@@ -414,7 +415,7 @@ public class MockRequest implements Request {
 
     public UploadedFile[] getFiles(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         if (null == getFiles()) {
             return null;
@@ -448,7 +449,7 @@ public class MockRequest implements Request {
      */
     public void setFile(String name, MockFileUpload file) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == file) throw new IllegalArgumentException("file can't be null");
 
         setFiles(name, new MockFileUpload[]{file});
@@ -468,7 +469,7 @@ public class MockRequest implements Request {
      */
     public void setFiles(Map<String, MockFileUpload[]> files) {
         if (null == files ||
-            0 == files.size()) {
+            files.isEmpty()) {
             return;
         }
 
@@ -491,7 +492,7 @@ public class MockRequest implements Request {
      */
     public void setFiles(String name, MockFileUpload[] files) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == files) throw new IllegalArgumentException("files can't be null");
 
         checkUploadDirectory();
@@ -506,7 +507,7 @@ public class MockRequest implements Request {
 
             try {
                 var tmp_file = File.createTempFile("upl", ".tmp", uploadDirectory_);
-                var output_stream = new FileOutputStream(tmp_file);
+                var output_stream = Files.newOutputStream(tmp_file.toPath());
                 var output = new BufferedOutputStream(output_stream, 8 * 1024); // 8K
 
                 var input_stream = files[i].getInputStream();
@@ -621,15 +622,15 @@ public class MockRequest implements Request {
 
     public String getServerRootUrl(int port) {
         var server_root = new StringBuilder();
-        server_root.append(getScheme());
-        server_root.append("://");
-        server_root.append(getServerName());
+        server_root.append(getScheme())
+            .append("://")
+            .append(getServerName());
         if (port <= -1) {
             port = getServerPort();
         }
         if (port != 80) {
-            server_root.append(":");
-            server_root.append(port);
+            server_root.append(':')
+                .append(port);
         }
         return server_root.toString();
     }
@@ -664,7 +665,7 @@ public class MockRequest implements Request {
 
     public Enumeration<String> getAttributeNames() {
         if (null == attributes_) {
-            return Collections.enumeration(new ArrayList<String>());
+            return Collections.enumeration(new ArrayList<>());
         }
 
         return Collections.enumeration(attributes_.keySet());
@@ -672,7 +673,7 @@ public class MockRequest implements Request {
 
     public void removeAttribute(String name) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         if (null == attributes_) {
             return;
@@ -683,7 +684,7 @@ public class MockRequest implements Request {
 
     public void setAttribute(String name, Object object) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         if (null == attributes_) {
             attributes_ = new HashMap<>();
@@ -704,7 +705,7 @@ public class MockRequest implements Request {
      */
     public void setCharacterEncoding(String encoding) {
         if (null == encoding) throw new IllegalArgumentException("encoding can't be null");
-        if (0 == encoding.length()) throw new IllegalArgumentException("encoding can't be empty");
+        if (encoding.isEmpty()) throw new IllegalArgumentException("encoding can't be empty");
 
         characterEncoding_ = encoding;
     }
@@ -734,7 +735,7 @@ public class MockRequest implements Request {
      */
     public void setContentType(String type) {
         if (null == type) throw new IllegalArgumentException("type can't be null");
-        if (0 == type.length()) throw new IllegalArgumentException("type can't be empty");
+        if (type.isEmpty()) throw new IllegalArgumentException("type can't be empty");
 
         contentType_ = type;
     }
@@ -783,7 +784,7 @@ public class MockRequest implements Request {
      */
     public MockRequest addHeader(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == value) throw new IllegalArgumentException("value can't be null");
 
         headers_.addHeader(name, value);
@@ -803,7 +804,7 @@ public class MockRequest implements Request {
      */
     public MockRequest addDateHeader(String name, long value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         headers_.addDateHeader(name, value);
 
@@ -821,7 +822,7 @@ public class MockRequest implements Request {
      */
     public MockRequest addIntHeader(String name, int value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         headers_.addIntHeader(name, value);
 
@@ -853,7 +854,7 @@ public class MockRequest implements Request {
      */
     public void setDateHeader(String name, long value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         headers_.setDateHeader(name, value);
     }
@@ -884,7 +885,7 @@ public class MockRequest implements Request {
      */
     public void setHeader(String name, String value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == value) throw new IllegalArgumentException("value can't be null");
 
         headers_.setHeader(name, value);
@@ -916,7 +917,7 @@ public class MockRequest implements Request {
      */
     public void setIntHeader(String name, int value) {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         headers_.setIntHeader(name, value);
     }
@@ -947,7 +948,7 @@ public class MockRequest implements Request {
 
     public Locale getLocale() {
         if (null == locales_ ||
-            0 == locales_.size()) {
+            locales_.isEmpty()) {
             return Locale.getDefault();
         }
 
@@ -955,13 +956,10 @@ public class MockRequest implements Request {
     }
 
     public Enumeration<Locale> getLocales() {
-        if (null == locales_) {
-            return Collections.enumeration(new ArrayList() {{
-                add(Locale.getDefault());
-            }});
-        }
+        return Collections.enumeration(Objects.requireNonNullElseGet(locales_, () -> new ArrayList() {{
+            add(Locale.getDefault());
+        }}));
 
-        return Collections.enumeration(locales_);
     }
 
     /**
@@ -1008,7 +1006,7 @@ public class MockRequest implements Request {
      */
     public void setProtocol(String protocol) {
         if (null == protocol) throw new IllegalArgumentException("protocol can't be null");
-        if (0 == protocol.length()) throw new IllegalArgumentException("protocol can't be empty");
+        if (protocol.isEmpty()) throw new IllegalArgumentException("protocol can't be empty");
 
         protocol_ = protocol;
     }
@@ -1039,7 +1037,7 @@ public class MockRequest implements Request {
      */
     public void setRemoteAddr(String remoteAddr) {
         if (null == remoteAddr) throw new IllegalArgumentException("remoteAddr can't be null");
-        if (0 == remoteAddr.length()) throw new IllegalArgumentException("remoteAddr can't be empty");
+        if (remoteAddr.isEmpty()) throw new IllegalArgumentException("remoteAddr can't be empty");
 
         remoteAddr_ = remoteAddr;
     }
@@ -1070,7 +1068,7 @@ public class MockRequest implements Request {
      */
     public void setRemoteUser(String remoteUser) {
         if (null == remoteUser) throw new IllegalArgumentException("remoteUser can't be null");
-        if (0 == remoteUser.length()) throw new IllegalArgumentException("remoteUser can't be empty");
+        if (remoteUser.isEmpty()) throw new IllegalArgumentException("remoteUser can't be empty");
 
         remoteUser_ = remoteUser;
     }
@@ -1101,7 +1099,7 @@ public class MockRequest implements Request {
      */
     public void setRemoteHost(String remoteHost) {
         if (null == remoteHost) throw new IllegalArgumentException("remoteHost can't be null");
-        if (0 == remoteHost.length()) throw new IllegalArgumentException("remoteHost can't be empty");
+        if (remoteHost.isEmpty()) throw new IllegalArgumentException("remoteHost can't be empty");
 
         remoteHost_ = remoteHost;
     }
@@ -1189,8 +1187,7 @@ public class MockRequest implements Request {
     }
 
     public HttpSession getSession() {
-        var session = getSession(true);
-        return session;
+        return getSession(true);
     }
 
     void setRequestedSessionId(String pathParams) {
@@ -1199,8 +1196,8 @@ public class MockRequest implements Request {
         // try cookies first
         var cookies = getCookies();
         if (cookies != null && cookies.length > 0) {
-            for (var i = 0; i < cookies.length; i++) {
-                if (MockConversation.SESSION_ID_COOKIE.equalsIgnoreCase(cookies[i].getName())) {
+            for (Cookie cookie : cookies) {
+                if (MockConversation.SESSION_ID_COOKIE.equalsIgnoreCase(cookie.getName())) {
                     if (requestedSessionId_ != null) {
                         // Multiple jsessionid cookies. Probably due to
                         // multiple paths and/or domains. Pick the first
@@ -1210,7 +1207,7 @@ public class MockRequest implements Request {
                         }
                     }
 
-                    requestedSessionId_ = cookies[i].getValue();
+                    requestedSessionId_ = cookie.getValue();
                     sessionIdState_ = SESSIONID_COOKIE;
                 }
             }

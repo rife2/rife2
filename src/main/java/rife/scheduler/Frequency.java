@@ -10,7 +10,9 @@ import rife.tools.StringUtils;
 
 import java.time.DayOfWeek;
 import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -746,7 +748,7 @@ public class Frequency {
     void parse(String frequency)
     throws FrequencyException {
         if (null == frequency) throw new IllegalArgumentException("frequency can't be null");
-        if (0 == frequency.length()) throw new IllegalArgumentException("frequency can't be empty");
+        if (frequency.isEmpty()) throw new IllegalArgumentException("frequency can't be empty");
 
         reset();
 
@@ -807,7 +809,7 @@ public class Frequency {
     private byte[] processParts(List<String> parts, byte[] allValues, boolean deferOverflowProcessing, byte[] underflowStorage, byte[] overflowStorage)
     throws FrequencyException {
         assert parts != null;
-        assert parts.size() > 0;
+        assert !parts.isEmpty();
         assert allValues != null;
         assert allValues.length > 0;
         assert !deferOverflowProcessing || (deferOverflowProcessing && underflowStorage != null && overflowStorage != null);
@@ -858,7 +860,6 @@ public class Frequency {
                     for (byte i = 0; i < allValues.length; i += divider) {
                         result_values[i] = allValues[i];
                     }
-                    continue;
                 }
                 // range
                 else if ((separator = current_part.indexOf("-")) != -1) {
@@ -933,7 +934,6 @@ public class Frequency {
                         result_values[left - begin] = allValues[left - begin];
                         left += divider;
                     }
-                    continue;
                 }
                 // one number
                 else {

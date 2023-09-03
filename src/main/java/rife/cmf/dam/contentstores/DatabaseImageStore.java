@@ -4,11 +4,6 @@
  */
 package rife.cmf.dam.contentstores;
 
-import java.io.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-
 import rife.cmf.Content;
 import rife.cmf.ContentInfo;
 import rife.cmf.MimeType;
@@ -33,6 +28,14 @@ import rife.engine.Route;
 import rife.tools.Convert;
 import rife.tools.StringUtils;
 import rife.tools.exceptions.ConversionException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 
 public abstract class DatabaseImageStore extends DatabaseContentStore {
     public DatabaseImageStore(Datasource datasource) {
@@ -67,9 +70,9 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
         if (null == route) throw new IllegalArgumentException("route can't be null.");
 
         var result = new StringBuilder();
-        result.append("<img src=\"");
-        result.append(StringUtils.encodeHtml(context.urlFor(route).pathInfo(info.getPath()).toString()));
-        result.append("\"");
+        result.append("<img src=\"")
+            .append(StringUtils.encodeHtml(context.urlFor(route).pathInfo(info.getPath()).toString()))
+            .append('"');
         var properties = info.getProperties();
         if (properties != null) {
             var width = properties.get(ImageFormatter.CmfProperty.WIDTH);
@@ -83,7 +86,7 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
                     }
                     result.append(" width=\"");
                     result.append(width_attribute);
-                    result.append("\"");
+                    result.append('"');
                 } catch (ConversionException e) {
                     throw new RuntimeException(e);
                 }
@@ -96,7 +99,7 @@ public abstract class DatabaseImageStore extends DatabaseContentStore {
                     }
                     result.append(" height=\"");
                     result.append(height_attribute);
-                    result.append("\"");
+                    result.append('"');
                 } catch (ConversionException e) {
                     throw new RuntimeException(e);
                 }

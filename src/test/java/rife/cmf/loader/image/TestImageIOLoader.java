@@ -9,8 +9,6 @@ import rife.cmf.MimeType;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 
-import java.awt.Image;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 

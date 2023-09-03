@@ -4,10 +4,10 @@
  */
 package rife.cmf.dam.contentstores.textstoredrivers;
 
-import rife.database.*;
-
 import rife.config.RifeConfig;
+import rife.database.Datasource;
 import rife.database.queries.CreateTable;
+
 import java.sql.Clob;
 
 public class oracle_jdbc_driver_OracleDriver extends generic {

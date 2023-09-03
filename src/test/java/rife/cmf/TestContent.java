@@ -62,7 +62,7 @@ public class TestContent {
             content = new Content(null, "<html></html>");
             fail();
         } catch (IllegalArgumentException e) {
-            assertTrue(e.getMessage().indexOf("mimeType") != -1);
+            assertTrue(e.getMessage().contains("mimeType"));
         }
 
         assertNull(content);

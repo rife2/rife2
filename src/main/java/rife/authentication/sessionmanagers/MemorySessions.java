@@ -11,11 +11,8 @@ import rife.authentication.sessionmanagers.exceptions.StartSessionErrorException
 import rife.config.RifeConfig;
 import rife.tools.UniqueIDGenerator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MemorySessions implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
@@ -75,7 +72,7 @@ public class MemorySessions implements SessionManager {
     throws SessionManagerException {
         if (userId < 0 ||
             null == authData ||
-            0 == authData.length()) {
+            authData.isEmpty()) {
             throw new StartSessionErrorException(userId, authData);
         }
 
@@ -95,9 +92,9 @@ public class MemorySessions implements SessionManager {
     public boolean isSessionValid(String authId, String authData)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length() ||
+            authId.isEmpty() ||
             null == authData ||
-            0 == authData.length()) {
+            authData.isEmpty()) {
             return false;
         }
 
@@ -125,7 +122,7 @@ public class MemorySessions implements SessionManager {
     public boolean continueSession(String authId)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -138,7 +135,7 @@ public class MemorySessions implements SessionManager {
     public boolean eraseSession(String authId)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -148,7 +145,7 @@ public class MemorySessions implements SessionManager {
     public boolean wasRemembered(String authId)
     throws SessionManagerException {
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 

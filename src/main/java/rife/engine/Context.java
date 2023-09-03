@@ -7,7 +7,8 @@ package rife.engine;
 import rife.config.RifeConfig;
 import rife.continuations.ContinuationConfigRuntime;
 import rife.continuations.ContinuationContext;
-import rife.continuations.exceptions.*;
+import rife.continuations.exceptions.ContinuationsNotActiveException;
+import rife.continuations.exceptions.PauseException;
 import rife.engine.exceptions.*;
 import rife.forms.FormBuilder;
 import rife.ioc.HierarchicalProperties;
@@ -15,7 +16,9 @@ import rife.servlet.ServletUtils;
 import rife.template.Template;
 import rife.template.TemplateFactory;
 import rife.template.exceptions.TemplateException;
-import rife.tools.*;
+import rife.tools.ArrayUtils;
+import rife.tools.BeanUtils;
+import rife.tools.StringUtils;
 import rife.tools.exceptions.BeanUtilsException;
 
 import java.io.OutputStream;
@@ -514,7 +517,7 @@ public class Context {
     public Template template(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.HTML.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -568,7 +571,7 @@ public class Context {
     public Template templateTxt(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.TXT.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -622,7 +625,7 @@ public class Context {
     public Template templateXml(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.XML.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -676,7 +679,7 @@ public class Context {
     public Template templateJson(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.JSON.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -730,7 +733,7 @@ public class Context {
     public Template templateSvg(String name, String encoding)
     throws TemplateException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var template = TemplateFactory.SVG.get(name, encoding);
         template.setAttribute(Context.class.getName(), this);
@@ -791,12 +794,12 @@ public class Context {
         webapp_root.append(serverRootUrl(port));
         var gate_url = gateUrl();
         if (!gate_url.startsWith("/")) {
-            webapp_root.append("/");
+            webapp_root.append('/');
         }
         webapp_root.append(gate_url);
-        if (gate_url.length() > 0 &&
+        if (!gate_url.isEmpty() &&
             !gate_url.endsWith("/")) {
-            webapp_root.append("/");
+            webapp_root.append('/');
         }
 
         return webapp_root.toString();
@@ -848,7 +851,7 @@ public class Context {
     public Collection<String> selectParameter(Template template, String name, String[] values) {
         if (null == template) throw new IllegalArgumentException("template can't be null.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var form_builder = template.getFormBuilder();
         if (null == form_builder) {
@@ -929,7 +932,7 @@ public class Context {
      * Generates a form that corresponds to an empty instance of a bean class.
      * <p>An '<em>empty</em>' instance is an object that has been created by
      * calling the default constructor of the bean class, without making any
-     * additional changes to it afterwards.
+     * additional changes to it afterward.
      * <p>This method delegates all logic to the {@link
      * rife.forms.FormBuilder#generateForm(Template, Class, Map, String)}
      * method of the provided template instance.
@@ -1146,7 +1149,7 @@ public class Context {
     public boolean isParameterEmpty(String name) {
         var parameter = parameter(name);
         return null == parameter ||
-            parameter.trim().equals("");
+            parameter.isBlank();
     }
 
     /**
@@ -1678,7 +1681,7 @@ public class Context {
                 parameter_values = parameterValues(parameter_name);
                 if (null == empty_bean &&
                     (null == parameter_values ||
-                        0 == parameter_values[0].length())) {
+                        parameter_values[0].isEmpty())) {
                     empty_bean = getNewBeanInstance(bean.getClass());
                 }
 

@@ -6,7 +6,8 @@ package rife.scheduler;
 
 import rife.config.RifeConfig;
 import rife.scheduler.exceptions.*;
-import rife.scheduler.schedulermanagers.*;
+import rife.scheduler.schedulermanagers.DatabaseScheduling;
+import rife.scheduler.schedulermanagers.MemoryScheduling;
 
 import java.util.*;
 

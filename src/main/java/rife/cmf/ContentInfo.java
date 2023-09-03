@@ -106,10 +106,7 @@ public class ContentInfo extends Validation {
             return path_;
         }
 
-        var result = new StringBuilder(path_);
-        result.append("/");
-        result.append(name_);
-        return result.toString();
+        return path_ + '/' + name_;
     }
 
     /**
@@ -281,7 +278,7 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public boolean hasAttributes() {
-        return attributes_ != null && attributes_.size() > 0;
+        return attributes_ != null && !attributes_.isEmpty();
     }
 
     /**
@@ -397,7 +394,7 @@ public class ContentInfo extends Validation {
      * @since 1.0
      */
     public boolean hasProperties() {
-        return properties_ != null && properties_.size() > 0;
+        return properties_ != null && !properties_.isEmpty();
     }
 
     /**

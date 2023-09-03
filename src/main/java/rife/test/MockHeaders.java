@@ -4,10 +4,9 @@
  */
 package rife.test;
 
-import java.util.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.*;
 
 class MockHeaders {
     private static final String[] DATE_FORMAT_SYNTAXES =
@@ -88,7 +87,7 @@ class MockHeaders {
 
         var headers = headers_.get(name);
         if (null == headers ||
-            0 == headers.size()) {
+            headers.isEmpty()) {
             return null;
         }
 
@@ -110,7 +109,7 @@ class MockHeaders {
 
         var headers = headers_.get(name);
         if (null == headers ||
-            0 == headers.size()) {
+            headers.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -126,13 +125,13 @@ class MockHeaders {
         try {
             return Integer.parseInt(header);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(header);
+            throw new IllegalArgumentException(header, e);
         }
     }
 
     public void addHeader(String name, String value) {
         if (null == headers_) {
-            headers_ = new HashMap<String, List<String>>();
+            headers_ = new HashMap<>();
         }
 
         var headers = headers_.computeIfAbsent(name, k -> new ArrayList<>());
@@ -167,10 +166,10 @@ class MockHeaders {
 
     public void setHeader(String name, final String value) {
         if (null == headers_) {
-            headers_ = new HashMap<String, List<String>>();
+            headers_ = new HashMap<>();
         }
 
-        headers_.put(name, new ArrayList<String>() {{
+        headers_.put(name, new ArrayList<>() {{
             add(value);
         }});
     }

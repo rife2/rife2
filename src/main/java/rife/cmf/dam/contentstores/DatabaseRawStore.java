@@ -4,20 +4,21 @@
  */
 package rife.cmf.dam.contentstores;
 
-import rife.cmf.dam.*;
-import rife.cmf.dam.contentstores.exceptions.*;
-import rife.database.*;
-import rife.database.queries.*;
-
 import rife.cmf.Content;
 import rife.cmf.ContentInfo;
 import rife.cmf.MimeType;
+import rife.cmf.dam.ContentDataUser;
+import rife.cmf.dam.ContentDataUserWithoutResult;
+import rife.cmf.dam.ContentStore;
+import rife.cmf.dam.contentstores.exceptions.*;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.format.Formatter;
 import rife.cmf.format.exceptions.FormatException;
 import rife.cmf.transform.ContentTransformer;
 import rife.config.RifeConfig;
+import rife.database.*;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.engine.Context;
 import rife.engine.Route;
 import rife.tools.Convert;
@@ -25,14 +26,12 @@ import rife.tools.ExceptionUtils;
 import rife.tools.FileUtils;
 import rife.tools.InnerClassException;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class DatabaseRawStore extends DbQueryManager implements ContentStore {
@@ -416,7 +415,7 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
     }
 
     protected void serveChunks(DbResultSet resultset, OutputStream os, int size)
-    throws SQLException, IOException {
+    throws SQLException {
         var buffer = new byte[512];
         do {
             var is = resultset.getBinaryStream("chunk");

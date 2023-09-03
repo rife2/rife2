@@ -4,17 +4,25 @@
  */
 package rife.scheduler.taskmanagers;
 
-import rife.database.*;
+import rife.database.Datasource;
+import rife.database.DbPreparedStatementHandler;
+import rife.database.DbQueryManager;
+import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.*;
-import rife.scheduler.*;
+import rife.scheduler.Frequency;
+import rife.scheduler.Scheduler;
+import rife.scheduler.Task;
+import rife.scheduler.TaskManager;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.scheduler.taskmanagers.exceptions.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class DatabaseTasks extends DbQueryManager implements TaskManager {
     private Scheduler scheduler_ = null;
@@ -277,7 +285,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
                 result = true;
             }
         } catch (DatabaseException e) {
-            throw new ActivateTaskErrorException(id);
+            throw new ActivateTaskErrorException(id, e);
         }
 
         return result;
@@ -325,7 +333,7 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
             try {
                 task_.setFrequencySpecification(resultSet.getString("frequency"));
             } catch (FrequencyException e) {
-                throw new SQLException(e.getMessage());
+                throw new SQLException(e.getMessage(), e);
             }
             task_.setBusy(resultSet.getBoolean("busy"));
             task_.setTaskManager(DatabaseTasks.this);

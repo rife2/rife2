@@ -5,7 +5,10 @@
 package rife.workflow;
 
 import org.junit.jupiter.api.Test;
-import rifeworkflowtests.*;
+import rifeworkflowtests.TestEventTypes;
+import rifeworkflowtests.WorkDep1;
+import rifeworkflowtests.WorkDep2;
+import rifeworkflowtests.WorkPauseType1;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.LongAdder;

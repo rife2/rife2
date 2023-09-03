@@ -7,31 +7,30 @@ package rife.cmf.dam.contentstores;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.cmf.dam.contentstores.exceptions.*;
-
-import java.awt.*;
-
 import rife.cmf.Content;
 import rife.cmf.ContentInfo;
 import rife.cmf.ContentRepository;
 import rife.cmf.MimeType;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.dam.contentmanagers.DatabaseContentInfo;
+import rife.cmf.dam.contentstores.exceptions.*;
 import rife.config.RifeConfig;
-import rife.database.*;
+import rife.database.Datasource;
+import rife.database.TestDatasources;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 import rife.tools.ImageWaiter;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.sql.Timestamp;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -126,7 +125,7 @@ public class TestDatabaseImageStore {
         setup(datasource);
         try {
             var store = DatabaseImageStoreFactory.instance(datasource);
-            assertTrue(store.getSupportedMimeTypes().size() > 0);
+            assertFalse(store.getSupportedMimeTypes().isEmpty());
         } finally {
             tearDown(datasource);
         }

@@ -5,11 +5,11 @@
 
 package rife.web;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-
 import rife.engine.Context;
 import rife.template.Template;
+
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 
 /**
  * This class provides utility methods to generate navigation for paged lists.
@@ -214,7 +214,7 @@ public class PagedNavigation {
      * @since 1.1
      */
     public static void generate(Context context, Template template, long count, int limit, long offset, int span, String parameter) {
-        var range_count = (long) Math.ceil(((double) count) / limit);
+        var range_count = (long) ceil(((double) count) / limit);
         if (range_count < 0) {
             range_count = 0;
         }

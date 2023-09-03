@@ -26,7 +26,7 @@ public class org_h2_Driver extends generic {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains("AUTHROLE_NAME_UQ_INDEX")) {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -45,10 +45,10 @@ public class org_h2_Driver extends generic {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains("AUTHUSER_LOGIN_UQ_INDEX")) {
-                    throw new DuplicateLoginException(login);
+                    throw new DuplicateLoginException(login, e);
                 }
                 if (message.contains("PRIMARY KEY ON")) {
-                    throw new DuplicateUserIdException(attributes.getUserId());
+                    throw new DuplicateUserIdException(attributes.getUserId(), e);
                 }
             }
 

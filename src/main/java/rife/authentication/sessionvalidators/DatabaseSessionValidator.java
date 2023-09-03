@@ -15,8 +15,6 @@ import rife.authentication.sessionmanagers.DatabaseSessions;
 import rife.authentication.sessionmanagers.DatabaseSessionsFactory;
 import rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException;
 import rife.database.Datasource;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.Select;
@@ -74,9 +72,9 @@ public abstract class DatabaseSessionValidator extends DbQueryManager implements
     protected int _validateSession(Select sessionValidityNoRole, Select sessionValidityNoRoleRestrictAuthData, Select sessionValidityRole, Select sessionValidityRoleRestrictAuthData, ProcessSessionValidity processSessionValidity, final String authId, final String authData, final SessionAttributes attributes)
     throws SessionValidatorException {
         if (null == authId ||
-            0 == authId.length() ||
+            authId.isEmpty() ||
             null == authData ||
-            0 == authData.length() ||
+            authData.isEmpty() ||
             null == attributes) {
             return SESSION_INVALID;
         }

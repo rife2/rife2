@@ -4,7 +4,8 @@
  */
 package rife.continuations.basic;
 
-import rife.continuations.*;
+import rife.continuations.CallState;
+import rife.continuations.ContinuationConfigInstrument;
 
 /**
  * Retrieves the target continuable for a call continuation.

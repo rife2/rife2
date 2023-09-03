@@ -9,7 +9,9 @@ import rife.authentication.SessionAttributes;
 import rife.authentication.credentials.RememberMe;
 import rife.authentication.credentials.RoleUserCredentials;
 import rife.authentication.elements.exceptions.UndefinedAuthenticationRememberManagerException;
-import rife.engine.*;
+import rife.engine.Context;
+import rife.engine.CookieBuilder;
+import rife.engine.RequestMethod;
 import rife.template.Template;
 import rife.validation.ValidationError;
 
@@ -152,8 +154,7 @@ public class Login extends Identified implements SessionAttributes {
         credentials.addValidationError(new ValidationError.UNEXPECTED("sessioncreation"));
     }
 
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         initializeLogin(c);
 
         final var auth_config = getAuthConfig();
@@ -226,8 +227,7 @@ public class Login extends Identified implements SessionAttributes {
         c.print(template);
     }
 
-    private boolean startNewSession(Context c, long userid, String authData, boolean remember, boolean remembered)
-    throws Exception {
+    private boolean startNewSession(Context c, long userid, String authData, boolean remember, boolean remembered) {
         final var auth_config = getAuthConfig();
 
         if (remember) {

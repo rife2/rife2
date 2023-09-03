@@ -15,11 +15,7 @@ import rife.cmf.dam.contentmanagers.exceptions.UnsupportedMimeTypeException;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.transform.ContentTransformer;
 import rife.config.RifeConfig;
-import rife.database.Datasource;
-import rife.database.DbConnection;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
-import rife.database.DbTransactionUser;
+import rife.database.*;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Insert;
@@ -147,7 +143,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
     public boolean createRepository(final String name)
     throws ContentManagerException {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         Boolean result = null;
 

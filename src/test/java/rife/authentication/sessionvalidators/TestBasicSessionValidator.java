@@ -12,7 +12,6 @@ import rife.authentication.exceptions.CredentialsManagerException;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.authentication.exceptions.SessionValidatorException;
 import rife.authentication.sessionmanagers.MemorySessions;
-import rife.config.RifeConfig;
 import rife.tools.ExceptionUtils;
 
 import static org.junit.jupiter.api.Assertions.*;

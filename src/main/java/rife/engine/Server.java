@@ -5,12 +5,17 @@
 package rife.engine;
 
 import jakarta.servlet.DispatcherType;
-import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.session.*;
-import org.eclipse.jetty.servlet.*;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SessionIdManager;
+import org.eclipse.jetty.server.session.DefaultSessionIdManager;
+import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-
 import rife.ioc.HierarchicalProperties;
 import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
@@ -34,14 +39,7 @@ public class Server {
     public static final int DEFAULT_MIN_THREADS = 8;
     public static final int DEFAULT_MAX_THREADS = 200;
     public static final int DEFAULT_IDLE_TIMEOUT_MS = 60000;
-
-    private int port_ = DEFAULT_PORT;
-    private String host_ = DEFAULT_HOST;
-    private String staticResourceBase_ = DEFAULT_STATIC_RESOURCE_BASE;
-    private int minThreads_ = DEFAULT_MIN_THREADS;
-    private int maxThreads_ = DEFAULT_MAX_THREADS;
-    private int idleTimeout_ = DEFAULT_IDLE_TIMEOUT_MS;
-
+    private final HierarchicalProperties properties_;
     protected String sslKeyStorePath_ = null;
     protected String sslKeyStorePassword_ = null;
     protected String sslCertAlias_ = null;
@@ -50,8 +48,12 @@ public class Server {
     protected boolean sslNeedClientAuth_ = false;
     protected boolean sslWantClientAuth_ = false;
     protected boolean enableVirtualThreads_ = false;
-
-    private final HierarchicalProperties properties_;
+    private int port_ = DEFAULT_PORT;
+    private String host_ = DEFAULT_HOST;
+    private String staticResourceBase_ = DEFAULT_STATIC_RESOURCE_BASE;
+    private int minThreads_ = DEFAULT_MIN_THREADS;
+    private int maxThreads_ = DEFAULT_MAX_THREADS;
+    private int idleTimeout_ = DEFAULT_IDLE_TIMEOUT_MS;
     private org.eclipse.jetty.server.Server server_;
 
     /**
@@ -322,30 +324,7 @@ public class Server {
         SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
         ServletContextHandler handler_ = new ServletContextHandler();
 
-        SslContextFactory.Server sslContextFactory = null;
-        if (sslKeyStorePath_ != null) {
-            sslContextFactory = new SslContextFactory.Server();
-            sslContextFactory.setKeyStorePath(sslKeyStorePath_);
-
-            if (sslKeyStorePassword_ != null) {
-                sslContextFactory.setKeyStorePassword(sslKeyStorePassword_);
-            }
-            if (sslCertAlias_ != null) {
-                sslContextFactory.setCertAlias(sslCertAlias_);
-            }
-            if (sslTrustStorePath_ != null) {
-                sslContextFactory.setTrustStorePath(sslTrustStorePath_);
-            }
-            if (sslTrustStorePassword_ != null) {
-                sslContextFactory.setTrustStorePassword(sslTrustStorePassword_);
-            }
-            if (sslNeedClientAuth_) {
-                sslContextFactory.setNeedClientAuth(true);
-            }
-            if (sslWantClientAuth_) {
-                sslContextFactory.setWantClientAuth(true);
-            }
-        }
+        SslContextFactory.Server sslContextFactory = initSslContextFactory();
 
         try (var connector = new ServerConnector(server_, sslContextFactory)) {
             connector.setPort(port_);
@@ -385,6 +364,34 @@ public class Server {
         }
 
         return this;
+    }
+
+    private SslContextFactory.Server initSslContextFactory() {
+        SslContextFactory.Server sslContextFactory = null;
+        if (sslKeyStorePath_ != null) {
+            sslContextFactory = new SslContextFactory.Server();
+            sslContextFactory.setKeyStorePath(sslKeyStorePath_);
+
+            if (sslKeyStorePassword_ != null) {
+                sslContextFactory.setKeyStorePassword(sslKeyStorePassword_);
+            }
+            if (sslCertAlias_ != null) {
+                sslContextFactory.setCertAlias(sslCertAlias_);
+            }
+            if (sslTrustStorePath_ != null) {
+                sslContextFactory.setTrustStorePath(sslTrustStorePath_);
+            }
+            if (sslTrustStorePassword_ != null) {
+                sslContextFactory.setTrustStorePassword(sslTrustStorePassword_);
+            }
+            if (sslNeedClientAuth_) {
+                sslContextFactory.setNeedClientAuth(true);
+            }
+            if (sslWantClientAuth_) {
+                sslContextFactory.setWantClientAuth(true);
+            }
+        }
+        return sslContextFactory;
     }
 
     /**

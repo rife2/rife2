@@ -4,10 +4,9 @@
  */
 package rife.authentication.credentialsmanagers.databasedrivers;
 
-import rife.authentication.credentialsmanagers.exceptions.*;
-
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.RoleUserAttributes;
+import rife.authentication.credentialsmanagers.exceptions.*;
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
@@ -89,7 +88,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public DatabaseUsers addRole(final String role)
     throws CredentialsManagerException {
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 
@@ -108,7 +107,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 if (message.contains("DUPLICATE") &&
                     (message.contains("FOR KEY 'AUTHROLE.AUTHROLE_NAME_UQ'") /* MySQL */ ||
                      message.contains("FOR KEY 'AUTHROLE_NAME_UQ'"))) /* MariaDB */ {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -121,7 +120,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public DatabaseUsers addUser(final String login, final RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new AddUserErrorException(login, attributes);
         }
@@ -143,7 +142,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             HashMap<String, Integer> roleids = null;
             // get the role ids
             if (attributes.getRoles() != null) {
-                roleids = new HashMap<String, Integer>();
+                roleids = new HashMap<>();
 
                 try (DbPreparedStatement ps_get_roleid = getConnection().getPreparedStatement(getRoleId_)) {
                     int roleid = -1;
@@ -202,11 +201,11 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 if (message.contains("DUPLICATE")) {
                     if (message.contains("FOR KEY 'AUTHUSER.PRIMARY'") /* MySQL */ ||
                         message.contains("FOR KEY 'PRIMARY'")) /* MariaDB */ {
-                        throw new DuplicateUserIdException(attributes.getUserId());
+                        throw new DuplicateUserIdException(attributes.getUserId(), e);
                     }
                     if (message.contains("FOR KEY 'AUTHUSER.AUTHUSER_LOGIN_UQ'") /* MySQL */ ||
                         message.contains("FOR KEY 'AUTHUSER_LOGIN_UQ'")) /* MariaDB */ {
-                        throw new DuplicateLoginException(login);
+                        throw new DuplicateLoginException(login, e);
                     }
                 }
             }
@@ -220,7 +219,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean updateUser(final String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new UpdateUserErrorException(login, attributes);
         }
@@ -229,7 +228,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
             HashMap<String, Integer> roleids = null;
             // get the role ids
             if (attributes.getRoles() != null) {
-                roleids = new HashMap<String, Integer>();
+                roleids = new HashMap<>();
 
                 try (DbPreparedStatement ps_get_roleid = getConnection().getPreparedStatement(getRoleId_)) {
                     int roleid = -1;
@@ -315,7 +314,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean removeUser(final String login)
     throws CredentialsManagerException {
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -389,7 +388,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
     public boolean removeRole(final String name)
     throws CredentialsManagerException {
         if (null == name ||
-            0 == name.length()) {
+            name.isEmpty()) {
             return false;
         }
 

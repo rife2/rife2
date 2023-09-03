@@ -4,6 +4,10 @@
  */
 package rife.cmf.loader.xhtml;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 import rife.cmf.MimeType;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.loader.LoadedContent;
@@ -15,19 +19,15 @@ import rife.xml.XmlEntityResolver;
 import rife.xml.XmlErrorRedirector;
 import rife.xml.exceptions.XmlErrorException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import javax.xml.parsers.*;
 
 public class SAXLoader extends XhtmlContentLoaderBackend {
     public LoadedContent<String> loadFromString(String data, boolean fragment, Set<String> errors)
@@ -54,18 +54,15 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             return entityResolver_.resolveEntity(publicId, systemId);
         }
 
-        public void warning(SAXParseException e)
-        throws SAXException {
+        public void warning(SAXParseException e) {
             errorRedirector_.warning(e);
         }
 
-        public void fatalError(SAXParseException e)
-        throws SAXException {
+        public void fatalError(SAXParseException e) {
             errorRedirector_.fatalError(e);
         }
 
-        public void error(SAXParseException e)
-        throws SAXException {
+        public void error(SAXParseException e) {
             errorRedirector_.error(e);
         }
 
@@ -134,9 +131,9 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
 
             if (sax_parse_exception ||
                 (errors != null &&
-                 errors.size() > 0) ||
+                    !errors.isEmpty()) ||
                 (errorRedirector_.hasErrors() ||
-                 errorRedirector_.hasFatalErrors())) {
+                    errorRedirector_.hasFatalErrors())) {
                 return null;
             }
 
@@ -163,14 +160,14 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             }
 
             if (e.getPublicId() != null) {
-                if (formatted.length() > 0) {
+                if (!formatted.isEmpty()) {
                     formatted.append(", ");
                 }
                 formatted.append(e.getPublicId());
             }
 
             if (e.getLineNumber() >= 0) {
-                if (formatted.length() > 0) {
+                if (!formatted.isEmpty()) {
                     formatted.append(", ");
                 }
                 formatted.append("line ");
@@ -182,14 +179,14 @@ public class SAXLoader extends XhtmlContentLoaderBackend {
             }
 
             if (e.getColumnNumber() >= 0) {
-                if (formatted.length() > 0) {
+                if (!formatted.isEmpty()) {
                     formatted.append(", ");
                 }
                 formatted.append("col ");
                 formatted.append(e.getColumnNumber());
             }
 
-            if (formatted.length() > 0) {
+            if (!formatted.isEmpty()) {
                 formatted.append(" : ");
             }
             formatted.append(e.getMessage());

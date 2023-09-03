@@ -6,7 +6,6 @@ package rife.instrument;
 
 import rife.tools.InstrumentationUtils;
 
-import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
 /**

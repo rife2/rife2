@@ -8,8 +8,6 @@ import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.DbConnection;
 import rife.database.DbConnectionUser;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Select;

@@ -5,7 +5,6 @@
 package rife.continuations.instrument;
 
 import rife.asm.*;
-
 import rife.continuations.ContinuationConfigInstrument;
 
 import java.util.*;
@@ -28,18 +27,14 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
     private final String className_;
     private final String classNameInternal_;
     private final TypesNode rootNode_;
-
-    private TypesNode currentNode_;
-
     private final HashMap<Label, TypesNode> labelMapping_;
     private final LinkedHashMap<Label, List<Label>> tryCatchHandlers_;
+    private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
+    private TypesNode currentNode_;
     private TypesContext[] pauseContexts_ = null;
     private TypesContext[] labelContexts_ = null;
-
     private int pauseCount_ = -1;
     private int labelCount_ = -1;
-
-    private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
 
     TypesMethodVisitor(ContinuationConfigInstrument config, TypesClassVisitor classVisitor, String className) {
         super(ASM9);
@@ -123,15 +118,13 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
             if ((owner_classname.equals(config_.getContinuableSupportClassName()) || className_.equals(owner_classname)) &&
                 ((config_.getPauseMethodName() != null && !config_.getPauseMethodName().isEmpty() && config_.getPauseMethodName().equals(name) && "()V".equals(desc)) ||
-                 (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() && config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) ||
-                 (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() && config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)))) {
+                    (config_.getStepBackMethodName() != null && !config_.getStepBackMethodName().isEmpty() && config_.getStepBackMethodName().equals(name) && "()V".equals(desc)) ||
+                    (config_.getCallMethodName() != null && !config_.getCallMethodName().isEmpty() && config_.getCallMethodName().equals(name) && config_.getCallMethodDescriptor().equals(desc)))) {
                 // pop the element instance reference from the stack
                 currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
 
                 // remember the node in which the pause invocation is called
                 currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PAUSE, ++pauseCount_));
-
-                return;
             }
             // not the pause invocation
             else {
@@ -855,7 +848,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                     if (node.getPredecessor() != null &&
                         context.getVars() == node.getPredecessor().getContext().getVars() &&
                         (null == current_var_type ||
-                         (current_var_type != TypesContext.TYPE_NULL && !current_var_type.equals(type)))) {
+                            (!current_var_type.equals(TypesContext.TYPE_NULL) && !current_var_type.equals(type)))) {
                         context.cloneVars();
                     }
 
@@ -905,7 +898,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                 case TypesOpcode.PUSH:
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  PUSH " + instruction.getType());
-
                     context.push(instruction.getType());
                     break;
                 case TypesOpcode.AALOAD: {
@@ -928,7 +920,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                 case TypesOpcode.DUP:
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "  DUP " + context.peek());
-
                     context.push(context.peek());
                     break;
                 case TypesOpcode.DUPX1: {
@@ -1073,7 +1064,6 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                 case TypesOpcode.PAUSE:
                     if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
                         ContinuationDebug.LOGGER.finest(repeat("  ", node.getLevel()) + "PAUSE " + instruction.getArgument());
-
                     pauseContexts_[instruction.getArgument()] = context.clone(node);
                     break;
                 case TypesOpcode.LABEL: {

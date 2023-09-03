@@ -4,10 +4,9 @@
  */
 package rife.cmf.dam;
 
-import rife.cmf.dam.exceptions.*;
-
 import rife.cmf.Content;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
+import rife.cmf.dam.exceptions.*;
 import rife.database.Datasource;
 import rife.database.DbQueryManager;
 import rife.database.DbTransactionUser;
@@ -18,15 +17,11 @@ import rife.database.querymanagers.generic.GenericQueryManagerListener;
 import rife.database.querymanagers.generic.RestoreQuery;
 import rife.engine.Context;
 import rife.engine.Route;
+import rife.tools.*;
+import rife.tools.exceptions.BeanUtilsException;
 import rife.validation.Constrained;
 import rife.validation.ConstrainedProperty;
 import rife.validation.ConstrainedUtils;
-import rife.tools.BeanUtils;
-import rife.tools.ClassUtils;
-import rife.tools.ExceptionUtils;
-import rife.tools.InnerClassException;
-import rife.tools.StringUtils;
-import rife.tools.exceptions.BeanUtilsException;
 
 import java.util.Collection;
 import java.util.List;
@@ -94,7 +89,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
      *                     stored
      * @param klass        the class of the bean that will be handled by this
      *                     {@code ContentQueryManager}
-     * @param backendClass the class the will be used by this
+     * @param backendClass the class will be used by this
      *                     {@code ContentQueryManager} to reference data in the backend
      * @since 1.0
      */
@@ -229,7 +224,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     public boolean move(Constrained bean, String propertyName, OrdinalManager.Direction direction) {
         if (null == bean) throw new IllegalArgumentException("constrained can't be null");
         if (null == propertyName) throw new IllegalArgumentException("propertyName can't be null");
-        if (0 == propertyName.length()) throw new IllegalArgumentException("propertyName can't be empty");
+        if (propertyName.isEmpty()) throw new IllegalArgumentException("propertyName can't be empty");
 
         var property = bean.getConstrainedProperty(propertyName);
         if (null == property) {
@@ -249,7 +244,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
             }
             ordinal = (Integer) ordinal_object;
         } catch (BeanUtilsException e) {
-            throw new UnknownOrdinalException(bean.getClass(), propertyName);
+            throw new UnknownOrdinalException(bean.getClass(), propertyName, e);
         }
 
         OrdinalManager ordinals = null;
@@ -272,7 +267,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                 }
                 restriction = ((Number) restriction_object).longValue();
             } catch (BeanUtilsException e) {
-                throw new UnknownOrdinalRestrictionException(bean.getClass(), propertyName, restriction_name);
+                throw new UnknownOrdinalRestrictionException(bean.getClass(), propertyName, restriction_name, e);
             }
 
             // obtain a new ordinal, taking the restriction value into account
@@ -335,7 +330,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     public boolean storeEmptyContent(final T bean, String propertyName) {
         if (null == bean) throw new IllegalArgumentException("constrained can't be null");
         if (null == propertyName) throw new IllegalArgumentException("propertyName can't be null");
-        if (0 == propertyName.length()) throw new IllegalArgumentException("propertyName can't be empty");
+        if (propertyName.isEmpty()) throw new IllegalArgumentException("propertyName can't be empty");
 
         var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
         if (null == constrained) {
@@ -433,7 +428,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                                             }
                                             restriction = ((Number) restriction_object).longValue();
                                         } catch (BeanUtilsException e) {
-                                            throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name);
+                                            throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name, e);
                                         }
 
                                         // obtain a new ordinal, taking the restriction value into account
@@ -529,16 +524,13 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
             for (var property : properties) {
                 if (property.hasMimeType() &&
                     property.isAutoRetrieved()) {
-                    contentManager_.useContentDataResult(buildCmfPath(constrained, objectId, property.getPropertyName()), new ContentDataUser<>() {
-                        public Object useContentData(Object contentData)
-                        throws InnerClassException {
-                            try {
-                                BeanUtils.setPropertyValue(bean, property.getPropertyName(), contentData);
-                            } catch (BeanUtilsException | ContentManagerException e) {
-                                throw new DatabaseException(e);
-                            }
-                            return null;
+                    contentManager_.useContentDataResult(buildCmfPath(constrained, objectId, property.getPropertyName()), contentData -> {
+                        try {
+                            BeanUtils.setPropertyValue(bean, property.getPropertyName(), contentData);
+                        } catch (BeanUtilsException | ContentManagerException e) {
+                            throw new DatabaseException(e);
                         }
+                        return null;
                     });
                 }
             }
@@ -566,7 +558,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
             deletedBean_.set(bean);
             try {
-                if (ContentQueryManager.super.delete(objectId)) {
+                if (super.delete(objectId)) {
                     return true;
                 }
             } finally {
@@ -713,18 +705,18 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
 
         var path = new StringBuilder();
         if (repository != null &&
-            repository.length() > 0) {
-            path.append(repository);
-            path.append(":");
+            !repository.isEmpty()) {
+            path.append(repository)
+                .append(':');
         }
-        path.append("/");
+        path.append('/');
         var classname = backendClass_.getName();
         classname = classname.substring(classname.lastIndexOf(".") + 1);
-        path.append(StringUtils.encodeUrl(classname));
-        path.append("/");
-        path.append(objectId);
-        path.append("/");
-        path.append(StringUtils.encodeUrl(propertyName));
+        path.append(StringUtils.encodeUrl(classname))
+            .append('/')
+            .append(objectId)
+            .append('/')
+            .append(StringUtils.encodeUrl(propertyName));
 
         return path.toString().toLowerCase();
     }
@@ -876,7 +868,7 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                                 }
                                 restriction = ((Number) restriction_object).longValue();
                             } catch (BeanUtilsException e) {
-                                throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name);
+                                throw new UnknownOrdinalRestrictionException(bean.getClass(), property.getPropertyName(), restriction_name, e);
                             }
 
                             // tighten the remaining ordinals, taking the restriction value into account
@@ -892,6 +884,6 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
     }
 
     public <OtherBeanType> GenericQueryManager<OtherBeanType> createNewManager(Class<OtherBeanType> type) {
-        return new ContentQueryManager(getDatasource(), type, contentManager_);
+        return new ContentQueryManager<>(getDatasource(), type, contentManager_);
     }
 }

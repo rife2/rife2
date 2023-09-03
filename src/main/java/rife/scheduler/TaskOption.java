@@ -75,7 +75,7 @@ public class TaskOption extends Validation implements Cloneable {
      * @since 1.0
      */
     public void setName(String name) {
-        if (null == name && 0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (null == name || name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         name_ = name;
     }

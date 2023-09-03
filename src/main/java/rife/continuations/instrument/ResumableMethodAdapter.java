@@ -5,7 +5,6 @@
 package rife.continuations.instrument;
 
 import rife.asm.*;
-
 import rife.continuations.ContinuationConfigInstrument;
 
 import java.util.Arrays;
@@ -41,8 +40,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
     private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
 
     private void debugMessage(String message) {
-        if (ContinuationDebug.sTrace &&
-            ContinuationDebug.LOGGER.isLoggable(Level.FINEST)) {
+        if (sTrace && ContinuationDebug.LOGGER.isLoggable(Level.FINEST)) {
             methodVisitor_.visitFieldInsn(GETSTATIC, "rife/continuations/instrument/ContinuationDebug", "LOGGER", "Ljava/util/logging/Logger;");
             methodVisitor_.visitLdcInsn(message);
             methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "java/util/logging/Logger", "finest", "(Ljava/lang/String;)V", false);
@@ -435,7 +433,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
 
     /**
      * Restore the local variable stack, first the computation
-     * types of category 1 and afterwards those of category 2
+     * types of category 1 and afterward those of category 2
      */
     private void restoreLocalStack(TypesContext context) {
         for (var i = 1; i <= maxLocalIndex_; i++) {
@@ -461,7 +459,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     methodVisitor_.visitVarInsn(FSTORE, i);
                 }
                 case Type.OBJECT -> {
-                    debugMessage("CONT: restore local : " + i + ", " + context.getVar(i) + "");
+                    debugMessage("CONT: restore local : " + i + ", " + context.getVar(i));
                     var type = context.getVar(i);
                     if (TypesContext.TYPE_NULL.equals(type)) {
                         methodVisitor_.visitInsn(ACONST_NULL);

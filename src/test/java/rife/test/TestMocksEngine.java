@@ -145,9 +145,9 @@ public class TestMocksEngine {
                     c.print(":" + c.parameter("param1"));
                     c.print(":" + c.parameter("param2"));
                 });
-                get("/", c -> {
-                    c.print(c.urlFor(path_info).param("param1", "v1").param("param2", "412"));
-                });
+                get("/", c ->
+                    c.print(c.urlFor(path_info).param("param1", "v1").param("param2", "412"))
+                );
             }
         });
 

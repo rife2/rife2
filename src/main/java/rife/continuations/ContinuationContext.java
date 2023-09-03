@@ -4,15 +4,17 @@
  */
 package rife.continuations;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.*;
-import java.util.logging.Logger;
-
 import rife.continuations.exceptions.ContinuableLocalVariableUncloneableException;
 import rife.tools.ExceptionUtils;
 import rife.tools.UniqueIDGenerator;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Logger;
 
 /**
  * Contains all contextual data of one particular continuation.
@@ -448,7 +450,7 @@ public class ContinuationContext implements Cloneable {
     /**
      * Retrieves the continuation ID.
      * <p>Note that this ID is not necessarily present in the manager and that
-     * trying to retrieve a continuation afterwards from its ID is never
+     * trying to retrieve a continuation afterward from its ID is never
      * guaranteed to give a result.
      *
      * @return the unique ID of this continuation.
@@ -511,7 +513,7 @@ public class ContinuationContext implements Cloneable {
         writeLock_.lock();
         try {
             if (null == relatedIds_) {
-                relatedIds_ = new ArrayList<String>();
+                relatedIds_ = new ArrayList<>();
             }
             relatedIds_.add(id);
         } finally {

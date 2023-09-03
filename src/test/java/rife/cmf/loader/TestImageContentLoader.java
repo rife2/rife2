@@ -42,6 +42,6 @@ public class TestImageContentLoader {
     @Test
     void testGetBackends() {
         var loader = new ImageContentLoader();
-        assertTrue(loader.getBackends().size() > 0);
+        assertFalse(loader.getBackends().isEmpty());
     }
 }

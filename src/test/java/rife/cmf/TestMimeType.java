@@ -5,7 +5,6 @@
 package rife.cmf;
 
 import org.junit.jupiter.api.Test;
-import rife.cmf.validation.CmfPropertyValidationRule;
 import rife.validation.ConstrainedProperty;
 
 import static org.junit.jupiter.api.Assertions.*;

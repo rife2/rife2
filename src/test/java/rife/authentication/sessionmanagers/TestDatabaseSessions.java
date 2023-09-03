@@ -6,7 +6,6 @@ package rife.authentication.sessionmanagers;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.authentication.ListSessions;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
@@ -68,7 +67,7 @@ public class TestDatabaseSessions {
             assertEquals(1, sessions.countSessions());
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertFalse(auth_id.isEmpty());
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {
@@ -98,7 +97,7 @@ public class TestDatabaseSessions {
             assertEquals(1, sessions.countSessions());
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertFalse(auth_id.isEmpty());
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {

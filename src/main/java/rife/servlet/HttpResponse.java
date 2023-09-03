@@ -4,6 +4,8 @@
  */
 package rife.servlet;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import rife.engine.AbstractResponse;
 import rife.engine.Request;
 import rife.engine.exceptions.EngineException;
@@ -12,9 +14,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Locale;
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 
 public class HttpResponse extends AbstractResponse {
     private final HttpServletResponse response_;

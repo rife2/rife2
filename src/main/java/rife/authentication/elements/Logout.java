@@ -5,7 +5,8 @@
 package rife.authentication.elements;
 
 import rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerException;
-import rife.engine.*;
+import rife.engine.Context;
+import rife.engine.Element;
 import rife.template.Template;
 
 /**
@@ -103,8 +104,7 @@ public class Logout implements Element {
     protected void loggedOut(Template template) {
     }
 
-    public void process(Context c)
-    throws Exception {
+    public void process(Context c) {
         initializeLogout(c);
 
         final Template template = getTemplate();

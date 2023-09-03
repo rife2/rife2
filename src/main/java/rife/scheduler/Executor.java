@@ -62,7 +62,7 @@ public abstract class Executor {
      */
     public String getHandledTaskType() {
         return getClass().getName();
-    };
+    }
 
     /**
      * Provides the delay in milliseconds that should be used when tasks are

@@ -13,7 +13,6 @@ import rife.cmf.loader.XhtmlContentLoader;
 import rife.cmf.transform.ContentTransformer;
 import rife.tools.StringUtils;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 

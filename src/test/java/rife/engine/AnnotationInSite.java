@@ -30,7 +30,7 @@ public class AnnotationInSite extends Site {
         @Config String config1 = "defaultConfig1";
         @Config String config2 = "defaultConfig2";
         @Config("config1") String config3 = "defaultConfig3";
-        @Config List list1 = List.of("one", "two", "false");
+        @Config List<String> list1 = List.of("one", "two", "false");
         @Config List<Boolean> list2 = List.of(true, false, false);
         @Config List<String> list3 = List.of("one", "two", "false");
         @Config("listint") List<Integer> list4 = List.of(1, 2, 3);

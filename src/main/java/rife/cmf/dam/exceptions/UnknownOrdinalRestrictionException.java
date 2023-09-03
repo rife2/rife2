@@ -14,7 +14,11 @@ public class UnknownOrdinalRestrictionException extends ContentManagerException 
     private final String restriction_;
 
     public UnknownOrdinalRestrictionException(Class beanClass, String property, String restriction) {
-        super("The property '" + property + "' of bean '" + beanClass.getName() + "' declares itself as being a restricted ordinal, but the restriction property '" + restriction + "' can't be found.");
+        this(beanClass, property, restriction, null);
+    }
+
+    public UnknownOrdinalRestrictionException(Class beanClass, String property, String restriction, Throwable e) {
+        super("The property '" + property + "' of bean '" + beanClass.getName() + "' declares itself as being a restricted ordinal, but the restriction property '" + restriction + "' can't be found.", e);
 
         beanClass_ = beanClass;
         property_ = property;

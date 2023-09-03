@@ -7,16 +7,16 @@ package rife.cmf.dam.contentstores;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import rife.cmf.dam.contentstores.exceptions.*;
-
 import rife.cmf.Content;
 import rife.cmf.ContentInfo;
 import rife.cmf.ContentRepository;
 import rife.cmf.MimeType;
 import rife.cmf.dam.contentmanagers.DatabaseContentFactory;
 import rife.cmf.dam.contentmanagers.DatabaseContentInfo;
+import rife.cmf.dam.contentstores.exceptions.*;
 import rife.config.RifeConfig;
-import rife.database.*;
+import rife.database.Datasource;
+import rife.database.TestDatasources;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
 
@@ -79,7 +79,7 @@ public class TestDatabaseTextStore {
         setup(datasource);
         try {
             var store = DatabaseTextStoreFactory.instance(datasource);
-            assertTrue(store.getSupportedMimeTypes().size() > 0);
+            assertFalse(store.getSupportedMimeTypes().isEmpty());
         } finally {
             tearDown(datasource);
         }
@@ -494,7 +494,7 @@ public class TestDatabaseTextStore {
             var content = new Content(MimeType.APPLICATION_XHTML, data).fragment(true);
             try {
                 store.storeContentData(2, content, null);
-                assertTrue("com.mysql.cj.jdbc.Driver".equals(datasource.getAliasedDriver()));
+                assertEquals("com.mysql.cj.jdbc.Driver", datasource.getAliasedDriver());
             } catch (StoreContentDataErrorException e) {
                 assertEquals(2, e.getId());
             }

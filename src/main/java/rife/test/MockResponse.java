@@ -6,25 +6,24 @@ package rife.test;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import rife.engine.*;
-
-import java.io.*;
-import java.util.*;
-
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import rife.engine.AbstractResponse;
+import rife.engine.Request;
+import rife.engine.Response;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.tools.ExceptionUtils;
 import rife.tools.StringUtils;
 
-import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+import java.io.*;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Provides a {@link Response} implementation that is suitable for testing a
@@ -401,8 +400,7 @@ public class MockResponse extends AbstractResponse {
         // complete
     }
 
-    protected OutputStream _getOutputStream()
-    throws IOException {
+    protected OutputStream _getOutputStream() {
         return mockOutputStream_;
     }
 
@@ -623,9 +621,9 @@ public class MockResponse extends AbstractResponse {
         // Already encoded
         var prefix = url.indexOf(MockConversation.SESSION_URL_PREFIX);
         if (prefix != -1) {
-            var suffix = url.indexOf("?", prefix);
+            var suffix = url.indexOf('?', prefix);
             if (suffix < 0) {
-                suffix = url.indexOf("#", prefix);
+                suffix = url.indexOf('#', prefix);
             }
 
             if (suffix <= prefix) {
@@ -738,11 +736,11 @@ public class MockResponse extends AbstractResponse {
     static class QuotedStringTokenizer
         extends StringTokenizer {
         private static final String __delim = "\t\n\r";
-        private String _string;
+        private final String _string;
+        private final StringBuilder _token;
         private String _delim = __delim;
         private boolean _returnQuotes = false;
         private boolean _returnTokens = false;
-        private StringBuilder _token;
         private boolean _hasToken = false;
         private int _i = 0;
         private int _lastStart = 0;
@@ -798,7 +796,7 @@ public class MockResponse extends AbstractResponse {
                 var c = _string.charAt(_i++);
 
                 switch (state) {
-                    case 0: // Start
+                    case 0 -> { // Start
                         if (_delim.indexOf(c) >= 0) {
                             if (_returnTokens) {
                                 _token.append(c);
@@ -817,9 +815,8 @@ public class MockResponse extends AbstractResponse {
                             _hasToken = true;
                             state = 1;
                         }
-                        continue;
-
-                    case 1: // Token
+                    }
+                    case 1 -> { // Token
                         _hasToken = true;
                         if (_delim.indexOf(c) >= 0) {
                             if (_returnTokens)
@@ -835,10 +832,8 @@ public class MockResponse extends AbstractResponse {
                             state = 3;
                         } else
                             _token.append(c);
-                        continue;
-
-
-                    case 2: // Single Quote
+                    }
+                    case 2 -> { // Single Quote
                         _hasToken = true;
                         if (escape) {
                             escape = false;
@@ -853,10 +848,8 @@ public class MockResponse extends AbstractResponse {
                             escape = true;
                         } else
                             _token.append(c);
-                        continue;
-
-
-                    case 3: // Double Quote
+                    }
+                    case 3 -> { // Double Quote
                         _hasToken = true;
                         if (escape) {
                             escape = false;
@@ -871,7 +864,7 @@ public class MockResponse extends AbstractResponse {
                             escape = true;
                         } else
                             _token.append(c);
-                        continue;
+                    }
                 }
             }
 
@@ -932,7 +925,7 @@ public class MockResponse extends AbstractResponse {
         public static String quote(String s, String delim) {
             if (s == null)
                 return null;
-            if (s.length() == 0)
+            if (s.isEmpty())
                 return "\"\"";
 
 
@@ -972,7 +965,6 @@ public class MockResponse extends AbstractResponse {
                     continue;
                 }
                 buf.append(c);
-                continue;
             }
             buf.append('"');
         }

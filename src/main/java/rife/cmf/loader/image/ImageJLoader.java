@@ -4,13 +4,13 @@
  */
 package rife.cmf.loader.image;
 
+import ij.io.Opener;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.loader.ImageContentLoaderBackend;
 import rife.cmf.loader.LoadedContent;
 import rife.tools.ExceptionUtils;
-import ij.io.Opener;
 
-import java.awt.Image;
+import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.util.Set;
 

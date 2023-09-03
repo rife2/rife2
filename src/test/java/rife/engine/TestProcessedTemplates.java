@@ -70,8 +70,10 @@ public class TestProcessedTemplates {
                 final HtmlPage page = webClient.getPage("http://localhost:8181/template/html");
                 var response = page.getWebResponse();
                 assertEquals("text/html", response.getContentType());
-                assertEquals("This is an attribute value 'value1'.\n" +
-                             "This is another attribute value 'value2b'.\n", response.getContentAsString());
+                assertEquals("""
+                    This is an attribute value 'value1'.
+                    This is another attribute value 'value2b'.
+                    """, response.getContentAsString());
             }
         }
     }
@@ -96,8 +98,10 @@ public class TestProcessedTemplates {
                 final TextPage page = webClient.getPage("http://localhost:8181/template/txt");
                 var response = page.getWebResponse();
                 assertEquals("text/plain", response.getContentType());
-                assertEquals("This is an attribute value 'value1'.\n" +
-                             "This is another attribute value 'value2b'.\n", response.getContentAsString());
+                assertEquals("""
+                    This is an attribute value 'value1'.
+                    This is another attribute value 'value2b'.
+                    """, response.getContentAsString());
             }
         }
     }

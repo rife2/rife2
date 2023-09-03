@@ -4,22 +4,23 @@
  */
 package rife.scheduler.taskoptionmanagers;
 
-import rife.database.queries.*;
-import rife.scheduler.taskoptionmanagers.exceptions.*;
-
 import rife.database.Datasource;
 import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.scheduler.Scheduler;
 import rife.scheduler.TaskOption;
 import rife.scheduler.TaskOptionManager;
 import rife.scheduler.exceptions.TaskOptionManagerException;
+import rife.scheduler.taskoptionmanagers.exceptions.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public abstract class DatabaseTaskOptions extends DbQueryManager implements TaskOptionManager {
     private Scheduler scheduler_ = null;
@@ -113,7 +114,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         TaskOption taskoption = null;
 
@@ -162,7 +163,7 @@ public abstract class DatabaseTaskOptions extends DbQueryManager implements Task
 
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         var result = false;
 

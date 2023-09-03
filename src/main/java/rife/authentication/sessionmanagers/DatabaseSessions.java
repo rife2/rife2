@@ -4,24 +4,17 @@
  */
 package rife.authentication.sessionmanagers;
 
-import rife.authentication.sessionmanagers.exceptions.*;
-import rife.database.queries.*;
-
 import rife.authentication.ListSessions;
 import rife.authentication.SessionManager;
 import rife.authentication.exceptions.SessionManagerException;
+import rife.authentication.sessionmanagers.exceptions.*;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
-import rife.database.DbPreparedStatement;
-import rife.database.DbPreparedStatementHandler;
 import rife.database.DbQueryManager;
-import rife.database.DbRowProcessor;
 import rife.database.exceptions.DatabaseException;
-import rife.tools.UniqueIDGenerator;
+import rife.database.queries.*;
 import rife.tools.ExceptionUtils;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import rife.tools.UniqueIDGenerator;
 
 public abstract class DatabaseSessions extends DbQueryManager implements SessionManager {
     private long sessionDuration_ = RifeConfig.authentication().getSessionDuration();
@@ -115,7 +108,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
 
         if (userId < 0 ||
             null == authData ||
-            0 == authData.length()) {
+            authData.isEmpty()) {
             throw new StartSessionErrorException(userId, authData);
         }
 
@@ -143,9 +136,9 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         assert sessionValidityRestrictAuthData != null;
 
         if (null == authId ||
-            0 == authId.length() ||
+            authId.isEmpty() ||
             null == authData ||
-            0 == authData.length()) {
+            authData.isEmpty()) {
             return false;
         }
 
@@ -179,7 +172,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         assert continueSession != null;
 
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -202,7 +195,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         assert eraseSession != null;
 
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -223,7 +216,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         assert wasRemembered != null;
 
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return false;
         }
 
@@ -290,7 +283,7 @@ public abstract class DatabaseSessions extends DbQueryManager implements Session
         assert getSessionUserId != null;
 
         if (null == authId ||
-            0 == authId.length()) {
+            authId.isEmpty()) {
             return -1;
         }
 

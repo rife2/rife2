@@ -4,6 +4,10 @@
  */
 package rife.servlet;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.Request;
 import rife.engine.RequestMethod;
@@ -14,12 +18,10 @@ import rife.tools.StringUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
-
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class HttpRequest implements Request {
     private final HttpServletRequest request_;
@@ -101,7 +103,7 @@ public class HttpRequest implements Request {
     @Override
     public boolean hasFile(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         if (null == getFiles()) {
             return false;
@@ -130,7 +132,7 @@ public class HttpRequest implements Request {
     @Override
     public UploadedFile getFile(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         if (null == getFiles()) {
             return null;
@@ -147,7 +149,7 @@ public class HttpRequest implements Request {
     @Override
     public UploadedFile[] getFiles(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         if (null == getFiles()) {
             return null;
@@ -159,7 +161,7 @@ public class HttpRequest implements Request {
     @Override
     public boolean hasCookie(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         var cookies = request_.getCookies();
 
@@ -179,7 +181,7 @@ public class HttpRequest implements Request {
     @Override
     public Cookie getCookie(String name) {
         assert name != null;
-        assert name.length() > 0;
+        assert !name.isEmpty();
 
         var cookies = request_.getCookies();
 
@@ -339,15 +341,15 @@ public class HttpRequest implements Request {
         }
 
         var server_root = new StringBuilder();
-        server_root.append(getScheme());
-        server_root.append("://");
-        server_root.append(getServerName());
+        server_root.append(getScheme())
+            .append("://")
+            .append(getServerName());
         if (port <= -1) {
             port = getServerPort();
         }
         if (port != 80 && port != 443) {
-            server_root.append(":");
-            server_root.append(port);
+            server_root.append(':')
+                .append(port);
         }
         return server_root.toString();
     }

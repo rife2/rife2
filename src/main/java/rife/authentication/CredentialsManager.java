@@ -12,7 +12,7 @@ import rife.authentication.exceptions.CredentialsManagerException;
  * <p>A {@code CredentialsManager} is in charge of verifying
  * {@code Credentials} instances. Using the information that a
  * {@code CredentialsManager} provides, the authentication system is able
- * to take appropriate actions (ie. start a new session, provide informational
+ * to take appropriate actions (i.e. start a new session, provide informational
  * messages about a user's status, and so on).
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

@@ -10,13 +10,14 @@ import rife.resources.ResourceFinderClasspath;
 import rife.resources.exceptions.ResourceFinderErrorException;
 import rife.tools.*;
 import rife.tools.exceptions.FileUtilsErrorException;
-import rife.validation.*;
+import rife.validation.ConstrainedProperty;
+import rife.validation.Validation;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
 
 public class BeanImpl extends Validation {
     public enum Day {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY}

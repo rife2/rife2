@@ -5,11 +5,16 @@
 package rife.validation;
 
 import org.junit.jupiter.api.Test;
-import rife.database.*;
+import rife.database.DatasourceEnabledIf;
+import rife.database.TestDatasourceIdentifier;
+import rife.database.TestDatasources;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.tools.ObjectUtils;
-import rifetestmodels.*;
+import rifetestmodels.Person;
+import rifetestmodels.PersonAnnotation;
+import rifetestmodels.PersonCallbacks;
+import rifetestmodels.PersonCloneable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -180,7 +185,7 @@ public class TestMetaData {
         ConstrainedProperty prop = ((Constrained) person_clone).getConstrainedProperty("lastname");
         assertNotNull(prop);
         String[] list_array = prop.getInList();
-        List<String> list_list = new ArrayList<String>(Arrays.asList(list_array));
+        List<String> list_list = new ArrayList<>(Arrays.asList(list_array));
         list_list.add("Chronno");
         prop.inList(list_list);
         ((Constrained) person_clone).addConstraint(prop);

@@ -4,10 +4,9 @@
  */
 package rife.cmf.loader;
 
-import rife.cmf.MimeType;
 import rife.cmf.dam.exceptions.ContentManagerException;
 
-import java.awt.Image;
+import java.awt.*;
 import java.util.Set;
 
 /**

@@ -14,7 +14,11 @@ public class DuplicateLoginException extends CredentialsManagerException {
     private final String login_;
 
     public DuplicateLoginException(String login) {
-        super("The login '" + login + "' is already present.");
+        this(login, null);
+    }
+
+    public DuplicateLoginException(String login, Throwable e) {
+        super("The login '" + login + "' is already present.", e);
 
         login_ = login;
     }

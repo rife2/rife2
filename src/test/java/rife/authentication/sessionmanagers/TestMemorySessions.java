@@ -7,7 +7,6 @@
 package rife.authentication.sessionmanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.authentication.ListSessions;
 import rife.authentication.exceptions.SessionManagerException;
 import rife.tools.ExceptionUtils;
 
@@ -32,7 +31,7 @@ public class TestMemorySessions {
             assertFalse(sessions.wasRemembered(auth_id));
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertFalse(auth_id.isEmpty());
 
             assertEquals(1, sessions.countSessions());
 
@@ -67,7 +66,7 @@ public class TestMemorySessions {
             assertEquals(1, sessions.countSessions());
 
             assertNotNull(auth_id);
-            assertTrue(auth_id.length() > 0);
+            assertFalse(auth_id.isEmpty());
         } catch (SessionManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

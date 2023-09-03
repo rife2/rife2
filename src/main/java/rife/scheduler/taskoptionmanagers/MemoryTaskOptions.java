@@ -4,8 +4,6 @@
  */
 package rife.scheduler.taskoptionmanagers;
 
-import java.util.*;
-
 import rife.scheduler.Scheduler;
 import rife.scheduler.TaskOption;
 import rife.scheduler.TaskOptionManager;
@@ -15,6 +13,8 @@ import rife.scheduler.taskoptionmanagers.exceptions.AddTaskOptionErrorException;
 import rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException;
 import rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException;
 import rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorException;
+
+import java.util.*;
 
 public class MemoryTaskOptions implements TaskOptionManager {
     private Scheduler scheduler_ = null;
@@ -131,7 +131,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         synchronized (this) {
             // get the task options for the same task id
@@ -170,7 +170,7 @@ public class MemoryTaskOptions implements TaskOptionManager {
     throws TaskOptionManagerException {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         synchronized (this) {
             // get the task options for the same task id

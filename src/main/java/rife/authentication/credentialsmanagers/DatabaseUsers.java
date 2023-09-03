@@ -6,16 +6,15 @@
  */
 package rife.authentication.credentialsmanagers;
 
-import rife.authentication.credentialsmanagers.exceptions.*;
-import rife.database.*;
-import rife.database.queries.*;
-
 import rife.authentication.Credentials;
 import rife.authentication.CredentialsManager;
 import rife.authentication.PasswordEncrypting;
 import rife.authentication.credentials.RoleUserCredentials;
+import rife.authentication.credentialsmanagers.exceptions.*;
 import rife.authentication.exceptions.CredentialsManagerException;
+import rife.database.*;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.tools.InnerClassException;
 import rife.tools.StringEncryptor;
 
@@ -160,7 +159,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert addRole != null;
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 
@@ -200,7 +199,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert containsRole != null;
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -258,7 +257,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert addRoleLink != null;
 
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new AddUserErrorException(login, attributes);
         }
@@ -309,7 +308,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                                 public int performUpdate(DbPreparedStatement statement) {
                                     for (var role : attributes.getRoles()) {
                                         // obtain the role id
-                                        var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<String>(role) {
+                                        var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<>(role) {
                                             public void setParameters(DbPreparedStatement statement) {
                                                 statement.setString("name", data_);
                                             }
@@ -352,7 +351,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getUserRoles != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return null;
         }
 
@@ -404,7 +403,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert containsUser != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -468,7 +467,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getUserId != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return -1;
         }
 
@@ -488,7 +487,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         return result;
     }
 
-    public abstract String getPassword(final String login)
+    public abstract String getPassword(String login)
     throws CredentialsManagerException;
 
     protected String _getPassword(Select getPassword, final String login)
@@ -496,7 +495,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getPassword != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return null;
         }
 
@@ -569,7 +568,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
 
         if (userId < 0 ||
             null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -599,7 +598,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         }
 
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             return false;
         }
 
@@ -628,7 +627,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert addRoleLink != null;
 
         if (null == login ||
-            0 == login.length() ||
+            login.isEmpty() ||
             null == attributes) {
             throw new UpdateUserErrorException(login, attributes);
         }
@@ -690,7 +689,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
                                     public int performUpdate(DbPreparedStatement statement) {
                                         for (var role : attributes.getRoles()) {
                                             // obtain the role id
-                                            var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<String>(role) {
+                                            var roleid = executeGetFirstInt(getRoleId, new DbPreparedStatementHandler<>(role) {
                                                 public void setParameters(DbPreparedStatement statement) {
                                                     statement.setString("name", data_);
                                                 }
@@ -740,7 +739,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert removeUserByLogin != null;
 
         if (null == login ||
-            0 == login.length()) {
+            login.isEmpty()) {
             return false;
         }
 
@@ -793,7 +792,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert removeRole != null;
 
         if (null == name ||
-            0 == name.length()) {
+            name.isEmpty()) {
             return false;
         }
 

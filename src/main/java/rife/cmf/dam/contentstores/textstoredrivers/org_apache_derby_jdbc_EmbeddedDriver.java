@@ -10,7 +10,7 @@ import rife.database.queries.CreateTable;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,7 +36,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
         var size = 0;
         try {
             while ((size = text_reader.read(buffer)) != -1) {
-                os.write(new String(buffer).getBytes("UTF-8"), 0, size);
+                os.write(new String(buffer).getBytes(StandardCharsets.UTF_8), 0, size);
             }
 
             os.flush();

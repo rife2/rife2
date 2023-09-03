@@ -4,18 +4,17 @@
  */
 package rife.servlet;
 
-import java.io.*;
-
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import rife.config.RifeConfig;
 import rife.engine.UploadedFile;
+import rife.engine.exceptions.*;
 
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.http.HttpServletRequest;
-import rife.engine.exceptions.*;
 
 class MultipartRequest {
     private static final String CONTENT_TYPE_HEADER = "content-type";
@@ -196,7 +195,7 @@ class MultipartRequest {
         while (result == parameterBuffer_.length);
 
         // if nothing was read, the end of the stream must have been reached
-        if (line_buffer.length() == 0) {
+        if (line_buffer.isEmpty()) {
             return null;
         }
 
@@ -227,7 +226,7 @@ class MultipartRequest {
         // When no next line could be read, the end was reached.
         // IE4 on Mac sends an empty line at the end; treat that as the ending too.
         if (null == line ||
-            0 == line.length()) {
+            (line.isEmpty())) {
             // No parts left, we're done
             return false;
         }
@@ -236,7 +235,7 @@ class MultipartRequest {
         // A line starting with whitespace is considered a continuation;
         // that requires a little special logic.
         while (null != line &&
-            line.length() > 0) {
+            (!line.isEmpty())) {
             String next_line = null;
             var obtain_next_line = true;
             while (obtain_next_line) {
@@ -297,7 +296,7 @@ class MultipartRequest {
             parameters_.put(field_name, new_values);
         } else {
             // This is a file
-            if (file_name.equals("")) {
+            if (file_name.isEmpty()) {
                 // empty filename, probably an "empty" file param
                 file_name = null;
             }
@@ -349,7 +348,7 @@ class MultipartRequest {
         fieldname = dispositionLine.substring(start + FIELD_NAME_PREFIX_LENGTH, end);
 
         // Get the filename, if given
-        start = lowcase_line.indexOf(FILENAME_PREFIX, end + 2); // after quote and space)
+        start = lowcase_line.indexOf(FILENAME_PREFIX, end + 2); // after quote and space
         end = lowcase_line.indexOf(QUOTE, start + FILENAME_PREFIX_LENGTH);
         if (start != -1 &&
             end != -1) {
@@ -379,12 +378,12 @@ class MultipartRequest {
 
         // Get the content type, if any
         if (lower_case_line.startsWith(CONTENT_TYPE_HEADER)) {
-            var separator_location = lower_case_line.indexOf(" ");
+            var separator_location = lower_case_line.indexOf(' ');
             if (-1 == separator_location) {
                 throw new MultipartCorruptContentTypeException(contentTypeLine);
             }
             result = lower_case_line.substring(separator_location + 1);
-        } else if (lower_case_line.length() != 0) {
+        } else if (!lower_case_line.isEmpty()) {
             // no content type, so should be empty
             throw new MultipartCorruptContentTypeException(contentTypeLine);
         }
@@ -404,7 +403,7 @@ class MultipartRequest {
         }
 
         // nothing read
-        if (0 == result.length()) {
+        if (result.isEmpty()) {
             return null;
         }
 
@@ -418,7 +417,7 @@ class MultipartRequest {
         assert file != null;
 
         File tmp_file = null;
-        FileOutputStream output_stream = null;
+        OutputStream output_stream = null;
         BufferedOutputStream output = null;
 
         try {
@@ -427,8 +426,8 @@ class MultipartRequest {
             throw new MultipartFileErrorException(name, e);
         }
         try {
-            output_stream = new FileOutputStream(tmp_file);
-        } catch (FileNotFoundException e) {
+            output_stream = Files.newOutputStream(tmp_file.toPath());
+        } catch (IOException e) {
             throw new MultipartFileErrorException(name, e);
         }
         output = new BufferedOutputStream(output_stream, 8 * 1024); // 8K

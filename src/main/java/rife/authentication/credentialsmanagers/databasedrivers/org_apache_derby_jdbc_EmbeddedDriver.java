@@ -4,10 +4,9 @@
  */
 package rife.authentication.credentialsmanagers.databasedrivers;
 
-import rife.authentication.credentialsmanagers.exceptions.*;
-
 import rife.authentication.credentialsmanagers.DatabaseUsers;
 import rife.authentication.credentialsmanagers.RoleUserAttributes;
+import rife.authentication.credentialsmanagers.exceptions.*;
 import rife.authentication.exceptions.CredentialsManagerException;
 import rife.config.RifeConfig;
 import rife.database.Datasource;
@@ -71,7 +70,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
     public DatabaseUsers addRole(final String role)
     throws CredentialsManagerException {
         if (null == role ||
-            0 == role.length()) {
+            role.isEmpty()) {
             throw new AddRoleErrorException(role);
         }
 
@@ -88,7 +87,7 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
             if (null != e.getCause()) {
                 String message = e.getCause().getMessage().toUpperCase();
                 if (message.contains("AUTHROLE_NAME_UQ")) {
-                    throw new DuplicateRoleException(role);
+                    throw new DuplicateRoleException(role, e);
                 }
             }
 
@@ -107,10 +106,10 @@ public class org_apache_derby_jdbc_EmbeddedDriver extends generic {
                 null != e.getCause().getCause()) {
                 String message = e.getCause().getCause().getMessage().toUpperCase();
                 if (message.contains("AUTHUSER_LOGIN_UQ")) {
-                    throw new DuplicateLoginException(login);
+                    throw new DuplicateLoginException(login, e);
                 }
                 if (message.contains("AUTHUSER_PK")) {
-                    throw new DuplicateUserIdException(attributes.getUserId());
+                    throw new DuplicateUserIdException(attributes.getUserId(), e);
                 }
             }
 

@@ -5,9 +5,12 @@
 package rife.authentication.elements;
 
 import rife.authentication.credentialsmanagers.RoleUserAttributes;
-import rife.authentication.sessionvalidators.*;
+import rife.authentication.sessionvalidators.DatabaseSessionValidator;
+import rife.authentication.sessionvalidators.DatabaseSessionValidatorFactory;
 import rife.database.Datasource;
-import rife.engine.*;
+import rife.engine.Route;
+import rife.engine.Router;
+import rife.engine.Site;
 import rife.template.TemplateFactory;
 
 public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
@@ -70,9 +73,9 @@ public class DatabaseAuthenticatedSite extends Site implements AutoCloseable {
             });
         }
 
-        Route landing;
-        Route logout;
-        Route template;
+        final Route landing;
+        final Route logout;
+        final Route template;
     }
 
     Route login;

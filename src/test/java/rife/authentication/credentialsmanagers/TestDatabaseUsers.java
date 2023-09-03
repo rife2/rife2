@@ -121,8 +121,8 @@ public class TestDatabaseUsers {
         }
     }
 
-    class ListDatabaseRoles implements ListRoles {
-        private ArrayList<String> roles_ = new ArrayList<>();
+    static class ListDatabaseRoles implements ListRoles {
+        private final ArrayList<String> roles_ = new ArrayList<>();
 
         public ArrayList<String> getRoles() {
             return roles_;
@@ -430,7 +430,7 @@ public class TestDatabaseUsers {
         }
     }
 
-    class ListDatabaseUsers implements ListUsers {
+    static class ListDatabaseUsers implements ListUsers {
         private final ArrayList<String> users_ = new ArrayList<>();
 
         public ArrayList<String> getUsers() {

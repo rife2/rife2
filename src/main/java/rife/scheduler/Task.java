@@ -84,7 +84,7 @@ public class Task extends MetaData implements Cloneable {
     public String getTaskOptionValue(String name)
     throws SchedulerException {
         if (null == name) throw new IllegalArgumentException("name can't be null.");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty.");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty.");
 
         if (null == taskManager_) {
             return null;
@@ -421,16 +421,12 @@ public class Task extends MetaData implements Cloneable {
 
         var other_task = (Task) object;
 
-        if (other_task.getId() == getId() &&
+        return other_task.getId() == getId() &&
             other_task.getType().equals(getType()) &&
             other_task.getPlanned() == getPlanned() &&
             ((null == other_task.getFrequency() && null == getFrequency()) ||
-             (other_task.getFrequency() != null && other_task.getFrequency().equals(getFrequency()))) &&
-            other_task.getTaskManager() == getTaskManager()) {
-            return true;
-        }
-
-        return false;
+                (other_task.getFrequency() != null && other_task.getFrequency().equals(getFrequency()))) &&
+            other_task.getTaskManager() == getTaskManager();
     }
 
     public class InvalidPlanned implements ValidationRule {

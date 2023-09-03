@@ -5,13 +5,12 @@
 package rife.continuations.instrument;
 
 import rife.asm.*;
-
 import rife.continuations.ContinuationConfigInstrument;
 
 import java.util.logging.Level;
 
 import static rife.asm.Opcodes.ASM9;
-import static rife.continuations.instrument.ContinuationDebug.*;
+import static rife.continuations.instrument.ContinuationDebug.join;
 
 class ResumableClassAdapter extends ClassVisitor {
     private final ContinuationConfigInstrument config_;

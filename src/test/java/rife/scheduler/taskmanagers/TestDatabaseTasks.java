@@ -4,18 +4,21 @@
  */
 package rife.scheduler.taskmanagers;
 
-import java.util.Calendar;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
-import rife.scheduler.*;
+import rife.scheduler.Frequency;
+import rife.scheduler.Task;
+import rife.scheduler.TaskManager;
+import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.scheduler.schedulermanagers.DatabaseSchedulingFactory;
 import rife.tools.ExceptionUtils;
+
+import java.util.Calendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -399,7 +402,7 @@ public class TestDatabaseTasks {
             assertEquals(task3_new.getType(), task3.getType());
             assertTrue(task3_new.getPlanned() <= task3.getPlanned());
             assertEquals(task3_new.getFrequency(), task3.getFrequency());
-            assertEquals(task3_new.isBusy(), task3_new.isBusy());
+            assertEquals(task3_new.isBusy(), task3.isBusy());
         } catch (FrequencyException | TaskManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         } finally {

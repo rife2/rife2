@@ -4,13 +4,13 @@
  */
 package rife.cmf.dam.contentmanagers;
 
-import rife.cmf.dam.*;
-import rife.database.*;
-import rife.database.queries.*;
-
 import rife.cmf.Content;
 import rife.cmf.ContentRepository;
 import rife.cmf.MimeType;
+import rife.cmf.dam.ContentDataUser;
+import rife.cmf.dam.ContentDataUserWithoutResult;
+import rife.cmf.dam.ContentManager;
+import rife.cmf.dam.ContentStore;
 import rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException;
 import rife.cmf.dam.contentmanagers.exceptions.RemoveContentErrorException;
 import rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException;
@@ -20,7 +20,12 @@ import rife.cmf.dam.contentstores.DatabaseRawStoreFactory;
 import rife.cmf.dam.contentstores.DatabaseTextStoreFactory;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.transform.ContentTransformer;
+import rife.database.Datasource;
+import rife.database.DbQueryManager;
+import rife.database.DbRowProcessor;
+import rife.database.DbTransactionUser;
 import rife.database.exceptions.DatabaseException;
+import rife.database.queries.*;
 import rife.engine.Context;
 import rife.engine.Route;
 import rife.tools.InnerClassException;
@@ -116,7 +121,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
     protected boolean _createRepository(final SequenceValue getContentRepositoryId, final Insert storeContentRepository, final String name)
     throws ContentManagerException {
         if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (0 == name.length()) throw new IllegalArgumentException("name can't be empty");
+        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
         assert getContentRepositoryId != null;
         assert storeContentRepository != null;
@@ -147,7 +152,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         assert containsContentRepository != null;
 
         final String repository;
-        if (0 == name.length()) {
+        if (name.isEmpty()) {
             repository = ContentRepository.DEFAULT;
         } else {
             repository = name;
@@ -503,7 +508,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         return store.getContentForHtml(content_info.getContentId(), content_info, context, route);
     }
 
-    private class ContentAttributesProcessor extends DbRowProcessor {
+    private static class ContentAttributesProcessor extends DbRowProcessor {
         private Map<String, String> attributes_ = null;
 
         public boolean processRow(ResultSet result)
@@ -521,7 +526,7 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         }
     }
 
-    private class ContentPropertiesProcessor extends DbRowProcessor {
+    private static class ContentPropertiesProcessor extends DbRowProcessor {
         private Map<String, String> properties_ = null;
 
         public boolean processRow(ResultSet result)

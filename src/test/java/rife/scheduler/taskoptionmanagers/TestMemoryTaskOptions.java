@@ -6,7 +6,6 @@ package rife.scheduler.taskoptionmanagers;
 
 import org.junit.jupiter.api.Test;
 import rife.scheduler.*;
-
 import rife.scheduler.exceptions.SchedulerException;
 import rife.scheduler.exceptions.TaskOptionManagerException;
 import rife.scheduler.taskmanagers.MemoryTasks;

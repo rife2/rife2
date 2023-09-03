@@ -5,7 +5,10 @@
 package rife.scheduler.taskmanagers;
 
 import org.junit.jupiter.api.Test;
-import rife.scheduler.*;
+import rife.scheduler.Frequency;
+import rife.scheduler.Task;
+import rife.scheduler.TaskManager;
+import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.tools.ExceptionUtils;
@@ -325,7 +328,7 @@ public class TestMemoryTasks {
             assertEquals(task3_new.getType(), task3.getType());
             assertTrue(task3_new.getPlanned() <= task3.getPlanned());
             assertEquals(task3_new.getFrequency(), task3.getFrequency());
-            assertEquals(task3_new.isBusy(), task3_new.isBusy());
+            assertEquals(task3_new.isBusy(), task3.isBusy());
         } catch (FrequencyException | TaskManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }

@@ -287,7 +287,7 @@ public class TestGenericQueryManagerManyToOne {
             var bean1c = new MOFirstBean();
             bean1c.setFirstString("This is my test string C");
             assertNull(bean1c.getIdentifier());
-            List<MOFirstBean> firstbeans2 = new ArrayList<MOFirstBean>();
+            List<MOFirstBean> firstbeans2 = new ArrayList<>();
             firstbeans2.add(bean1a);
             bean1a.setFirstString("This is my test string updated");
             firstbeans2.add(bean1c);
@@ -393,7 +393,7 @@ public class TestGenericQueryManagerManyToOne {
 
             var bean_2 = new MOSecondBean();
             bean_2.setSecondString("MOSecondBeanA");
-            bean_2.setFirstBeans(new ArrayList<MOFirstBean>() {{
+            bean_2.setFirstBeans(new ArrayList<>() {{
                 add(bean_1a);
                 add(bean_1b);
             }});
@@ -487,7 +487,7 @@ public class TestGenericQueryManagerManyToOne {
 
             var bean_2 = new MOSecondBean();
             bean_2.setSecondString("MOSecondBeanA");
-            bean_2.setFirstBeans(new ArrayList<MOFirstBean>() {{
+            bean_2.setFirstBeans(new ArrayList<>() {{
                 add(bean_1a);
                 add(bean_1b);
             }});

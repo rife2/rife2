@@ -4,13 +4,16 @@
  */
 package rife.scheduler.taskmanagers;
 
-import java.util.*;
-
-import rife.scheduler.*;
+import rife.scheduler.Frequency;
+import rife.scheduler.Scheduler;
+import rife.scheduler.Task;
+import rife.scheduler.TaskManager;
 import rife.scheduler.exceptions.FrequencyException;
 import rife.scheduler.exceptions.TaskManagerException;
 import rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException;
 import rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException;
+
+import java.util.*;
 
 public class MemoryTasks implements TaskManager {
     private final Map<Integer, Task> taskMapping_;

@@ -5,7 +5,8 @@
 package rife.engine;
 
 import rife.config.RifeConfig;
-import rife.continuations.*;
+import rife.continuations.ContinuationConfigRuntime;
+import rife.continuations.ContinuationManager;
 
 class EngineContinuationConfigRuntime extends ContinuationConfigRuntime {
     private final Site site_;

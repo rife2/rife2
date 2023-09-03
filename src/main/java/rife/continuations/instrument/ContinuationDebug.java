@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class ContinuationDebug {
     static boolean sDebug = false;
     static boolean sTrace = false;
-    static Level sLevel = Level.parse("FINEST");
+    static final Level sLevel = Level.parse("FINEST");
 
     /**
      * The logger instance that is used for the debugging.
@@ -297,14 +297,14 @@ public class ContinuationDebug {
             return "";
         } else {
             int current_index = 0;
-            String result = "";
+            StringBuilder result = new StringBuilder();
             while (current_index < array.length - 1) {
-                result = result + array[current_index] + separator;
+                result.append(array[current_index]).append(separator);
                 current_index++;
             }
 
-            result = result + array[current_index];
-            return result;
+            result.append(array[current_index]);
+            return result.toString();
         }
     }
 
@@ -321,14 +321,14 @@ public class ContinuationDebug {
             return "";
         } else {
             int current_index = 0;
-            String result = "";
+            StringBuilder result = new StringBuilder();
             while (current_index < array.length - 1) {
-                result = result + array[current_index] + separator;
+                result.append(array[current_index]).append(separator);
                 current_index++;
             }
 
-            result = result + array[current_index];
-            return result;
+            result.append(array[current_index]);
+            return result.toString();
         }
 
     }

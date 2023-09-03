@@ -4,12 +4,12 @@
  */
 package rife.test;
 
-import java.util.*;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import rife.engine.RequestMethod;
 import rife.tools.ArrayUtils;
+
+import java.util.*;
 
 /**
  * Corresponds to a form in an HTML document after it has been parsed with
@@ -33,11 +33,11 @@ public class MockForm {
         var elements_stack = new Stack<Elements>();
 
         Elements child_elements = element_.children();
-        if (child_elements.size() > 0) {
+        if (!child_elements.isEmpty()) {
             elements_stack.push(child_elements);
         }
 
-        while (elements_stack.size() > 0) {
+        while (!elements_stack.isEmpty()) {
             child_elements = elements_stack.pop();
 
             for (Element child_element : child_elements) {
@@ -112,9 +112,9 @@ public class MockForm {
 
                             // if no options were selected and the select is not multiple,
                             // the first option should be automatically selected
-                            if (0 == selected_options.size() &&
+                            if (selected_options.isEmpty() &&
                                 !select_multiple &&
-                                select_child_elements.size() > 0) {
+                                !select_child_elements.isEmpty()) {
                                 selected_options.add(first_option_value);
                             }
 
@@ -127,7 +127,7 @@ public class MockForm {
                 }
 
                 var planned_child_nodes = child_element.children();
-                if (planned_child_nodes.size() > 0) {
+                if (!planned_child_nodes.isEmpty()) {
                     elements_stack.push(planned_child_nodes);
                 }
             }

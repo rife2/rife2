@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import rife.tools.ExceptionUtils;
 import rife.validation.ValidationError;
 
-import java.util.Iterator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTaskOption {

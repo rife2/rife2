@@ -6,7 +6,6 @@ package rife.engine.continuations;
 
 import rife.engine.Context;
 import rife.engine.Element;
-import rife.template.Template;
 
 public class TestThrow implements Element {
     public void process(Context c) {

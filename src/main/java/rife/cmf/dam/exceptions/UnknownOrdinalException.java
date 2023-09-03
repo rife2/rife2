@@ -13,7 +13,12 @@ public class UnknownOrdinalException extends ContentManagerException {
     private final String property_;
 
     public UnknownOrdinalException(Class beanClass, String property) {
-        super("The property '" + property + "' of bean '" + beanClass.getName() + "' can't be used as an ordinal since it can't be found.");
+        this(beanClass, property, null);
+    }
+
+
+    public UnknownOrdinalException(Class beanClass, String property, Throwable e) {
+        super("The property '" + property + "' of bean '" + beanClass.getName() + "' can't be used as an ordinal since it can't be found.", e);
 
         beanClass_ = beanClass;
         property_ = property;

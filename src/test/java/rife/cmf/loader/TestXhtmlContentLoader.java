@@ -36,6 +36,6 @@ public class TestXhtmlContentLoader {
 
     public void getBackends() {
         var loader = new XhtmlContentLoader();
-        assertTrue(loader.getBackends().size() > 0);
+        assertFalse(loader.getBackends().isEmpty());
     }
 }

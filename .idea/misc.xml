@@ -1,4 +1,2074 @@
 <project version="4">
+  <component name="EntryPointsManager">
+    <entry_points version="2.0">
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement baseSite" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.AnnotatedElement childSite" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement config2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement config3" />
+      <entry_point TYPE="field" FQNAME="rife.engine.RequestMethod CONNECT" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency DAILY" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.AnnotatedElement file" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.AnnotatedElement file2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement fileString" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.AnnotatedElement fileString2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.TestEngine$9 form" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency FRIDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.engine.TestEngine$11 group" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.ParentElement intBody" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement intCookie" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement intCookie2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement intHeader" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.ParentElement intHeader2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.AnnotatedOutElement intParam" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.AnnotatedOutElement intParam2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.ParentElement intRequestAttribute" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement intRequestAttribute2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement intSessionAttribute" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement intSessionAttribute2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement list2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement list3" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement list4" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.DatabaseAuthenticatedSite.AuthenticatedSection logout" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.MemoryAuthenticatedSite.AuthenticatedSection logout" />
+      <entry_point TYPE="field" FQNAME="rife.engine.BeanImpl.Day MONDAY" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency MONDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency MONTHLY" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement notSite" />
+      <entry_point TYPE="field" FQNAME="rife.engine.TestEngine$26$1 parameter" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.ParentInElement paramsBean" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement prop1" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement prop2" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency QUARTERLY" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite routeOut" />
+      <entry_point TYPE="field" FQNAME="rife.engine.BeanImpl.Day SATURDAY" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency SATURDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.TestTasktypes SEND_RESULTS" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.ActivateTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.AddRoleErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.AddTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.AddTaskOptionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.AddUserErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.AnnotatedElementInstanceFieldException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.AnswerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.CallException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.CallTargetNotFoundException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.ClearUsersErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.ContainsRoleErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.ContainsUserErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.ContentManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.ContinuableLocalVariableUncloneableException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.ContinuationsNotActiveException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.ContinueSessionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.CountRolesErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.CountSessionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.CountUsersErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.CreateRememberIdErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.exceptions.CredentialsManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.DeactivateTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.DeferException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.DeleteContentDataErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.DuplicateLoginException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.DuplicateRoleException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.EngineException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.EraseAllRememberIdsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.EraseAllSessionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.EraseRememberIdErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.EraseSessionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.EraseUserRememberIdsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.EraseUserSessionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.ExecutorAlreadyRegisteredException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.ExpectedMimeTypeConstraintException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.ExpectedOrdinalConstraintException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.FatalTaskExecutionException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.format.exceptions.FormatException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.FrequencyException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.GetAllTasksErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.GetAttributesErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.GetLoginErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.GetRememberedUserIdErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.GetScheduledTasksErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.GetSessionUserIdErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.GetTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.GetTaskIdErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.GetTasksToProcessErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.GetUserIdErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.HasContentDataErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.InstallContentStoreErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.InstallCredentialsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.InstallRememberUserErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.schedulermanagers.exceptions.InstallSchedulerErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.InstallSessionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.InstallTaskOptionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.InstallTasksErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.format.exceptions.InvalidContentDataTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.InvalidOrdinalRestrictionTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.InvalidOrdinalTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.IsSessionValidErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.IsUserInRoleErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.ListRolesErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.ListUsersErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.MissingActiveContinuationConfigRuntimeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.MissingIdentifierValueException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartCorruptContentDispositionException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartCorruptContentTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartFileErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartFileTooBigException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartInputErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartInvalidBoundaryException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartInvalidContentDispositionException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartInvalidContentTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartInvalidUploadDirectoryException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartMissingBoundaryException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartRequestException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.MultipartUnexpectedEndingException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.NextException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.NoContinuableInstanceAvailableException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.NoExecutorForTasktypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.OrdinalRestrictionCantBeNullException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.PathInfoMappingPatternInvalidException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.PauseException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.remembermanagers.exceptions.PurgeRememberIdsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.PurgeSessionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.RedirectException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.exceptions.RememberManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentmanagers.exceptions.RemoveContentErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.RemoveContentStoreErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.RemoveCredentialsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.RemoveRoleErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.schedulermanagers.exceptions.RemoveSchedulerErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.RemoveSessionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.RemoveTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.RemoveTasksErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.RemoveUserErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.RespondException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.ResponseOutputStreamRetrievalErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.RetrieveSizeErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionvalidators.exceptions.RoleCheckErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.RouterAlreadyDeployedException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.SchedulerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.SchedulerExecutionException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.SchedulerManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.exceptions.SessionManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.SessionRememberedCheckErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.exceptions.SessionValidatorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.sessionmanagers.exceptions.StartSessionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.continuations.exceptions.StepBackException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.StoreContentDataErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.TaskManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.TaskOptionManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.TaskTypeAlreadyRegisteredException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.exceptions.UnableToRetrieveTasksToProcessException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.exceptions.UndefinedAuthenticationRememberManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.exceptions.UndefinedLandingRouteException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.exceptions.UndefinedLoginRouteException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.format.exceptions.UnexpectedConversionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.UnknownConstrainedPropertyException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.UnknownOrdinalException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.UnknownOrdinalRestrictionException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.UnknownRoleErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.format.exceptions.UnreadableDataFormatException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.UnsupportedCredentialsTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentmanagers.exceptions.UnsupportedMimeTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.format.exceptions.UnsupportedTargetMimeTypeException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskmanagers.exceptions.UpdateTaskErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.UpdateUserErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.contentstores.exceptions.UseContentDataErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.credentialsmanagers.exceptions.VerifyCredentialsErrorException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.engine.exceptions.VirtualThreadsNotAvailableException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.cmf.dam.exceptions.WrongConstrainedPropertyVariantException serialVersionUID" />
+      <entry_point TYPE="field" FQNAME="rife.test.MockSession SESSION_COOKIE_NAME" />
+      <entry_point TYPE="method" FQNAME="rife.engine.TestEngine$26 void setup()" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.ParentElement site" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.AnnotatedOutElement site" />
+      <entry_point TYPE="field" FQNAME="rife.engine.TestEngine$11$1 source2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringBody" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringCookie" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.ParentElement stringCookie2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringHeader" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringHeader2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.AnnotatedOutElement stringParam" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.ParentOutElement stringParam2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.AnnotatedInElement stringParam3" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationParametersSite.AnnotatedOutElement stringParam3" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringRequestAttribute" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringRequestAttribute2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.ParentElement stringSessionAttribute" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationOutSite.AnnotatedElement stringSessionAttribute2" />
+      <entry_point TYPE="field" FQNAME="rife.engine.BeanImpl.Day SUNDAY" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency SUNDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.engine.TestEngine$11 target" />
+      <entry_point TYPE="field" FQNAME="rife.engine.TestEngine$11$1 target2" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.DatabaseAuthenticatedSite.AuthenticatedSection template" />
+      <entry_point TYPE="field" FQNAME="rife.authentication.elements.MemoryAuthenticatedSite.AuthenticatedSection template" />
+      <entry_point TYPE="field" FQNAME="rife.engine.BeanImpl.Day THURSDAY" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency THURSDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.engine.BeanImpl.Day TUESDAY" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency TUESDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.AnnotatedElement uploadedFile" />
+      <entry_point TYPE="field" FQNAME="rife.engine.AnnotationInSite.AnnotatedElement uploadedFile2" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency WEDNESDAYS" />
+      <entry_point TYPE="field" FQNAME="rife.scheduler.Frequency YEARLY" />
+    </entry_points>
+    <pattern value="rife.authentication.elements.Login" method="acceptedCredentials" />
+    <pattern value="rife.test.MockSession" method="access" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="activateTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.ActivateTaskErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.ActivateTaskErrorException" method="ActivateTaskErrorException" />
+    <pattern value="rife.test.MockRequest" method="addDateHeader" />
+    <pattern value="rife.test.MockRequest" method="addHeader" />
+    <pattern value="rife.test.MockRequest" method="addIntHeader" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="addRole" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUsersManager" method="addRole" />
+    <pattern value="rife.engine.TomcatServer" method="addRole" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.AddRoleErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="addTask" />
+    <pattern value="rife.scheduler.Scheduler" method="addTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.AddTaskErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" method="addTaskOption" />
+    <pattern value="rife.scheduler.Scheduler" method="addTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.AddTaskOptionErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="addUser" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUsersManager" method="addUser" />
+    <pattern value="rife.engine.TomcatServer" method="addUser" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.AddUserErrorException" />
+    <pattern value="rife.engine.TomcatServer" method="addWebapp" />
+    <pattern value="rife.engine.Router" method="after" />
+    <pattern value="rife.engine.AnnotationInSite.AnnotatedElement" />
+    <pattern value="rife.engine.AnnotationOutSite.AnnotatedElement" />
+    <pattern value="rife.engine.exceptions.AnnotatedElementInstanceFieldException" />
+    <pattern value="rife.engine.AnnotationParametersSite.AnnotatedInElement" />
+    <pattern value="rife.engine.AnnotationParametersSite.AnnotatedOutElement" />
+    <pattern value="rife.engine.AnnotationInSite" />
+    <pattern value="rife.engine.AnnotationOutSite" />
+    <pattern value="rife.engine.AnnotationParametersSite" />
+    <pattern value="rife.continuations.ContinuableSupport" method="answer" />
+    <pattern value="rife.continuations.exceptions.AnswerException" />
+    <pattern value="rife.continuations.exceptions.AnswerException" method="AnswerException" />
+    <pattern value="rife.engine.Session" method="attributeNames" />
+    <pattern value="rife.authentication.elements.AuthConfig" />
+    <pattern value="rife.authentication.elements.AuthConfig" method="authCookieName" />
+    <pattern value="rife.authentication.elements.Authenticated" />
+    <pattern value="rife.authentication.elements.Authenticated" method="Authenticated" />
+    <pattern value="rife.authentication.elements.Login" method="authenticated" />
+    <pattern value="rife.authentication.elements.DatabaseAuthenticatedSite.AuthenticatedSection" />
+    <pattern value="rife.authentication.elements.MemoryAuthenticatedSite.AuthenticatedSection" />
+    <pattern value="rife.engine.TomcatServer" method="baseDir" />
+    <pattern value="rife.continuations.basic.BasicContinuableRunner" />
+    <pattern value="rife.engine.BeanImpl" />
+    <pattern value="rife.engine.Router" method="before" />
+    <pattern value="rife.test.MockRequest" method="body" />
+    <pattern value="rife.engine.Context" method="bodyAsBytes" />
+    <pattern value="rife.test.MockRequest" method="bodyAsBytes" />
+    <pattern value="rife.continuations.ContinuableSupport" method="call" />
+    <pattern value="rife.continuations.exceptions.CallException" />
+    <pattern value="rife.continuations.exceptions.CallException" method="CallException" />
+    <pattern value="rife.continuations.CallState" />
+    <pattern value="rife.continuations.exceptions.CallTargetNotFoundException" />
+    <pattern value="rife.continuations.basic.BasicContinuableRunner" method="callTargetRetriever" />
+    <pattern value="rife.engine.Context" method="characterEncoding" />
+    <pattern value="rife.test.MockRequest" method="characterEncoding" />
+    <pattern value="rife.engine.Context" method="clearBuffer" />
+    <pattern value="rife.continuations.ContinuationContext" method="clearLabel" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="clearUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ClearUsersErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ClearUsersErrorException" method="ClearUsersErrorException" />
+    <pattern value="rife.continuations.basic.BasicContinuableRunner" method="cloneContinuations" />
+    <pattern value="rife.continuations.ContinuationConfigRuntime" method="cloneContinuations" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.com_mysql_cj_jdbc_Driver" method="com_mysql_cj_jdbc_Driver" />
+    <pattern value="rife.Rife2Build" method="compileExamples" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="concludeTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException" method="ConcludeTaskErrorException" />
+    <pattern value="rife.test.MockRequest" method="containsHeader" />
+    <pattern value="rife.engine.Response" method="containsHeader" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="containsRepository" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="containsRole" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ContainsRoleErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ContainsRoleErrorException" method="ContainsRoleErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="containsUser" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ContainsUserErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ContainsUserErrorException" method="ContainsUserErrorException" />
+    <pattern value="rife.cmf.dam.contentmanagers.DatabaseContent.ContentAttributesProcessor" />
+    <pattern value="rife.cmf.dam.ContentImage" />
+    <pattern value="rife.cmf.dam.ContentImageNonCmfProps" />
+    <pattern value="rife.cmf.dam.ContentImageRepository" />
+    <pattern value="rife.cmf.dam.contentmanagers.ContentLocation" />
+    <pattern value="rife.cmf.dam.contentmanagers.ContentLocation" method="ContentLocation" />
+    <pattern value="rife.cmf.dam.ContentManager" />
+    <pattern value="rife.cmf.dam.exceptions.ContentManagerException" />
+    <pattern value="rife.cmf.dam.exceptions.ContentManagerException" method="ContentManagerException" />
+    <pattern value="rife.cmf.dam.contentmanagers.DatabaseContent.ContentPropertiesProcessor" />
+    <pattern value="rife.cmf.dam.ContentQueryManager" />
+    <pattern value="rife.cmf.dam.ContentQueryManager" method="ContentQueryManager" />
+    <pattern value="rife.cmf.dam.ContentRaw" />
+    <pattern value="rife.engine.Context" method="contentType" />
+    <pattern value="rife.test.MockRequest" method="contentType" />
+    <pattern value="rife.engine.Context" />
+    <pattern value="rife.engine.Context" method="contextPath" />
+    <pattern value="rife.test.MockConversation" method="contextPath" />
+    <pattern value="rife.continuations.exceptions.ContinuableLocalVariableUncloneableException" />
+    <pattern value="rife.continuations.ContinuableSupport" />
+    <pattern value="rife.continuations.ContinuationConfigRuntime" />
+    <pattern value="rife.continuations.ContinuationContext" />
+    <pattern value="rife.continuations.instrument.ContinuationDebug" />
+    <pattern value="rife.continuations.instrument.ContinuationsAgent" />
+    <pattern value="rife.continuations.exceptions.ContinuationsNotActiveException" />
+    <pattern value="rife.continuations.ContinuationStack" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="continueSession" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.ContinueSessionErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.ContinueSessionErrorException" method="ContinueSessionErrorException" />
+    <pattern value="rife.test.MockConversation" method="cookie" />
+    <pattern value="rife.engine.Context" method="cookieBoolean" />
+    <pattern value="rife.engine.CookieBuilder" />
+    <pattern value="rife.engine.Context" method="cookieDouble" />
+    <pattern value="rife.engine.Context" method="cookieFloat" />
+    <pattern value="rife.engine.Context" method="cookieInt" />
+    <pattern value="rife.engine.Context" method="cookieLong" />
+    <pattern value="rife.engine.Context" method="cookieValue" />
+    <pattern value="rife.engine.Context" method="cookieValues" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="countRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.CountRolesErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.CountRolesErrorException" method="CountRolesErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="countSessions" />
+    <pattern value="rife.authentication.SessionManager" method="countSessions" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.CountSessionsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.CountSessionsErrorException" method="CountSessionsErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="countUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.CountUsersErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.CountUsersErrorException" method="CountUsersErrorException" />
+    <pattern value="rife.engine.continuations.TestAllTypes" method="createMultiArrayInt" />
+    <pattern value="rife.continuations.ContinuationContext" method="createOrResetContext" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="createRememberId" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.CreateRememberIdErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.CreateRememberIdErrorException" method="CreateRememberIdErrorException" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="createRepository" />
+    <pattern value="rife.scheduler.SchedulerFactory" method="createScheduler" />
+    <pattern value="rife.engine.Site" method="createWorkflow" />
+    <pattern value="rife.engine.Session" method="creationTime" />
+    <pattern value="rife.authentication.elements.AuthConfig" method="credentialsClass" />
+    <pattern value="rife.authentication.exceptions.CredentialsManagerException" />
+    <pattern value="rife.authentication.exceptions.CredentialsManagerException" method="CredentialsManagerException" />
+    <pattern value="rife.authentication.credentialsmanagers.CustomCredentialsManager" />
+    <pattern value="rife.authentication.credentialsmanagers.CustomCredentialsManager" method="CustomCredentialsManager" />
+    <pattern value="rife.authentication.elements.DatabaseAuthenticatedSite" />
+    <pattern value="rife.cmf.dam.contentmanagers.DatabaseContent" />
+    <pattern value="rife.cmf.dam.contentstores.DatabaseRawStore" />
+    <pattern value="rife.scheduler.schedulermanagers.DatabaseScheduling" />
+    <pattern value="rife.scheduler.taskoptionmanagers.DatabaseTaskOptions" />
+    <pattern value="rife.scheduler.taskmanagers.DatabaseTasks" />
+    <pattern value="rife.authentication.credentialsmanagers.DatabaseUsers" />
+    <pattern value="rife.test.MockRequest" method="dateHeader" />
+    <pattern value="rife.engine.BeanImpl.Day" />
+    <pattern value="rife.database.DbKeepAlive" />
+    <pattern value="rife.database.DbKeepAlive" method="DbKeepAlive" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="deactivateTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.DeactivateTaskErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.DeactivateTaskErrorException" method="DeactivateTaskErrorException" />
+    <pattern value="rife.engine.elements.Defer" />
+    <pattern value="rife.engine.exceptions.DeferException" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="deleteContent" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="deleteContentData" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="deleteContentData" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="deleteContentData" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.DeleteContentDataErrorException" />
+    <pattern value="rife.engine.CookieBuilder" method="domain" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.DuplicateLoginException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.DuplicateRoleException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdException" />
+    <pattern value="rife.engine.Server" method="enabledVirtualThreads" />
+    <pattern value="rife.engine.Response" method="encodeURL" />
+    <pattern value="rife.engine.EngineContinuationConfigInstrument" />
+    <pattern value="rife.instrument.EngineContinuationsTransformer" />
+    <pattern value="rife.instrument.EngineContinuationsTransformer" method="EngineContinuationsTransformer" />
+    <pattern value="rife.engine.exceptions.EngineException" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="eraseAllRememberIds" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseAllRememberIdsErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseAllRememberIdsErrorException" method="EraseAllRememberIdsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="eraseAllSessions" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseAllSessionsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseAllSessionsErrorException" method="EraseAllSessionsErrorException" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="eraseRememberId" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseRememberIdErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseRememberIdErrorException" method="EraseRememberIdErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="eraseSession" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseSessionErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseSessionErrorException" method="EraseSessionErrorException" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="eraseUserRememberIds" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseUserRememberIdsErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseUserRememberIdsErrorException" method="EraseUserRememberIdsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="eraseUserSessions" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseUserSessionsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseUserSessionsErrorException" method="EraseUserSessionsErrorException" />
+    <pattern value="rife.engine.Router" method="exception" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceSource" method="execute" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceTarget" method="execute" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallSource" method="execute" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallTarget" method="execute" />
+    <pattern value="rife.continuations.TestCallMultipleAnswersWithTryCatchSource" method="execute" />
+    <pattern value="rife.continuations.TestCallMultipleAnswersWithTryCatchTarget" method="execute" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceSource" method="execute" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceTarget1" method="execute" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceTarget2" method="execute" />
+    <pattern value="rife.continuations.TestCallSimpleCallSource" method="execute" />
+    <pattern value="rife.continuations.TestCallSimpleCallTarget1" method="execute" />
+    <pattern value="rife.continuations.TestCallSimpleCallTarget2" method="execute" />
+    <pattern value="rife.continuations.TestPauseInWhile" method="execute" />
+    <pattern value="rife.continuations.TestPauseInWhileInterface" method="execute" />
+    <pattern value="rife.continuations.TestStepBackCounter" method="execute" />
+    <pattern value="rife.continuations.TestStepBackCounterInterface" method="execute" />
+    <pattern value="rife.workflow.Work" method="execute" />
+    <pattern value="rife.database.DbKeepAlive" method="executeTask" />
+    <pattern value="rife.scheduler.TestExecutor" method="executeTask" />
+    <pattern value="rife.scheduler.TestExecutor2" method="executeTask" />
+    <pattern value="rife.scheduler.exceptions.ExecutorAlreadyRegisteredException" />
+    <pattern value="rife.cmf.dam.exceptions.ExpectedMimeTypeConstraintException" />
+    <pattern value="rife.cmf.dam.exceptions.ExpectedOrdinalConstraintException" />
+    <pattern value="rife.engine.Router" method="fallback" />
+    <pattern value="rife.scheduler.exceptions.FatalTaskExecutionException" />
+    <pattern value="rife.test.MockRequest" method="file" />
+    <pattern value="rife.engine.Context" method="files" />
+    <pattern value="rife.test.MockForm" method="files" />
+    <pattern value="rife.test.MockRequest" method="files" />
+    <pattern value="rife.instrument.FinalTransformer" />
+    <pattern value="rife.engine.Context" method="flush" />
+    <pattern value="rife.test.MockLink" method="follow" />
+    <pattern value="rife.cmf.format.exceptions.FormatException" />
+    <pattern value="rife.engine.UrlBuilder" method="fragment" />
+    <pattern value="rife.scheduler.Frequency" />
+    <pattern value="rife.scheduler.exceptions.FrequencyException" />
+    <pattern value="rife.scheduler.exceptions.FrequencyException" method="FrequencyException" />
+    <pattern value="rife.scheduler.Task" method="frequencySpecification" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" />
+    <pattern value="rife.authentication.sessionvalidators.databasedrivers.generic" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" />
+    <pattern value="rife.scheduler.schedulermanagers.databasedrivers.generic" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="generic" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="generic" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="generic" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="generic" />
+    <pattern value="rife.scheduler.schedulermanagers.databasedrivers.generic" method="generic" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" method="generic" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="generic" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="generic" />
+    <pattern value="rife.authentication.sessionvalidators.databasedrivers.generic" method="generic" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="generic" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="getAllTasks" />
+    <pattern value="rife.scheduler.taskmanagers.MemoryTasks" method="getAllTasks" />
+    <pattern value="rife.scheduler.TaskManager" method="getAllTasks" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetAllTasksErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetAllTasksErrorException" method="GetAllTasksErrorException" />
+    <pattern value="rife.continuations.instrument.MetricsClassVisitor" method="getAnswerCount" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.AddUserErrorException" method="getAttributes" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.UpdateUserErrorException" method="getAttributes" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="getAttributes" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetAttributesErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetAttributesErrorException" method="GetAttributesErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.IsSessionValidErrorException" method="getAuthData" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.RoleCheckErrorException" method="getAuthData" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException" method="getAuthData" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.StartSessionErrorException" method="getAuthData" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.ContinueSessionErrorException" method="getAuthId" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.EraseSessionErrorException" method="getAuthId" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.GetSessionUserIdErrorException" method="getAuthId" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.IsSessionValidErrorException" method="getAuthId" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.RoleCheckErrorException" method="getAuthId" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.SessionRememberedCheckErrorException" method="getAuthId" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException" method="getAuthId" />
+    <pattern value="rife.cmf.loader.TestXhtmlContentLoader" method="getBackends" />
+    <pattern value="rife.cmf.dam.exceptions.WrongConstrainedPropertyVariantException" method="getBeanClass" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidBoundaryException" method="getBoundary" />
+    <pattern value="rife.continuations.ContinuationContext" method="getCallAnswer" />
+    <pattern value="rife.continuations.basic.BasicContinuableRunner" method="getCallTargetRetriever" />
+    <pattern value="rife.continuations.basic.BasicContinuableRunner" method="getClassLoader" />
+    <pattern value="rife.continuations.basic.BasicContinuableRunner" method="getCloneContinuations" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="getContentForHtml" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="getContentInfo" />
+    <pattern value="rife.engine.exceptions.MultipartCorruptContentDispositionException" method="getContentType" />
+    <pattern value="rife.engine.exceptions.MultipartCorruptContentTypeException" method="getContentType" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidContentDispositionException" method="getContentType" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidContentTypeException" method="getContentType" />
+    <pattern value="rife.continuations.exceptions.ContinuableLocalVariableUncloneableException" method="getContinuableClass" />
+    <pattern value="rife.engine.EngineContinuationConfigInstrument" method="getContinuableMarkerInterfaceName" />
+    <pattern value="rife.engine.EngineContinuationConfigInstrument" method="getContinuableSupportClassName" />
+    <pattern value="rife.continuations.ContinuationConfigRuntime" method="getContinuationManager" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.UnsupportedCredentialsTypeException" method="getCredentials" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.VerifyCredentialsErrorException" method="getCredentials" />
+    <pattern value="rife.engine.BeanImpl" method="getDateFormatted" />
+    <pattern value="rife.test.MockResponse" method="getDateHeader" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidUploadDirectoryException" method="getDirectory" />
+    <pattern value="rife.test.ParsedHtml" method="getDocument" />
+    <pattern value="rife.engine.exceptions.AnnotatedElementInstanceFieldException" method="getElement" />
+    <pattern value="rife.test.MockForm" method="getElement" />
+    <pattern value="rife.test.ParsedHtml" method="getElementAttribute" />
+    <pattern value="rife.engine.EngineContinuationConfigInstrument" method="getEntryMethodDescriptor" />
+    <pattern value="rife.engine.EngineContinuationConfigInstrument" method="getEntryMethodName" />
+    <pattern value="rife.scheduler.exceptions.ExecutorAlreadyRegisteredException" method="getExecutor" />
+    <pattern value="rife.scheduler.Scheduler" method="getExecutors" />
+    <pattern value="rife.engine.exceptions.MultipartFileErrorException" method="getFileName" />
+    <pattern value="rife.engine.exceptions.MultipartFileTooBigException" method="getFileName" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException" method="getFrequency" />
+    <pattern value="rife.scheduler.Task" method="getFrequencySpecification" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="getGif" />
+    <pattern value="rife.scheduler.TestExecutor" method="getHandledTaskType" />
+    <pattern value="rife.scheduler.TestExecutor2" method="getHandledTaskType" />
+    <pattern value="rife.test.MockResponse" method="getHeaders" />
+    <pattern value="rife.engine.Request" method="getHttpServletRequest" />
+    <pattern value="rife.engine.Response" method="getHttpServletResponse" />
+    <pattern value="rife.authentication.credentialsmanagers.CustomCredentialsManager" method="getId" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="getId" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="getId" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="getId" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="getId" />
+    <pattern value="rife.cmf.validation.TestSupportedImage.ImageBean" method="getImage" />
+    <pattern value="rife.cmf.validation.TestSupportedImage.ImageBeanNotConstrained" method="getImage" />
+    <pattern value="rife.cmf.validation.TestSupportedImage.ImageBeanValidation" method="getImage" />
+    <pattern value="rife.engine.BeanImpl" method="getInstantFormatted" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="getJpeg" />
+    <pattern value="rife.engine.Response" method="getLastElement" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidBoundaryException" method="getLine" />
+    <pattern value="rife.engine.Response" method="getLocale" />
+    <pattern value="rife.continuations.exceptions.ContinuableLocalVariableUncloneableException" method="getLocalVarType" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.AddUserErrorException" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ContainsUserErrorException" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetAttributesErrorException" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetUserIdErrorException" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveUserErrorException" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.UpdateUserErrorException" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="getLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetLoginErrorException" />
+    <pattern value="rife.cmf.dam.contentmanagers.exceptions.UnsupportedMimeTypeException" method="getMimeType" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionErrorException" method="getName" />
+    <pattern value="rife.cmf.dam.Ordered" method="getName" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="getName" />
+    <pattern value="rife.cmf.dam.OrderedRestricted" method="getName" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="getName" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="getName" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="getName" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveRoleErrorException" method="getName" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionErrorException" method="getName" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException" method="getNewPlanned" />
+    <pattern value="rife.engine.exceptions.PathInfoMappingPatternInvalidException" method="getParameterName" />
+    <pattern value="rife.authentication.credentialsmanagers.DatabaseUsers" method="getPasswordEncryptor" />
+    <pattern value="rife.authentication.credentialsmanagers.MemoryUsers" method="getPasswordEncryptor" />
+    <pattern value="rife.engine.exceptions.PathInfoMappingPatternInvalidException" method="getPattern" />
+    <pattern value="rife.engine.EngineContinuationConfigInstrument" method="getPauseMethodName" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="getPng" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="getPriority" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="getPriority" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="getPriority" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="getPriority" />
+    <pattern value="rife.cmf.dam.exceptions.WrongConstrainedPropertyVariantException" method="getProperty" />
+    <pattern value="rife.test.MockResponse" method="getReason" />
+    <pattern value="rife.authentication.RememberManager" method="getRememberDuration" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="getRememberedUserId" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.GetRememberedUserIdErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.GetRememberedUserIdErrorException" method="GetRememberedUserIdErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.EraseRememberIdErrorException" method="getRememberId" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.GetRememberedUserIdErrorException" method="getRememberId" />
+    <pattern value="rife.authentication.RememberManager" method="getRememberPurgeFrequency" />
+    <pattern value="rife.authentication.RememberManager" method="getRememberPurgeScale" />
+    <pattern value="rife.cmf.dam.ContentQueryManager" method="getRepository" />
+    <pattern value="rife.engine.Request" method="getRequestDispatcher" />
+    <pattern value="rife.authentication.SessionManager" method="getRestrictAuthData" />
+    <pattern value="rife.cmf.dam.OrderedRestricted" method="getRestricted" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="getRestricted" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="getRestricted" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceSource" method="getResult" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallSource" method="getResult" />
+    <pattern value="rife.continuations.TestCallMultipleAnswersWithTryCatchSource" method="getResult" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceSource" method="getResult" />
+    <pattern value="rife.continuations.TestCallSimpleCallSource" method="getResult" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.AddRoleErrorException" method="getRole" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ContainsRoleErrorException" method="getRole" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.IsUserInRoleErrorException" method="getRole" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.RoleCheckErrorException" method="getRole" />
+    <pattern value="rife.engine.exceptions.RouterAlreadyDeployedException" method="getRouter" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="getScheduledTasks" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetScheduledTasksErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetScheduledTasksErrorException" method="GetScheduledTasksErrorException" />
+    <pattern value="rife.scheduler.TaskOptionManager" method="getScheduler" />
+    <pattern value="rife.authentication.SessionManager" method="getSessionDuration" />
+    <pattern value="rife.authentication.SessionManager" method="getSessionPurgeFrequency" />
+    <pattern value="rife.authentication.SessionManager" method="getSessionPurgeScale" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="getSessionUserId" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.GetSessionUserIdErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.GetSessionUserIdErrorException" method="GetSessionUserIdErrorException" />
+    <pattern value="rife.test.MockConversation" method="getSite" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="getSize" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="getSize" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="getSize" />
+    <pattern value="rife.engine.exceptions.MultipartFileTooBigException" method="getSizeLimit" />
+    <pattern value="rife.continuations.instrument.TypesContext" method="getStack" />
+    <pattern value="rife.continuations.CallState" method="getState" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.AddTaskErrorException" method="getTask" />
+    <pattern value="rife.scheduler.exceptions.FatalTaskExecutionException" method="getTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.UpdateTaskErrorException" method="getTask" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="getTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTaskErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTaskErrorException" method="GetTaskErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.ActivateTaskErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.ConcludeTaskErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.DeactivateTaskErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException" method="getTaskID" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTaskErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionsErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException" method="getTaskID" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RemoveTaskErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException" method="getTaskId" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTaskIdErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTaskIdErrorException" method="GetTaskIdErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.AddTaskOptionErrorException" method="getTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorException" method="getTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" method="getTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionErrorException" method="GetTaskOptionErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.DuplicateTaskOptionException" method="getTaskOptionName" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" method="getTaskOptions" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionsErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.GetTaskOptionsErrorException" method="GetTaskOptionsErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="getTasksToProcess" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTasksToProcessErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.GetTasksToProcessErrorException" method="GetTasksToProcessErrorException" />
+    <pattern value="rife.scheduler.exceptions.NoExecutorForTasktypeException" method="getTasktype" />
+    <pattern value="rife.scheduler.exceptions.TaskTypeAlreadyRegisteredException" method="getTaskType" />
+    <pattern value="rife.continuations.TestStepBackCounter" method="getTotal" />
+    <pattern value="rife.continuations.TestStepBackCounterInterface" method="getTotal" />
+    <pattern value="rife.cmf.dam.exceptions.InvalidOrdinalRestrictionTypeException" method="getType" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.CreateRememberIdErrorException" method="getUserId" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdException" method="getUserId" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetLoginErrorException" method="getUserId" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.IsUserInRoleErrorException" method="getUserId" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveUserErrorException" method="getUserId" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.StartSessionErrorException" method="getUserId" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.GetUserIdErrorException" />
+    <pattern value="rife.test.MockSession" method="getValue" />
+    <pattern value="rife.test.MockSession" method="getValueNames" />
+    <pattern value="rife.engine.Response" method="getWriter" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="getXhtml" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml.XhtmlBean" method="getXhtml" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml.XhtmlBeanValidation" method="getXhtml" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml.XhtmlBeanNotConstrained" method="getXhtml" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="hasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="hasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="hasContentData" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="hasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.HasContentDataErrorException" />
+    <pattern value="rife.engine.Context" method="hasFile" />
+    <pattern value="rife.test.MockForm" method="hasParameter" />
+    <pattern value="rife.engine.Context" method="hasProperty" />
+    <pattern value="rife.test.MockRequest" method="header" />
+    <pattern value="rife.engine.Context" method="headerInt" />
+    <pattern value="rife.engine.Context" method="headerNames" />
+    <pattern value="rife.engine.Context" method="headers" />
+    <pattern value="rife.engine.Session" method="id" />
+    <pattern value="rife.authentication.elements.Identified" />
+    <pattern value="rife.authentication.elements.AuthConfig" method="identityAttributeName" />
+    <pattern value="rife.cmf.validation.TestSupportedImage.ImageBean" />
+    <pattern value="rife.cmf.validation.TestSupportedImage.ImageBeanNotConstrained" />
+    <pattern value="rife.cmf.validation.TestSupportedImage.ImageBeanValidation" />
+    <pattern value="rife.instrument.InitialTransformer" />
+    <pattern value="rife.instrument.LazyLoadTransformer" />
+    <pattern value="rife.instrument.MetaDataTransformer" />
+    <pattern value="rife.authentication.sessionvalidators.ProcessSessionValidity" />
+    <pattern value="rife.authentication.sessionvalidators.ProcessSessionValidityBasic" />
+    <pattern value="rife.authentication.credentialsmanagers.DatabaseUsers.ProcessVerifyCredentials" />
+    <pattern value="rife.instrument.RifeTransformer" />
+    <pattern value="rife.cmf.dam.contentstores.DatabaseRawStore$3Scope" />
+    <pattern value="rife.cmf.dam.contentstores.DatabaseRawStore$2Scope" />
+    <pattern value="rife.engine.TestAnnotations" />
+    <pattern value="rife.authentication.sessionvalidators.TestBasicSessionValidator" />
+    <pattern value="rife.engine.TestBeans" />
+    <pattern value="rife.continuations.TestCall" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceSource" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceTarget" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallSource" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallTarget" />
+    <pattern value="rife.continuations.TestCallMultipleAnswersWithTryCatchSource" />
+    <pattern value="rife.continuations.TestCallMultipleAnswersWithTryCatchTarget" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceSource" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceTarget1" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceTarget2" />
+    <pattern value="rife.continuations.TestCallSimpleCallSource" />
+    <pattern value="rife.continuations.TestCallSimpleCallTarget1" />
+    <pattern value="rife.continuations.TestCallSimpleCallTarget2" />
+    <pattern value="rife.cmf.TestContent" />
+    <pattern value="rife.cmf.dam.TestContentDataUser" />
+    <pattern value="rife.cmf.TestContentInfo" />
+    <pattern value="rife.cmf.dam.TestContentManager" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" />
+    <pattern value="rife.cmf.TestContentRepository" />
+    <pattern value="rife.engine.TestContinuations" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" />
+    <pattern value="rife.cmf.dam.TestDatabaseContentInfo" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseSchedulerInstallation" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" />
+    <pattern value="rife.authentication.sessionvalidators.TestDatabaseSessionValidator" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" />
+    <pattern value="rife.cmf.dam.elements.TestElements" />
+    <pattern value="rife.engine.TestEngine" />
+    <pattern value="rife.scheduler.TestExecutor" />
+    <pattern value="rife.scheduler.TestExecutor2" />
+    <pattern value="rife.scheduler.TestFrequency" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" />
+    <pattern value="rife.engine.TestGroups" />
+    <pattern value="rife.cmf.loader.TestImageContentLoader" />
+    <pattern value="rife.cmf.format.TestImageFormatter" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" />
+    <pattern value="rife.validation.TestMetaData" />
+    <pattern value="rife.cmf.TestMimeType" />
+    <pattern value="rife.test.TestMockCookie" />
+    <pattern value="rife.test.TestMocksBeans" />
+    <pattern value="rife.test.TestMocksEngine" />
+    <pattern value="rife.test.TestMocksGroups" />
+    <pattern value="rife.test.TestMocksRouting" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" />
+    <pattern value="rife.engine.TestPagedNavigation" />
+    <pattern value="rife.test.TestParsedHtml" />
+    <pattern value="rife.continuations.TestPause" />
+    <pattern value="rife.continuations.TestPauseInWhile" />
+    <pattern value="rife.continuations.TestPauseInWhileInterface" />
+    <pattern value="rife.engine.TestProcessedTemplates" />
+    <pattern value="rife.authentication.remembermanagers.TestPurgingDatabaseRemember" />
+    <pattern value="rife.authentication.sessionmanagers.TestPurgingDatabaseSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestPurgingMemorySessions" />
+    <pattern value="rife.cmf.format.TestRawFormatter" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" />
+    <pattern value="rife.engine.TestRouting" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" />
+    <pattern value="rife.continuations.TestStepBack" />
+    <pattern value="rife.continuations.TestStepBackCounter" />
+    <pattern value="rife.continuations.TestStepBackCounterInterface" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" />
+    <pattern value="rife.scheduler.TestTask" />
+    <pattern value="rife.scheduler.TestTaskOption" />
+    <pattern value="rife.workflow.TestWorkflow" />
+    <pattern value="rife.cmf.loader.TestXhtmlContentLoader" />
+    <pattern value="rife.cmf.format.TestXhtmlFormatter" />
+    <pattern value="rife.engine.elements.Uncached" />
+    <pattern value="rife.continuations.ContinuationStack" method="incrementInt" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.InexistentTaskIdException" />
+    <pattern value="rife.test.MockRequest" method="init" />
+    <pattern value="rife.authentication.elements.Authenticated" method="initializeAuthenticated" />
+    <pattern value="rife.authentication.elements.Identified" method="initializeIdentified" />
+    <pattern value="rife.authentication.elements.Login" method="initializeLogin" />
+    <pattern value="rife.authentication.elements.Logout" method="initializeLogout" />
+    <pattern value="rife.cmf.dam.ContentManager" method="install" />
+    <pattern value="rife.scheduler.schedulermanagers.DatabaseScheduling" method="install" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="install" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="install" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="install" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="install" />
+    <pattern value="rife.scheduler.schedulermanagers.databasedrivers.generic" method="install" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="install" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="install" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="install" />
+    <pattern value="rife.cmf.dam.contentmanagers.exceptions.InstallContentErrorException" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.InstallContentStoreErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.InstallCredentialsErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.InstallCredentialsErrorException" method="InstallCredentialsErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.InstallRememberUserErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.InstallRememberUserErrorException" method="InstallRememberUserErrorException" />
+    <pattern value="rife.scheduler.schedulermanagers.exceptions.InstallSchedulerErrorException" />
+    <pattern value="rife.scheduler.schedulermanagers.exceptions.InstallSchedulerErrorException" method="InstallSchedulerErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.InstallSessionsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.InstallSessionsErrorException" method="InstallSessionsErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.InstallTaskOptionsErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.InstallTaskOptionsErrorException" method="InstallTaskOptionsErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.InstallTasksErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.InstallTasksErrorException" method="InstallTasksErrorException" />
+    <pattern value="rife.test.MockRequest" method="intHeader" />
+    <pattern value="rife.engine.Session" method="invalidate" />
+    <pattern value="rife.cmf.format.exceptions.InvalidContentDataTypeException" />
+    <pattern value="rife.cmf.dam.exceptions.InvalidOrdinalRestrictionTypeException" />
+    <pattern value="rife.cmf.dam.exceptions.InvalidOrdinalTypeException" />
+    <pattern value="rife.engine.Context" method="isFileEmpty" />
+    <pattern value="rife.engine.Session" method="isNew" />
+    <pattern value="rife.engine.Context" method="isParameterEmpty" />
+    <pattern value="rife.scheduler.Scheduler" method="isRunning" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="isSessionValid" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.IsSessionValidErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.IsSessionValidErrorException" method="IsSessionValidErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="isUserInRole" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.IsUserInRoleErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.IsUserInRoleErrorException" method="IsUserInRoleErrorException" />
+    <pattern value="rife.engine.Session" method="lastAccessedTime" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="listRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ListRolesErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="listSessions" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="listUserRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="listUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.ListUsersErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="listUsersInRole" />
+    <pattern value="rife.engine.Context" method="locale" />
+    <pattern value="rife.test.MockRequest" method="locale" />
+    <pattern value="rife.engine.Context" method="locales" />
+    <pattern value="rife.authentication.elements.Logout" method="loggedOut" />
+    <pattern value="rife.authentication.elements.Login" />
+    <pattern value="rife.authentication.elements.Login" method="Login" />
+    <pattern value="rife.authentication.credentials.RoleUser" method="login" />
+    <pattern value="rife.authentication.elements.Logout" />
+    <pattern value="rife.authentication.elements.Logout" method="Logout" />
+    <pattern value="rife.Rife2Build" method="main" />
+    <pattern value="rife.engine.Session" method="maxInactiveInterval" />
+    <pattern value="rife.authentication.elements.MemoryAuthenticatedSite" />
+    <pattern value="rife.scheduler.taskmanagers.MemoryTasks" />
+    <pattern value="rife.authentication.credentialsmanagers.MemoryUsers" />
+    <pattern value="rife.continuations.instrument.MetricsClassVisitor" />
+    <pattern value="rife.continuations.exceptions.MissingActiveContinuationConfigRuntimeException" />
+    <pattern value="rife.continuations.exceptions.MissingActiveContinuationConfigRuntimeException" method="MissingActiveContinuationConfigRuntimeException" />
+    <pattern value="rife.cmf.dam.exceptions.MissingIdentifierValueException" />
+    <pattern value="rife.test.MockConversation" />
+    <pattern value="rife.test.MockFileUpload" />
+    <pattern value="rife.test.MockFileUpload" method="MockFileUpload" />
+    <pattern value="rife.test.MockForm" />
+    <pattern value="rife.test.MockLink" />
+    <pattern value="rife.test.MockRequest" />
+    <pattern value="rife.test.MockResponse" />
+    <pattern value="rife.test.MockSession" />
+    <pattern value="rife.engine.exceptions.MultipartCorruptContentDispositionException" />
+    <pattern value="rife.engine.exceptions.MultipartCorruptContentTypeException" />
+    <pattern value="rife.engine.exceptions.MultipartFileErrorException" />
+    <pattern value="rife.engine.exceptions.MultipartFileTooBigException" />
+    <pattern value="rife.engine.exceptions.MultipartInputErrorException" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidBoundaryException" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidContentDispositionException" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidContentTypeException" />
+    <pattern value="rife.engine.exceptions.MultipartInvalidUploadDirectoryException" />
+    <pattern value="rife.engine.exceptions.MultipartMissingBoundaryException" />
+    <pattern value="rife.servlet.MultipartRequest" />
+    <pattern value="rife.engine.exceptions.MultipartRequestException" />
+    <pattern value="rife.engine.exceptions.MultipartUnexpectedEndingException" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="name" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="name" />
+    <pattern value="rife.scheduler.TaskOption" method="name" />
+    <pattern value="rife.engine.exceptions.NextException" />
+    <pattern value="rife.continuations.exceptions.NoContinuableInstanceAvailableException" />
+    <pattern value="rife.scheduler.exceptions.NoExecutorForTasktypeException" />
+    <pattern value="rife.engine.Route" method="obtainElementInstance" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.oracle_jdbc_driver_OracleDriver" method="oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.oracle_jdbc_driver_OracleDriver" method="oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.oracle_jdbc_driver_OracleDriver" method="oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.oracle_jdbc_driver_OracleDriver" method="oracle_jdbc_driver_OracleDriver" />
+    <pattern value="rife.cmf.dam.Ordered" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" />
+    <pattern value="rife.cmf.dam.OrderedRestricted" />
+    <pattern value="rife.cmf.dam.exceptions.OrdinalRestrictionCantBeNullException" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.org_apache_derby_jdbc_EmbeddedDriver" method="org_apache_derby_jdbc_EmbeddedDriver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.org_h2_Driver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.org_h2_Driver" method="org_h2_Driver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.org_hsqldb_jdbcDriver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.org_hsqldb_jdbcDriver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.org_hsqldb_jdbcDriver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.org_hsqldb_jdbcDriver" method="org_hsqldb_jdbcDriver" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.org_hsqldb_jdbcDriver" method="org_hsqldb_jdbcDriver" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.org_hsqldb_jdbcDriver" method="org_hsqldb_jdbcDriver" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.org_postgresql_Driver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.org_postgresql_Driver" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.org_postgresql_Driver" method="org_postgresql_Driver" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.org_postgresql_Driver" method="org_postgresql_Driver" />
+    <pattern value="rife.continuations.ContinuationStack" method="outputState" />
+    <pattern value="rife.engine.UrlBuilder" method="param" />
+    <pattern value="rife.test.MockRequest" method="parameter" />
+    <pattern value="rife.engine.Context" method="parameter" />
+    <pattern value="rife.test.MockForm" method="parameter" />
+    <pattern value="rife.engine.Context" method="parameterDouble" />
+    <pattern value="rife.engine.Context" method="parameterDoubles" />
+    <pattern value="rife.engine.Context" method="parameterFloat" />
+    <pattern value="rife.engine.Context" method="parameterFloats" />
+    <pattern value="rife.engine.Context" method="parameterInts" />
+    <pattern value="rife.engine.Context" method="parameterLong" />
+    <pattern value="rife.engine.Context" method="parameterLongs" />
+    <pattern value="rife.engine.UrlBuilder" method="params" />
+    <pattern value="rife.engine.AnnotationInSite.ParentElement" />
+    <pattern value="rife.engine.AnnotationOutSite.ParentElement" />
+    <pattern value="rife.engine.AnnotationParametersSite.ParentInElement" />
+    <pattern value="rife.engine.AnnotationParametersSite.ParentOutElement" />
+    <pattern value="rife.test.ParsedHtml" />
+    <pattern value="rife.authentication.credentials.RoleUser" method="password" />
+    <pattern value="rife.authentication.PasswordEncrypting" />
+    <pattern value="rife.engine.exceptions.PathInfoMappingPatternInvalidException" />
+    <pattern value="rife.cmf.dam.contentmanagers.DatabaseContent.PathParts" />
+    <pattern value="rife.cmf.dam.contentmanagers.DatabaseContent.PathParts" method="PathParts" />
+    <pattern value="rife.continuations.exceptions.PauseException" />
+    <pattern value="rife.continuations.exceptions.PauseException" method="PauseException" />
+    <pattern value="rife.workflow.Work" method="pauseForEvent" />
+    <pattern value="rife.scheduler.Task" method="planned" />
+    <pattern value="rife.continuations.ContinuationStack" method="popDouble" />
+    <pattern value="rife.continuations.ContinuationStack" method="popFloat" />
+    <pattern value="rife.continuations.ContinuationStack" method="popInt" />
+    <pattern value="rife.continuations.ContinuationStack" method="popLong" />
+    <pattern value="rife.continuations.ContinuationStack" method="popReference" />
+    <pattern value="rife.continuations.instrument.ContinuationsAgent" method="premain" />
+    <pattern value="rife.instrument.RifeAgent" method="premain" />
+    <pattern value="rife.engine.Response" method="print" />
+    <pattern value="rife.engine.elements.PrintTemplate" />
+    <pattern value="rife.engine.elements.PrintTemplate" method="PrintTemplate" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="priority" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="priority" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="priority" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="priority" />
+    <pattern value="rife.engine.elements.Defer" method="process" />
+    <pattern value="rife.engine.elements.PrintTemplate" method="process" />
+    <pattern value="rife.engine.elements.Uncached" method="process" />
+    <pattern value="rife.scheduler.taskmanagers.DatabaseTasks.ProcessTask" />
+    <pattern value="rife.scheduler.taskmanagers.DatabaseTasks.ProcessTask" method="ProcessTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.DatabaseTaskOptions.ProcessTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.DatabaseTaskOptions.ProcessTaskOption" method="ProcessTaskOption" />
+    <pattern value="rife.test.MockConversation" method="properties" />
+    <pattern value="rife.engine.TestTomcatRunner" method="properties" />
+    <pattern value="rife.workflow.Workflow" method="properties" />
+    <pattern value="rife.engine.Context" method="property" />
+    <pattern value="rife.engine.Context" method="propertyNames" />
+    <pattern value="rife.engine.Context" method="protocol" />
+    <pattern value="rife.test.MockRequest" method="protocol" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.PurgeRememberIdsErrorException" />
+    <pattern value="rife.authentication.remembermanagers.exceptions.PurgeRememberIdsErrorException" method="PurgeRememberIdsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.PurgeSessionsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.PurgeSessionsErrorException" method="PurgeSessionsErrorException" />
+    <pattern value="rife.continuations.ContinuationStack" method="pushDouble" />
+    <pattern value="rife.continuations.ContinuationStack" method="pushFloat" />
+    <pattern value="rife.continuations.ContinuationStack" method="pushInt" />
+    <pattern value="rife.continuations.ContinuationStack" method="pushLong" />
+    <pattern value="rife.continuations.ContinuationStack" method="pushReference" />
+    <pattern value="rife.test.MockSession" method="putValue" />
+    <pattern value="rife.test.MockResponse.QuotedStringTokenizer" />
+    <pattern value="rife.test.MockResponse.QuotedStringTokenizer" method="QuotedStringTokenizer" />
+    <pattern value="rife.cmf.dam.contentstores.RawContentStream" />
+    <pattern value="rife.cmf.dam.contentstores.RawContentStream" method="RawContentStream" />
+    <pattern value="rife.engine.exceptions.RedirectException" />
+    <pattern value="rife.authentication.elements.Login" method="refusedCredentials" />
+    <pattern value="rife.continuations.ContinuationContext" method="registerContext" />
+    <pattern value="rife.cmf.dam.RegularPojo" />
+    <pattern value="rife.authentication.credentials.RoleUser" method="remember" />
+    <pattern value="rife.authentication.elements.AuthConfig" method="rememberCookieName" />
+    <pattern value="rife.authentication.RememberManager" />
+    <pattern value="rife.authentication.exceptions.RememberManagerException" />
+    <pattern value="rife.authentication.exceptions.RememberManagerException" method="RememberManagerException" />
+    <pattern value="rife.authentication.credentials.RememberMe" />
+    <pattern value="rife.test.MockRequest" method="remoteAddr" />
+    <pattern value="rife.test.MockRequest" method="remoteHost" />
+    <pattern value="rife.engine.Context" method="remoteUser" />
+    <pattern value="rife.test.MockRequest" method="remoteUser" />
+    <pattern value="rife.cmf.dam.ContentManager" method="remove" />
+    <pattern value="rife.continuations.ContinuationContext" method="remove" />
+    <pattern value="rife.scheduler.schedulermanagers.DatabaseScheduling" method="remove" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="remove" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="remove" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="remove" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="remove" />
+    <pattern value="rife.scheduler.schedulermanagers.databasedrivers.generic" method="remove" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="remove" />
+    <pattern value="rife.authentication.remembermanagers.databasedrivers.generic" method="remove" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="remove" />
+    <pattern value="rife.engine.Session" method="removeAttribute" />
+    <pattern value="rife.cmf.dam.contentmanagers.exceptions.RemoveContentErrorException" />
+    <pattern value="rife.cmf.dam.contentmanagers.exceptions.RemoveContentErrorException" method="RemoveContentErrorException" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.RemoveContentStoreErrorException" />
+    <pattern value="rife.continuations.ContinuationContext" method="removeContextTree" />
+    <pattern value="rife.engine.Context" method="removeCookie" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveCredentialsErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveCredentialsErrorException" method="RemoveCredentialsErrorException" />
+    <pattern value="rife.test.MockRequest" method="removeHeader" />
+    <pattern value="rife.test.MockResponse" method="removeHeader" />
+    <pattern value="rife.workflow.Workflow" method="removeListener" />
+    <pattern value="rife.engine.Context" method="removeParameter" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="removeRole" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUserAttributes" method="removeRole" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveRoleErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveRoleErrorException" method="RemoveRoleErrorException" />
+    <pattern value="rife.scheduler.schedulermanagers.exceptions.RemoveSchedulerErrorException" />
+    <pattern value="rife.scheduler.schedulermanagers.exceptions.RemoveSchedulerErrorException" method="RemoveSchedulerErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.RemoveSessionsErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.RemoveSessionsErrorException" method="RemoveSessionsErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="removeTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RemoveTaskErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RemoveTaskErrorException" method="RemoveTaskErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" method="removeTaskOption" />
+    <pattern value="rife.scheduler.TaskOptionManager" method="removeTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionErrorException" method="RemoveTaskOptionErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionsErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.RemoveTaskOptionsErrorException" method="RemoveTaskOptionsErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RemoveTasksErrorException" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RemoveTasksErrorException" method="RemoveTasksErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="removeUser" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveUserErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.RemoveUserErrorException" method="RemoveUserErrorException" />
+    <pattern value="rife.test.MockSession" method="removeValue" />
+    <pattern value="rife.cmf.dam.ContentQueryManager" method="repository" />
+    <pattern value="rife.engine.Request" />
+    <pattern value="rife.engine.RequestMethod" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="rescheduleTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.RescheduleTaskErrorException" />
+    <pattern value="rife.engine.exceptions.RespondException" />
+    <pattern value="rife.engine.Response" />
+    <pattern value="rife.engine.exceptions.ResponseOutputStreamRetrievalErrorException" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.RetrieveSizeErrorException" />
+    <pattern value="rife.Rife2Build" />
+    <pattern value="rife.instrument.RifeAgent" />
+    <pattern value="rife.servlet.RifeFilter" />
+    <pattern value="rife.authentication.credentials.RoleUser" method="role" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.RoleCheckErrorException" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.RoleCheckErrorException" method="RoleCheckErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUserAttributes" method="roles" />
+    <pattern value="rife.authentication.credentials.RoleUser" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUserAttributes" />
+    <pattern value="rife.authentication.credentials.RoleUserCredentials" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUsersManager" />
+    <pattern value="rife.engine.Route" />
+    <pattern value="rife.engine.Router" />
+    <pattern value="rife.engine.exceptions.RouterAlreadyDeployedException" />
+    <pattern value="rife.Rife2Build" method="runExamples" />
+    <pattern value="rife.scheduler.Scheduler" />
+    <pattern value="rife.scheduler.exceptions.SchedulerException" />
+    <pattern value="rife.scheduler.exceptions.SchedulerExecutionException" />
+    <pattern value="rife.scheduler.exceptions.SchedulerExecutionException" method="SchedulerExecutionException" />
+    <pattern value="rife.scheduler.SchedulerFactory" />
+    <pattern value="rife.scheduler.exceptions.SchedulerManagerException" />
+    <pattern value="rife.scheduler.exceptions.SchedulerManagerException" method="SchedulerManagerException" />
+    <pattern value="rife.test.MockConversation" method="scheme" />
+    <pattern value="rife.engine.Context" method="secure" />
+    <pattern value="rife.test.MockRequest" method="secure" />
+    <pattern value="rife.engine.Context" method="selectParameter" />
+    <pattern value="rife.engine.Response" method="sendError" />
+    <pattern value="rife.engine.BeanImpl.SerializableParam" />
+    <pattern value="rife.cmf.dam.contentstores.DatabaseRawStore" method="serveChunks" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="serveContentData" />
+    <pattern value="rife.engine.Server" />
+    <pattern value="rife.engine.Context" method="serverName" />
+    <pattern value="rife.test.MockConversation" method="serverName" />
+    <pattern value="rife.test.MockConversation" method="serverPort" />
+    <pattern value="rife.engine.Session" />
+    <pattern value="rife.authentication.elements.Login" method="sessionCreationError" />
+    <pattern value="rife.authentication.SessionManager" />
+    <pattern value="rife.authentication.exceptions.SessionManagerException" />
+    <pattern value="rife.authentication.exceptions.SessionManagerException" method="SessionManagerException" />
+    <pattern value="rife.authentication.elements.Authenticated" method="sessionNotValid" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.SessionRememberedCheckErrorException" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.SessionRememberedCheckErrorException" method="SessionRememberedCheckErrorException" />
+    <pattern value="rife.authentication.SessionValidator" />
+    <pattern value="rife.authentication.elements.AuthConfig" method="sessionValidator" />
+    <pattern value="rife.authentication.exceptions.SessionValidatorException" />
+    <pattern value="rife.authentication.exceptions.SessionValidatorException" method="SessionValidatorException" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException" />
+    <pattern value="rife.authentication.sessionvalidators.exceptions.SessionValidityCheckErrorException" method="SessionValidityCheckErrorException" />
+    <pattern value="rife.continuations.TestStepBackCounter" method="setAnswer" />
+    <pattern value="rife.continuations.TestStepBackCounterInterface" method="setAnswer" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceSource" method="setContinuableSupport" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceTarget" method="setContinuableSupport" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceSource" method="setContinuableSupport" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceTarget1" method="setContinuableSupport" />
+    <pattern value="rife.continuations.TestCallSimpleCallInterfaceTarget2" method="setContinuableSupport" />
+    <pattern value="rife.continuations.TestPauseInWhileInterface" method="setContinuableSupport" />
+    <pattern value="rife.continuations.TestStepBackCounterInterface" method="setContinuableSupport" />
+    <pattern value="rife.authentication.SessionValidator" method="setCredentialsManager" />
+    <pattern value="rife.engine.Context" method="setDateHeader" />
+    <pattern value="rife.continuations.instrument.ContinuationDebug" method="setDebug" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallInterfaceTarget" method="setDoAnswer" />
+    <pattern value="rife.continuations.TestCallAnswerInOtherThreadCallTarget" method="setDoAnswer" />
+    <pattern value="rife.servlet.MultipartRequest" method="setEncoding" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="setGif" />
+    <pattern value="rife.engine.Context" method="setHeader" />
+    <pattern value="rife.cmf.dam.ContentImageNonCmfProps" method="setId" />
+    <pattern value="rife.cmf.dam.ContentRaw" method="setId" />
+    <pattern value="rife.cmf.dam.Ordered" method="setId" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="setId" />
+    <pattern value="rife.cmf.dam.OrderedRestricted" method="setId" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="setId" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="setId" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="setId" />
+    <pattern value="rife.cmf.dam.RegularPojo" method="setId" />
+    <pattern value="rife.cmf.dam.ContentImage" method="setImage" />
+    <pattern value="rife.cmf.dam.ContentImageNonCmfProps" method="setImage" />
+    <pattern value="rife.cmf.dam.ContentImageRepository" method="setImage" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="setJpeg" />
+    <pattern value="rife.engine.Context" method="setLocale" />
+    <pattern value="rife.authentication.credentials.RoleUserCredentials" method="setLogin" />
+    <pattern value="rife.cmf.dam.ContentImage" method="setName" />
+    <pattern value="rife.cmf.dam.ContentImageNonCmfProps" method="setName" />
+    <pattern value="rife.cmf.dam.ContentImageRepository" method="setName" />
+    <pattern value="rife.cmf.dam.ContentRaw" method="setName" />
+    <pattern value="rife.cmf.dam.Ordered" method="setName" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="setName" />
+    <pattern value="rife.cmf.dam.OrderedRestricted" method="setName" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="setName" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="setName" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="setName" />
+    <pattern value="rife.cmf.dam.RegularPojo" method="setName" />
+    <pattern value="rife.engine.BeanImpl.SerializableParam" method="setNumber" />
+    <pattern value="rife.engine.Context" method="setParametersBean" />
+    <pattern value="rife.authentication.credentials.RoleUserCredentials" method="setPassword" />
+    <pattern value="rife.authentication.PasswordEncrypting" method="setPasswordEncryptor" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="setPng" />
+    <pattern value="rife.cmf.dam.Ordered" method="setPriority" />
+    <pattern value="rife.cmf.dam.OrderedRestricted" method="setPriority" />
+    <pattern value="rife.cmf.dam.OrdrdRestrInvalidType" method="setPriority" />
+    <pattern value="rife.cmf.dam.OrdrdRestrUnknown" method="setPriority" />
+    <pattern value="rife.cmf.dam.OrdrdUnknown" method="setPriority" />
+    <pattern value="rife.cmf.dam.OrderedInvalidType" method="setPriority" />
+    <pattern value="rife.cmf.dam.ContentRaw" method="setRaw" />
+    <pattern value="rife.authentication.credentials.RememberMe" method="setRemember" />
+    <pattern value="rife.authentication.RememberManager" method="setRememberDuration" />
+    <pattern value="rife.authentication.SessionValidator" method="setRememberManager" />
+    <pattern value="rife.authentication.RememberManager" method="setRememberPurgeFrequency" />
+    <pattern value="rife.authentication.RememberManager" method="setRememberPurgeScale" />
+    <pattern value="rife.authentication.SessionManager" method="setRestrictAuthData" />
+    <pattern value="rife.authentication.SessionManager" method="setSessionDuration" />
+    <pattern value="rife.authentication.SessionManager" method="setSessionPurgeFrequency" />
+    <pattern value="rife.authentication.SessionManager" method="setSessionPurgeScale" />
+    <pattern value="rife.continuations.TestStepBackCounter" method="setStart" />
+    <pattern value="rife.continuations.TestStepBackCounterInterface" method="setStart" />
+    <pattern value="rife.engine.BeanImpl.SerializableParam" method="setString" />
+    <pattern value="rife.continuations.instrument.ContinuationDebug" method="setTrace" />
+    <pattern value="rife.authentication.elements.DatabaseAuthenticatedSite" method="setup" />
+    <pattern value="rife.scheduler.TestFrequency" method="setup" />
+    <pattern value="rife.servlet.RifeFilter" method="setupProperties" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" method="setXhtml" />
+    <pattern value="rife.engine.Site" />
+    <pattern value="rife.engine.Server" method="sslCertAlias" />
+    <pattern value="rife.engine.Server" method="sslKeyStorePassword" />
+    <pattern value="rife.engine.Server" method="sslKeyStorePath" />
+    <pattern value="rife.engine.Server" method="sslNeedClientAuth" />
+    <pattern value="rife.engine.Server" method="sslTrustStorePassword" />
+    <pattern value="rife.engine.Server" method="sslTrustStorePath" />
+    <pattern value="rife.engine.Server" method="sslWantClientAuth" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="startSession" />
+    <pattern value="rife.authentication.sessionmanagers.exceptions.StartSessionErrorException" />
+    <pattern value="rife.authentication.elements.AuthConfig" method="staticAuthData" />
+    <pattern value="rife.engine.Server" method="staticResourceBase" />
+    <pattern value="rife.engine.Server" method="staticUberJarResourceBase" />
+    <pattern value="rife.continuations.exceptions.StepBackException" />
+    <pattern value="rife.continuations.exceptions.StepBackException" method="StepBackException" />
+    <pattern value="rife.cmf.dam.contentstores.DatabaseRawStore" method="storeChunks" />
+    <pattern value="rife.cmf.dam.contentstores.DatabaseRawStore" method="storeChunksNoStream" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="storeContent" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="storeContentData" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="storeContentData" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="storeContentData" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.StoreContentDataErrorException" />
+    <pattern value="rife.scheduler.Task" />
+    <pattern value="rife.scheduler.TaskManager" />
+    <pattern value="rife.scheduler.exceptions.TaskManagerException" />
+    <pattern value="rife.scheduler.exceptions.TaskManagerException" method="TaskManagerException" />
+    <pattern value="rife.scheduler.TaskOption" />
+    <pattern value="rife.scheduler.TaskOptionManager" />
+    <pattern value="rife.scheduler.exceptions.TaskOptionManagerException" />
+    <pattern value="rife.scheduler.exceptions.TaskOptionManagerException" method="TaskOptionManagerException" />
+    <pattern value="rife.scheduler.exceptions.TaskTypeAlreadyRegisteredException" />
+    <pattern value="rife.scheduler.TestFrequency" method="tearDown" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="tearDown" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="tearDown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="tearDown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="tearDown" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" method="tearDown" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="tearDown" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="tearDown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="tearDown" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="tearDown" />
+    <pattern value="rife.engine.Context" method="template" />
+    <pattern value="rife.engine.Context" method="templateJson" />
+    <pattern value="rife.engine.Context" method="templateSvg" />
+    <pattern value="rife.engine.Context" method="templateTxt" />
+    <pattern value="rife.engine.Context" method="templateXml" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testAddDuplicateTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testAddDuplicateTaskOption" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" method="testAddExecutor" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" method="testAddExecutor" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testAddRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testAddRoles" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testAddTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testAddTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testAddTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testAddTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testAddTaskOptionWithInexistentTaskId" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testAddTaskOptionWithInexistentTaskId" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testAddUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testAddUsers" />
+    <pattern value="rife.engine.TestGroups" method="testAfter" />
+    <pattern value="rife.test.TestMocksGroups" method="testAfter" />
+    <pattern value="rife.engine.TestGroups" method="testAfterGroup" />
+    <pattern value="rife.test.TestMocksGroups" method="testAfterGroup" />
+    <pattern value="rife.engine.continuations.TestAllTypes" />
+    <pattern value="rife.engine.TestContinuations" method="testAllTypes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testAllWildcards" />
+    <pattern value="rife.engine.TestAnnotations" method="testAnnotationBodyIn" />
+    <pattern value="rife.engine.TestAnnotations" method="testAnnotationInCookiesParamsAttributesHeaders" />
+    <pattern value="rife.continuations.TestCall" method="testAnswerInOtherThread" />
+    <pattern value="rife.cmf.TestMimeType.TestBean" />
+    <pattern value="rife.engine.TestGroups" method="testBefore" />
+    <pattern value="rife.test.TestMocksGroups" method="testBefore" />
+    <pattern value="rife.engine.TestGroups" method="testBeforeAfter" />
+    <pattern value="rife.test.TestMocksGroups" method="testBeforeAfter" />
+    <pattern value="rife.engine.TestGroups" method="testBeforeAfterGroup" />
+    <pattern value="rife.test.TestMocksGroups" method="testBeforeAfterGroup" />
+    <pattern value="rife.engine.TestGroups" method="testBeforeAfterGroupNext" />
+    <pattern value="rife.test.TestMocksGroups" method="testBeforeAfterGroupNext" />
+    <pattern value="rife.engine.TestGroups" method="testBeforeAfterGroupRespond" />
+    <pattern value="rife.test.TestMocksGroups" method="testBeforeAfterGroupRespond" />
+    <pattern value="rife.engine.TestGroups" method="testBeforeAfterGroupsMultiLevel" />
+    <pattern value="rife.test.TestMocksGroups" method="testBeforeAfterGroupsMultiLevel" />
+    <pattern value="rife.engine.TestGroups" method="testBeforeGroup" />
+    <pattern value="rife.test.TestMocksGroups" method="testBeforeGroup" />
+    <pattern value="rife.engine.TestEngine" method="testBinary" />
+    <pattern value="rife.test.TestMocksEngine" method="testBinary" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildCmfPathBean" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildCmfPathBeanRepository" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildCmfPathId" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildCmfPathIdRepository" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildServeContentPathBean" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildServeContentPathBeanRepository" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildServeContentPathId" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testBuildServeContentPathIdRepository" />
+    <pattern value="rife.validation.TestMetaData" method="testCallbacks" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testClearUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testClearUsers" />
+    <pattern value="rife.scheduler.TestTask" method="testCloneTask" />
+    <pattern value="rife.scheduler.TestTaskOption" method="testCloneTaskOption" />
+    <pattern value="rife.validation.TestMetaData" method="testCloningExistingMethod" />
+    <pattern value="rife.validation.TestMetaData" method="testCloningNoMethod" />
+    <pattern value="rife.workflow.TestWorkflow" method="testCodependency" />
+    <pattern value="rife.engine.TestContinuations" method="testConditional" />
+    <pattern value="rife.engine.TestEngine" method="testConfigFile" />
+    <pattern value="rife.engine.TestEngine" method="testConfigResource" />
+    <pattern value="rife.validation.TestMetaData" method="testConstraintsValidation" />
+    <pattern value="rife.validation.TestMetaData" method="testConstraintsValidationAnnotation" />
+    <pattern value="rife.test.TestMockCookie" method="testConstructor" />
+    <pattern value="rife.test.TestMockCookie" method="testConstructorCookie" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testContainsContentRepository" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testContainsRepositoryIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestDatabaseContentInfo" method="testContentId" />
+    <pattern value="rife.engine.TestEngine" method="testContentlength" />
+    <pattern value="rife.test.TestMocksEngine" method="testContentlength" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testContentQueryManagerContentForHtml" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testContentQueryManagerContentForHtmlHiDpi" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testContinueSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testContinueSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testContinueUnknownSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testContinueUnknownSession" />
+    <pattern value="rife.engine.TestEngine" method="testCookies" />
+    <pattern value="rife.test.TestMocksEngine" method="testCookies" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testCountSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testCountSessions" />
+    <pattern value="rife.cmf.TestContentInfo" method="testCreated" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testCreateRememberId" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testCreateRepositoryIllegalArguments" />
+    <pattern value="rife.scheduler.TestTask" method="testCreateTaskOption" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testCustom" />
+    <pattern value="rife.cmf.dam.TestContentDataUser" method="testData" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedBasic" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedEncrypted" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedFilteredTags" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedFilteredTagsNotEnforced" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedLogoutBefore" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedLogoutTemplate" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedNotEnforce" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRemember" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRememberProhibited" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRole" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRole2" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRole2Encrypted" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRoleEncrypted" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRoleIsolation" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedRoleIsolation2" />
+    <pattern value="rife.authentication.elements.TestDatabaseAuthenticated" method="testDatabaseAuthenticatedSessionDuration" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testDefaults" />
+    <pattern value="rife.engine.TestAnnotations" method="testDefaultValuesIn" />
+    <pattern value="rife.engine.TestAnnotations" method="testDefaultValuesInOut" />
+    <pattern value="rife.engine.TestAnnotations" method="testDefaultValuesOut" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testDelete" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testDeleteAssociation" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteContent" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testDeleteContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testDeleteContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testDeleteContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testDeleteContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testDeleteContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testDeleteContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testDeleteContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testDeleteContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testDeleteContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testDeleteContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testDeleteContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testDeleteContentDataUnknown" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testDeleteContentIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testDeleteContentImage" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteContentNonCmfProperty" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testDeleteContentRaw" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteContentRepository" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testDeleteContentText" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteContentUnknownId" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteNotPresent" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteOrdinal" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeleteOrdinalRestricted" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testDeletePojo" />
+    <pattern value="rife.scheduler.TestFrequency" method="testDividerDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testDividerHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testDividerMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testDividerMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testDividerWeekdays" />
+    <pattern value="rife.scheduler.TestFrequency" method="testDsl" />
+    <pattern value="rife.engine.TestEngine" method="testDynamicContenttype" />
+    <pattern value="rife.test.TestMocksEngine" method="testDynamicContenttype" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" method="testEmptyInitialRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" method="testEquals" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testEraseAllRememberIds" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testEraseAllSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testEraseAllSessions" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testEraseRememberId" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testEraseSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testEraseSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testEraseUnknownSession" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testEraseUnknownSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testEraseUnknownSession" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testEraseUnkownUserRememberIds" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testEraseUnkownUserSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testEraseUnkownUserSessions" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testEraseUserRememberIds" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testEraseUserSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testEraseUserSessions" />
+    <pattern value="rife.Rife2Build" method="testExamples" />
+    <pattern value="rife.cmf.dam.TestContentDataUser" method="testException" />
+    <pattern value="rife.engine.TestGroups" method="testExceptionElements" />
+    <pattern value="rife.test.TestMockCookie" method="testExpiration" />
+    <pattern value="rife.engine.TestEngine" method="testFallbacks" />
+    <pattern value="rife.test.TestMocksEngine" method="testFallbacks" />
+    <pattern value="rife.engine.TestAnnotations" method="testFileUploadIn" />
+    <pattern value="rife.engine.TestContinuations" method="testFinally" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatAttributeHeight" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatAttributeLongestEdgeLengthHorizontal" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatAttributeLongestEdgeLengthVertical" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatAttributeWidth" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatAttributeWidthHeight" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatAttributeWidthHeight2" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatBasic" />
+    <pattern value="rife.cmf.format.TestRawFormatter" method="testFormatBasic" />
+    <pattern value="rife.cmf.format.TestXhtmlFormatter" method="testFormatBasic" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatCachedLoadedData" />
+    <pattern value="rife.cmf.format.TestXhtmlFormatter" method="testFormatCachedLoadedData" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatInvalidAttributeHeight" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatInvalidAttributeLongestEdgeLength" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatInvalidAttributeWidth" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatInvalidDataType" />
+    <pattern value="rife.cmf.format.TestRawFormatter" method="testFormatInvalidDataType" />
+    <pattern value="rife.cmf.format.TestXhtmlFormatter" method="testFormatInvalidDataType" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatNegativeAttributeLongestEdgeLength" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatNegativeAttributeWidthHeight" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatPassThrough" />
+    <pattern value="rife.cmf.TestContentInfo" method="testFormattedSize" />
+    <pattern value="rife.cmf.TestMimeType" method="testFormatters" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatTransformer" />
+    <pattern value="rife.cmf.format.TestRawFormatter" method="testFormatTransformer" />
+    <pattern value="rife.cmf.format.TestXhtmlFormatter" method="testFormatTransformer" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatUnreadableData" />
+    <pattern value="rife.cmf.format.TestXhtmlFormatter" method="testFormatUnreadableData" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatUnsupportedAttributes" />
+    <pattern value="rife.cmf.format.TestImageFormatter" method="testFormatUnsupportedMimetype" />
+    <pattern value="rife.test.TestParsedHtml" method="testFormDefaultValues" />
+    <pattern value="rife.test.TestParsedHtml" method="testFormParameterNames" />
+    <pattern value="rife.test.TestParsedHtml" method="testFormParameters" />
+    <pattern value="rife.test.TestParsedHtml" method="testFormParameterValue" />
+    <pattern value="rife.test.TestParsedHtml" method="testFormParameterValues" />
+    <pattern value="rife.test.TestParsedHtml" method="testForms" />
+    <pattern value="rife.engine.TestContinuations" method="testFormSubmission" />
+    <pattern value="rife.engine.TestEngine" method="testFormUrlGeneration" />
+    <pattern value="rife.cmf.TestContent" method="testFragment" />
+    <pattern value="rife.cmf.TestContentInfo" method="testFragment" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testFree" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testFreeOutOfBounds" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testFreeOutOfBoundsRestricted" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testFreeOutOfBoundsUnknownRestricted" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testFreeRestricted" />
+    <pattern value="rife.engine.TestAnnotations" method="testGeneratedInValuesInOut" />
+    <pattern value="rife.engine.TestAnnotations" method="testGeneratedOutValuesInOut" />
+    <pattern value="rife.engine.TestAnnotations" method="testGeneratedValuesOut" />
+    <pattern value="rife.engine.TestEngine" method="testGenerateEmptyForm" />
+    <pattern value="rife.test.TestMocksEngine" method="testGenerateEmptyForm" />
+    <pattern value="rife.engine.TestEngine" method="testGenerateEmptyFormPrefix" />
+    <pattern value="rife.test.TestMocksEngine" method="testGenerateEmptyFormPrefix" />
+    <pattern value="rife.engine.TestEngine" method="testGenerateForm" />
+    <pattern value="rife.test.TestMocksEngine" method="testGenerateForm" />
+    <pattern value="rife.engine.TestEngine" method="testGenerateFormPrefix" />
+    <pattern value="rife.test.TestMocksEngine" method="testGenerateFormPrefix" />
+    <pattern value="rife.cmf.loader.TestImageContentLoader" method="testGetBackends" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testGetBaseClass" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testGetContentForHtmlInvalidPath" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testGetContentForHtmlUnknownPath" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testGetContentInfo" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testGetContentInfoIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testGetContentInfoName" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testGetContentType" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testGetContentType" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testGetContentType" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testGetDirection" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testGetError" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testGetError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testGetFormatter" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testGetFormatter" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testGetFormatter" />
+    <pattern value="rife.cmf.TestMimeType" method="testGetMimeType" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testGetNonExistingTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testGetNonExistingTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testGetNonExistingTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testGetNonExistingTaskOption" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testGetRememberedUserId" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testGetScheduledAnAllTasks" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testGetScheduledTasks" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testGetSupportedMimeTypes" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testGetSupportedMimeTypes" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testGetSupportedMimeTypes" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testGetTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testGetTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testGetTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testGetTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testGetTaskOptions" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testGetTaskOptions" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testGetTasksToProcess" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testGetTasksToProcess" />
+    <pattern value="rife.cmf.TestMimeType" method="testGetUnsupportedMimeType" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testGetUserAttributes" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testGetUserAttributes" />
+    <pattern value="rife.engine.TestGroups" method="testGroup" />
+    <pattern value="rife.test.TestMocksGroups" method="testGroup" />
+    <pattern value="rife.engine.TestGroups" method="testGroupPrefix" />
+    <pattern value="rife.test.TestMocksGroups" method="testGroupPrefix" />
+    <pattern value="rife.engine.TestGroups" method="testGroupsMultiLevel" />
+    <pattern value="rife.test.TestMocksGroups" method="testGroupsMultiLevel" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testHasContent" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testHasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testHasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testHasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testHasContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testHasContentDataContentEmpty" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testHasContentDataContentEmpty" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testHasContentDataContentEmpty" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testHasContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testHasContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testHasContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testHasContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testHasContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testHasContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testHasContentDataIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testHasContentDataName" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testHasContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testHasContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testHasContentDataUnknown" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testHasContentRepository" />
+    <pattern value="rife.engine.TestEngine" method="testHeaders" />
+    <pattern value="rife.test.TestMocksEngine" method="testHeaders" />
+    <pattern value="rife.workflow.TestWorkflow" method="testInform" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" method="testInitialEmptyLogin" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" method="testInitialEmptyPassword" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" method="testInitialEmptyRole" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testInitialization" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testInitializationIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testInitializationRestricted" />
+    <pattern value="rife.engine.TestContinuations" method="testInnerClass" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testInstall" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseSchedulerInstallation" method="testInstall" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testInstall" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testInstall" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testInstallCustomQuery" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testInstallError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testInstallError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testInstallError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testInstallError" />
+    <pattern value="rife.engine.TestContinuations" method="testInstanceOf" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" method="testInstantiateScheduler" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" method="testInstantiateScheduler" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseSchedulerInstallation" method="testInstantiateSchedulerManager" />
+    <pattern value="rife.scheduler.TestTask" method="testInstantiateTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testInstantiateTaskManager" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testInstantiateTaskManager" />
+    <pattern value="rife.scheduler.TestTaskOption" method="testInstantiateTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testInstantiateTaskOptionManager" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testInstantiateTaskOptionManager" />
+    <pattern value="rife.authentication.sessionvalidators.TestBasicSessionValidator" method="testInstantiation" />
+    <pattern value="rife.cmf.TestContent" method="testInstantiation" />
+    <pattern value="rife.cmf.dam.TestContentDataUser" method="testInstantiation" />
+    <pattern value="rife.cmf.TestContentInfo" method="testInstantiation" />
+    <pattern value="rife.cmf.TestContentRepository" method="testInstantiation" />
+    <pattern value="rife.cmf.dam.TestDatabaseContentInfo" method="testInstantiation" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testInstantiation" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" method="testInstantiation" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" method="testInstantiation" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testInstantiation" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testInstantiation" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testInstantiation" />
+    <pattern value="rife.authentication.sessionvalidators.TestDatabaseSessionValidator" method="testInstantiation" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testInstantiation" />
+    <pattern value="rife.authentication.remembermanagers.TestPurgingDatabaseRemember" method="testInstantiation" />
+    <pattern value="rife.cmf.TestContent" method="testInstantiationNullData" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidDividerDate" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidDividerHour" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidDividerMinute" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidDividerMonth" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidDividerWeekday" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidEmptyPartDate" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidEmptyPartHour" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidEmptyPartMinute" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidEmptyPartMonth" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidEmptyPartWeekday" />
+    <pattern value="rife.cmf.TestContent" method="testInvalidMimeType" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidNextDate" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidNumberDate" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidNumberHour" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidNumberMinute" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidNumberMonth" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidNumberWeekday" />
+    <pattern value="rife.scheduler.TestFrequency" method="testInvalidSpacing" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testIsBackendPresent" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" method="testIsBackendPresent" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testIsBackendPresent" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" method="testIsInRole" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" method="testIsValid" />
+    <pattern value="rife.test.TestParsedHtml" method="testLinks" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testListRoles" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testListSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testListSessions" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testListUserRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testListUserRoles" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testListUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testListUsersInRole" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testListUsersInRole" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testListUsersRanged" />
+    <pattern value="rife.cmf.loader.TestImageContentLoader" method="testLoad" />
+    <pattern value="rife.cmf.loader.TestXhtmlContentLoader" method="testLoad" />
+    <pattern value="rife.cmf.TestContent" method="testLoadedDataCache" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadFromBytesError" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" method="testLoadFromBytesError" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadFromBytesErrorNoList" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" method="testLoadFromBytesErrorNoList" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" method="testLoadFromBytesSuccess" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadFromBytesSuccessGif" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadFromBytesSuccessJpg" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadFromBytesSuccessPng" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testLoadFromStringError" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testLoadFromStringErrorNoList" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testLoadFromStringSuccessComplete" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testLoadFromStringSuccessFragment" />
+    <pattern value="rife.cmf.loader.TestImageContentLoader" method="testLoadNull" />
+    <pattern value="rife.cmf.loader.TestXhtmlContentLoader" method="testLoadNull" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" method="testLoadSuccess" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testLoadSuccess" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadSuccessGif" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadSuccessJpg" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadSuccessPng" />
+    <pattern value="rife.cmf.loader.image.TestImageIOLoader" method="testLoadUnsupportedType" />
+    <pattern value="rife.cmf.loader.image.TestImageJLoader" method="testLoadUnsupportedType" />
+    <pattern value="rife.cmf.loader.xhtml.TestSAXLoader" method="testLoadUnsupportedType" />
+    <pattern value="rife.engine.TestContinuations" method="testMemberMethod" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedBasic" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedEncrypted" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedFilteredTags" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedFilteredTagsNotEnforced" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedLogoutBefore" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedLogoutTemplate" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedNotEnforce" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedRole" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedRole2" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedRole2Encrypted" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedRoleEncrypted" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedRoleIsolation" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedRoleIsolation2" />
+    <pattern value="rife.authentication.elements.TestMemoryAuthenticated" method="testMemoryAuthenticatedSessionDuration" />
+    <pattern value="rife.cmf.TestContentInfo" method="testMimeType" />
+    <pattern value="rife.cmf.TestMimeType" method="testMimeTypeIdentifiers" />
+    <pattern value="rife.scheduler.TestFrequency" method="testMixedDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testMixedHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testMixedMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testMixedMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testMixedWeekdays" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMove" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveDown" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveDownExtremity" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveDownExtremityRestricted" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveDownRestricted" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveNotOrdinalConstraint" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveNotOrdinalInvalidOrdinalType" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveOrdinal" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveOrdinalRestricted" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveOther" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveOtherExtremity" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveOtherExtremityRestricted" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveOtherRestricted" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveRestrictionInvalidType" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveRestrictionNull" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveUnknownOrdinal" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveUnknownProperty" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testMoveUnknownRestriction" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveUp" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveUpExtremity" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveUpExtremityRestricted" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testMoveUpRestricted" />
+    <pattern value="rife.continuations.TestCall" method="testMultipleAnswersWithTryCatch" />
+    <pattern value="rife.cmf.TestContent" method="testName" />
+    <pattern value="rife.cmf.TestContentInfo" method="testName" />
+    <pattern value="rife.cmf.TestContentRepository" method="testName" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testNegativeCount" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testNegativeOffset" />
+    <pattern value="rife.scheduler.TestFrequency" method="testNextDateDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testNextDateHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testNextDateMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testNextDateMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testNextDateWeekdays" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testNoInitialUsers" />
+    <pattern value="rife.engine.TestContinuations" method="testNoPause" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testNoRangeCount" />
+    <pattern value="rife.engine.TestContinuations" method="testNull" />
+    <pattern value="rife.engine.TestContinuations" method="testNullConditional" />
+    <pattern value="rife.engine.TestContinuations" method="testNullReference" />
+    <pattern value="rife.engine.TestContinuations" method="testNumberGuess" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testObtainInsertOrdinal" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testObtainInsertOrdinalRestricted" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testOffsetEqualToCount" />
+    <pattern value="rife.engine.TestPagedNavigation" method="testOffsetLargerThanCount" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" method="testOneshotTaskExecution" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" method="testOneshotTaskExecution" />
+    <pattern value="rife.cmf.TestContentInfo" method="testOptimalPath" />
+    <pattern value="rife.engine.TestBeans" method="testParametersBean" />
+    <pattern value="rife.test.TestMocksBeans" method="testParametersBean" />
+    <pattern value="rife.engine.TestBeans" method="testParametersBeanFill" />
+    <pattern value="rife.test.TestMocksBeans" method="testParametersBeanFill" />
+    <pattern value="rife.engine.TestBeans" method="testParametersBeanFillPrefix" />
+    <pattern value="rife.test.TestMocksBeans" method="testParametersBeanFillPrefix" />
+    <pattern value="rife.engine.TestBeans" method="testParametersBeanPrefix" />
+    <pattern value="rife.test.TestMocksBeans" method="testParametersBeanPrefix" />
+    <pattern value="rife.engine.TestAnnotations" method="testParametersSite" />
+    <pattern value="rife.cmf.TestContentInfo" method="testPath" />
+    <pattern value="rife.engine.TestEngine" method="testPathInfoMapping" />
+    <pattern value="rife.test.TestMocksEngine" method="testPathInfoMapping" />
+    <pattern value="rife.engine.TestEngine" method="testPathInfoMappingMultiple" />
+    <pattern value="rife.test.TestMocksEngine" method="testPathInfoMappingMultiple" />
+    <pattern value="rife.engine.TestEngine" method="testPathInfoMappingUrlGeneration" />
+    <pattern value="rife.test.TestMocksEngine" method="testPathInfoMappingUrlGeneration" />
+    <pattern value="rife.continuations.TestPause" method="testPauseInWhile" />
+    <pattern value="rife.continuations.TestPause" method="testPauseInWhileClones" />
+    <pattern value="rife.authentication.credentialsmanagers.TestRoleUserAttributes" method="testPopulate" />
+    <pattern value="rife.scheduler.TestTask" method="testPopulateTask" />
+    <pattern value="rife.scheduler.TestTaskOption" method="testPopulateTaskOption" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" method="testPopulation" />
+    <pattern value="rife.engine.TestEngine" method="testPreventElementInstanceAnnotations" />
+    <pattern value="rife.engine.TestEngine" method="testPrintAndWriteBuffer" />
+    <pattern value="rife.test.TestMocksEngine" method="testPrintAndWriteBuffer" />
+    <pattern value="rife.engine.TestEngine" method="testPrintAndWriteNoBuffer" />
+    <pattern value="rife.test.TestMocksEngine" method="testPrintAndWriteNoBuffer" />
+    <pattern value="rife.engine.TestContinuations" method="testPrivateMethod" />
+    <pattern value="rife.cmf.TestContentInfo" method="testProperties" />
+    <pattern value="rife.authentication.remembermanagers.TestPurgingDatabaseRemember" method="testPurgeRemember" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testPurgeRememberIds" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testPurgeSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestPurgingMemorySessions" method="testPurgeSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testPurgeSessions" />
+    <pattern value="rife.authentication.sessionmanagers.TestPurgingDatabaseSessions" method="testPurgeSessions" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedDividerDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedDividerHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedDividerMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedDividerMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedDividerWeekdays" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testRangedWeekdays" />
+    <pattern value="rife.authentication.remembermanagers.TestDatabaseRemember" method="testRemove" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseSchedulerInstallation" method="testRemove" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testRemove" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testRemove" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testRemoveError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testRemoveError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testRemoveError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testRemoveError" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testRemoveNonExistingTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testRemoveNonExistingTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testRemoveNonExistingTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testRemoveNonExistingTaskOption" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testRemoveRole" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testRemoveRole" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testRemoveTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testRemoveTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testRemoveTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testRemoveTaskOption" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testRemoveUsersByLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testRemoveUsersByLogin" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testRemoveUsersByUserId" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testRemoveUsersByUserId" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" method="testRepeatingTaskExecution" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" method="testRepeatingTaskExecution" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" method="testRepeatingTaskExecutionNoPlanned" />
+    <pattern value="rife.engine.TestEngine" method="testResolveRoutes" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestore" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreById" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreByIdAutoRetrieved" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreByIdNonCmfProperties" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreByIdPojo" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreFirst" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreQuery" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testRestoreRepository" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testRetrieveSize" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testRetrieveSize" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testRetrieveSize" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testRetrieveSizeError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testRetrieveSizeError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testRetrieveSizeError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testRetrieveSizeIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testRetrieveSizeIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testRetrieveSizeIllegalArgument" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedDividerDates" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedDividerHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedDividerMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedDividerMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedDividerWeekdays" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedHours" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedMinutes" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedMonths" />
+    <pattern value="rife.scheduler.TestFrequency" method="testReverseRangedWeekdays" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testRolesList" />
+    <pattern value="rife.engine.TestEngine" method="testRouterSite" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingCombo" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingCombo" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingDelete" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingDelete" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingGet" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingGet" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingGetPost" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingPatch" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingPatch" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingPost" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingPost" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingPut" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingPut" />
+    <pattern value="rife.test.TestMocksRouting" method="testRoutingRoute" />
+    <pattern value="rife.engine.TestRouting" method="testRoutingRoute" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveContent" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveContentOtherTable" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveContentRaw" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveContentRepository" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveContentUpdate" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveContentUpdateRepository" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveOrdinal" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveOrdinalRestricted" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveOrdinalRestrictedInvalidType" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSaveOrdinalRestrictedUnknownRestriction" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testSavePojo" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testSaveRestoreConstrained" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testSaveRestoreConstrainedAssociation" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testServeContentIllegalArgument" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentImage" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentModifiedSince" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentNoPathinfo" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentRaw" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentRepository" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentText" />
+    <pattern value="rife.cmf.dam.elements.TestElements" method="testServeContentUnknown" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testSessionExpiration" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testSessionExpiration" />
+    <pattern value="rife.authentication.sessionvalidators.TestBasicSessionValidator" method="testSessionValidity" />
+    <pattern value="rife.authentication.sessionvalidators.TestDatabaseSessionValidator" method="testSessionValidity" />
+    <pattern value="rife.authentication.sessionvalidators.TestBasicSessionValidator" method="testSessionValidityRole" />
+    <pattern value="rife.authentication.sessionvalidators.TestDatabaseSessionValidator" method="testSessionValidityRole" />
+    <pattern value="rife.cmf.TestContent" method="testSetAttribute" />
+    <pattern value="rife.cmf.TestContent" method="testSetAttributes" />
+    <pattern value="rife.cmf.TestContentInfo" method="testSetAttributes" />
+    <pattern value="rife.cmf.TestContent" method="testSetProperties" />
+    <pattern value="rife.cmf.TestContent" method="testSetProperty" />
+    <pattern value="rife.continuations.TestCall" method="testSimpleCall" />
+    <pattern value="rife.engine.TestEngine" method="testSimpleHtml" />
+    <pattern value="rife.test.TestMocksEngine" method="testSimpleHtml" />
+    <pattern value="rife.engine.TestEngine" method="testSimplePathInfo" />
+    <pattern value="rife.test.TestMocksEngine" method="testSimplePathInfo" />
+    <pattern value="rife.engine.TestContinuations" method="testSimplePause" />
+    <pattern value="rife.engine.TestEngine" method="testSimplePlain" />
+    <pattern value="rife.test.TestMocksEngine" method="testSimplePlain" />
+    <pattern value="rife.scheduler.TestFrequency" method="testSingleDate" />
+    <pattern value="rife.scheduler.TestFrequency" method="testSingleHour" />
+    <pattern value="rife.scheduler.TestFrequency" method="testSingleMinute" />
+    <pattern value="rife.scheduler.TestFrequency" method="testSingleMonth" />
+    <pattern value="rife.scheduler.TestFrequency" method="testSingleWeekday" />
+    <pattern value="rife.cmf.TestContentInfo" method="testSize" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testStartRememberedSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testStartRememberedSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestMemorySessions" method="testStartSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestPurgingMemorySessions" method="testStartSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestDatabaseSessions" method="testStartSession" />
+    <pattern value="rife.authentication.remembermanagers.TestPurgingDatabaseRemember" method="testStartSession" />
+    <pattern value="rife.authentication.sessionmanagers.TestPurgingDatabaseSessions" method="testStartSession" />
+    <pattern value="rife.scheduler.schedulermanagers.TestMemoryScheduler" method="testStartStopScheduler" />
+    <pattern value="rife.scheduler.schedulermanagers.TestDatabaseScheduler" method="testStartStopScheduler" />
+    <pattern value="rife.continuations.TestStepBack" method="testStepBackInWhile" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataBytes" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentDataContentEmpty" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataContentEmpty" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataContentEmpty" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentDataContentNull" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataContentNull" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataContentNull" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentDataLarge" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataLargeBytes" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataLargeStream" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testStoreContentDataMimeTypeWithoutFormatter" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataMimeTypeWithoutFormatter" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataMimeTypeWithoutFormatter" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testStoreContentDataStream" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataTextPlain" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataTextPlainLarge" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataXhtml" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testStoreContentDataXhtmlLarge" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentGif" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentGifResized" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentRaw" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentRepository" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentTif" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentTifResized" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreContentXhtml" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContent" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContentIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContentMimeTypeExpected" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContentMissingIdentifier" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContentPojo" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContentRepository" />
+    <pattern value="rife.cmf.dam.TestContentQueryManager" method="testStoreEmptyContentUnknownProperty" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testStoreUnknownContentRepository" />
+    <pattern value="rife.engine.TestContinuations" method="testSynchronization" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testTaskActivation" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testTaskActivation" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testTaskConclusion" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testTaskConclusion" />
+    <pattern value="rife.scheduler.TestTaskOption" method="testTaskOptionValidation" />
+    <pattern value="rife.scheduler.TestTasktypes" />
+    <pattern value="rife.scheduler.TestTask" method="testTaskValidation" />
+    <pattern value="rife.engine.TestProcessedTemplates" method="testTemplateAttributesHtml" />
+    <pattern value="rife.engine.TestProcessedTemplates" method="testTemplateAttributesTxt" />
+    <pattern value="rife.engine.TestProcessedTemplates" method="testTemplateConfigHtml" />
+    <pattern value="rife.engine.TestProcessedTemplates" method="testTemplateConfigTxt" />
+    <pattern value="rife.engine.TestProcessedTemplates" method="testTemplatePropertiesHtml" />
+    <pattern value="rife.engine.TestProcessedTemplates" method="testTemplatePropertiesTxt" />
+    <pattern value="rife.engine.TestContinuations" method="testThrow" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testTighten" />
+    <pattern value="rife.cmf.dam.TestOrdinalManager" method="testTightenRestricted" />
+    <pattern value="rife.test.TestParsedHtml" method="testTitle" />
+    <pattern value="rife.engine.TestEngine" method="testTomcatBinary" />
+    <pattern value="rife.engine.TestEngine" method="testTomcatCookies" />
+    <pattern value="rife.engine.TestEngine" method="testTomcatDynamicContenttype" />
+    <pattern value="rife.engine.TestEngine" method="testTomcatHeaders" />
+    <pattern value="rife.engine.TestEngine" method="testTomcatPlain" />
+    <pattern value="rife.engine.TestTomcatRunner" />
+    <pattern value="rife.engine.TestEngine" method="testTomcatSimplePathInfo" />
+    <pattern value="rife.scheduler.TestFrequency" method="testTooLittleParts" />
+    <pattern value="rife.scheduler.TestFrequency" method="testTooManyParts" />
+    <pattern value="rife.workflow.TestWorkflow" method="testTrigger" />
+    <pattern value="rife.engine.TestContinuations" method="testTryCatch" />
+    <pattern value="rife.engine.TestContinuations" method="testUniqueIDPerRequest" />
+    <pattern value="rife.test.TestParsedHtml" method="testUnknownForms" />
+    <pattern value="rife.test.TestParsedHtml" method="testUnknownLinks" />
+    <pattern value="rife.scheduler.taskmanagers.TestMemoryTasks" method="testUpdateTask" />
+    <pattern value="rife.scheduler.taskmanagers.TestDatabaseTasks" method="testUpdateTask" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestMemoryTaskOptions" method="testUpdateTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.TestDatabaseTaskOptions" method="testUpdateTaskOption" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testUpdateUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testUpdateUsers" />
+    <pattern value="rife.engine.TestEngine" method="testUrlGeneration" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testUseContent" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testUseContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testUseContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testUseContentData" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testUseContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testUseContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testUseContentDataError" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testUseContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testUseContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testUseContentDataIllegalArgument" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testUseContentDataIllegalArguments" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testUseContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseImageStore" method="testUseContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseRawStore" method="testUseContentDataUnknown" />
+    <pattern value="rife.cmf.dam.contentstores.TestDatabaseTextStore" method="testUseContentDataUnknown" />
+    <pattern value="rife.cmf.dam.TestContentManager" method="testUseContentName" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testUserIdSpecification" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testUserIdSpecification" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testUsersInRole" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testUsersInRole" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testUsersList" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testUsersListRanged" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testValidateNotCmfProperty" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateNotCmfProperty" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testValidateNotConstrained" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateNotConstrained" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testValidateNull" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateNull" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testValidateSupported" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateSupportedDocument" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateSupportedFragment" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testValidateUnknownProperty" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateUnknownProperty" />
+    <pattern value="rife.cmf.validation.TestSupportedImage" method="testValidateUnsupported" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateUnsupportedDocument" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml" method="testValidateUnsupportedFragment" />
+    <pattern value="rife.cmf.TestContentInfo" method="testValidation" />
+    <pattern value="rife.cmf.TestContentRepository" method="testValidation" />
+    <pattern value="rife.cmf.dam.TestDatabaseContentInfo" method="testValidation" />
+    <pattern value="rife.authentication.credentials.TestRoleUser" method="testValidation" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testValidationContextManyToOne" />
+    <pattern value="rife.database.querymanagers.generic.TestGenericQueryManagerManyToOne" method="testValidationContextManyToOneAssociation" />
+    <pattern value="rife.cmf.TestMimeType" method="testValidationRuleApplicationXhtml" />
+    <pattern value="rife.cmf.TestMimeType" method="testValidationRuleImageGif" />
+    <pattern value="rife.cmf.TestMimeType" method="testValidationRuleImageJpeg" />
+    <pattern value="rife.cmf.TestMimeType" method="testValidationRuleImagePng" />
+    <pattern value="rife.cmf.TestMimeType" method="testValidationRuleTextPlain" />
+    <pattern value="rife.authentication.sessionvalidators.TestBasicSessionValidator" method="testValidSessionId" />
+    <pattern value="rife.authentication.sessionvalidators.TestDatabaseSessionValidator" method="testValidSessionId" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testValidUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testValidUsers" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testValidUsersDrupal" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testVerifyCredentials" />
+    <pattern value="rife.authentication.credentialsmanagers.TestDatabaseUsers" method="testVerifyCredentials" />
+    <pattern value="rife.authentication.credentialsmanagers.TestMemoryUsers" method="testVerifyCredentialsDrupal" />
+    <pattern value="rife.cmf.TestContentInfo" method="testVersion" />
+    <pattern value="rife.test.TestMocksEngine" method="testWrongServerRootUrl" />
+    <pattern value="rife.engine.Context" method="textBufferEnabled" />
+    <pattern value="rife.engine.TomcatServer" />
+    <pattern value="rife.instrument.RifeTransformer" method="transformRife" />
+    <pattern value="rife.workflow.Workflow" method="trigger" />
+    <pattern value="rife.continuations.instrument.TypesContext" />
+    <pattern value="rife.scheduler.exceptions.UnableToRetrieveTasksToProcessException" />
+    <pattern value="rife.authentication.elements.exceptions.UndefinedAuthenticationRememberManagerException" />
+    <pattern value="rife.authentication.elements.exceptions.UndefinedLandingRouteException" />
+    <pattern value="rife.authentication.elements.exceptions.UndefinedLoginRouteException" />
+    <pattern value="rife.authentication.elements.exceptions.UndefinedLogoutRememberManagerException" />
+    <pattern value="rife.cmf.format.exceptions.UnexpectedConversionErrorException" />
+    <pattern value="rife.cmf.dam.exceptions.UnknownConstrainedPropertyException" />
+    <pattern value="rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException" />
+    <pattern value="rife.cmf.dam.exceptions.UnknownOrdinalException" />
+    <pattern value="rife.cmf.dam.exceptions.UnknownOrdinalRestrictionException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.UnknownRoleErrorException" />
+    <pattern value="rife.cmf.format.exceptions.UnreadableDataFormatException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.UnsupportedCredentialsTypeException" />
+    <pattern value="rife.cmf.dam.contentmanagers.exceptions.UnsupportedMimeTypeException" />
+    <pattern value="rife.cmf.format.exceptions.UnsupportedTargetMimeTypeException" />
+    <pattern value="rife.authentication.elements.Login" method="unvalidatedCredentials" />
+    <pattern value="rife.scheduler.taskmanagers.databasedrivers.generic" method="updateTask" />
+    <pattern value="rife.scheduler.taskmanagers.exceptions.UpdateTaskErrorException" />
+    <pattern value="rife.scheduler.taskoptionmanagers.databasedrivers.generic" method="updateTaskOption" />
+    <pattern value="rife.scheduler.taskoptionmanagers.exceptions.UpdateTaskOptionErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="updateUser" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.UpdateUserErrorException" />
+    <pattern value="rife.engine.UrlBuilder" />
+    <pattern value="rife.engine.UrlBuilder" method="UrlBuilder" />
+    <pattern value="rife.cmf.dam.contentstores.rawstoredrivers.generic" method="useContentData" />
+    <pattern value="rife.cmf.dam.contentstores.textstoredrivers.generic" method="useContentData" />
+    <pattern value="rife.cmf.dam.contentstores.imagestoredrivers.generic" method="useContentData" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="useContentData" />
+    <pattern value="rife.cmf.dam.contentstores.exceptions.UseContentDataErrorException" />
+    <pattern value="rife.cmf.dam.contentmanagers.databasedrivers.generic" method="useContentDataResult" />
+    <pattern value="rife.authentication.credentialsmanagers.RoleUserAttributes" method="userId" />
+    <pattern value="rife.authentication.elements.Login" method="validatedCredentials" />
+    <pattern value="rife.authentication.sessionvalidators.databasedrivers.generic" method="validateSession" />
+    <pattern value="rife.engine.CookieBuilder" method="value" />
+    <pattern value="rife.scheduler.TaskOption" method="value" />
+    <pattern value="rife.authentication.credentialsmanagers.CustomCredentialsManager" method="verifyCredentials" />
+    <pattern value="rife.authentication.credentialsmanagers.databasedrivers.generic" method="verifyCredentials" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.VerifyCredentialsErrorException" />
+    <pattern value="rife.authentication.credentialsmanagers.exceptions.VerifyCredentialsErrorException" method="VerifyCredentialsErrorException" />
+    <pattern value="rife.engine.exceptions.VirtualThreadsNotAvailableException" />
+    <pattern value="rife.engine.exceptions.VirtualThreadsNotAvailableException" method="VirtualThreadsNotAvailableException" />
+    <pattern value="rife.authentication.sessionmanagers.databasedrivers.generic" method="wasRemembered" />
+    <pattern value="rife.workflow.Work" />
+    <pattern value="rife.workflow.Workflow" />
+    <pattern value="rife.cmf.dam.exceptions.WrongConstrainedPropertyVariantException" />
+    <pattern value="rife.cmf.dam.exceptions.WrongConstrainedPropertyVariantException" method="WrongConstrainedPropertyVariantException" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml.XhtmlBean" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml.XhtmlBeanNotConstrained" />
+    <pattern value="rife.cmf.validation.TestSupportedXhtml.XhtmlBeanValidation" />
+    <pattern value="rife.test.MockResponse" method="xpathBoolean" />
+    <pattern value="rife.test.MockResponse" method="xpathNode" />
+    <pattern value="rife.test.MockResponse" method="xpathNodeSet" />
+    <pattern value="rife.test.MockResponse" method="xpathNumber" />
+    <pattern value="rife.test.MockResponse" method="xpathString" />
+  </component>
   <component name="PDMPlugin">
     <option name="skipTestSources" value="false" />
   </component>

@@ -21,7 +21,7 @@ public class MemorySession {
 
     public void setAuthId(String authId) {
         assert authId != null;
-        assert authId.length() > 0;
+        assert !authId.isEmpty();
 
         authId_ = authId;
     }
@@ -42,7 +42,7 @@ public class MemorySession {
 
     public void setAuthData(String authData) {
         assert authData != null;
-        assert authData.length() > 0;
+        assert !authData.isEmpty();
 
         authData_ = authData;
     }
@@ -73,10 +73,8 @@ public class MemorySession {
 
     public boolean equals(Object object) {
         if (object instanceof MemorySession other_session) {
-            if (null != other_session &&
-                other_session.getAuthId().equals(getAuthId())) {
-                return true;
-            }
+            return null != other_session &&
+                other_session.getAuthId().equals(getAuthId());
         }
 
         return false;

@@ -78,7 +78,7 @@ public class TestXhtmlFormatter {
             fail();
         } catch (UnreadableDataFormatException e) {
             assertSame(MimeType.APPLICATION_XHTML, e.getMimeType());
-            assertTrue(e.getErrors().size() > 0);
+            assertFalse(e.getErrors().isEmpty());
         }
     }
 

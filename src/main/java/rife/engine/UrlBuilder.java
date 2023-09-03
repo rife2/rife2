@@ -7,7 +7,10 @@ package rife.engine;
 import rife.tools.Convert;
 import rife.tools.StringUtils;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * {@code UrlBuilder} helps creating valid URLs that automatically
@@ -32,7 +35,7 @@ public class UrlBuilder {
     public record Segments(String path, Map<String, String[]> parameters, String fragment) {
         public void appendQueryParameters(StringBuilder url) {
             // generate the query parameters that are available
-            if (parameters.size() > 0) {
+            if (!parameters.isEmpty()) {
                 var query_parameters = new StringBuilder("?");
 
                 for (var parameter_entry : parameters.entrySet()) {
@@ -62,7 +65,7 @@ public class UrlBuilder {
 
         public void appendFormInputParameters(StringBuilder url) {
             // generate the query parameters that are available
-            if (parameters.size() > 0) {
+            if (!parameters.isEmpty()) {
                 var input_parameters = new StringBuilder();
 
                 for (var parameter_entry : parameters.entrySet()) {
@@ -240,7 +243,7 @@ public class UrlBuilder {
         // handle an explicit path info
         if (pathInfo_ != null) {
             if (path.charAt(path.length() - 1) != '/') {
-                path.append("/");
+                path.append('/');
             }
             path.append(StringUtils.encodeUrl(pathInfo_, "/~"));
         }
@@ -287,7 +290,7 @@ public class UrlBuilder {
                     var path_info = builder.toString();
                     if (!path_info.isEmpty()) {
                         if (path_info.charAt(0) != '/' && path.charAt(path.length() - 1) != '/') {
-                            path.append("/");
+                            path.append('/');
                         }
                         path.append(path_info);
                     }
