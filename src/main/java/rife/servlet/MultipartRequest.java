@@ -378,7 +378,7 @@ class MultipartRequest {
 
         // Get the content type, if any
         if (lower_case_line.startsWith(CONTENT_TYPE_HEADER)) {
-            var separator_location = lower_case_line.indexOf(" ");
+            var separator_location = lower_case_line.indexOf(' ');
             if (-1 == separator_location) {
                 throw new MultipartCorruptContentTypeException(contentTypeLine);
             }
