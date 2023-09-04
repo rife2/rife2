@@ -8,6 +8,7 @@
     <option name="VM_PARAMETERS" value="-ea -javaagent:build/dist/rife2-1.7.1-SNAPSHOT-agent.jar" />
     <dir value="$PROJECT_DIR$/src/test/java" />
     <method v="2">
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_bld grammar agent" />
       <option name="Make" enabled="true" />
     </method>
   </configuration>
