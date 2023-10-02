@@ -58,6 +58,9 @@ public class MockCookie extends Cookie {
         if (getMaxAge() < 0) {
             return false;
         }
+        if (getMaxAge() == 0) {
+            return true;
+        }
         return creationTime_.plusSeconds(getMaxAge()).isBefore(Instant.now());
     }
 }
