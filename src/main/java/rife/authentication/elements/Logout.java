@@ -104,7 +104,8 @@ public class Logout implements Element {
     protected void loggedOut(Template template) {
     }
 
-    public void process(Context c) {
+    public void process(Context c)
+    throws Exception {
         initializeLogout(c);
 
         final Template template = getTemplate();

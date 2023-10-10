@@ -32,7 +32,8 @@ public class PrintTemplate implements Element {
         return c.template(templateName_);
     }
 
-    public void process(Context c) {
+    public void process(Context c)
+    throws Exception {
         c.print(getTemplate(c));
     }
 }

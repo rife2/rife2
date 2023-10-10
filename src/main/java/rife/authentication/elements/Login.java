@@ -154,7 +154,8 @@ public class Login extends Identified implements SessionAttributes {
         credentials.addValidationError(new ValidationError.UNEXPECTED("sessioncreation"));
     }
 
-    public void process(Context c) {
+    public void process(Context c)
+    throws Exception {
         initializeLogin(c);
 
         final var auth_config = getAuthConfig();

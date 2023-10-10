@@ -34,7 +34,8 @@ public class ServeContent implements Element {
         repositoryName_ = repositoryName;
     }
 
-    public void process(Context c) {
+    public void process(Context c)
+    throws Exception {
         // retrieve and output the content that corresponds to the path info
         ContentManager manager = DatabaseContentFactory.instance(datasource_);
 
