@@ -7,13 +7,13 @@ package rife.engine;
 import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SessionIdManager;
-import org.eclipse.jetty.server.session.DefaultSessionIdManager;
-import org.eclipse.jetty.server.session.SessionHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.session.SessionIdManager;
+import org.eclipse.jetty.session.DefaultSessionIdManager;
+import org.eclipse.jetty.ee10.servlet.SessionHandler;
+import org.eclipse.jetty.ee10.servlet.DefaultServlet;
+import org.eclipse.jetty.ee10.servlet.FilterHolder;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import rife.ioc.HierarchicalProperties;
@@ -351,7 +351,7 @@ public class Server {
         var default_servlet = new DefaultServlet();
         var servlet_holder = new ServletHolder(default_servlet);
         if (staticResourceBase_ != null) {
-            handler_.setResourceBase(staticResourceBase_);
+            handler_.setBaseResourceAsString(staticResourceBase_);
         }
 
         handler_.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));

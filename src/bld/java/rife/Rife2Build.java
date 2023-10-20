@@ -26,19 +26,23 @@ public class Rife2Build extends AbstractRife2Build {
         name = "RIFE2";
         version = version(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
+        var imagej_version = version("1.54g");
+        var jetty_version = version(12,0,2);
+        var jsoup_version =  version(1,16,1);
+        var tomcat_version = version(10,1,15);
+
         scope(provided)
-            .include(dependency("org.jsoup", "jsoup", version(1,16,1)))
-            .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,15)).exclude("*", "jetty-jakarta-servlet-api"))
-            .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,15)).exclude("*", "jetty-jakarta-servlet-api"))
-            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-core", version(10,1,13)))
-            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-jasper", version(10,1,13)))
-            .include(dependency("net.imagej", "ij", version("1.54f")));
+            .include(dependency("org.jsoup", "jsoup", jsoup_version))
+            .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
+            .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
+            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-core", tomcat_version))
+            .include(dependency("org.apache.tomcat.embed", "tomcat-embed-jasper", tomcat_version))
+            .include(dependency("net.imagej", "ij", imagej_version));
         scope(test)
-            .include(dependency("org.jsoup", "jsoup", version(1,16,1)))
-            .include(dependency("jakarta.servlet", "jakarta.servlet-api", version(5,0,0)))
-            .include(dependency("org.eclipse.jetty", "jetty-server", version(11,0,15)).exclude("*", "jetty-jakarta-servlet-api"))
-            .include(dependency("org.eclipse.jetty", "jetty-servlet", version(11,0,15)).exclude("*", "jetty-jakarta-servlet-api"))
-            .include(dependency("net.imagej", "ij", version("1.54f")));
+            .include(dependency("org.jsoup", "jsoup", jsoup_version))
+            .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
+            .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
+            .include(dependency("net.imagej", "ij", imagej_version));
 
         var core_directory = new File(workDirectory(), "core");
         var core_src_directory = new File(core_directory, "src");
