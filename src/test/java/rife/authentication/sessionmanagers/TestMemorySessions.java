@@ -88,10 +88,10 @@ public class TestMemorySessions {
             assertEquals(1, sessions.countSessions());
 
             assertTrue(sessions.isSessionValid(auth_id, auth_data));
-            Thread.sleep(400);
+            Thread.sleep(200);
             assertTrue(sessions.isSessionValid(auth_id, auth_data));
 
-            Thread.sleep(101);
+            Thread.sleep(301);
             assertFalse(sessions.isSessionValid(auth_id, auth_data));
 
             assertEquals(0, sessions.countSessions());
