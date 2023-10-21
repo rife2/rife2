@@ -448,6 +448,7 @@ public class Context {
      * @param template the template to print
      * @throws TemplateException if an error occurs while processing the template
      * @throws EngineException   if an error occurs during the output of the content
+     * @since 1.0
      */
     public void print(Template template)
     throws TemplateException {
