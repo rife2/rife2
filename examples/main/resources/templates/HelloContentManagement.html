@@ -12,7 +12,7 @@
   <form action="{{v route:action:/}}" method="post" enctype="multipart/form-data" name="news">
     <!--v route:inputs:/-->
     <label>Title<br><!--v form:input:title-->size="50"<!--/v--></label><br>
-    <label>Text<br><!--v form:textarea:text-->cols="50" rows="10"<!--/v--></label><br>
+    <label>Text (xhtml)<br><!--v form:textarea:text-->cols="50" rows="10"<!--/v--></label><br>
     <label>Image<br><input type="file" name="newsImage" /></label><br>
     <input type="submit" name="Submit" />
   </form>
@@ -20,7 +20,7 @@
 <!--b display-->
   <h2>Title</h2>
   <p><!--v title/--></p>
-  <h2>Text</h2>
+  <h2>Text (xhtml)</h2>
   <p><!--v text/--></p>
   <h2>Image</h2>
   <div><!--v imageSmall/--></div>

@@ -30,9 +30,11 @@ public class ExamplesBuild extends WebProject {
             .compileMainClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
             .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath());
         runOperation()
+            .classpath(mainBuild.testsBadgeOperation.classpath())
             .classpath(mainBuild.buildMainDirectory().getAbsolutePath())
             .javaOptions().javaAgent(new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName()));
         testOperation()
+            .classpath(mainBuild.testsBadgeOperation.classpath())
             .classpath(mainBuild.buildMainDirectory().getAbsolutePath())
             .javaOptions().javaAgent(new File(buildDistDirectory(), mainBuild.jarAgentOperation.destinationFileName()));
     }

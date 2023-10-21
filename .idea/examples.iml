@@ -7,7 +7,7 @@
     <content url="file://$MODULE_DIR$/examples">
       <sourceFolder url="file://$MODULE_DIR$/examples/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/examples/test/java" isTestSource="true" />
-      <excludeFolder url="file://$MODULE_DIR$/examples/main/resources/templates" />
+      <sourceFolder url="file://$MODULE_DIR$/examples/main/resources" type="java-resource" relativeOutputPath="resources" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
