@@ -22,7 +22,6 @@ public class HelloPathInfoMapping extends Site {
         @Parameter String first;
         @Parameter String last;
         public void process(Context c) {
-            c.addCookie(new CookieBuilder("name", "value"));
             c.print(first);
             if (last != null) {
                 c.print(" " + last);
