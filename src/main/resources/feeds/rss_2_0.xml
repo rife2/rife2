@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss{{v namespaces}}{{/v}}{{b namespace}} xmlns:{{v namespace_key/}}="{{v namespace_url/}}"{{/b}} version="2.0"{{b media_namespace}} xmlns:media="http://search.yahoo.com/mrss"{{/b}}>
+    <channel>
+        <title><!--v feed_title--><!--/v--></title>
+        <link><!--v feed_link--><!--/v--></link>
+        <description><!--v feed_description--><!--/v--></description>
+        <language><!--v feed_language--><!--/v--></language>
+        <copyright><!--v feed_copyright--><!--/v--></copyright>
+        <pubDate><!--v feed_publishedDate--><!--/v--></pubDate>
+        <managingEditor><!--v feed_author--><!--/v--></managingEditor><!--v entries--><!--/v--><!--b entry-->
+        <item>
+            <title><!--v entry_title--><!--/v--></title>
+            <link><!--v entry_link--><!--/v--></link>
+            <description><!--v entry_content--><!--/v--></description>
+            <pubDate><!--v entry_publishedDate--><!--/v--></pubDate>
+            <author><!--v entry_author--><!--/v--></author>
+            <guid><!--v entry_id--><!--/v--></guid><!--v image--><!--/v--><!--b image-->
+            <media:thumbnail url="{{v entry_image}}{{/v}}" /><!--/b-->
+        </item><!--/b-->
+    </channel>
+</rss>
