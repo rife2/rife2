@@ -10,14 +10,10 @@ import rife.engine.Element;
 import rife.feed.Entry;
 import rife.feed.EntryProcessor;
 import rife.feed.EntryProvider;
-import rife.feed.Feed;
 import rife.template.Template;
 import rife.template.TemplateFactory;
-import rife.tools.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Map;
-import java.util.Objects;
+import java.text.DateFormat;
 
 import static rife.tools.StringUtils.encodeXml;
 
@@ -35,7 +31,7 @@ import static rife.tools.StringUtils.encodeXml;
 public class FeedProvider implements Element, EntryProcessor {
     private final EntryProvider provider_;
     private final Template feedTemplate_;
-    private final SimpleDateFormat dateFormat_;
+    private final DateFormat dateFormat_;
     private boolean addedMediaNamespace_ = false;
 
     public enum FeedType {
@@ -53,14 +49,13 @@ public class FeedProvider implements Element, EntryProcessor {
         }
 
         switch (feedType) {
-            case ATOM_0_3, ATOM_1_0 , JSON_1_1 ->
+            case ATOM_0_3, ATOM_1_0, JSON_1_1 ->
                 // ISO8601
-                dateFormat_ = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                dateFormat_ = RifeConfig.tools().getSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             default ->
                 // RFC822
-                dateFormat_ = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z");
+                dateFormat_ = RifeConfig.tools().getSimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z");
         }
-        dateFormat_.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
 
         provider_ = provider;
     }

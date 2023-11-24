@@ -4,15 +4,29 @@
  */
 package rife.feed;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 import rife.engine.Site;
 import rife.feed.elements.FeedProvider;
 import rife.test.MockConversation;
-import rife.tools.StringUtils;
+
+import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestFeedProvider {
+    @BeforeEach
+    public void setup() {
+        RifeConfig.tools().setDefaultTimeZone(TimeZone.getTimeZone("EST"));
+    }
+
+    @AfterEach
+    public void tearDown() {
+        RifeConfig.tools().setDefaultTimeZone(null);
+    }
+
     @Test
     public void testFeedProviderRss() {
         var conversation = new MockConversation(new Site() {
@@ -23,7 +37,7 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/rss");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals(StringUtils.convertLineSeparator("""
+        assertEquals("""
             <?xml version="1.0" encoding="UTF-8"?>
             <rss version="2.0">
                 <channel>
@@ -53,7 +67,7 @@ public class TestFeedProvider {
                         <guid>entry_link2</guid>
                     </item>
                 </channel>
-            </rss>"""), StringUtils.convertLineSeparator(response.getText()));
+            </rss>""", response.getText());
     }
 
     @Test

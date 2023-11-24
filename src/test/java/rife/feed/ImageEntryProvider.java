@@ -13,9 +13,7 @@ public class ImageEntryProvider implements EntryProvider {
     private final Calendar calendar_;
 
     public ImageEntryProvider() {
-        calendar_ = Calendar.getInstance();
-        calendar_.setTimeZone(RifeConfig.tools().getDefaultTimeZone());
-        calendar_.set(2023, Calendar.NOVEMBER, 24, 0, 0, 0);
+        calendar_ = RifeConfig.tools().getCalendarInstance(2023, Calendar.NOVEMBER, 24, 0, 0, 0);
         calendar_.set(Calendar.AM_PM, Calendar.AM);
     }
 
