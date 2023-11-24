@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.engine.Site;
 import rife.feed.elements.FeedProvider;
 import rife.test.MockConversation;
+import rife.tools.StringUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,36 +23,37 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/rss");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                     "<rss version=\"2.0\">\n" +
-                     "    <channel>\n" +
-                     "        <title>feed_title</title>\n" +
-                     "        <link>feed_link</link>\n" +
-                     "        <description>feed_description</description>\n" +
-                     "        <language>feed_language</language>\n" +
-                     "        <copyright>feed_copyright</copyright>\n" +
-                     "        <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>\n" +
-                     "        <managingEditor>feed_author</managingEditor>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title1</title>\n" +
-                     "            <link>entry_link1</link>\n" +
-                     "            <description>&quot;entry&quot;\n" +
-                     "&lt;content&gt;1</description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 01:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author1</author>\n" +
-                     "            <guid>entry_link1</guid>\n" +
-                     "        </item>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title2</title>\n" +
-                     "            <link>entry_link2</link>\n" +
-                     "            <description>&quot;entry&quot;\n" +
-                     "&lt;content&gt;2</description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author2</author>\n" +
-                     "            <guid>entry_link2</guid>\n" +
-                     "        </item>\n" +
-                     "    </channel>\n" +
-                     "</rss>", response.getText());
+        assertEquals(StringUtils.convertLineSeparator("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rss version="2.0">
+                <channel>
+                    <title>feed_title</title>
+                    <link>feed_link</link>
+                    <description>feed_description</description>
+                    <language>feed_language</language>
+                    <copyright>feed_copyright</copyright>
+                    <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>
+                    <managingEditor>feed_author</managingEditor>
+                    <item>
+                        <title>entry_title1</title>
+                        <link>entry_link1</link>
+                        <description>&quot;entry&quot;
+            &lt;content&gt;1</description>
+                        <pubDate>Fri, 24 Nov 2023 01:00:00 -0500</pubDate>
+                        <author>entry_author1</author>
+                        <guid>entry_link1</guid>
+                    </item>
+                    <item>
+                        <title>entry_title2</title>
+                        <link>entry_link2</link>
+                        <description>&quot;entry&quot;
+            &lt;content&gt;2</description>
+                        <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>
+                        <author>entry_author2</author>
+                        <guid>entry_link2</guid>
+                    </item>
+                </channel>
+            </rss>"""), StringUtils.convertLineSeparator(response.getText()));
     }
 
     @Test
@@ -64,47 +66,48 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/images_rss");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                     "<rss xmlns:media=\"http://search.yahoo.com/mrss\" version=\"2.0\">\n" +
-                     "    <channel>\n" +
-                     "        <title>feed_title</title>\n" +
-                     "        <link>feed_link</link>\n" +
-                     "        <description>feed_description</description>\n" +
-                     "        <language>feed_language</language>\n" +
-                     "        <copyright>feed_copyright</copyright>\n" +
-                     "        <pubDate>Fri, 24 Nov 2023 03:00:00 -0500</pubDate>\n" +
-                     "        <managingEditor>feed_author</managingEditor>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title1</title>\n" +
-                     "            <link>entry_link1</link>\n" +
-                     "            <description>&quot;entry&quot;\n" +
-                     "&lt;content&gt;1</description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 01:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author1</author>\n" +
-                     "            <guid>entry_link1</guid>\n" +
-                     "            <media:thumbnail url=\"https://rife2.com/images/logo.svg?0\" />\n" +
-                     "        </item>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title2</title>\n" +
-                     "            <link>entry_link2</link>\n" +
-                     "            <description>&quot;entry&quot;\n" +
-                     "&lt;content&gt;2</description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author2</author>\n" +
-                     "            <guid>entry_link2</guid>\n" +
-                     "        </item>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title3</title>\n" +
-                     "            <link>entry_link3</link>\n" +
-                     "            <description>&quot;entry&quot;\n" +
-                     "&lt;content&gt;3</description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 03:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author3</author>\n" +
-                     "            <guid>entry_link3</guid>\n" +
-                     "            <media:thumbnail url=\"https://rife2.com/images/logo.svg?2\" />\n" +
-                     "        </item>\n" +
-                     "    </channel>\n" +
-                     "</rss>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rss xmlns:media="http://search.yahoo.com/mrss" version="2.0">
+                <channel>
+                    <title>feed_title</title>
+                    <link>feed_link</link>
+                    <description>feed_description</description>
+                    <language>feed_language</language>
+                    <copyright>feed_copyright</copyright>
+                    <pubDate>Fri, 24 Nov 2023 03:00:00 -0500</pubDate>
+                    <managingEditor>feed_author</managingEditor>
+                    <item>
+                        <title>entry_title1</title>
+                        <link>entry_link1</link>
+                        <description>&quot;entry&quot;
+            &lt;content&gt;1</description>
+                        <pubDate>Fri, 24 Nov 2023 01:00:00 -0500</pubDate>
+                        <author>entry_author1</author>
+                        <guid>entry_link1</guid>
+                        <media:thumbnail url="https://rife2.com/images/logo.svg?0" />
+                    </item>
+                    <item>
+                        <title>entry_title2</title>
+                        <link>entry_link2</link>
+                        <description>&quot;entry&quot;
+            &lt;content&gt;2</description>
+                        <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>
+                        <author>entry_author2</author>
+                        <guid>entry_link2</guid>
+                    </item>
+                    <item>
+                        <title>entry_title3</title>
+                        <link>entry_link3</link>
+                        <description>&quot;entry&quot;
+            &lt;content&gt;3</description>
+                        <pubDate>Fri, 24 Nov 2023 03:00:00 -0500</pubDate>
+                        <author>entry_author3</author>
+                        <guid>entry_link3</guid>
+                        <media:thumbnail url="https://rife2.com/images/logo.svg?2" />
+                    </item>
+                </channel>
+            </rss>""", response.getText());
     }
 
     @Test
@@ -117,34 +120,35 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/namespaces_rss");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                     "<rss xmlns:doap=\"http://usefulinc.com/ns/doap#\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" version=\"2.0\">\n" +
-                     "    <channel>\n" +
-                     "        <title>feed_title_namespace</title>\n" +
-                     "        <link>feed_link_namespace</link>\n" +
-                     "        <description>feed_description_namespace</description>\n" +
-                     "        <language>feed_language_namespace</language>\n" +
-                     "        <copyright>feed_copyright_namespace</copyright>\n" +
-                     "        <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>\n" +
-                     "        <managingEditor>feed_author_namespace</managingEditor>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title_namespace1</title>\n" +
-                     "            <link>entry_link_namespace1</link>\n" +
-                     "            <description><doap:Project>entry_content_namespace1</doap:Project></description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 01:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author_namespace1</author>\n" +
-                     "            <guid>entry_link_namespace1</guid>\n" +
-                     "        </item>\n" +
-                     "        <item>\n" +
-                     "            <title>entry_title_namespace2</title>\n" +
-                     "            <link>entry_link_namespace2</link>\n" +
-                     "            <description><doap:Project>entry_content_namespace2</doap:Project></description>\n" +
-                     "            <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>\n" +
-                     "            <author>entry_author_namespace2</author>\n" +
-                     "            <guid>entry_link_namespace2</guid>\n" +
-                     "        </item>\n" +
-                     "    </channel>\n" +
-                     "</rss>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <rss xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:foaf="http://xmlns.com/foaf/0.1/" version="2.0">
+                <channel>
+                    <title>feed_title_namespace</title>
+                    <link>feed_link_namespace</link>
+                    <description>feed_description_namespace</description>
+                    <language>feed_language_namespace</language>
+                    <copyright>feed_copyright_namespace</copyright>
+                    <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>
+                    <managingEditor>feed_author_namespace</managingEditor>
+                    <item>
+                        <title>entry_title_namespace1</title>
+                        <link>entry_link_namespace1</link>
+                        <description><doap:Project>entry_content_namespace1</doap:Project></description>
+                        <pubDate>Fri, 24 Nov 2023 01:00:00 -0500</pubDate>
+                        <author>entry_author_namespace1</author>
+                        <guid>entry_link_namespace1</guid>
+                    </item>
+                    <item>
+                        <title>entry_title_namespace2</title>
+                        <link>entry_link_namespace2</link>
+                        <description><doap:Project>entry_content_namespace2</doap:Project></description>
+                        <pubDate>Fri, 24 Nov 2023 02:00:00 -0500</pubDate>
+                        <author>entry_author_namespace2</author>
+                        <guid>entry_link_namespace2</guid>
+                    </item>
+                </channel>
+            </rss>""", response.getText());
     }
 
     @Test
@@ -157,49 +161,50 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/atom");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                     "<feed xmlns=\"http://purl.org/atom/ns#\" xmlns:taxo=\"http://purl.org/rss/1.0/modules/taxonomy/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" version=\"0.3\">\n" +
-                     "    <title>feed_title</title>\n" +
-                     "    <link rel=\"alternate\" href=\"feed_link\" type=\"text/html\" />\n" +
-                     "    <author>\n" +
-                     "        <name>feed_author</name>\n" +
-                     "    </author>\n" +
-                     "    <copyright>feed_copyright</copyright>\n" +
-                     "    <info>feed_description</info>\n" +
-                     "    <modified>2023-11-24T02:00:00-0500</modified>\n" +
-                     "    <dc:creator>feed_author</dc:creator>\n" +
-                     "    <dc:date>2023-11-24T02:00:00-0500</dc:date>\n" +
-                     "    <dc:language>feed_language</dc:language>\n" +
-                     "    <dc:rights>feed_copyright</dc:rights>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title1</title>\n" +
-                     "        <link rel=\"alternate\" href=\"entry_link1\" type=\"text/html\" />\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author1</name>\n" +
-                     "        </author>\n" +
-                     "        <modified>2023-11-24T01:00:00-0500</modified>\n" +
-                     "        <content type=\"text/html\" mode=\"escaped\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;1</content>\n" +
-                     "        <id>entry_link1</id>\n" +
-                     "        <issued>2023-11-24T01:00:00-0500</issued>\n" +
-                     "        <dc:creator>entry_author1</dc:creator>\n" +
-                     "        <dc:date>2023-11-24T01:00:00-0500</dc:date>\n" +
-                     "    </entry>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title2</title>\n" +
-                     "        <link rel=\"alternate\" href=\"entry_link2\" type=\"text/html\" />\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author2</name>\n" +
-                     "        </author>\n" +
-                     "        <modified>2023-11-24T02:00:00-0500</modified>\n" +
-                     "        <content type=\"text/html\" mode=\"escaped\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;2</content>\n" +
-                     "        <id>entry_link2</id>\n" +
-                     "        <issued>2023-11-24T02:00:00-0500</issued>\n" +
-                     "        <dc:creator>entry_author2</dc:creator>\n" +
-                     "        <dc:date>2023-11-24T02:00:00-0500</dc:date>\n" +
-                     "    </entry>\n" +
-                     "</feed>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <feed xmlns="http://purl.org/atom/ns#" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="0.3">
+                <title>feed_title</title>
+                <link rel="alternate" href="feed_link" type="text/html" />
+                <author>
+                    <name>feed_author</name>
+                </author>
+                <copyright>feed_copyright</copyright>
+                <info>feed_description</info>
+                <modified>2023-11-24T02:00:00-0500</modified>
+                <dc:creator>feed_author</dc:creator>
+                <dc:date>2023-11-24T02:00:00-0500</dc:date>
+                <dc:language>feed_language</dc:language>
+                <dc:rights>feed_copyright</dc:rights>
+                <entry>
+                    <title>entry_title1</title>
+                    <link rel="alternate" href="entry_link1" type="text/html" />
+                    <author>
+                        <name>entry_author1</name>
+                    </author>
+                    <modified>2023-11-24T01:00:00-0500</modified>
+                    <content type="text/html" mode="escaped">&quot;entry&quot;
+            &lt;content&gt;1</content>
+                    <id>entry_link1</id>
+                    <issued>2023-11-24T01:00:00-0500</issued>
+                    <dc:creator>entry_author1</dc:creator>
+                    <dc:date>2023-11-24T01:00:00-0500</dc:date>
+                </entry>
+                <entry>
+                    <title>entry_title2</title>
+                    <link rel="alternate" href="entry_link2" type="text/html" />
+                    <author>
+                        <name>entry_author2</name>
+                    </author>
+                    <modified>2023-11-24T02:00:00-0500</modified>
+                    <content type="text/html" mode="escaped">&quot;entry&quot;
+            &lt;content&gt;2</content>
+                    <id>entry_link2</id>
+                    <issued>2023-11-24T02:00:00-0500</issued>
+                    <dc:creator>entry_author2</dc:creator>
+                    <dc:date>2023-11-24T02:00:00-0500</dc:date>
+                </entry>
+            </feed>""", response.getText());
     }
 
     @Test
@@ -212,47 +217,48 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/namespaces_atom");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                     "<feed xmlns=\"http://purl.org/atom/ns#\" xmlns:taxo=\"http://purl.org/rss/1.0/modules/taxonomy/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:doap=\"http://usefulinc.com/ns/doap#\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\" version=\"0.3\">\n" +
-                     "    <title>feed_title_namespace</title>\n" +
-                     "    <link rel=\"alternate\" href=\"feed_link_namespace\" type=\"text/html\" />\n" +
-                     "    <author>\n" +
-                     "        <name>feed_author_namespace</name>\n" +
-                     "    </author>\n" +
-                     "    <copyright>feed_copyright_namespace</copyright>\n" +
-                     "    <info>feed_description_namespace</info>\n" +
-                     "    <modified>2023-11-24T02:00:00-0500</modified>\n" +
-                     "    <dc:creator>feed_author_namespace</dc:creator>\n" +
-                     "    <dc:date>2023-11-24T02:00:00-0500</dc:date>\n" +
-                     "    <dc:language>feed_language_namespace</dc:language>\n" +
-                     "    <dc:rights>feed_copyright_namespace</dc:rights>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title_namespace1</title>\n" +
-                     "        <link rel=\"alternate\" href=\"entry_link_namespace1\" type=\"text/html\" />\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author_namespace1</name>\n" +
-                     "        </author>\n" +
-                     "        <modified>2023-11-24T01:00:00-0500</modified>\n" +
-                     "        <content type=\"application/rdf+xml\"><doap:Project>entry_content_namespace1</doap:Project></content>\n" +
-                     "        <id>entry_link_namespace1</id>\n" +
-                     "        <issued>2023-11-24T01:00:00-0500</issued>\n" +
-                     "        <dc:creator>entry_author_namespace1</dc:creator>\n" +
-                     "        <dc:date>2023-11-24T01:00:00-0500</dc:date>\n" +
-                     "    </entry>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title_namespace2</title>\n" +
-                     "        <link rel=\"alternate\" href=\"entry_link_namespace2\" type=\"text/html\" />\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author_namespace2</name>\n" +
-                     "        </author>\n" +
-                     "        <modified>2023-11-24T02:00:00-0500</modified>\n" +
-                     "        <content type=\"application/rdf+xml\"><doap:Project>entry_content_namespace2</doap:Project></content>\n" +
-                     "        <id>entry_link_namespace2</id>\n" +
-                     "        <issued>2023-11-24T02:00:00-0500</issued>\n" +
-                     "        <dc:creator>entry_author_namespace2</dc:creator>\n" +
-                     "        <dc:date>2023-11-24T02:00:00-0500</dc:date>\n" +
-                     "    </entry>\n" +
-                     "</feed>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="UTF-8"?>
+            <feed xmlns="http://purl.org/atom/ns#" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:foaf="http://xmlns.com/foaf/0.1/" version="0.3">
+                <title>feed_title_namespace</title>
+                <link rel="alternate" href="feed_link_namespace" type="text/html" />
+                <author>
+                    <name>feed_author_namespace</name>
+                </author>
+                <copyright>feed_copyright_namespace</copyright>
+                <info>feed_description_namespace</info>
+                <modified>2023-11-24T02:00:00-0500</modified>
+                <dc:creator>feed_author_namespace</dc:creator>
+                <dc:date>2023-11-24T02:00:00-0500</dc:date>
+                <dc:language>feed_language_namespace</dc:language>
+                <dc:rights>feed_copyright_namespace</dc:rights>
+                <entry>
+                    <title>entry_title_namespace1</title>
+                    <link rel="alternate" href="entry_link_namespace1" type="text/html" />
+                    <author>
+                        <name>entry_author_namespace1</name>
+                    </author>
+                    <modified>2023-11-24T01:00:00-0500</modified>
+                    <content type="application/rdf+xml"><doap:Project>entry_content_namespace1</doap:Project></content>
+                    <id>entry_link_namespace1</id>
+                    <issued>2023-11-24T01:00:00-0500</issued>
+                    <dc:creator>entry_author_namespace1</dc:creator>
+                    <dc:date>2023-11-24T01:00:00-0500</dc:date>
+                </entry>
+                <entry>
+                    <title>entry_title_namespace2</title>
+                    <link rel="alternate" href="entry_link_namespace2" type="text/html" />
+                    <author>
+                        <name>entry_author_namespace2</name>
+                    </author>
+                    <modified>2023-11-24T02:00:00-0500</modified>
+                    <content type="application/rdf+xml"><doap:Project>entry_content_namespace2</doap:Project></content>
+                    <id>entry_link_namespace2</id>
+                    <issued>2023-11-24T02:00:00-0500</issued>
+                    <dc:creator>entry_author_namespace2</dc:creator>
+                    <dc:date>2023-11-24T02:00:00-0500</dc:date>
+                </entry>
+            </feed>""", response.getText());
     }
 
     @Test
@@ -265,42 +271,43 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/atom");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                     "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n" +
-                     "    <title>feed_title</title>\n" +
-                     "    <subtitle>feed_description</subtitle>\n" +
-                     "    <id>feed_link</id>\n" +
-                     "    <updated>2023-11-24T02:00:00-0500</updated>\n" +
-                     "    <link href=\"feed_link\" type=\"text/html\" />\n" +
-                     "    <rights>feed_copyright</rights>\n" +
-                     "    <author>\n" +
-                     "        <name>feed_author</name>\n" +
-                     "    </author>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title1</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link1\" />\n" +
-                     "        <id>entry_link1</id>\n" +
-                     "        <updated>2023-11-24T01:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T01:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author1</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"text/html\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;1</content>\n" +
-                     "    </entry>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title2</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link2\" />\n" +
-                     "        <id>entry_link2</id>\n" +
-                     "        <updated>2023-11-24T02:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T02:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author2</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"text/html\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;2</content>\n" +
-                     "    </entry>\n" +
-                     "</feed>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="utf-8"?>
+            <feed xmlns="http://www.w3.org/2005/Atom">
+                <title>feed_title</title>
+                <subtitle>feed_description</subtitle>
+                <id>feed_link</id>
+                <updated>2023-11-24T02:00:00-0500</updated>
+                <link href="feed_link" type="text/html" />
+                <rights>feed_copyright</rights>
+                <author>
+                    <name>feed_author</name>
+                </author>
+                <entry>
+                    <title>entry_title1</title>
+                    <link rel="alternate" type="text/html" href="entry_link1" />
+                    <id>entry_link1</id>
+                    <updated>2023-11-24T01:00:00-0500</updated>
+                    <published>2023-11-24T01:00:00-0500</published>
+                    <author>
+                        <name>entry_author1</name>
+                    </author>
+                    <content type="text/html">&quot;entry&quot;
+            &lt;content&gt;1</content>
+                </entry>
+                <entry>
+                    <title>entry_title2</title>
+                    <link rel="alternate" type="text/html" href="entry_link2" />
+                    <id>entry_link2</id>
+                    <updated>2023-11-24T02:00:00-0500</updated>
+                    <published>2023-11-24T02:00:00-0500</published>
+                    <author>
+                        <name>entry_author2</name>
+                    </author>
+                    <content type="text/html">&quot;entry&quot;
+            &lt;content&gt;2</content>
+                </entry>
+            </feed>""", response.getText());
     }
 
     @Test
@@ -313,56 +320,57 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/images_atom");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                     "<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:media=\"http://search.yahoo.com/mrss\">\n" +
-                     "    <title>feed_title</title>\n" +
-                     "    <subtitle>feed_description</subtitle>\n" +
-                     "    <id>feed_link</id>\n" +
-                     "    <updated>2023-11-24T03:00:00-0500</updated>\n" +
-                     "    <link href=\"feed_link\" type=\"text/html\" />\n" +
-                     "    <rights>feed_copyright</rights>\n" +
-                     "    <author>\n" +
-                     "        <name>feed_author</name>\n" +
-                     "    </author>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title1</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link1\" />\n" +
-                     "        <id>entry_link1</id>\n" +
-                     "        <updated>2023-11-24T01:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T01:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author1</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"text/html\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;1</content>\n" +
-                     "        <media:thumbnail url=\"https://rife2.com/images/logo.svg?0\" />\n" +
-                     "    </entry>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title2</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link2\" />\n" +
-                     "        <id>entry_link2</id>\n" +
-                     "        <updated>2023-11-24T02:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T02:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author2</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"text/html\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;2</content>\n" +
-                     "    </entry>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title3</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link3\" />\n" +
-                     "        <id>entry_link3</id>\n" +
-                     "        <updated>2023-11-24T03:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T03:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author3</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"text/html\">&quot;entry&quot;\n" +
-                     "&lt;content&gt;3</content>\n" +
-                     "        <media:thumbnail url=\"https://rife2.com/images/logo.svg?2\" />\n" +
-                     "    </entry>\n" +
-                     "</feed>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="utf-8"?>
+            <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss">
+                <title>feed_title</title>
+                <subtitle>feed_description</subtitle>
+                <id>feed_link</id>
+                <updated>2023-11-24T03:00:00-0500</updated>
+                <link href="feed_link" type="text/html" />
+                <rights>feed_copyright</rights>
+                <author>
+                    <name>feed_author</name>
+                </author>
+                <entry>
+                    <title>entry_title1</title>
+                    <link rel="alternate" type="text/html" href="entry_link1" />
+                    <id>entry_link1</id>
+                    <updated>2023-11-24T01:00:00-0500</updated>
+                    <published>2023-11-24T01:00:00-0500</published>
+                    <author>
+                        <name>entry_author1</name>
+                    </author>
+                    <content type="text/html">&quot;entry&quot;
+            &lt;content&gt;1</content>
+                    <media:thumbnail url="https://rife2.com/images/logo.svg?0" />
+                </entry>
+                <entry>
+                    <title>entry_title2</title>
+                    <link rel="alternate" type="text/html" href="entry_link2" />
+                    <id>entry_link2</id>
+                    <updated>2023-11-24T02:00:00-0500</updated>
+                    <published>2023-11-24T02:00:00-0500</published>
+                    <author>
+                        <name>entry_author2</name>
+                    </author>
+                    <content type="text/html">&quot;entry&quot;
+            &lt;content&gt;2</content>
+                </entry>
+                <entry>
+                    <title>entry_title3</title>
+                    <link rel="alternate" type="text/html" href="entry_link3" />
+                    <id>entry_link3</id>
+                    <updated>2023-11-24T03:00:00-0500</updated>
+                    <published>2023-11-24T03:00:00-0500</published>
+                    <author>
+                        <name>entry_author3</name>
+                    </author>
+                    <content type="text/html">&quot;entry&quot;
+            &lt;content&gt;3</content>
+                    <media:thumbnail url="https://rife2.com/images/logo.svg?2" />
+                </entry>
+            </feed>""", response.getText());
     }
 
     @Test
@@ -375,40 +383,41 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/atom");
         assertEquals("application/xml; charset=UTF-8", response.getContentType());
-        assertEquals("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                     "<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:doap=\"http://usefulinc.com/ns/doap#\" xmlns:foaf=\"http://xmlns.com/foaf/0.1/\">\n" +
-                     "    <title>feed_title_namespace</title>\n" +
-                     "    <subtitle>feed_description_namespace</subtitle>\n" +
-                     "    <id>feed_link_namespace</id>\n" +
-                     "    <updated>2023-11-24T02:00:00-0500</updated>\n" +
-                     "    <link href=\"feed_link_namespace\" type=\"text/html\" />\n" +
-                     "    <rights>feed_copyright_namespace</rights>\n" +
-                     "    <author>\n" +
-                     "        <name>feed_author_namespace</name>\n" +
-                     "    </author>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title_namespace1</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link_namespace1\" />\n" +
-                     "        <id>entry_link_namespace1</id>\n" +
-                     "        <updated>2023-11-24T01:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T01:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author_namespace1</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"application/rdf+xml\"><doap:Project>entry_content_namespace1</doap:Project></content>\n" +
-                     "    </entry>\n" +
-                     "    <entry>\n" +
-                     "        <title>entry_title_namespace2</title>\n" +
-                     "        <link rel=\"alternate\" type=\"text/html\" href=\"entry_link_namespace2\" />\n" +
-                     "        <id>entry_link_namespace2</id>\n" +
-                     "        <updated>2023-11-24T02:00:00-0500</updated>\n" +
-                     "        <published>2023-11-24T02:00:00-0500</published>\n" +
-                     "        <author>\n" +
-                     "            <name>entry_author_namespace2</name>\n" +
-                     "        </author>\n" +
-                     "        <content type=\"application/rdf+xml\"><doap:Project>entry_content_namespace2</doap:Project></content>\n" +
-                     "    </entry>\n" +
-                     "</feed>", response.getText());
+        assertEquals("""
+            <?xml version="1.0" encoding="utf-8"?>
+            <feed xmlns="http://www.w3.org/2005/Atom" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+                <title>feed_title_namespace</title>
+                <subtitle>feed_description_namespace</subtitle>
+                <id>feed_link_namespace</id>
+                <updated>2023-11-24T02:00:00-0500</updated>
+                <link href="feed_link_namespace" type="text/html" />
+                <rights>feed_copyright_namespace</rights>
+                <author>
+                    <name>feed_author_namespace</name>
+                </author>
+                <entry>
+                    <title>entry_title_namespace1</title>
+                    <link rel="alternate" type="text/html" href="entry_link_namespace1" />
+                    <id>entry_link_namespace1</id>
+                    <updated>2023-11-24T01:00:00-0500</updated>
+                    <published>2023-11-24T01:00:00-0500</published>
+                    <author>
+                        <name>entry_author_namespace1</name>
+                    </author>
+                    <content type="application/rdf+xml"><doap:Project>entry_content_namespace1</doap:Project></content>
+                </entry>
+                <entry>
+                    <title>entry_title_namespace2</title>
+                    <link rel="alternate" type="text/html" href="entry_link_namespace2" />
+                    <id>entry_link_namespace2</id>
+                    <updated>2023-11-24T02:00:00-0500</updated>
+                    <published>2023-11-24T02:00:00-0500</published>
+                    <author>
+                        <name>entry_author_namespace2</name>
+                    </author>
+                    <content type="application/rdf+xml"><doap:Project>entry_content_namespace2</doap:Project></content>
+                </entry>
+            </feed>""", response.getText());
     }
 
     @Test
@@ -421,44 +430,45 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/json");
         assertEquals("application/json; charset=UTF-8", response.getContentType());
-        assertEquals("{\n" +
-                     "    \"version\": \"https://jsonfeed.org/version/1.1\",\n" +
-                     "    \"title\": \"feed_title\",\n" +
-                     "    \"home_page_url\": \"feed_link\",\n" +
-                     "    \"description\": \"feed_description\",\n" +
-                     "    \"authors\": [\n" +
-                     "        {\n" +
-                     "            \"name\": \"feed_author\"\n" +
-                     "        }\n" +
-                     "    ],\n" +
-                     "    \"language\": \"feed_language\",\n" +
-                     "    \"items\": [\n" +
-                     "        {\n" +
-                     "            \"id\": \"entry_link1\",\n" +
-                     "            \"url\": \"entry_link1\",\n" +
-                     "            \"title\": \"entry_title1\",\n" +
-                     "            \"content_html\": \"\\\"entry\\\"\\n<content>1\",\n" +
-                     "            \"date_published\": \"2023-11-24T01:00:00-0500\",\n" +
-                     "            \"authors\": [\n" +
-                     "                {\n" +
-                     "                    \"name\": \"entry_author1\"\n" +
-                     "                }\n" +
-                     "            ]\n" +
-                     "        },\n" +
-                     "        {\n" +
-                     "            \"id\": \"entry_link2\",\n" +
-                     "            \"url\": \"entry_link2\",\n" +
-                     "            \"title\": \"entry_title2\",\n" +
-                     "            \"content_html\": \"\\\"entry\\\"\\n<content>2\",\n" +
-                     "            \"date_published\": \"2023-11-24T02:00:00-0500\",\n" +
-                     "            \"authors\": [\n" +
-                     "                {\n" +
-                     "                    \"name\": \"entry_author2\"\n" +
-                     "                }\n" +
-                     "            ]\n" +
-                     "        },\n" +
-                     "    ]\n" +
-                     "}", response.getText());
+        assertEquals("""
+            {
+                "version": "https://jsonfeed.org/version/1.1",
+                "title": "feed_title",
+                "home_page_url": "feed_link",
+                "description": "feed_description",
+                "authors": [
+                    {
+                        "name": "feed_author"
+                    }
+                ],
+                "language": "feed_language",
+                "items": [
+                    {
+                        "id": "entry_link1",
+                        "url": "entry_link1",
+                        "title": "entry_title1",
+                        "content_html": "\\"entry\\"\\n<content>1",
+                        "date_published": "2023-11-24T01:00:00-0500",
+                        "authors": [
+                            {
+                                "name": "entry_author1"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "entry_link2",
+                        "url": "entry_link2",
+                        "title": "entry_title2",
+                        "content_html": "\\"entry\\"\\n<content>2",
+                        "date_published": "2023-11-24T02:00:00-0500",
+                        "authors": [
+                            {
+                                "name": "entry_author2"
+                            }
+                        ]
+                    },
+                ]
+            }""", response.getText());
     }
 
     @Test
@@ -472,57 +482,58 @@ public class TestFeedProvider {
 
         var response = conversation.doRequest("http://localhost/images_json");
         assertEquals("application/json; charset=UTF-8", response.getContentType());
-        assertEquals("{\n" +
-                     "    \"version\": \"https://jsonfeed.org/version/1.1\",\n" +
-                     "    \"title\": \"feed_title\",\n" +
-                     "    \"home_page_url\": \"feed_link\",\n" +
-                     "    \"description\": \"feed_description\",\n" +
-                     "    \"authors\": [\n" +
-                     "        {\n" +
-                     "            \"name\": \"feed_author\"\n" +
-                     "        }\n" +
-                     "    ],\n" +
-                     "    \"language\": \"feed_language\",\n" +
-                     "    \"items\": [\n" +
-                     "        {\n" +
-                     "            \"id\": \"entry_link1\",\n" +
-                     "            \"url\": \"entry_link1\",\n" +
-                     "            \"title\": \"entry_title1\",\n" +
-                     "            \"content_html\": \"\\\"entry\\\"\\n<content>1\",\n" +
-                     "            \"date_published\": \"2023-11-24T01:00:00-0500\",\n" +
-                     "            \"authors\": [\n" +
-                     "                {\n" +
-                     "                    \"name\": \"entry_author1\"\n" +
-                     "                }\n" +
-                     "            ],\n" +
-                     "            \"image\": \"https://rife2.com/images/logo.svg?0\"\n" +
-                     "        },\n" +
-                     "        {\n" +
-                     "            \"id\": \"entry_link2\",\n" +
-                     "            \"url\": \"entry_link2\",\n" +
-                     "            \"title\": \"entry_title2\",\n" +
-                     "            \"content_html\": \"\\\"entry\\\"\\n<content>2\",\n" +
-                     "            \"date_published\": \"2023-11-24T02:00:00-0500\",\n" +
-                     "            \"authors\": [\n" +
-                     "                {\n" +
-                     "                    \"name\": \"entry_author2\"\n" +
-                     "                }\n" +
-                     "            ]\n" +
-                     "        },\n" +
-                     "        {\n" +
-                     "            \"id\": \"entry_link3\",\n" +
-                     "            \"url\": \"entry_link3\",\n" +
-                     "            \"title\": \"entry_title3\",\n" +
-                     "            \"content_html\": \"\\\"entry\\\"\\n<content>3\",\n" +
-                     "            \"date_published\": \"2023-11-24T03:00:00-0500\",\n" +
-                     "            \"authors\": [\n" +
-                     "                {\n" +
-                     "                    \"name\": \"entry_author3\"\n" +
-                     "                }\n" +
-                     "            ],\n" +
-                     "            \"image\": \"https://rife2.com/images/logo.svg?2\"\n" +
-                     "        },\n" +
-                     "    ]\n" +
-                     "}", response.getText());
+        assertEquals("""
+            {
+                "version": "https://jsonfeed.org/version/1.1",
+                "title": "feed_title",
+                "home_page_url": "feed_link",
+                "description": "feed_description",
+                "authors": [
+                    {
+                        "name": "feed_author"
+                    }
+                ],
+                "language": "feed_language",
+                "items": [
+                    {
+                        "id": "entry_link1",
+                        "url": "entry_link1",
+                        "title": "entry_title1",
+                        "content_html": "\\"entry\\"\\n<content>1",
+                        "date_published": "2023-11-24T01:00:00-0500",
+                        "authors": [
+                            {
+                                "name": "entry_author1"
+                            }
+                        ],
+                        "image": "https://rife2.com/images/logo.svg?0"
+                    },
+                    {
+                        "id": "entry_link2",
+                        "url": "entry_link2",
+                        "title": "entry_title2",
+                        "content_html": "\\"entry\\"\\n<content>2",
+                        "date_published": "2023-11-24T02:00:00-0500",
+                        "authors": [
+                            {
+                                "name": "entry_author2"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "entry_link3",
+                        "url": "entry_link3",
+                        "title": "entry_title3",
+                        "content_html": "\\"entry\\"\\n<content>3",
+                        "date_published": "2023-11-24T03:00:00-0500",
+                        "authors": [
+                            {
+                                "name": "entry_author3"
+                            }
+                        ],
+                        "image": "https://rife2.com/images/logo.svg?2"
+                    },
+                ]
+            }""", response.getText());
     }
 }
