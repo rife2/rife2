@@ -1,0 +1,13 @@
+<html lang="en">
+<body>
+<!--v errors:*--><!--/v-->
+<!--b errormessage:*--><!--v errormessage/--><br><!--/b-->
+<form name="credentials" action="{{v route:action:/}}" method="post">
+  <!--v route:inputs:/-->
+  <input name="login" value="{{v param:login}}{{/v}}" type="text">
+  <input name="password" type="password">
+  <input name="remember" type="checkbox">
+  <input type="submit" value="Login">
+</form>
+</body>
+</html>

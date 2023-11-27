@@ -97,7 +97,7 @@ class EngineTemplateProcessor {
     }
 
     private void processParameters(final List<String> setValues) {
-        var parameters = context_.request().getParameters();
+        var parameters = context_.parameters();
         final var param_tags = template_.getFilteredValues(TemplateFactoryFilters.TAG_PARAM);
         if (param_tags != null) {
             for (var captured_groups : param_tags) {
