@@ -452,6 +452,10 @@ public class Context {
      */
     public void print(Template template)
     throws TemplateException {
+        if (template != null && !template.hasAttribute(Context.class.getName())) {
+            template.setAttribute(Context.class.getName(), this);
+        }
+
         new EngineTemplateProcessor(this, template).processTemplate();
 
         // set the content type
@@ -466,6 +470,20 @@ public class Context {
 
         // print the element contents with the auto-generated values
         response_.print(template);
+    }
+
+    /**
+     * Retrieves the context that was stored in a template attribute.
+     * <p>Each template that was obtained through a context, automatically
+     * has the context store itself in the template as an attribute.
+     * This convenience method makes it easy to retrieve that context
+     * elsewhere.
+     *
+     * @return the current context stored in a template attribute.
+     * @since 1.8.0
+     */
+    public static Context fromTemplate(Template template) {
+        return (Context)template.getAttribute(Context.class.getName());
     }
 
     /**

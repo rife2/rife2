@@ -109,6 +109,9 @@ public class Logout implements Element {
         initializeLogout(c);
 
         final Template template = getTemplate();
+        if (template != null && c != null) {
+            template.setAttribute(Context.class.getName(), c);
+        }
 
         String authid = null;
         var auth_cookie_name = getAuthConfig().authCookieName();

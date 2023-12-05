@@ -168,6 +168,9 @@ public class Login extends Identified implements SessionAttributes {
         var auth_data = auth_config.generateAuthData(c);
 
         final Template template = getTemplate();
+        if (template != null && c != null) {
+            template.setAttribute(Context.class.getName(), c);
+        }
 
         // check if a cookie for remember id is provided
         var remember_id = c.cookieValue(auth_config.rememberCookieName());
