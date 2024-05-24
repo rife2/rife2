@@ -29,7 +29,7 @@ public class Rife2Build extends AbstractRife2Build {
         var imagej_version = version("1.54h");
         var jetty_version = version(12,0,9);
         var jsoup_version =  version(1,17,2);
-        var tomcat_version = version(10,1,23);
+        var tomcat_version = version(10,1,24);
 
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", jsoup_version))
