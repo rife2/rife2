@@ -74,17 +74,14 @@ public class Server {
         try {
             var klass = Thread.class;
             var method = klass.getDeclaredMethod("ofVirtual");
-            if (method != null) {
-                try {
-                    return method.invoke(klass) != null;
-                } catch (Throwable e) {
-                    return false;
-                }
+            try {
+                return method.invoke(klass) != null;
+            } catch (Throwable e) {
+                return false;
             }
         } catch (Throwable e) {
             return false;
         }
-        return false;
     }
 
     /**
