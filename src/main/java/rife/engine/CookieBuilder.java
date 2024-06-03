@@ -108,4 +108,15 @@ public class CookieBuilder {
         cookie_.setHttpOnly(isHttpOnly);
         return this;
     }
+
+    /**
+     * See {@link Cookie#setAttribute(String, String)}
+     *
+     * @return the {@code CookieBuilder} instance
+     * @since 1.8.0
+     */
+    public CookieBuilder attribute(String name, String value) {
+        cookie_.setAttribute(name, value);
+        return this;
+    }
 }
