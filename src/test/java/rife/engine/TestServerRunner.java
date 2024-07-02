@@ -12,10 +12,15 @@ public class TestServerRunner implements AutoCloseable {
         .host("localhost")
         .minThreads(1)
         .maxThreads(4)
-        .idleTimeout(2000);
+        .idleTimeout(4000);
 
     public TestServerRunner(Site site) {
         server_.start(site);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public HierarchicalProperties properties() {
