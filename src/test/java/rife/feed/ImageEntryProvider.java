@@ -8,6 +8,7 @@ import rife.config.RifeConfig;
 import rife.engine.Context;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class ImageEntryProvider implements EntryProvider {
     private final Calendar calendar_;
@@ -26,6 +27,7 @@ public class ImageEntryProvider implements EntryProvider {
             .description("feed_description")
             .language("feed_language")
             .link("feed_link")
+            .categories(List.of("feed_category"))
             .publishedDate(calendar_.getTime());
 
         return feed;

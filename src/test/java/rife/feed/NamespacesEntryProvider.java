@@ -9,6 +9,7 @@ import rife.engine.Context;
 
 import java.util.Calendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class NamespacesEntryProvider implements EntryProvider {
     private final Calendar calendar_;
@@ -44,6 +45,7 @@ public class NamespacesEntryProvider implements EntryProvider {
                 .author("entry_author_namespace" + (i + 1))
                 .content("<doap:Project>entry_content_namespace" + (i + 1) + "</doap:Project>")
                 .link("entry_link_namespace" + (i + 1))
+                .categories(List.of("entry_category" + (i + 1)))
                 .publishedDate(calendar_.getTime())
                 .title("entry_title_namespace" + (i + 1))
                 .type("application/rdf+xml")

@@ -5,6 +5,7 @@
 package rife.feed;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * A bean representing an entry in a feed.
@@ -21,6 +22,7 @@ public class Entry {
     private String id_ = null;
     private String title_ = null;
     private String link_ = null;
+    private List<String> categories_ = null;
     private Date publishedDate_ = null;
     private String content_ = null;
     private String author_ = null;
@@ -69,6 +71,19 @@ public class Entry {
 
     public void setLink(String link) {
         link_ = link;
+    }
+
+    public Entry categories(List<String> categories) {
+        setCategories(categories);
+        return this;
+    }
+
+    public List<String> getCategories() {
+        return categories_;
+    }
+
+    public void setCategories(List<String> categories) {
+        categories_ = categories;
     }
 
     public Entry publishedDate(Date publishedDate) {

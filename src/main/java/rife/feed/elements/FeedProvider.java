@@ -12,6 +12,7 @@ import rife.feed.EntryProcessor;
 import rife.feed.EntryProvider;
 import rife.template.Template;
 import rife.template.TemplateFactory;
+import rife.tools.ObjectUtils;
 
 import java.text.DateFormat;
 
@@ -36,7 +37,6 @@ public class FeedProvider implements Element, EntryProcessor {
 
     public enum FeedType {
         RSS_2_0,
-        ATOM_0_3,
         ATOM_1_0,
         JSON_1_1
     }
@@ -49,7 +49,7 @@ public class FeedProvider implements Element, EntryProcessor {
         }
 
         switch (feedType) {
-            case ATOM_0_3, ATOM_1_0, JSON_1_1 ->
+            case ATOM_1_0, JSON_1_1 ->
                 // ISO8601
                 dateFormat_ = RifeConfig.tools().getSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             default ->
@@ -66,6 +66,18 @@ public class FeedProvider implements Element, EntryProcessor {
 
             var feed = provider_.getFeedDescriptor(c);
             feedTemplate_.setBean(feed, "feed_");
+            if (feedTemplate_.hasValueId("feed_link_self")) {
+                feedTemplate_.setValueEncoded("feed_link_self", c.urlFor(c.route()));
+            }
+
+            if (feedTemplate_.hasValueId("feed_category_section") &&
+                feed.getCategories() != null &&
+                !feed.getCategories().isEmpty()) {
+                for (var category : feed.getCategories()) {
+                    feedTemplate_.setValueEncoded("feed_category", category);
+                    feedTemplate_.appendBlock("feed_category_section", "feed_category");
+                }
+            }
 
             if (feedTemplate_.hasValueId("feed_publishedDate")) {
                 feedTemplate_.setValue("feed_publishedDate", dateFormat_.format(feed.getPublishedDate()));
@@ -85,7 +97,26 @@ public class FeedProvider implements Element, EntryProcessor {
     }
 
     public void setEntry(Entry entry) {
+        if (!feedTemplate_.getValue("entries").isEmpty()) {
+            feedTemplate_.appendBlock("entries", "entry_separator");
+        }
+
         feedTemplate_.setBean(entry, "entry_");
+
+        if (feedTemplate_.hasValueId("entry_category_section")) {
+            feedTemplate_.blankValue("entry_category_section");
+            if (entry.getCategories() != null &&
+                !entry.getCategories().isEmpty()) {
+                for (var category : entry.getCategories()) {
+                    if (!feedTemplate_.getValue("entry_category_section").isEmpty()) {
+                        feedTemplate_.appendBlock("entry_category_section", "entry_category_separator");
+                    }
+                    feedTemplate_.setValueEncoded("entry_category", category);
+                    feedTemplate_.appendBlock("entry_category_section", "entry_category");
+                }
+            }
+        }
+
         if (entry.isEscaped() &&
             feedTemplate_.hasValueId("entry_escaped_attribute")) {
             feedTemplate_.setBlock("entry_escaped_attribute");

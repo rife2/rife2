@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss{{v namespaces}}{{/v}}{{b namespace}} xmlns:{{v namespace_key/}}="{{v namespace_url/}}"{{/b}} version="2.0"{{b media_namespace}} xmlns:media="http://search.yahoo.com/mrss"{{/b}}>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"{{v namespaces}}{{/v}}{{b namespace}} xmlns:{{v namespace_key/}}="{{v namespace_url/}}"{{/b}} version="2.0"{{b media_namespace}} xmlns:media="http://search.yahoo.com/mrss"{{/b}}>
     <channel>
         <title><!--v feed_title--><!--/v--></title>
         <link><!--v feed_link--><!--/v--></link>
+        <atom:link href="{{v feed_link_self}}{{/v}}" rel="self" type="application/rss+xml" /><!--v feed_category_section--><!--/v--><!--b feed_category-->
+        <category><!--v feed_category--><!--/v--></category>
+        <dc:subject><!--v feed_category/--></dc:subject><!--/b-->
         <description><!--v feed_description--><!--/v--></description>
         <language><!--v feed_language--><!--/v--></language>
         <copyright><!--v feed_copyright--><!--/v--></copyright>
         <pubDate><!--v feed_publishedDate--><!--/v--></pubDate>
-        <managingEditor><!--v feed_author--><!--/v--></managingEditor><!--v entries--><!--/v--><!--b entry-->
+        <managingEditor><!--v feed_author--><!--/v--></managingEditor>
+        <dc:language><!--v feed_language--><!--/v--></dc:language>
+        <dc:rights><!--v feed_copyright/--></dc:rights><!--v entries--><!--/v--><!--b entry-->
         <item>
             <title><!--v entry_title--><!--/v--></title>
-            <link><!--v entry_link--><!--/v--></link>
+            <link><!--v entry_link--><!--/v--></link><!--v entry_category_section--><!--/v--><!--b entry_category-->
+            <category><!--v entry_category--><!--/v--></category><!--/b--><!--b entry_category_separator--><!--/b-->
             <description><!--v entry_content--><!--/v--></description>
             <pubDate><!--v entry_publishedDate--><!--/v--></pubDate>
             <author><!--v entry_author--><!--/v--></author>
+            <dc:creator><!--v entry_author/--></dc:creator>
             <guid><!--v entry_id--><!--/v--></guid><!--v image--><!--/v--><!--b image-->
             <media:thumbnail url="{{v entry_image}}{{/v}}" /><!--/b-->
-        </item><!--/b-->
+        </item><!--b entry_separator--><!--/b--><!--/b-->
     </channel>
 </rss>

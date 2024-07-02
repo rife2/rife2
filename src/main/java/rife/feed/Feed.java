@@ -5,6 +5,7 @@
 package rife.feed;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +21,7 @@ public class Feed {
     private String id_ = null;
     private String title_ = null;
     private String link_ = null;
+    private List<String> categories_ = null;
     private String description_ = null;
     private String language_ = null;
     private String copyright_ = null;
@@ -68,6 +70,19 @@ public class Feed {
 
     public void setLink(String link) {
         link_ = link;
+    }
+
+    public Feed categories(List<String> categories) {
+        setCategories(categories);
+        return this;
+    }
+
+    public List<String> getCategories() {
+        return categories_;
+    }
+
+    public void setCategories(List<String> categories) {
+        categories_ = categories;
     }
 
     public Feed description(String description) {

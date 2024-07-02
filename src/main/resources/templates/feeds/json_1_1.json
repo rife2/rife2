@@ -13,6 +13,7 @@
         {
             "id": "{{v entry_id}}{{/v}}",
             "url": "{{v entry_link}}{{/v}}",
+            "tags": [{{v entry_category_section}}{{/v}}{{b entry_category}}"{{v entry_category}}{{/v}}"{{/b}}{{b entry_category_separator}}, {{/b}}],
             "title": "{{v entry_title}}{{/v}}",
             "content_html": "{{v entry_content}}{{/v}}",
             "date_published": "{{v entry_publishedDate}}{{/v}}",
@@ -22,6 +23,6 @@
                 }
             ]{{v image}}{{/v}}{{b image}},
             "image": "{{v entry_image}}{{/v}}"{{/b}}
-        },{{/b}}
+        }{{b entry_separator}},{{/b}}{{/b}}
     ]
 }

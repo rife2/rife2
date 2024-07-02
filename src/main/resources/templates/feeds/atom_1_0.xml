@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"{{v namespaces}}{{/v}}{{b namespace}} xmlns:{{v namespace_key/}}="{{v namespace_url/}}"{{/b}}{{b media_namespace}} xmlns:media="http://search.yahoo.com/mrss"{{/b}}>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/"{{v namespaces}}{{/v}}{{b namespace}} xmlns:{{v namespace_key/}}="{{v namespace_url/}}"{{/b}}{{b media_namespace}} xmlns:media="http://search.yahoo.com/mrss"{{/b}}>
     <title><!--v feed_title--><!--/v--></title>
     <subtitle><!--v feed_description--><!--/v--></subtitle>
     <id><!--v feed_id--><!--/v--></id>
     <updated><!--v feed_publishedDate--><!--/v--></updated>
     <link href="{{v feed_link}}{{/v}}" type="text/html" />
+    <link href="{{v feed_link_self}}{{/v}}" rel="self" /><!--v feed_category_section--><!--/v--><!--b feed_category-->
+    <category term="<!--v feed_category--><!--/v-->"></category>
+    <dc:subject><!--v feed_category/--></dc:subject><!--/b-->
     <rights><!--v feed_copyright--><!--/v--></rights>
     <author>
         <name><!--v feed_author--><!--/v--></name>
-    </author><!--v entries--><!--/v--><!--b entry-->
+    </author>
+    <dc:language><!--v feed_language--><!--/v--></dc:language>
+    <dc:rights><!--v feed_copyright/--></dc:rights><!--v entries--><!--/v--><!--b entry-->
     <entry>
         <title><!--v entry_title--><!--/v--></title>
-        <link rel="alternate" type="text/html" href="{{v entry_link}}{{/v}}" />
+        <link rel="alternate" type="text/html" href="{{v entry_link}}{{/v}}" /><!--v entry_category_section--><!--/v--><!--b entry_category-->
+        <category term="<!--v entry_category--><!--/v-->"></category><!--/b--><!--b entry_category_separator--><!--/b-->
         <id><!--v entry_id--><!--/v--></id>
         <updated><!--v entry_publishedDate--><!--/v--></updated>
         <published><!--v entry_publishedDate--><!--/v--></published>
         <author>
             <name><!--v entry_author--><!--/v--></name>
         </author>
+        <dc:creator><!--v entry_author/--></dc:creator>
         <content type="{{v entry_type/}}"><!--v entry_content--><!--/v--></content><!--v image--><!--/v--><!--b image-->
         <media:thumbnail url="{{v entry_image}}{{/v}}" /><!--/b-->
-    </entry><!--/b-->
+    </entry><!--b entry_separator--><!--/b--><!--/b-->
 </feed>
