@@ -6,6 +6,7 @@ package rife.engine;
 
 import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.session.SessionIdManager;
 import org.eclipse.jetty.session.DefaultSessionIdManager;
@@ -14,14 +15,22 @@ import org.eclipse.jetty.ee10.servlet.DefaultServlet;
 import org.eclipse.jetty.ee10.servlet.FilterHolder;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.util.resource.ResourceFactory;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import rife.ioc.HierarchicalProperties;
 import rife.resources.ResourceFinderClasspath;
 import rife.servlet.RifeFilter;
 import rife.tools.ExceptionUtils;
+import rife.tools.StringUtils;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -318,12 +327,13 @@ public class Server {
         }
 
         server_ = new org.eclipse.jetty.server.Server(thread_pool);
-        SessionIdManager sessions_ = new DefaultSessionIdManager(server_);
-        ServletContextHandler handler_ = new ServletContextHandler();
 
-        SslContextFactory.Server sslContextFactory = initSslContextFactory();
+        // create the servlet context handler
 
-        try (var connector = new ServerConnector(server_, sslContextFactory)) {
+        var handler = new ServletContextHandler();
+        var sessions = new DefaultSessionIdManager(server_);
+
+        try (var connector = new ServerConnector(server_, initSslContextFactory())) {
             connector.setPort(port_);
             if (host_ != null) {
                 connector.setHost(host_);
@@ -331,12 +341,14 @@ public class Server {
             server_.setConnectors(new Connector[]{connector});
         }
 
-        server_.setHandler(handler_);
+        // handle sessions
 
         var session_handler = new SessionHandler();
         session_handler.getSessionCookieConfig().setHttpOnly(true);
-        session_handler.setSessionIdManager(sessions_);
-        handler_.setSessionHandler(session_handler);
+        session_handler.setSessionIdManager(sessions);
+        handler.setSessionHandler(session_handler);
+
+        // create the RIFE2 filter
 
         var rife_filter = new RifeFilter();
         rife_filter.init(properties_, site);
@@ -345,14 +357,42 @@ public class Server {
         var ctx = new ServletContextHandler();
         ctx.setContextPath("/");
 
-        var default_servlet = new DefaultServlet();
-        var servlet_holder = new ServletHolder(default_servlet);
+        // setup default servlet
+
+        var servlet_holder = new ServletHolder("default", DefaultServlet.class);
+
+        // setup resource bases
+
+        var resource_factory = ResourceFactory.of(handler);
+        var resource_list = new ArrayList<Resource>();
+
+        // handle the optional static resource base
+
         if (staticResourceBase_ != null) {
-            handler_.setBaseResourceAsString(staticResourceBase_);
+            resource_list.add(resource_factory.newResource(staticResourceBase_));
         }
 
-        handler_.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));
-        handler_.addServlet(servlet_holder, "/*");
+        // add support for webjars
+
+        try {
+            var hits = Collections.list(Server.class.getClassLoader().getResources("META-INF/resources"));
+            for (var hit : hits) {
+                resource_list.add(resource_factory.newResource(hit));
+            }
+        } catch (IOException e) {
+            Logger.getLogger("rife.engine").warning(ExceptionUtils.getExceptionStackTrace(e));
+        }
+
+        handler.setBaseResource(ResourceFactory.combine(resource_list));
+
+        // configure the handler
+
+        handler.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));
+        handler.addServlet(servlet_holder, "/*");
+
+        // Register the handler
+
+        server_.setHandler(handler);
 
         try {
             server_.start();
