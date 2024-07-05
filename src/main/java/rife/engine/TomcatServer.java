@@ -11,6 +11,8 @@ import org.apache.tomcat.util.descriptor.web.FilterMap;
 import rife.config.RifeConfig;
 import rife.ioc.HierarchicalProperties;
 import rife.servlet.RifeFilter;
+import rife.tools.FileUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 import java.util.HashMap;
@@ -143,7 +145,7 @@ public class TomcatServer {
             tomcat_.setBaseDir(new File(baseDir_).getAbsolutePath());
         }
 
-        var ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
+        var ctx = tomcat_.addWebapp("", new File(docBase_).getAbsolutePath());
 
         var servletName = "default-servlet";
         var defaultServlet = new DefaultServlet();
