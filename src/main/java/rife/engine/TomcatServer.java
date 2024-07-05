@@ -139,8 +139,14 @@ public class TomcatServer {
 
         if (baseDir_ == null) {
             var tmpDir = new File(RifeConfig.global().getTempPath(), "rife2.tomcat." + port_);
-            tmpDir.deleteOnExit();
             tomcat_.setBaseDir(tmpDir.getAbsolutePath());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    FileUtils.deleteDirectory(tmpDir);
+                } catch (FileUtilsErrorException | IllegalArgumentException ignore) {
+                    // do nothing
+                }
+            }));
         } else {
             tomcat_.setBaseDir(new File(baseDir_).getAbsolutePath());
         }
