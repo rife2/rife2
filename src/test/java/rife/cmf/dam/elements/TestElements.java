@@ -36,6 +36,7 @@ import static rife.cmf.format.ImageFormatter.ContentAttribute.HIDPI;
 
 public class TestElements {
     public void setup(Datasource datasource) {
+        System.setProperty("org.slf4j.simpleLogger.log." + XmlPage.class.getName(), "error");
         DatabaseContentFactory.instance(datasource).install();
     }
 
@@ -188,6 +189,7 @@ public class TestElements {
             })) {
                 try (final var webClient = new WebClient()) {
                     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
                     XmlPage page = webClient.getPage("http://localhost:8181/serve_repository/textxhtml");
                     var response = page.getWebResponse();
@@ -225,6 +227,7 @@ public class TestElements {
             })) {
                 try (final var webClient = new WebClient()) {
                     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
                     var response = webClient.getPage("http://localhost:8181/serve/imageunknown").getWebResponse();
                     assertEquals(404, response.getStatusCode());
@@ -248,6 +251,7 @@ public class TestElements {
             })) {
                 try (final var webClient = new WebClient()) {
                     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
                     var response = webClient.getPage("http://localhost:8181/serve").getWebResponse();
                     assertEquals(404, response.getStatusCode());
@@ -290,6 +294,7 @@ public class TestElements {
             })) {
                 try (final var webClient = new WebClient()) {
                     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
                     HtmlPage page = webClient.getPage("http://localhost:8181/contentforhtml?id=" + id);
                     assertEquals("<img src=\"http://localhost:8181/serve/contentimage/" + id + "/image\" width=\"1280\" height=\"406\" alt=\"\" />" +
@@ -333,6 +338,7 @@ public class TestElements {
             })) {
                 try (final var webClient = new WebClient()) {
                     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
                     HtmlPage page = webClient.getPage("http://localhost:8181/contentforhtml?id=" + id);
                     assertEquals("<img src=\"http://localhost:8181/serve/contentimage/" + id + "/image\" width=\"640\" height=\"203\" alt=\"\" />" +
@@ -365,6 +371,7 @@ public class TestElements {
             })) {
                 try (final var webClient = new WebClient()) {
                     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
 
                     var request = new WebRequest(new URL("http://localhost:8181/serve/textxhtml"));
                     request.setAdditionalHeader("If-Modified-Since", "24 Aug 2204 15:14:06 GMT");
