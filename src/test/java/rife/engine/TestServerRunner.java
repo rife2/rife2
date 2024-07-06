@@ -15,6 +15,8 @@ public class TestServerRunner implements AutoCloseable {
         .idleTimeout(4000);
 
     public TestServerRunner(Site site) {
+        System.setProperty("org.slf4j.simpleLogger.log.org.eclipse.jetty", "warn");
+
         server_.start(site);
         try {
             Thread.sleep(500);
