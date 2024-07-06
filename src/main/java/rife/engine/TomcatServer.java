@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Erik C. Thauvin (https://erik.thauvin.net/)
+ * Copyright 2023-2024 Erik C. Thauvin (https://erik.thauvin.net/)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -8,9 +8,12 @@ import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
+import org.apache.tomcat.util.scan.StandardJarScanner;
 import rife.config.RifeConfig;
 import rife.ioc.HierarchicalProperties;
 import rife.servlet.RifeFilter;
+import rife.tools.FileUtils;
+import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.File;
 import java.util.HashMap;
@@ -30,6 +33,7 @@ public class TomcatServer {
     private String docBase_ = ".";
     private String hostname_ = null;
     private Tomcat tomcat_;
+    private boolean isScanManifest_ = false;
     private int port_ = 8080;
 
     /**
@@ -45,7 +49,7 @@ public class TomcatServer {
      * Add a role for a user.
      *
      * @param role the role name
-     * @param user the user name
+     * @param user the username
      * @return the instance of the server that's being configured
      * @since 1.7.1
      */
@@ -57,7 +61,7 @@ public class TomcatServer {
     /**
      * Add a user for the in-memory realm.
      *
-     * @param user the user name
+     * @param user the username
      * @param pass the password
      * @return the instance of the server that's being configured
      * @since 1.7.1
@@ -116,6 +120,21 @@ public class TomcatServer {
     }
 
     /**
+     * Configures whether JARs declared in {@code Class-Path} {@code MANIFEST.MF} entry of other scanned JARs will be
+     * scanned.
+     * <p>
+     * By default, manifests are <strong>not</strong> scanned.
+     *
+     * @param scanManifest {@code true} to scan manifests, {@code false} otherwise
+     * @return the instance of the server that's being configured
+     * @since 1.8.0
+     */
+    public TomcatServer scanManifest(boolean scanManifest) {
+        isScanManifest_ = scanManifest;
+        return this;
+    }
+
+    /**
      * Retrieves the hierarchical properties for this server instance.
      *
      * @return this server's collection of hierarchical properties
@@ -137,13 +156,19 @@ public class TomcatServer {
 
         if (baseDir_ == null) {
             var tmpDir = new File(RifeConfig.global().getTempPath(), "rife2.tomcat." + port_);
-            tmpDir.deleteOnExit();
             tomcat_.setBaseDir(tmpDir.getAbsolutePath());
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    FileUtils.deleteDirectory(tmpDir);
+                } catch (FileUtilsErrorException | IllegalArgumentException ignore) {
+                    // do nothing
+                }
+            }));
         } else {
             tomcat_.setBaseDir(new File(baseDir_).getAbsolutePath());
         }
 
-        var ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
+        var ctx = tomcat_.addWebapp("", new File(docBase_).getAbsolutePath());
 
         var servletName = "default-servlet";
         var defaultServlet = new DefaultServlet();
@@ -173,6 +198,12 @@ public class TomcatServer {
         users_.forEach((u, p) -> tomcat_.addUser(u, p));
 
         roles_.forEach((u, r) -> tomcat_.addRole(u, r));
+
+        if (!isScanManifest_) {
+            var jarScanner = new StandardJarScanner();
+            jarScanner.setScanManifest(false);
+            ctx.setJarScanner(jarScanner);
+        }
 
         // Tomcat opens the port only if called at least once
         tomcat_.getConnector();

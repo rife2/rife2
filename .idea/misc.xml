@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
     <entry_points version="2.0">
@@ -2068,6 +2069,7 @@
     <pattern value="rife.test.MockResponse" method="xpathNodeSet" />
     <pattern value="rife.test.MockResponse" method="xpathNumber" />
     <pattern value="rife.test.MockResponse" method="xpathString" />
+    <pattern value="rife.engine.TomcatServer" method="scanManifest" />
   </component>
   <component name="PDMPlugin">
     <option name="skipTestSources" value="false" />
