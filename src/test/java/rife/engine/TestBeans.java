@@ -8,7 +8,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlFileInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.RetryingTest;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 import rife.tools.InnerClassException;
@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestBeans {
-    @Test
+    @RetryingTest(value=3, suspendForMs=1000)
     void testParametersBean()
     throws Exception {
         try (final var server = new TestServerRunner(new GetBeanSite())) {
@@ -137,19 +137,7 @@ public class TestBeans {
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
                 serializable_params_inputs.get(1).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne")));
 
-                try {
-                    page = page.getHtmlElementById("beanSubmit").click();
-                    Thread.sleep(500);
-                }
-                catch (IOException e1) {
-                    try {
-                        page = page.getHtmlElementById("beanSubmit").click();
-                        Thread.sleep(500);
-                    }
-                    catch (IOException e2) {
-                        page = page.getHtmlElementById("beanSubmit").click();
-                    }
-                }
+                page = page.getHtmlElementById("beanSubmit").click();
 
                 assertEquals("""
                     invalid : enum
@@ -165,7 +153,7 @@ public class TestBeans {
         }
     }
 
-    @Test
+    @RetryingTest(value=3, suspendForMs=1000)
     void testParametersBeanPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new GetBeanSite("prefix_"))) {
@@ -304,7 +292,7 @@ public class TestBeans {
         }
     }
 
-    @Test
+    @RetryingTest(value=3, suspendForMs=1000)
     void testParametersBeanFill()
     throws Exception {
         try (final var server = new TestServerRunner(new FillBeanSite())) {
@@ -449,7 +437,7 @@ public class TestBeans {
         }
     }
 
-    @Test
+    @RetryingTest(value=3, suspendForMs=1000)
     void testParametersBeanFillPrefix()
     throws Exception {
         try (final var server = new TestServerRunner(new FillBeanSite("prefix_"))) {

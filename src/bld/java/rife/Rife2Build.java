@@ -28,9 +28,9 @@ public class Rife2Build extends AbstractRife2Build {
         version = VersionNumber.parse(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
         var imagej_version = version("1.54h");
-        var jetty_version = version(12,0,10);
-        var jsoup_version =  version(1,17,2);
-        var tomcat_version = version(10,1,25);
+        var jetty_version = version(12,0,11);
+        var jsoup_version =  version(1,18,1);
+        var tomcat_version = version(10,1,26);
 
         scope(provided)
             .include(dependency("org.jsoup", "jsoup", jsoup_version))
@@ -40,6 +40,7 @@ public class Rife2Build extends AbstractRife2Build {
             .include(dependency("org.apache.tomcat.embed", "tomcat-embed-jasper", tomcat_version))
             .include(dependency("net.imagej", "ij", imagej_version));
         scope(test)
+            .include(dependency("org.junit-pioneer", "junit-pioneer", version(2,2,0)))
             .include(dependency("org.jsoup", "jsoup", jsoup_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
