@@ -16,6 +16,7 @@ import rife.tools.InputStreamUser;
 import rife.tools.SerializationUtils;
 import rife.tools.exceptions.FileUtilsErrorException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -136,7 +137,19 @@ public class TestBeans {
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
                 serializable_params_inputs.get(1).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne")));
 
-                page = page.getHtmlElementById("beanSubmit").click();
+                try {
+                    page = page.getHtmlElementById("beanSubmit").click();
+                    Thread.sleep(500);
+                }
+                catch (IOException e1) {
+                    try {
+                        page = page.getHtmlElementById("beanSubmit").click();
+                        Thread.sleep(500);
+                    }
+                    catch (IOException e2) {
+                        page = page.getHtmlElementById("beanSubmit").click();
+                    }
+                }
 
                 assertEquals("""
                     invalid : enum
@@ -263,7 +276,19 @@ public class TestBeans {
                 serializable_params_inputs.get(0).setValueAttribute("invalid");
                 serializable_params_inputs.get(1).setValueAttribute(SerializationUtils.serializeToString(new BeanImpl.SerializableParam(91, "NinetyOne")));
 
-                page = page.getHtmlElementById("beanSubmit").click();
+                try {
+                    page = page.getHtmlElementById("beanSubmit").click();
+                    Thread.sleep(500);
+                }
+                catch (IOException e1) {
+                    try {
+                        page = page.getHtmlElementById("beanSubmit").click();
+                        Thread.sleep(500);
+                    }
+                    catch (IOException e2) {
+                        page = page.getHtmlElementById("beanSubmit").click();
+                    }
+                }
 
                 assertEquals("""
                     invalid : enum
