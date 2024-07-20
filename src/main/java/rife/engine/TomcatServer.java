@@ -35,7 +35,7 @@ public class TomcatServer {
     private String hostname_ = null;
     private Tomcat tomcat_;
     private boolean isScanManifest_ = false;
-    private boolean isContext_ = false;
+    private boolean noDefaults_ = false;
     private int port_ = 8080;
 
     /**
@@ -76,14 +76,15 @@ public class TomcatServer {
     /**
      * Adds a web application to the webapps directory.
      *
-     * @param docBase   the base directory for the context, for static file
-     * @param isContext {@code true} to add as a context with no default {@code web.xml}, {@code false} otherwise
+     * @param docBase    the base directory for the context, for static file
+     * @param noDefaults {@code true} to add as a context with no defaults ({@code web.xml}, etc.),
+     *                   {@code false} otherwise
      * @return the instance of the server that's being configured
      * @see #addWebapp(String)
      * @since 1.8.1
      */
-    public TomcatServer addWebapp(String docBase, boolean isContext) {
-        isContext_ = isContext;
+    public TomcatServer addWebapp(String docBase, boolean noDefaults) {
+        noDefaults_ = noDefaults;
         docBase_ = docBase;
         return this;
     }
@@ -187,7 +188,7 @@ public class TomcatServer {
         }
 
         Context ctx;
-        if (isContext_) {
+        if (noDefaults_) {
             ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
         } else {
             ctx = tomcat_.addWebapp("", new File(docBase_).getAbsolutePath());
