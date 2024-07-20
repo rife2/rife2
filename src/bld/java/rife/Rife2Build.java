@@ -5,6 +5,7 @@
 package rife;
 
 import rife.bld.BuildCommand;
+import rife.bld.dependencies.VersionNumber;
 import rife.bld.operations.JarOperation;
 import rife.bld.operations.JavacOptions;
 import rife.bld.publish.*;
@@ -24,7 +25,7 @@ public class Rife2Build extends AbstractRife2Build {
     throws Exception {
         pkg = "rife";
         name = "RIFE2";
-        version = version(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
+        version = VersionNumber.parse(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
         var imagej_version = version("1.54h");
         var jetty_version = version(12,0,10);
