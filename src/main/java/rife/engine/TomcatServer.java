@@ -35,7 +35,7 @@ public class TomcatServer {
     private String hostname_ = null;
     private Tomcat tomcat_;
     private boolean isScanManifest_ = false;
-    private boolean noDefaults_ = false;
+    private boolean isContext_ = false;
     private int port_ = 8080;
 
     /**
@@ -76,29 +76,29 @@ public class TomcatServer {
     /**
      * Adds a web application to the webapps directory.
      *
-     * @param docBase    the base directory for the context, for static file
-     * @param noDefaults {@code true} to add as a context with no defaults ({@code web.xml}, etc.),
-     *                   {@code false} otherwise
+     * @param docBase the base directory for the context, for static file
      * @return the instance of the server that's being configured
-     * @see #addWebapp(String)
+     * @see #addContext(String) (String)
      * @since 1.8.1
      */
-    public TomcatServer addWebapp(String docBase, boolean noDefaults) {
-        noDefaults_ = noDefaults;
+    public TomcatServer addWebapp(String docBase) {
+        isContext_ = false;
         docBase_ = docBase;
         return this;
     }
 
     /**
-     * Adds a web application to the webapps directory.
+     * Adds a web application directory to the root context.
      *
      * @param docBase the base directory for the context, for static file
      * @return the instance of the server that's being configured
-     * @see #addWebapp(String, boolean)
+     * @see #addWebapp(String)
      * @since 1.7.1
      */
-    public TomcatServer addWebapp(String docBase) {
-        return addWebapp(docBase, false);
+    public TomcatServer addContext(String docBase) {
+        isContext_ = true;
+        docBase_ = docBase;
+        return this;
     }
 
 
@@ -188,7 +188,7 @@ public class TomcatServer {
         }
 
         Context ctx;
-        if (noDefaults_) {
+        if (isContext_) {
             ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
         } else {
             ctx = tomcat_.addWebapp("", new File(docBase_).getAbsolutePath());
