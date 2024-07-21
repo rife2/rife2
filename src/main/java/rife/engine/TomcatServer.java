@@ -78,8 +78,8 @@ public class TomcatServer {
      *
      * @param docBase the base directory for the context, for static file
      * @return the instance of the server that's being configured
-     * @see #addContext(String) (String)
-     * @since 1.8.1
+     * @see #addContext(String)
+     * @since 1.7.1
      */
     public TomcatServer addWebapp(String docBase) {
         isContext_ = false;
@@ -88,12 +88,12 @@ public class TomcatServer {
     }
 
     /**
-     * Adds a web application directory to the root context.
+     * Adds a web application location to the root context.
      *
      * @param docBase the base directory for the context, for static file
      * @return the instance of the server that's being configured
      * @see #addWebapp(String)
-     * @since 1.7.1
+     * @since 1.8.1
      */
     public TomcatServer addContext(String docBase) {
         isContext_ = true;
