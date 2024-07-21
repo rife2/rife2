@@ -4,6 +4,7 @@
  */
 package rife.engine;
 
+import org.apache.catalina.Context;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
@@ -34,6 +35,7 @@ public class TomcatServer {
     private String hostname_ = null;
     private Tomcat tomcat_;
     private boolean isScanManifest_ = false;
+    private boolean isContext_ = false;
     private int port_ = 8080;
 
     /**
@@ -72,16 +74,33 @@ public class TomcatServer {
     }
 
     /**
-     * Add the location of the webapp directory or WAR for the root context.
+     * Adds a web application to the webapps directory.
      *
-     * @param docBase the base directory for the context, for static file.
+     * @param docBase the base directory for the context, for static file
      * @return the instance of the server that's being configured
-     * @since 1.7.1
+     * @see #addContext(String) (String)
+     * @since 1.8.1
      */
     public TomcatServer addWebapp(String docBase) {
+        isContext_ = false;
         docBase_ = docBase;
         return this;
     }
+
+    /**
+     * Adds a web application directory to the root context.
+     *
+     * @param docBase the base directory for the context, for static file
+     * @return the instance of the server that's being configured
+     * @see #addWebapp(String)
+     * @since 1.7.1
+     */
+    public TomcatServer addContext(String docBase) {
+        isContext_ = true;
+        docBase_ = docBase;
+        return this;
+    }
+
 
     /**
      * Configures the Tomcat base directory on which all others, such as the {@code work} directory, will be derived.
@@ -168,7 +187,12 @@ public class TomcatServer {
             tomcat_.setBaseDir(new File(baseDir_).getAbsolutePath());
         }
 
-        var ctx = tomcat_.addWebapp("", new File(docBase_).getAbsolutePath());
+        Context ctx;
+        if (isContext_) {
+            ctx = tomcat_.addContext("", new File(docBase_).getAbsolutePath());
+        } else {
+            ctx = tomcat_.addWebapp("", new File(docBase_).getAbsolutePath());
+        }
 
         var servletName = "default-servlet";
         var defaultServlet = new DefaultServlet();
