@@ -28,7 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * necessary steps to keep the application running for as long as you need the
  * work to be available.
  *
- * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
+ * @rife.apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */

@@ -12,7 +12,10 @@ import rife.bld.publish.*;
 import rife.tools.FileUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.regex.Pattern;
 
@@ -57,8 +60,7 @@ public class Rife2Build extends AbstractRife2Build {
         var core_src_main_resources_templates_directory = new File(core_src_main_resources_directory, "templates");
 
         antlr4Operation
-            .sourceDirectories(List.of(new File(core_src_main_directory, "antlr")))
-            .outputDirectory(new File(buildDirectory(), "generated/rife/template/antlr"));
+            .sourceDirectories(List.of(new File(core_src_main_directory, "antlr")));
 
         precompileOperation()
             .sourceDirectories(core_src_main_resources_templates_directory)
@@ -68,6 +70,20 @@ public class Rife2Build extends AbstractRife2Build {
             .mainSourceDirectories(antlr4Operation.outputDirectory(), core_src_main_java_directory)
             .testSourceDirectories(core_src_test_java_directory)
             .compileOptions()
+                .modulePath(
+                    new File(libProvidedDirectory(), "jakarta.servlet-api-6.0.0.jar"),
+                    new File(libProvidedDirectory(), "ij-1.54h.jar"),
+                    new File(libProvidedDirectory(), "jetty-ee10-servlet-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-http-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-io-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-security-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-session-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-server-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-util-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jsoup-1.18.1.jar"),
+                    new File(libProvidedDirectory(), "slf4j-api-2.0.12.jar"),
+                    new File(libProvidedDirectory(), "tomcat-embed-core-10.1.26.jar")
+                    )
                 .debuggingInfo(JavacOptions.DebuggingInfo.ALL)
                 .addAll(List.of("-encoding", "UTF-8"));
 
@@ -120,6 +136,21 @@ public class Rife2Build extends AbstractRife2Build {
         javadocOperation()
             .sourceFiles(FileUtils.getJavaFileList(core_src_main_java_directory))
             .javadocOptions()
+                .modulePath(
+                    new File(libProvidedDirectory(), "jakarta.servlet-api-6.0.0.jar"),
+                    new File(libProvidedDirectory(), "ij-1.54h.jar"),
+                    new File(libProvidedDirectory(), "jetty-ee10-servlet-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-http-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-io-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-security-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-session-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-server-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jetty-util-12.0.11.jar"),
+                    new File(libProvidedDirectory(), "jsoup-1.18.1.jar"),
+                    new File(libProvidedDirectory(), "slf4j-api-2.0.12.jar"),
+                    new File(libProvidedDirectory(), "tomcat-embed-core-10.1.26.jar")
+                )
+                .tag("rife.apiNote", "a", "API Note:")
                 .docTitle("<a href=\"https://rife2.com\">RIFE2</a> " + version())
                 .overview(new File(srcMainJavaDirectory(), "overview.html"));
 
@@ -152,6 +183,49 @@ public class Rife2Build extends AbstractRife2Build {
                 new PublishArtifact(jarContinuationsOperation.destinationFile(), "agent-continuations", "jar"));
 
         examples = new ExamplesBuild(this);
+    }
+
+    @Override
+    public void download()
+    throws Exception {
+        super.download();
+        sanitizeTomcatEmbedCore();
+    }
+
+    private void sanitizeTomcatEmbedCore()
+    throws IOException {
+        System.out.println("Sanitizing tomcat-embed-core for Java module usage...");
+        for (var jar : FileUtils.getFileList(libProvidedDirectory(), Pattern.compile("tomcat-embed-core.*\\.jar"), null)) {
+            System.out.println("Stripping jakarta.servlet from " + jar + "...");
+            var tmp_dir = Files.createTempDirectory("tomcat-embed").toFile();
+            try {
+                var source_jar = new File(libProvidedDirectory(), jar);
+                FileUtils.unzipFile(source_jar, tmp_dir);
+                FileUtils.deleteDirectory(new File(new File(tmp_dir, "jakarta"), "servlet"));
+
+                var existing_manifest = new File(new File(tmp_dir, "META-INF"), "MANIFEST.MF");
+                existing_manifest.delete();
+                source_jar.delete();
+                new JarOperation()
+                    .manifestAttributes(Map.of(
+                        Attributes.Name.MANIFEST_VERSION, "1.0"))
+                    .sourceDirectories(tmp_dir)
+                    .destinationDirectory(libProvidedDirectory())
+                    .destinationFileName(jar)
+                    .execute();
+            }
+            finally {
+                FileUtils.deleteDirectory(tmp_dir);
+            }
+        }
+    }
+
+    @Override
+    public void javadoc()
+    throws Exception {
+        javadocOperation().executeOnce(() -> javadocOperation()
+            .fromProject(this)
+            .sourceFiles(FileUtils.getJavaFileList(buildGeneratedDir)));
     }
 
     final JarOperation jarAgentOperation = new JarOperation();

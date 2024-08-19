@@ -23,6 +23,6 @@
     <orderEntry type="library" name="examples" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="runtime" level="project" />
     <orderEntry type="library" scope="TEST" name="test" level="project" />
-    <orderEntry type="module" module-name="framework" />
+    <orderEntry type="module" module-name="rife" />
   </component>
 </module>

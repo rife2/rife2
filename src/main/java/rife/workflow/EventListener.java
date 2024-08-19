@@ -10,7 +10,7 @@ package rife.workflow;
  * <p>Event listeners have to be registered through
  * {@link Workflow#addListener}.
  *
- * @apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
+ * @rife.apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */

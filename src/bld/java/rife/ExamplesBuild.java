@@ -14,7 +14,7 @@ public class ExamplesBuild extends WebProject {
     public ExamplesBuild(Rife2Build mainBuild) {
         pkg = "rife";
         name = "Examples";
-        mainClass = "rife.HelloAll";
+        mainClass = "rife.examples.HelloAll";
         version = version(1,0,0);
 
         javaRelease = 17;
@@ -28,7 +28,9 @@ public class ExamplesBuild extends WebProject {
             .templateTypes(HTML);
         compileOperation()
             .compileMainClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
-            .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath());
+            .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
+            .compileOptions()
+                .modulePath(mainBuild.buildMainDirectory());
         runOperation()
             .classpath(mainBuild.testsBadgeOperation.classpath())
             .classpath(mainBuild.buildMainDirectory().getAbsolutePath())
