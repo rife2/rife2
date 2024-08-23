@@ -173,18 +173,21 @@ public class Rife2Build extends AbstractRife2Build {
             try {
                 var source_jar = new File(libProvidedModulesDirectory(), jar);
                 FileUtils.unzipFile(source_jar, tmp_dir);
-                FileUtils.deleteDirectory(new File(new File(tmp_dir, "jakarta"), "servlet"));
+                var servlet_dir = new File(new File(tmp_dir, "jakarta"), "servlet");
+                if (servlet_dir.exists()) {
+                    FileUtils.deleteDirectory(servlet_dir);
 
-                var existing_manifest = new File(new File(tmp_dir, "META-INF"), "MANIFEST.MF");
-                existing_manifest.delete();
-                source_jar.delete();
-                new JarOperation()
-                    .manifestAttributes(Map.of(
-                        Attributes.Name.MANIFEST_VERSION, "1.0"))
-                    .sourceDirectories(tmp_dir)
-                    .destinationDirectory(libProvidedModulesDirectory())
-                    .destinationFileName(jar)
-                    .execute();
+                    var existing_manifest = new File(new File(tmp_dir, "META-INF"), "MANIFEST.MF");
+                    existing_manifest.delete();
+                    source_jar.delete();
+                    new JarOperation()
+                        .manifestAttributes(Map.of(
+                            Attributes.Name.MANIFEST_VERSION, "1.0"))
+                        .sourceDirectories(tmp_dir)
+                        .destinationDirectory(libProvidedModulesDirectory())
+                        .destinationFileName(jar)
+                        .execute();
+                }
             }
             finally {
                 FileUtils.deleteDirectory(tmp_dir);
