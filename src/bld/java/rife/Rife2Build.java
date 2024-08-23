@@ -174,7 +174,10 @@ public class Rife2Build extends AbstractRife2Build {
                 var source_jar = new File(libProvidedModulesDirectory(), jar);
                 FileUtils.unzipFile(source_jar, tmp_dir);
                 var servlet_dir = new File(new File(tmp_dir, "jakarta"), "servlet");
-                if (servlet_dir.exists()) {
+                if (!servlet_dir.exists()) {
+                    System.out.println("Already sanitized " + jar);
+                }
+                else {
                     FileUtils.deleteDirectory(servlet_dir);
 
                     var existing_manifest = new File(new File(tmp_dir, "META-INF"), "MANIFEST.MF");
