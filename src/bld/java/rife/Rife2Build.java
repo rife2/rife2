@@ -198,14 +198,6 @@ public class Rife2Build extends AbstractRife2Build {
         }
     }
 
-    @Override
-    public void javadoc()
-    throws Exception {
-        javadocOperation().executeOnce(() -> javadocOperation()
-            .fromProject(this)
-            .sourceFiles(FileUtils.getJavaFileList(buildGeneratedDir)));
-    }
-
     final JarOperation jarAgentOperation = new JarOperation();
     @BuildCommand(value = "jar-agent", summary = "Creates the agent jar archive")
     public void jarAgent()
