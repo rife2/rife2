@@ -30,9 +30,9 @@ public class Rife2Build extends AbstractRife2Build {
         name = "RIFE2";
         version = VersionNumber.parse(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
-        var imagej_version = version("1.54h");
-        var jetty_version = version(12,0,11);
-        var jsoup_version =  version(1,18,1);
+        var imagej_version = version("1.54j");
+        var jetty_version = version(12,0,12);
+        var jsoup_version = version(1,18,1);
         var tomcat_version = version(10,1,26);
 
         scope(provided)
@@ -162,6 +162,7 @@ public class Rife2Build extends AbstractRife2Build {
     throws Exception {
         super.download();
         sanitizeTomcatEmbedCore();
+        removeSourceJarsThatConfuseIntellijIDEA();
     }
 
     private void sanitizeTomcatEmbedCore()
@@ -195,6 +196,13 @@ public class Rife2Build extends AbstractRife2Build {
             finally {
                 FileUtils.deleteDirectory(tmp_dir);
             }
+        }
+    }
+
+    private void removeSourceJarsThatConfuseIntellijIDEA() {
+        for (var jar : FileUtils.getFileList(libProvidedModulesDirectory(), Pattern.compile("ij-.*-sources\\.jar|tomcat-embed-core.*-sources\\.jar"), null)) {
+            System.out.println("Removing " + libProvidedModulesDirectory() + "/" + jar + "...");
+            new File(libProvidedModulesDirectory(), jar).delete();
         }
     }
 
