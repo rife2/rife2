@@ -30,7 +30,7 @@ public class Rife2Build extends AbstractRife2Build {
         name = "RIFE2";
         version = VersionNumber.parse(FileUtils.readString(new File(srcMainResourcesDirectory(), "RIFE_VERSION")));
 
-        var imagej_version = version("1.54j");
+        var imagej_version = version("1.54h");
         var jetty_version = version(12,0,12);
         var jsoup_version = version(1,18,1);
         var tomcat_version = version(10,1,26);
