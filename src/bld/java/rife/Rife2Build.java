@@ -39,15 +39,15 @@ public class Rife2Build extends AbstractRife2Build {
             .include(module("org.jsoup", "jsoup", jsoup_version))
             .include(module("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
             .include(module("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
-            .include(module("org.apache.tomcat.embed", "tomcat-embed-core", tomcat_version))
+            .include(module("org.apache.tomcat.embed", "tomcat-embed-core", tomcat_version).excludeSources())
             .include(module("org.apache.tomcat.embed", "tomcat-embed-jasper", tomcat_version))
-            .include(module("net.imagej", "ij", imagej_version));
+            .include(module("net.imagej", "ij", imagej_version).excludeSources());
         scope(test)
             .include(dependency("org.junit-pioneer", "junit-pioneer", version(2,2,0)))
             .include(dependency("org.jsoup", "jsoup", jsoup_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
-            .include(dependency("net.imagej", "ij", imagej_version));
+            .include(dependency("net.imagej", "ij", imagej_version).excludeSources());
 
         var core_directory = new File(workDirectory(), "core");
         var core_src_directory = new File(core_directory, "src");
@@ -162,7 +162,6 @@ public class Rife2Build extends AbstractRife2Build {
     throws Exception {
         super.download();
         sanitizeTomcatEmbedCore();
-        removeSourceJarsThatConfuseIntellijIDEA();
     }
 
     private void sanitizeTomcatEmbedCore()
@@ -196,13 +195,6 @@ public class Rife2Build extends AbstractRife2Build {
             finally {
                 FileUtils.deleteDirectory(tmp_dir);
             }
-        }
-    }
-
-    private void removeSourceJarsThatConfuseIntellijIDEA() {
-        for (var jar : FileUtils.getFileList(libProvidedModulesDirectory(), Pattern.compile("ij-.*-sources\\.jar|tomcat-embed-core.*-sources\\.jar"), null)) {
-            System.out.println("Removing " + libProvidedModulesDirectory() + "/" + jar + "...");
-            new File(libProvidedModulesDirectory(), jar).delete();
         }
     }
 
