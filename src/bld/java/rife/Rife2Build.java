@@ -33,7 +33,7 @@ public class Rife2Build extends AbstractRife2Build {
         var imagej_version = version("1.54h");
         var jetty_version = version(12,0,12);
         var jsoup_version = version(1,18,1);
-        var tomcat_version = version(10,1,26);
+        var tomcat_version = version(10,1,28);
 
         scope(provided)
             .include(module("org.jsoup", "jsoup", jsoup_version))
@@ -179,6 +179,9 @@ public class Rife2Build extends AbstractRife2Build {
                 }
                 else {
                     FileUtils.deleteDirectory(servlet_dir);
+
+                    var module_info = new File(tmp_dir,"module-info.class");
+                    module_info.delete();
 
                     var existing_manifest = new File(new File(tmp_dir, "META-INF"), "MANIFEST.MF");
                     existing_manifest.delete();
