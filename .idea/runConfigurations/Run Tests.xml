@@ -6,7 +6,7 @@
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="package" />
-    <option name="VM_PARAMETERS" value="-ea -javaagent:build/dist/rife2-1.9.0-SNAPSHOT-agent.jar" />
+    <option name="VM_PARAMETERS" value="-ea -javaagent:build/dist/rife2-1.9.0-agent.jar" />
     <dir value="$PROJECT_DIR$/src/test/java" />
     <method v="2">
       <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_bld grammar agent" />
