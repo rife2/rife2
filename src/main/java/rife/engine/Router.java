@@ -991,6 +991,31 @@ public class Router {
     }
 
     /**
+     * Registers a class element as a route for HTTP method with a specific path and pathinfo handling.
+     *
+     * @param path         the path of the route
+     * @param pathInfo     the pathinfo handling to use
+     * @param methods      the HTTP methods
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route route(String path, PathInfoHandling pathInfo, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, methods, path, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for HTTP method with a specific path handling.
+     *
+     * @param path         the path of the route
+     * @param methods      the HTTP methods
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route route(String path, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, methods, path, null, elementClass));
+    }
+
+    /**
      * Registers an element supplier as a route for any HTTP method,
      * the path will be derived from the uncapitalized shortened class name.
      *
@@ -1075,7 +1100,7 @@ public class Router {
     }
 
     /**
-     * Registers an element supplier as a route for HTTP methods with a specific path.
+     * Registers an element supplier as a route for HTTP methods with a specific path handling.
      *
      * @param path            the path of the route
      * @param methods         the HTTP methods
