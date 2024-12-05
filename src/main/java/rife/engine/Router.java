@@ -1038,31 +1038,6 @@ public class Router {
     }
 
     /**
-     * Registers an element supplier as a route for HTTP methods with a specific path and pathinfo handling.
-     *
-     * @param path            the path of the route
-     * @param pathInfo        the pathinfo handling to use
-     * @param methods         the HTTP methods
-     * @param elementSupplier the element to register a route for
-     * @since 1.0
-     */
-    public final Route route(String path, PathInfoHandling pathInfo, RequestMethod[] methods, Supplier<? extends Element> elementSupplier) {
-        return registerRoute(new RouteSupplier(this, methods, path, pathInfo, elementSupplier));
-    }
-
-    /**
-     * Registers an element supplier as a route for HTTP methods with a specific path.
-     *
-     * @param path            the path of the route
-     * @param methods         the HTTP methods
-     * @param elementSupplier the element to register a route for
-     * @since 1.0
-     */
-    public final Route route(String path, RequestMethod[] methods, Supplier<? extends Element> elementSupplier) {
-        return registerRoute(new RouteSupplier(this, methods, path, elementSupplier));
-    }
-
-    /**
      * Registers a lambda element as a route for any HTTP method with a specific path.
      *
      * @param path    the path of the route
