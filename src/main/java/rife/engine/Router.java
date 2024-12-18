@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2024 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.engine;
@@ -354,6 +354,242 @@ public class Router {
     }
 
     /**
+     * Registers a class element as a route for the HEAD method,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.HEAD}, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD method with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.HEAD}, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD method with a specific path.
+     *
+     * @param path         the path of the route
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.HEAD}, path, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD method with a specific path
+     * and pathinfo handling.
+     *
+     * @param path         the path of the route
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.HEAD}, path, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD method,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.HEAD}, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD method with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.HEAD}, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD method with a specific path.
+     *
+     * @param path            the path of the route
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(String path, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.HEAD}, path, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD method with a specific path
+     * and pathinfo handling.
+     *
+     * @param path            the path of the route
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.
+     */
+    public final Route head(String path, PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.HEAD}, path, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD method with a specific path.
+     *
+     * @param path    the path of the route
+     * @param element the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(String path, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.HEAD}, path, element));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD method with a specific path
+     * and pathinfo handling.
+     *
+     * @param path     the path of the route
+     * @param pathInfo the pathinfo handling to use
+     * @param element  the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route head(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.HEAD}, path, pathInfo, element));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and GET methods,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and GET methods with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and GET methods with a specific path.
+     *
+     * @param path         the path of the route
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and GET methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path         the path of the route
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and GET methods,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and GET methods with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and GET methods with a specific path.
+     *
+     * @param path            the path of the route
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(String path, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and GET methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path            the path of the route
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.
+     */
+    public final Route headGet(String path, PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD and GET methods with a specific path.
+     *
+     * @param path    the path of the route
+     * @param element the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(String path, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, element));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD and GET methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path     the path of the route
+     * @param pathInfo the pathinfo handling to use
+     * @param element  the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headGet(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, pathInfo, element));
+    }
+
+    /**
      * Registers a class element as a route for the POST method,
      * the path will be derived from the uncapitalized shortened class name.
      *
@@ -472,6 +708,124 @@ public class Router {
     }
 
     /**
+     * Registers a class element as a route for the HEAD and POST methods,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and POST methods with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and POST methods with a specific path.
+     *
+     * @param path         the path of the route
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, path, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD and POST methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path         the path of the route
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, path, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and POST methods,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and POST methods with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and POST methods with a specific path.
+     *
+     * @param path            the path of the route
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(String path, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, path, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD and POST methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path            the path of the route
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(String path, PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, path, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD and POST methods with a specific path.
+     *
+     * @param path    the path of the route
+     * @param element the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(String path, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, path, element));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD and POST methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path     the path of the route
+     * @param pathInfo the pathinfo handling to use
+     * @param element  the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route headPost(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.POST, RequestMethod.HEAD}, path, pathInfo, element));
+    }
+
+    /**
      * Registers a class element as a route for the GET and POST method,
      * the path will be derived from the uncapitalized shortened class name.
      *
@@ -587,6 +941,124 @@ public class Router {
      */
     public final Route getPost(String path, PathInfoHandling pathInfo, Element element) {
         return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST}, path, pathInfo, element));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD, GET and POST methods,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementClass the element to register a route for
+     * @since 1.0
+     */
+    public final Route headGetPost(Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD, GET and POST methods with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.0
+     */
+    public final Route headGetPost(PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD, GET and POST methods with a specific path.
+     *
+     * @param path         the path of the route
+     * @param elementClass the element to register a route for
+     * @since 1.0
+     */
+    public final Route headGetPost(String path, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, path, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for the HEAD, GET and POST methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path         the path of the route
+     * @param pathInfo     the pathinfo handling to use
+     * @param elementClass the element to register a route for
+     * @since 1.0
+     */
+    public final Route headGetPost(String path, PathInfoHandling pathInfo, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, path, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD, GET and POST methods,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param elementSupplier the element to register a route for
+     * @since 1.1
+     */
+    public final Route headGetPost(Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD, GET and POST methods with a pathinfo handling,
+     * the path will be derived from the uncapitalized shortened class name.
+     *
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.1
+     */
+    public final Route headGetPost(PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD, GET and POST methods with a specific path.
+     *
+     * @param path            the path of the route
+     * @param elementSupplier the element to register a route for
+     * @since 1.1
+     */
+    public final Route headGetPost(String path, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, path, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for the HEAD, GET and POST methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path            the path of the route
+     * @param pathInfo        the pathinfo handling to use
+     * @param elementSupplier the element to register a route for
+     * @since 1.1
+     */
+    public final Route headGetPost(String path, PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, path, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD, GET and POST methods with a specific path.
+     *
+     * @param path    the path of the route
+     * @param element the element to register a route for
+     * @since 1.0
+     */
+    public final Route headGetPost(String path, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, path, element));
+    }
+
+    /**
+     * Registers a lambda element as a route for the HEAD, GET and POST methods with a specific path
+     * and pathinfo handling.
+     *
+     * @param path     the path of the route
+     * @param pathInfo the pathinfo handling to use
+     * @param element  the element to register a route for
+     * @since 1.0
+     */
+    public final Route headGetPost(String path, PathInfoHandling pathInfo, Element element) {
+        return registerRoute(new RouteInstance(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD}, path, pathInfo, element));
     }
 
     /**
@@ -991,6 +1463,31 @@ public class Router {
     }
 
     /**
+     * Registers a class element as a route for HTTP method with a specific path and pathinfo handling.
+     *
+     * @param path         the path of the route
+     * @param pathInfo     the pathinfo handling to use
+     * @param methods      the HTTP methods
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route route(String path, PathInfoHandling pathInfo, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, methods, path, pathInfo, elementClass));
+    }
+
+    /**
+     * Registers a class element as a route for HTTP method with a specific path handling.
+     *
+     * @param path         the path of the route
+     * @param methods      the HTTP methods
+     * @param elementClass the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route route(String path, RequestMethod[] methods, Class<? extends Element> elementClass) {
+        return registerRoute(new RouteClass(this, methods, path, null, elementClass));
+    }
+
+    /**
      * Registers an element supplier as a route for any HTTP method,
      * the path will be derived from the uncapitalized shortened class name.
      *
@@ -1059,6 +1556,31 @@ public class Router {
      */
     public final Route route(String path, PathInfoHandling pathInfo, Element element) {
         return registerRoute(new RouteInstance(this, null, path, pathInfo, element));
+    }
+
+    /**
+     * Registers an element supplier as a route for HTTP methods with a specific path and pathinfo handling.
+     *
+     * @param path            the path of the route
+     * @param pathInfo        the pathinfo handling to use
+     * @param methods         the HTTP methods
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route route(String path, PathInfoHandling pathInfo, RequestMethod[] methods, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, methods, path, pathInfo, elementSupplier));
+    }
+
+    /**
+     * Registers an element supplier as a route for HTTP methods with a specific path handling.
+     *
+     * @param path            the path of the route
+     * @param methods         the HTTP methods
+     * @param elementSupplier the element to register a route for
+     * @since 1.9.1
+     */
+    public final Route route(String path, RequestMethod[] methods, Supplier<? extends Element> elementSupplier) {
+        return registerRoute(new RouteSupplier(this, methods, path, elementSupplier));
     }
 
     final Route registerRoute(Route route) {

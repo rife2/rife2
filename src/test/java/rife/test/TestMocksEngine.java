@@ -1,5 +1,5 @@
 /*
- * Copyright 2001-2023 Geert Bevin (gbevin[remove] at uwyn dot com)
+ * Copyright 2001-2024 Geert Bevin (gbevin[remove] at uwyn dot com)
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 package rife.test;
@@ -48,6 +48,105 @@ public class TestMocksEngine {
     }
 
     @Test
+    void testSimpleHead() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = head("/simple/plain", c -> c.setContentType("text/plain"));
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/plain",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/plain");
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    void testSimpleHeadGet() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGet("/simple/plain", c -> {
+                    c.setContentType("text/plain");
+                    if (c.request().getMethod() != RequestMethod.HEAD) {
+                        c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                    }
+                });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/plain");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/plain",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("", response.getText());
+    }
+
+    @Test
+    void testSimpleHeadPost() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headPost("/simple/plain", c -> {
+                    c.setContentType("text/plain");
+                    if (c.request().getMethod() != RequestMethod.HEAD) {
+                        c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                    }
+                });
+            }
+        });
+
+        var response = conversation.doRequest("http://localhost/simple/plain",
+            new MockRequest().method(RequestMethod.POST));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/plain",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("", response.getText());
+    }
+
+    @Test
+    void testSimpleHeadGetPost() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGetPost("/simple/plain", c -> {
+                    c.setContentType("text/plain");
+                    if (c.request().getMethod() != RequestMethod.HEAD) {
+                        c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                    }
+                });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/plain");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/plain",
+            new MockRequest().method(RequestMethod.POST));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/plain",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("", response.getText());
+    }
+
+    @Test
     void testSimplePathInfo() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
@@ -82,6 +181,81 @@ public class TestMocksEngine {
     }
 
     @Test
+    void testSimpleHeadGetPathInfo() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGet("/simple/pathinfo", PathInfoHandling.CAPTURE,
+                    c -> {
+                        if (c.request().getMethod() != RequestMethod.HEAD) {
+                            c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                        }
+                    });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/pathinfo/some/path");
+        assertEquals(200, response.getStatus());
+        assertEquals("Just some text 127.0.0.1:some/path", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/some/path",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+    }
+
+    @Test
+    void testSimpleHeadPostPathInfo() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headPost("/simple/pathinfo", PathInfoHandling.CAPTURE,
+                    c -> {
+                        if (c.request().getMethod() != RequestMethod.HEAD) {
+                            c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                        }
+                    });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/pathinfo/some/path",
+            new MockRequest().method(RequestMethod.POST));
+        assertEquals(200, response.getStatus());
+        assertEquals("Just some text 127.0.0.1:some/path", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/some/path",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+    }
+
+    @Test
+    void testSimpleHeadGetPostPathInfo() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGetPost("/simple/pathinfo", PathInfoHandling.CAPTURE,
+                    c -> {
+                        if (c.request().getMethod() != RequestMethod.HEAD) {
+                            c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                        }
+                    });
+            }
+        });
+
+        MockResponse response = conversation.doRequest("http://localhost/simple/pathinfo/some/path");
+        assertEquals(200, response.getStatus());
+        assertEquals("Just some text 127.0.0.1:some/path", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/some/path",
+            new MockRequest().method(RequestMethod.POST));
+        assertEquals(200, response.getStatus());
+        assertEquals("Just some text 127.0.0.1:some/path", response.getText());
+
+        response = conversation.doRequest("http://localhost/simple/pathinfo/some/path",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+    }
+
+    @Test
     void testPathInfoMapping() {
         var conversation = new MockConversation(new Site() {
             public void setup() {
@@ -99,6 +273,105 @@ public class TestMocksEngine {
         assertEquals(200, response.getStatus());
         assertEquals("text/html; charset=UTF-8", response.getContentType());
         assertEquals("Just some text 127.0.0.1:text/val1/x4321:val1:4321", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/ddd");
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    void testHeadGetPathInfoMapping() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGet("/pathinfo/map", PathInfoHandling.MAP(m ->
+                        m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")),
+                    c -> {
+                        c.setContentType("text/html");
+                        if (c.request().getMethod() != RequestMethod.HEAD) {
+                            c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                            c.print(":" + c.parameter("param1"));
+                            c.print(":" + c.parameter("param2"));
+                        }
+                    });
+            }
+        });
+
+        var response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/val1/x4321:val1:4321", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/ddd");
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    void testHeadPostPathInfoMapping() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGetPost("/pathinfo/map", PathInfoHandling.MAP(m ->
+                        m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")),
+                    c -> {
+                        c.setContentType("text/html");
+                        if (c.request().getMethod() != RequestMethod.HEAD) {
+                            c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                            c.print(":" + c.parameter("param1"));
+                            c.print(":" + c.parameter("param2"));
+                        }
+                    });
+            }
+        });
+
+        var response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321",
+            new MockRequest().method(RequestMethod.POST));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/val1/x4321:val1:4321", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/ddd");
+        assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    void testHeadGetPostPathInfoMapping() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                var ignore = headGetPost("/pathinfo/map", PathInfoHandling.MAP(
+                        m -> m.t("text").s().p("param1").s().t("x").p("param2", "\\d+")),
+                    c -> {
+                        if (c.request().getMethod() != RequestMethod.HEAD) {
+                            c.print("Just some text " + c.remoteAddr() + ":" + c.pathInfo());
+                            c.print(":" + c.parameter("param1"));
+                            c.print(":" + c.parameter("param2"));
+                        }
+                    });
+            }
+        });
+
+        var response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321");
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/val1/x4321:val1:4321", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321",
+            new MockRequest().method(RequestMethod.POST));
+        assertEquals(200, response.getStatus());
+        assertEquals("text/html; charset=UTF-8", response.getContentType());
+        assertEquals("Just some text 127.0.0.1:text/val1/x4321:val1:4321", response.getText());
+
+        response = conversation.doRequest("http://localhost/pathinfo/map/text/val1/x4321",
+            new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
 
         response = conversation.doRequest("http://localhost/pathinfo/map/ddd");
         assertEquals(404, response.getStatus());
@@ -226,8 +499,8 @@ public class TestMocksEngine {
         var response = conversation.doRequest("/cookies1");
 
         // check if the correct cookies were returned
-        assertEquals(conversation.getCookie("cookie3").getValue(), "this is the first cookie");
-        assertEquals(conversation.getCookie("cookie4").getValue(), "this is the second cookie");
+        assertEquals("this is the first cookie", conversation.getCookie("cookie3").getValue());
+        assertEquals("this is the second cookie", conversation.getCookie("cookie4").getValue());
 
         // new page with cookie context
         conversation.cookie("cookie4", "this is the fourth cookie");
@@ -266,8 +539,8 @@ public class TestMocksEngine {
             }
         });
 
-        assertEquals(conversation.doRequest("/dynamiccontenttype?switch=text").getContentType(), "text/plain; charset=UTF-8");
-        assertEquals(conversation.doRequest("/dynamiccontenttype?switch=html").getContentType(), "text/html; charset=UTF-8");
+        assertEquals("text/plain; charset=UTF-8", conversation.doRequest("/dynamiccontenttype?switch=text").getContentType());
+        assertEquals("text/html; charset=UTF-8", conversation.doRequest("/dynamiccontenttype?switch=html").getContentType());
     }
 
     @Test
