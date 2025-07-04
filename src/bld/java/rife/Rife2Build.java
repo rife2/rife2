@@ -32,7 +32,7 @@ public class Rife2Build extends AbstractRife2Build {
 
         var imagej_version = version("1.54p");
         var jetty_version = version(12,0,21);
-        var jsoup_version = version(1,20,1);
+        var jsoup_version = version(1,21,1);
         var tomcat_version = version(11,0,7);
 
         scope(provided)
