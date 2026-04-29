@@ -2,7 +2,7 @@
 [![Java](https://img.shields.io/badge/java-17%2B-blue)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![bld](https://img.shields.io/badge/2.3.0-FA9052?label=bld&labelColor=2392FF)](https://rife2.com/bld)
 [![Release](https://img.shields.io/github/release/rife2/rife2.svg)](https://github.com/rife2/rife2/releases/latest)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.uwyn.rife2/rife2/badge.svg?color=blue)](https://maven-badges.herokuapp.com/maven-central/com.uwyn.rife2/rife2)
+[![Maven Central](https://img.shields.io/maven-central/v/com.uwyn.rife2/rife2)](https://central.sonatype.com/artifact/com.uwyn.rife2/rife2)
 [![GitHub Snapshot](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fcom%2Fuwyn%2Frife2%2Frife2%2Fmaven-metadata.xml)](https://github.com/rife2/rife2/packages/2214743/versions)
 [![bld-ci](https://github.com/rife2/rife2/actions/workflows/bld.yml/badge.svg)](https://github.com/rife2/rife2/actions/workflows/bld.yml)
 [![Tests](https://rife2.com/tests-badge/badge/com.uwyn.rife2/rife2)](https://github.com/rife2/rife2/actions/workflows/bld.yml)
