@@ -114,11 +114,16 @@ jobs:
         run: ./bld clean compile
 
       - name: Run tests
+        id: tests
         run: >-
           ./bld test
           -Dtest.postgres=true -Dtest.mysql=true -Dtest.mariadb=true -Dtest.oracle=true -Dtest.oracle-free=true
           -DtestsBadgeUrl=https://rife2.com/tests-badge/update/com.uwyn.rife2/rife2
           -DtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}
+
+      - name: Run reporter
+        if: always() && steps.tests.outcome == 'failure'
+        run: ${{ matrix.bld-cmd }} --offline --offline reporter --all
 
   build-macos:
     runs-on: macos-latest
@@ -152,8 +157,13 @@ jobs:
         run: ./bld clean compile
 
       - name: Run tests
+        id: tests
         run: >-
           ./bld test
+
+      - name: Run reporter
+        if: always() && steps.tests.outcome == 'failure'
+        run: ${{ matrix.bld-cmd }} --offline --offline reporter --all
 
   build-windows:
     runs-on: windows-latest
@@ -190,5 +200,10 @@ jobs:
         run: .\bld.bat clean compile
 
       - name: Run tests
+        id: tests
         run: >-
           .\bld.bat test
+
+      - name: Run reporter
+        if: always() && steps.tests.outcome == 'failure'
+        run: .\bld --offline reporter --all
