@@ -9,7 +9,9 @@ import rife.continuations.CloneableContinuable;
 import rife.continuations.ContinuationConfigInstrument;
 import rife.continuations.basic.BasicContinuableRunner;
 import rife.continuations.basic.CallTargetRetriever;
+import rife.continuations.exceptions.ContinuationsNotActiveException;
 import rife.ioc.HierarchicalProperties;
+import rife.tools.ExceptionUtils;
 import rife.workflow.config.ContinuationInstrument;
 
 import java.util.HashSet;
@@ -20,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 /**
  * Runs work and dispatches events to work that is paused.
@@ -41,6 +44,7 @@ public class Workflow {
     private final ConcurrentMap<Object, Set<String>> eventsMapping_;
     private final ConcurrentMap<Object, Queue<Event>> pendingEvents_;
     private final Set<EventListener> listeners_;
+    private final Set<ErrorListener> errorListeners_;
     private final Lock workLock_ = new ReentrantLock();
     private final Condition workFinished_ = workLock_.newCondition();
     private final Condition workPaused_ = workLock_.newCondition();
@@ -103,6 +107,7 @@ public class Workflow {
         pendingEvents_ = new ConcurrentHashMap<>();
         workExecutor_ = executor;
         listeners_ = new CopyOnWriteArraySet<>();
+        errorListeners_ = new CopyOnWriteArraySet<>();
     }
 
     /**
@@ -127,11 +132,11 @@ public class Workflow {
         workExecutor_.submit(() -> {
             try {
                 runner_.start(klass);
-
+            } catch (Throwable e) {
+                reportWorkError("of class " + klass.getName(), e);
+            } finally {
                 activeWorkAndPauseCount_.decrementAndGet();
                 signalWhenAllWorkFinished();
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
             }
         });
 
@@ -150,11 +155,11 @@ public class Workflow {
         workExecutor_.submit(() -> {
             try {
                 runner_.start(work);
-
+            } catch (Throwable e) {
+                reportWorkError("of class " + work.getClass().getName(), e);
+            } finally {
                 activeWorkAndPauseCount_.decrementAndGet();
                 signalWhenAllWorkFinished();
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
             }
         });
 
@@ -288,19 +293,26 @@ public class Workflow {
 
     /**
      * Causes the calling thread to wait until work is paused for events.
+     * <p>This method also returns when no active work remains that could
+     * still pause, for instance when all work has finished or has failed
+     * with an exception. The returned value indicates which of the two
+     * situations occurred.
      *
+     * @return {@code true} when work is paused for events; or
+     * <p>{@code false} when no active work remains that could still pause
      * @throws InterruptedException when the current thread is interrupted
      * @since 1.0
      */
-    public void waitForPausedWork()
+    public boolean waitForPausedWork()
     throws InterruptedException {
         workLock_.lock();
         try {
-            if (activePauseCount_.get() > 0) {
-                return;
+            while (activePauseCount_.get() == 0 &&
+                   activeWorkAndPauseCount_.get() != 0) {
+                workPaused_.await();
             }
 
-            workPaused_.await();
+            return activePauseCount_.get() > 0;
         } finally {
             workLock_.unlock();
         }
@@ -355,11 +367,83 @@ public class Workflow {
         listeners_.remove(listener);
     }
 
+    /**
+     * Adds a new error listener that will be notified when work fails with
+     * an exception.
+     * <p>When no error listeners are registered, work failures are logged
+     * to the {@code rife.workflow} logger instead, so that they never pass
+     * silently.
+     *
+     * @param listener the error listener that will be added
+     * @see #removeErrorListener
+     * @since 1.10
+     */
+    public void addErrorListener(final ErrorListener listener) {
+        if (null == listener) {
+            return;
+        }
+        errorListeners_.add(listener);
+    }
+
+    /**
+     * Removes an error listener.
+     *
+     * @param listener the error listener that will be removed
+     * @see #addErrorListener
+     * @since 1.10
+     */
+    public void removeErrorListener(final ErrorListener listener) {
+        if (null == listener) {
+            return;
+        }
+
+        errorListeners_.remove(listener);
+    }
+
+    private void reportWorkError(String description, Throwable e) {
+        var message = new StringBuilder("Error while executing work ");
+        message.append(description);
+        if (isCausedByContinuationsNotActive(e)) {
+            message.append("""
+                ; the work class hasn't been instrumented for continuations, \
+                ensure that the RIFE2 agent is being used \
+                (-javaagent:rife2-[version]-agent.jar) or that the class was \
+                instrumented at build time, note that classes inside rife.* \
+                packages are excluded from agent instrumentation""");
+        }
+
+        var error = new WorkErrorException(message.toString(), e);
+        if (errorListeners_.isEmpty()) {
+            Logger.getLogger("rife.workflow").severe(ExceptionUtils.getExceptionStackTrace(error));
+        } else {
+            for (var listener : errorListeners_) {
+                try {
+                    listener.errorOccurred(error);
+                } catch (Throwable t) {
+                    Logger.getLogger("rife.workflow").severe(ExceptionUtils.getExceptionStackTrace(t));
+                }
+            }
+        }
+    }
+
+    private static boolean isCausedByContinuationsNotActive(Throwable e) {
+        while (e != null) {
+            if (e instanceof ContinuationsNotActiveException) {
+                return true;
+            }
+            e = e.getCause();
+        }
+        return false;
+    }
+
     private void signalWhenAllWorkFinished() {
         workLock_.lock();
         try {
             if (activeWorkAndPauseCount_.get() == 0) {
                 workFinished_.signalAll();
+                // also wake up threads that are waiting for work to pause,
+                // since no work remains that could still pause
+                workPaused_.signalAll();
             }
         } finally {
             workLock_.unlock();
@@ -381,11 +465,11 @@ public class Workflow {
         workExecutor_.submit(() -> {
             try {
                 runner_.answer(id, callAnswer);
-
+            } catch (Throwable e) {
+                reportWorkError("that was resumed for an event", e);
+            } finally {
                 activeWorkAndPauseCount_.decrementAndGet();
                 signalWhenAllWorkFinished();
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
             }
         });
     }
