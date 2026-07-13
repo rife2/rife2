@@ -441,7 +441,7 @@ public class Router {
      * @param path            the path of the route
      * @param pathInfo        the pathinfo handling to use
      * @param elementSupplier the element to register a route for
-     * @since 1.
+     * @since 1.9.1
      */
     public final Route head(String path, PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
         return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.HEAD}, path, pathInfo, elementSupplier));
@@ -559,7 +559,7 @@ public class Router {
      * @param path            the path of the route
      * @param pathInfo        the pathinfo handling to use
      * @param elementSupplier the element to register a route for
-     * @since 1.
+     * @since 1.9.1
      */
     public final Route headGet(String path, PathInfoHandling pathInfo, Supplier<? extends Element> elementSupplier) {
         return registerRoute(new RouteSupplier(this, new RequestMethod[]{RequestMethod.GET, RequestMethod.HEAD}, path, pathInfo, elementSupplier));
