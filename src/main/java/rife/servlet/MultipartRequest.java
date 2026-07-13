@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import rife.config.RifeConfig;
 import rife.engine.UploadedFile;
 import rife.engine.exceptions.*;
+import rife.tools.ArrayUtils;
+import rife.tools.StringUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -47,7 +49,12 @@ class MultipartRequest {
         if (null == request) throw new IllegalArgumentException("request can't be null");
 
         request_ = request;
-        parameters_ = new LinkedHashMap<>(request.getParameterMap());
+        // Servlet 6.1 containers (Jakarta EE 11) process the multipart body themselves
+        // when the request parameters are accessed, either consuming the input stream
+        // or throwing an exception when no multipart configuration is present.
+        // Since only the query string parameters are needed at this point, parse them
+        // directly without touching the container's parameter API.
+        parameters_ = extractQueryParameters(request.getQueryString());
         files_ = new LinkedHashMap<>();
         parameterBuffer_ = new byte[8 * 1024];
         fileBuffer_ = new byte[100 * 1024];
@@ -61,6 +68,43 @@ class MultipartRequest {
     static boolean isValidContentType(String type) {
         return null != type &&
             type.toLowerCase().startsWith(MULTIPART_CONTENT_TYPE);
+    }
+
+    static Map<String, String[]> extractQueryParameters(String query) {
+        var parameters = new LinkedHashMap<String, String[]>();
+        if (null == query ||
+            query.isEmpty()) {
+            return parameters;
+        }
+
+        for (var pair : StringUtils.split(query, "&")) {
+            if (pair.isEmpty()) {
+                continue;
+            }
+
+            String name;
+            String value;
+            var index = pair.indexOf('=');
+            if (-1 == index) {
+                name = pair;
+                value = "";
+            } else {
+                name = pair.substring(0, index);
+                value = pair.substring(index + 1);
+            }
+            name = StringUtils.decodeUrl(name.replace('+', ' '));
+            value = StringUtils.decodeUrl(value.replace('+', ' '));
+
+            var values = parameters.get(name);
+            if (null == values) {
+                values = new String[]{value};
+            } else {
+                values = ArrayUtils.join(values, value);
+            }
+            parameters.put(name, values);
+        }
+
+        return parameters;
     }
 
     Map<String, String[]> getParameterMap() {
