@@ -6,6 +6,7 @@ package rife;
 
 import rife.bld.BuildCommand;
 import rife.bld.dependencies.VersionNumber;
+import rife.bld.extension.JUnitReporterOperation;
 import rife.bld.operations.JarOperation;
 import rife.bld.operations.JavacOptions;
 import rife.bld.publish.*;
@@ -231,6 +232,14 @@ public class Rife2Build extends AbstractRife2Build {
         jarJavadoc();
         jarAgent();
         jarContinuations();
+    }
+
+    @BuildCommand(summary = "Runs the JUnit reporter")
+    public void reporter() throws Exception {
+        new JUnitReporterOperation()
+            .fromProject(this)
+            .failOnSummary(true)
+            .execute();
     }
 
     public void publish()
