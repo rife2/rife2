@@ -123,7 +123,7 @@ jobs:
 
       - name: Run reporter
         if: always() && steps.tests.outcome == 'failure'
-        run: ${{ matrix.bld-cmd }} --offline --offline reporter --all
+        run: ./bld --offline reporter --all
 
   build-macos:
     runs-on: macos-latest
@@ -163,7 +163,7 @@ jobs:
 
       - name: Run reporter
         if: always() && steps.tests.outcome == 'failure'
-        run: ${{ matrix.bld-cmd }} --offline --offline reporter --all
+        run: ./bld --offline reporter --all
 
   build-windows:
     runs-on: windows-latest
@@ -206,4 +206,4 @@ jobs:
 
       - name: Run reporter
         if: always() && steps.tests.outcome == 'failure'
-        run: .\bld --offline reporter --all
+        run: .\bld.bat --offline reporter --all
