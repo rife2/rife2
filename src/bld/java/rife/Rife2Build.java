@@ -210,14 +210,21 @@ public class Rife2Build extends AbstractRife2Build {
     @BuildCommand(value = "generate-native-config", summary = "Generates the GraalVM native-image reflection config for the precompiled templates")
     public void generateNativeConfig()
     throws Exception {
-        // every precompiled template class is instantiated reflectively at
-        // runtime, so each template resource needs a reflection entry for
-        // GraalVM native image; generating them from the actual template
-        // resources keeps the config from going stale; the types have to
-        // match those of the precompile operation
+        writeTemplateNativeConfig(
+            List.of(srcMainResourcesTemplatesDirectory(), coreTemplatesDirectory_),
+            new File(nativeConfigDirectory_, "META-INF/native-image/rife-templates"));
+    }
+
+    // every precompiled template class is instantiated reflectively at
+    // runtime, so each template resource needs a reflection entry for
+    // GraalVM native image; generating them from the actual template
+    // resources keeps the config from going stale; the types have to
+    // match those of the precompile operation
+    static void writeTemplateNativeConfig(List<File> templateDirectories, File configDirectory)
+    throws Exception {
         var template_pattern = Pattern.compile(".*\\.(html|xml|sql|txt|json|svg)$");
         var entries = new java.util.TreeSet<String>();
-        for (var dir : List.of(srcMainResourcesTemplatesDirectory(), coreTemplatesDirectory_)) {
+        for (var dir : templateDirectories) {
             for (var file : FileUtils.getFileList(dir, template_pattern, null)) {
                 var normalized = file.replace(File.separatorChar, '/');
                 var extension_index = normalized.lastIndexOf('.');
@@ -254,9 +261,8 @@ public class Rife2Build extends AbstractRife2Build {
         }
         config.append("\n]\n");
 
-        var config_directory = new File(nativeConfigDirectory_, "META-INF/native-image/rife-templates");
-        config_directory.mkdirs();
-        FileUtils.writeString(config.toString(), new File(config_directory, "reflect-config.json"));
+        configDirectory.mkdirs();
+        FileUtils.writeString(config.toString(), new File(configDirectory, "reflect-config.json"));
         System.out.println("Generated native-image reflection config for " + entries.size() + " precompiled templates.");
     }
 

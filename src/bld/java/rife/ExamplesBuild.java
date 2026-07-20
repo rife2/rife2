@@ -7,6 +7,7 @@ package rife;
 import rife.bld.WebProject;
 
 import java.io.File;
+import java.util.List;
 
 import static rife.bld.operations.TemplateType.HTML;
 import static rife.bld.operations.TemplateType.SVG;
@@ -46,5 +47,8 @@ public class ExamplesBuild extends WebProject {
     throws Exception {
         super.compile();
         precompile();
+        Rife2Build.writeTemplateNativeConfig(
+            List.of(srcMainResourcesTemplatesDirectory()),
+            new File(buildMainDirectory(), "META-INF/native-image/rife2-examples"));
     }
 }
