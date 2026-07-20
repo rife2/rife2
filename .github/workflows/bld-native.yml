@@ -1,0 +1,53 @@
+name: bld-native-ci
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  native-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v7
+        with:
+          clean: true
+          submodules: 'true'
+          fetch-depth: 0
+
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: 'graalvm-community'
+          java-version: '25'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache bld dependencies
+        uses: actions/cache@v6
+        with:
+          path: lib
+          key: ${{ runner.os }}-bld-native-lib
+
+      - name: Build the jar and the examples
+        run: ./bld clean compile jar compile-examples
+
+      - name: Build the native example
+        run: >-
+          native-image --no-fallback
+          -cp "build/dist/rife2-$(cat src/main/resources/RIFE_VERSION).jar:lib/provided/*:lib/provided/modules/*:build/main_examples"
+          -o build/sse-svg-native rife.examples.HelloSseSvg
+
+      - name: Verify the native example serves
+        run: |
+          build/sse-svg-native &
+          SERVER_PID=$!
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:8080/ && break
+            sleep 0.5
+          done
+          PAGE=$(curl -sf http://localhost:8080/)
+          echo "$PAGE" | grep -q "sse-connect" || (echo "missing sse-connect" && exit 1)
+          echo "$PAGE" | grep -q "<svg" || (echo "missing embedded svg" && exit 1)
+          curl -s --max-time 3 http://localhost:8080/clock > clock-stream.txt || true
+          grep -q "event: clock" clock-stream.txt || (echo "missing clock events on the stream" && exit 1)
+          grep -q "rotate(" clock-stream.txt || (echo "missing rendered svg on the stream" && exit 1)
+          kill $SERVER_PID
