@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello SSE Database</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx-ext-sse@2.2.3"></script>
+    <style>
+        .done { text-decoration: line-through; }
+    </style>
+</head>
+<body hx-ext="sse" sse-connect="{{v route:events/}}?lastEventId={{v lastEventId/}}">
+<h1>Shared tasks</h1>
+<form hx-post="{{v route:add/}}" hx-swap="none" hx-on::after-request="this.reset()">
+    <input name="description" placeholder="New task" required>
+    <button type="submit">Add</button>
+</form>
+<ul id="tasks" sse-swap="inserted" hx-swap="beforeend">
+    <!--v rows/-->
+</ul>
+<div sse-swap="updated" hx-swap="none"></div>
+<div sse-swap="deleted" hx-swap="none"></div>
+<!--b task_row--><li id="task-{{v id/}}"{{v oob/}}>
+    <input type="checkbox" {{v checked/}} hx-post="{{v route:toggle/}}?id={{v id/}}" hx-swap="none">
+    <span class="{{v style/}}">{{v description/}}</span>
+    <button hx-post="{{v route:del/}}?id={{v id/}}" hx-swap="none">remove</button>
+</li><!--/b-->
+</body>
+</html>

@@ -37,6 +37,7 @@ public class TomcatServer {
     private boolean isScanManifest_ = false;
     private boolean isContext_ = false;
     private int port_ = 8080;
+    private int connectionTimeout_ = -1;
 
     /**
      * Instantiates a new embedded Tomcat server.
@@ -139,6 +140,26 @@ public class TomcatServer {
     }
 
     /**
+     * Configures the connection timeout of the Tomcat connector in ms.
+     * <p>
+     * Tomcat applies this timeout to blocking writes that make no progress,
+     * so it bounds how long a sending thread can be stalled by the client
+     * of a server-sent events stream that stopped reading. Keep it longer
+     * than the {@link SseBroadcaster#heartbeat heartbeat} interval, so that
+     * healthy idle streams are kept alive.
+     * <p>
+     * Defaults to Tomcat's own connector default of 60 seconds.
+     *
+     * @param timeout the connection timeout in ms
+     * @return the instance of the server that's being configured
+     * @since 1.10
+     */
+    public TomcatServer connectionTimeout(int timeout) {
+        connectionTimeout_ = timeout;
+        return this;
+    }
+
+    /**
      * Configures whether JARs declared in {@code Class-Path} {@code MANIFEST.MF} entry of other scanned JARs will be
      * scanned.
      * <p>
@@ -196,7 +217,9 @@ public class TomcatServer {
 
         var servletName = "default-servlet";
         var defaultServlet = new DefaultServlet();
-        Tomcat.addServlet(ctx, servletName, defaultServlet);
+        var servletWrapper = Tomcat.addServlet(ctx, servletName, defaultServlet);
+        // required for detached SSE connections
+        servletWrapper.setAsyncSupported(true);
         ctx.addServletMappingDecoded("/*", servletName);
 
         var filterName = "RIFE2";
@@ -206,6 +229,8 @@ public class TomcatServer {
         var filerDef = new FilterDef();
         filerDef.setFilter(rifeFilter);
         filerDef.setFilterName(filterName);
+        // required for detached SSE connections
+        filerDef.setAsyncSupported("true");
         ctx.addFilterDef(filerDef);
 
         var filterMap = new FilterMap();
@@ -230,7 +255,10 @@ public class TomcatServer {
         }
 
         // Tomcat opens the port only if called at least once
-        tomcat_.getConnector();
+        var connector = tomcat_.getConnector();
+        if (connectionTimeout_ >= 0) {
+            connector.setProperty("connectionTimeout", String.valueOf(connectionTimeout_));
+        }
 
         try {
             tomcat_.start();

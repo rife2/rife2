@@ -30,8 +30,13 @@ import java.util.logging.Logger;
  * thread for itself. When a workflow is used, you should take the
  * necessary steps to keep the application running for as long as you need the
  * work to be available.
+ * <p>Events are delivered to the registered listeners before any work that
+ * is paused for them is resumed. Events that work triggers after being
+ * woken up are therefore always delivered to listeners after the event
+ * that woke the work up. No ordering is guaranteed between events that are
+ * triggered concurrently from independent threads.
  *
- * @rife.apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
+ * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
@@ -260,35 +265,48 @@ public class Workflow {
             if (ids != null) {
                 synchronized (ids) {
                     ids_to_resume.addAll(ids);
-                    int delta = -ids.size();
-                    activeWorkAndPauseCount_.addAndGet(delta);
-                    activePauseCount_.addAndGet(delta);
+                    // the captured continuations are guaranteed to be
+                    // resumed, so they keep counting as active work across
+                    // the paused-to-resuming transition, they merely stop
+                    // counting as paused; without this, waitForNoWork() and
+                    // waitForPausedWork() could report completion while a
+                    // listener runs before the resumptions
+                    activePauseCount_.addAndGet(-ids.size());
                     ids.clear();
                 }
             }
-            return ids;
-        });
-
-        if (ids_to_resume.isEmpty()) {
-            if (schedulePending) {
-                // couldn't find any continuations to resume, add the event as pending
-                pendingEvents_.compute(event.getType(), (eventType, events) -> {
+            if (ids_to_resume.isEmpty() &&
+                schedulePending) {
+                // couldn't find any continuations to resume, add the event as
+                // pending; this has to happen inside this compute so that a
+                // continuation that is concurrently pausing for this event
+                // type either is captured above or finds the pending event,
+                // otherwise both could miss each other and the event would be
+                // stranded while the continuation stays paused forever
+                pendingEvents_.compute(event.getType(), (pendingType, events) -> {
                     if (events == null) events = new ConcurrentLinkedQueue<>();
                     events.add(event);
                     return events;
                 });
             }
-        } else {
-            // resume all the continuations that are paused for the event type
+            return ids;
+        });
+
+        try {
+            // notify all the event listeners that a new event has been triggered,
+            // before resuming any work, so that listeners are guaranteed to
+            // receive this event before any events that resumed work triggers
+            listeners_.forEach(listener -> listener.eventTriggered(event));
+        } finally {
+            // the captured continuations have already been removed from the
+            // events mapping, they always have to be resumed, even when a
+            // listener fails
             for (var id : ids_to_resume) {
                 answer(id, event);
             }
+
+            signalWhenAllWorkFinished();
         }
-
-        // notify all the event listeners that a new event has been triggered
-        listeners_.forEach(listener -> listener.eventTriggered(event));
-
-        signalWhenAllWorkFinished();
     }
 
     /**
@@ -371,8 +389,7 @@ public class Workflow {
      * Adds a new error listener that will be notified when work fails with
      * an exception.
      * <p>When no error listeners are registered, work failures are logged
-     * to the {@code rife.workflow} logger instead, so that they never pass
-     * silently.
+     * to the {@code rife.workflow} logger instead.
      *
      * @param listener the error listener that will be added
      * @see #removeErrorListener
@@ -461,7 +478,8 @@ public class Workflow {
 
     private void answer(final String id, final Object callAnswer) {
         if (null == id) return;
-        activeWorkAndPauseCount_.incrementAndGet();
+        // the active work count carries over from the paused continuation
+        // that is being resumed, it was registered when the work paused
         workExecutor_.submit(() -> {
             try {
                 runner_.answer(id, callAnswer);
@@ -477,6 +495,7 @@ public class Workflow {
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
         public CloneableContinuable getCallTarget(Object type, CallState state) {
             // keeps track of the continuation ID for this event type
+            final var pending_event = new Event[1];
             eventsMapping_.compute(type, (eventType, ids) -> {
                 if (ids == null) ids = new HashSet<>();
                 synchronized (ids) {
@@ -484,17 +503,23 @@ public class Workflow {
                     activeWorkAndPauseCount_.incrementAndGet();
                     activePauseCount_.incrementAndGet();
                 }
+                // get the next pending event of this call type; this has to
+                // happen inside this compute so that a concurrent trigger of
+                // this event type either already queued the event here or
+                // captures the continuation ID that was just registered,
+                // otherwise both could miss each other
+                pendingEvents_.computeIfPresent(type, (pendingType, events) -> {
+                    pending_event[0] = events.poll();
+                    return events;
+                });
                 return ids;
             });
 
             signalThatWorkIsPaused();
 
-            // get the next pending event of this call type and trigger it
-            final var pending_event = new Event[1];
-            pendingEvents_.computeIfPresent(type, (evenType, events) -> {
-                pending_event[0] = events.poll();
-                return events;
-            });
+            // the pending event has to be triggered outside of the compute
+            // above, triggering re-enters the events mapping for the same
+            // type and compute isn't reentrant
             if (pending_event[0] != null) {
                 trigger(pending_event[0]);
             }

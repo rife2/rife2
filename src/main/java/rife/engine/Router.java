@@ -6,11 +6,13 @@ package rife.engine;
 
 import rife.engine.exceptions.RouterAlreadyDeployedException;
 import rife.ioc.HierarchicalProperties;
+import rife.tools.ExceptionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 /**
  * Provides the routing features of the RIFE2 web engine.
@@ -53,6 +55,38 @@ public class Router {
         }
 
         deployed_ = true;
+    }
+
+    /**
+     * The {@code destroy()} method will be called by RIFE2 when the
+     * web application tears down, for this router and for every router
+     * that was added with {@code group()}. Grouped routers are destroyed
+     * before the router they belong to.
+     * <p>
+     * RIFE2 tracks active {@code Datasource} and {@code Scheduler}
+     * instances, automatically closing and stopping them after all the
+     * {@code destroy()} methods have been called.
+     * <p>
+     * This method can be implemented to close any other application resources
+     * that require it.
+     * <p>
+     * Prior to RIFE2 1.10, this method was only declared on {@code Site}
+     * and was only called for the top-level site.
+     *
+     * @since 1.10
+     */
+    public void destroy() {
+    }
+
+    final void shutdown() {
+        for (var router : groups_) {
+            try {
+                router.shutdown();
+            } catch (Throwable e) {
+                Logger.getLogger("rife.engine").severe("Error while destroying router " + router.getClass().getName() + "\n" + ExceptionUtils.getExceptionStackTrace(e));
+            }
+        }
+        destroy();
     }
 
     void ensurePreDeployment() {

@@ -68,6 +68,18 @@ public class MockConversation {
     }
 
     /**
+     * Tears down this conversation's site, calling {@code destroy()} on
+     * the site and on all its grouped routers.
+     * <p>This allows the teardown lifecycle of a site to be tested out
+     * of container.
+     *
+     * @since 1.10
+     */
+    public void destroy() {
+        gate_.destroy();
+    }
+
+    /**
      * Perform a request for a particular URL.
      *
      * @param url the url that should be tested

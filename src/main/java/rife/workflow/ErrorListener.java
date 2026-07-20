@@ -9,13 +9,12 @@ package rife.workflow;
  * notifications when work fails with an exception in a {@link Workflow}.
  * <p>Error listeners have to be registered through
  * {@link Workflow#addErrorListener}. When no error listeners are registered,
- * work failures are logged to the {@code rife.workflow} logger instead, so
- * that they never pass silently.
+ * work failures are logged to the {@code rife.workflow} logger instead.
  * <p>Failed work counts as finished work: {@link Workflow#waitForNoWork}
  * and {@link Workflow#waitForPausedWork} return normally when work fails,
  * and these listeners are the way to detect that failures happened.
  *
- * @rife.apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
+ * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see WorkErrorException
  * @see Workflow#addErrorListener

@@ -60,6 +60,7 @@ public class Context {
     private Throwable engineException_;
 
     private Route processedRoute_ = null;
+    private SseConnection sseConnection_ = null;
     private Element processedElement_ = null;
 
     Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
@@ -100,13 +101,22 @@ public class Context {
         var route = routeMatch_.route();
 
         try {
+            // establishing an SSE connection is terminal for the element
+            // chain: output from later elements would corrupt the
+            // event stream
             for (var before_route : route.router().before_) {
                 processElement(before_route);
+                if (sseConnection_ != null) {
+                    return;
+                }
             }
 
             processElement(route);
 
             for (var after_route : route.router().after_) {
+                if (sseConnection_ != null) {
+                    return;
+                }
                 processElement(after_route);
             }
         } catch (RespondException ignored) {
@@ -425,13 +435,23 @@ public class Context {
      * {@code String.valueOf(value)} call.
      *
      * @param object the object that will be output
-     * @throws EngineException if an error occurs during the output of the content
+     * @throws EngineException           if an error occurs during the output
+     *                                   of the content
+     * @throws SseOutputRefusedException when an SSE connection has been
+     *                                   established for this request
      * @see #print(Template)
      * @since 1.0
      */
     public void print(Object object)
     throws EngineException {
+        ensureNoSseConnection();
         response_.print(object);
+    }
+
+    private void ensureNoSseConnection() {
+        if (sseConnection_ != null) {
+            throw new SseOutputRefusedException();
+        }
     }
 
     /**
@@ -446,12 +466,18 @@ public class Context {
      * to assert of value content, instead of having to parse a response.
      *
      * @param template the template to print
-     * @throws TemplateException if an error occurs while processing the template
-     * @throws EngineException   if an error occurs during the output of the content
+     * @throws TemplateException          if an error occurs while processing
+     *                                    the template
+     * @throws EngineException            if an error occurs during the output
+     *                                    of the content
+     * @throws SseOutputRefusedException  when an SSE connection has been
+     *                                    established for this request
      * @since 1.0
      */
     public void print(Template template)
     throws TemplateException {
+        ensureNoSseConnection();
+
         if (template != null && !template.hasAttribute(Context.class.getName())) {
             template.setAttribute(Context.class.getName(), this);
         }
@@ -2580,6 +2606,87 @@ public class Context {
     public OutputStream outputStream()
     throws EngineException {
         return response_.getOutputStream();
+    }
+
+    /**
+     * Turns the response into a server-sent events (SSE) stream that remains
+     * under the control of this element.
+     * <p>The response is prepared for event streaming and the headers are
+     * immediately sent to the client. The connection stays open for as long
+     * as this element is executing, so the element typically sends events in
+     * a loop until {@link SseConnection#isOpen()} indicates that the client
+     * has disconnected.
+     *
+     * @return the SSE connection for this response
+     * @throws SseConnectionAlreadyEstablishedException when an SSE
+     *                                                  connection has
+     *                                                  already been
+     *                                                  established for this
+     *                                                  request
+     * @throws SseConnectionAfterOutputException        when response content
+     *                                                  has already been
+     *                                                  produced
+     * @see SseConnection
+     * @see #sse(SseBroadcaster)
+     * @since 1.10
+     */
+    public SseConnection sse()
+    throws EngineException {
+        return establishSseConnection(null);
+    }
+
+    /**
+     * Turns the response into a server-sent events (SSE) stream that is
+     * detached from this element and registered with a broadcaster.
+     * <p>The response is prepared for event streaming and the headers are
+     * immediately sent to the client. The element returns immediately while
+     * the connection stays open, and events are pushed to it afterwards
+     * through the broadcaster, from anywhere in the application.
+     *
+     * @param broadcaster the broadcaster this connection will be
+     *                    registered with
+     * @return the SSE connection for this response
+     * @throws SseConnectionAlreadyEstablishedException when an SSE
+     *                                                  connection has
+     *                                                  already been
+     *                                                  established for this
+     *                                                  request
+     * @throws SseConnectionAfterOutputException        when response content
+     *                                                  has already been
+     *                                                  produced
+     * @see SseConnection
+     * @see SseBroadcaster
+     * @since 1.10
+     */
+    public SseConnection sse(SseBroadcaster broadcaster)
+    throws EngineException {
+        if (null == broadcaster) throw new IllegalArgumentException("broadcaster can't be null");
+
+        return establishSseConnection(broadcaster);
+    }
+
+    SseConnection sseConnection() {
+        return sseConnection_;
+    }
+
+    private SseConnection establishSseConnection(SseBroadcaster broadcaster) {
+        if (sseConnection_ != null) {
+            throw new SseConnectionAlreadyEstablishedException();
+        }
+
+        if (response_ instanceof AbstractResponse abstract_response &&
+            abstract_response.hasOutputStarted()) {
+            throw new SseConnectionAfterOutputException();
+        }
+
+        var connection = new SseConnection(this, broadcaster != null);
+        sseConnection_ = connection;
+        // a connection that couldn't be established isn't registered
+        if (broadcaster != null &&
+            connection.isOpen()) {
+            broadcaster.register(connection);
+        }
+        return connection;
     }
 
     /**

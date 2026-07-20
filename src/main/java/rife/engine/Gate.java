@@ -48,12 +48,13 @@ public class Gate {
     }
 
     /**
-     * Tears down the gate and the associated {@code Site}.
+     * Tears down the gate and the associated {@code Site}, calling
+     * {@code destroy()} on the site and on all its grouped routers.
      *
      * @since 1.6.1
      */
     public void destroy() {
-        site_.destroy();
+        site_.shutdown();
     }
 
     /**
@@ -113,17 +114,64 @@ public class Gate {
         var context = new Context(gateUrl, site_, request, response, match);
         try {
             context.process();
-            response.close();
+            if (!isDetached(response)) {
+                // an element-controlled SSE connection ends when the element
+                // returns
+                var sse_connection = context.sseConnection();
+                if (sse_connection != null) {
+                    sse_connection.close();
+                }
+                response.close();
+            }
         } catch (RedirectException e) {
-            response.sendRedirect(e.getUrl());
+            var sse_connection = sseConnection(context, response);
+            if (sse_connection != null) {
+                // a committed event stream can't be redirected,
+                // end the connection instead
+                sse_connection.close();
+            } else {
+                response.sendRedirect(e.getUrl());
+            }
         } catch (DeferException e) {
+            var sse_connection = sseConnection(context, response);
+            if (sse_connection != null) {
+                // a committed event stream can't be deferred to other
+                // filters, end the connection and consider the request
+                // handled
+                sse_connection.close();
+                return true;
+            }
             return false;
         } catch (Throwable e) {
-            handleRequestException(e, context);
-            response.close();
+            var sse_connection = sseConnection(context, response);
+            if (sse_connection != null) {
+                // an error response can't be rendered into a committed event
+                // stream, log the exception and end the connection
+                if (RifeConfig.engine().getLogEngineExceptions()) {
+                    var message = "Error on host " + context.request().getServerName() + ":" + context.request().getServerPort() + context.request().getContextPath();
+                    Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(e));
+                }
+                sse_connection.close();
+            } else {
+                handleRequestException(e, context);
+                response.close();
+            }
         }
 
         return true;
+    }
+
+    private static boolean isDetached(Response response) {
+        return response instanceof AbstractResponse abstract_response &&
+            abstract_response.isDetached();
+    }
+
+    private static SseConnection sseConnection(Context context, Response response) {
+        if (response instanceof AbstractResponse abstract_response &&
+            abstract_response.detachedConnection() != null) {
+            return abstract_response.detachedConnection();
+        }
+        return context.sseConnection();
     }
 
     private void handleSiteInitException(Throwable exception) {

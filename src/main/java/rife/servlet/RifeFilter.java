@@ -139,9 +139,11 @@ public class RifeFilter implements Filter {
 
     @Override
     public final void destroy() {
-        Scheduler.stopAllActiveSchedulers();
-        Datasource.closeAllActiveDatasources();
-
-        gate_.destroy();
+        try {
+            gate_.destroy();
+        } finally {
+            Scheduler.stopAllActiveSchedulers();
+            Datasource.closeAllActiveDatasources();
+        }
     }
 }

@@ -33,6 +33,8 @@ public abstract class AbstractResponse implements Response {
     protected String contentType_ = null;
     protected Element lastElement_ = null;
     protected boolean textBufferEnabled_ = true;
+    private boolean outputStarted_ = false;
+    private volatile SseConnection detachedConnection_ = null;
     protected ArrayList<CharSequence> textBuffer_ = null;
     protected OutputStream responseOutputStream_ = null;
     protected ByteArrayOutputStream gzipByteOutputStream_ = null;
@@ -86,6 +88,50 @@ public abstract class AbstractResponse implements Response {
 
     public void setLastElement(Element element) {
         lastElement_ = element;
+    }
+
+    /**
+     * Records that response output has been produced or that an output
+     * channel has been handed out, after which an SSE connection can no
+     * longer be established for this response.
+     * <p>Back-end implementations call this when their writer is obtained,
+     * the output paths of {@code AbstractResponse} record it themselves.
+     * The state is sticky: it survives buffer clearing and the closing of
+     * the output stream.
+     *
+     * @since 1.10
+     */
+    protected void markOutputStarted() {
+        outputStarted_ = true;
+    }
+
+    boolean hasOutputStarted() {
+        return outputStarted_;
+    }
+
+    void markDetached(SseConnection connection) {
+        detachedConnection_ = connection;
+    }
+
+    boolean isDetached() {
+        return detachedConnection_ != null;
+    }
+
+    SseConnection detachedConnection() {
+        return detachedConnection_;
+    }
+
+    /**
+     * Called for each server-sent event that was written to this response.
+     * <p>By default, this method does nothing. It is intended for testing
+     * infrastructure that wants to capture the state of the events that
+     * were sent, like the out-of-container testing API does.
+     *
+     * @param template the processed template that provided the event data;
+     *                 or {@code null} when the event didn't use a template
+     * @since 1.10
+     */
+    protected void sseEventSent(Template template) {
     }
 
     public Element getLastElement() {
@@ -156,6 +202,7 @@ public abstract class AbstractResponse implements Response {
                 textBuffer_ = new ArrayList<>();
             }
             textBuffer_.addAll(deferredContent);
+            markOutputStarted();
         } else {
             writeDeferredContent(deferredContent);
         }
@@ -186,6 +233,7 @@ public abstract class AbstractResponse implements Response {
                 textBuffer_ = new ArrayList<>();
             }
             textBuffer_.add(text);
+            markOutputStarted();
         } else {
             ensureOutputStream();
 
@@ -300,6 +348,7 @@ public abstract class AbstractResponse implements Response {
 
     private void ensureOutputStream()
     throws EngineException {
+        markOutputStarted();
         if (null == outputStream_) {
             if (null == responseOutputStream_) {
                 try {
@@ -308,9 +357,12 @@ public abstract class AbstractResponse implements Response {
                     if (contentType_ != null) {
                         String content_type = HttpUtils.extractMimeTypeFromContentType(contentType_);
 
-                        // check if the content type should be gzip encoded
+                        // check if the content type should be gzip encoded,
+                        // event streams are excluded since gzip would buffer the
+                        // events instead of sending them to the client right away
                         if (RifeConfig.engine().getGzipCompression() &&
-                            RifeConfig.engine().getGzipCompressionTypes().contains(content_type)) {
+                            RifeConfig.engine().getGzipCompressionTypes().contains(content_type) &&
+                            !SseConnection.CONTENT_TYPE_EVENT_STREAM.equals(content_type)) {
                             String accept_encoding = request_.getHeader("Accept-Encoding");
                             if (accept_encoding != null &&
                                 accept_encoding.contains("gzip")) {

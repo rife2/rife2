@@ -54,6 +54,7 @@ public class MockResponse extends AbstractResponse {
     private Locale locale_;
     private PrintWriter mockWriter_;
     private Template template_;
+    private final List<Template> eventTemplates_ = Collections.synchronizedList(new ArrayList<>());
 
     MockResponse(MockConversation conversation, Request request) {
         super(request);
@@ -125,6 +126,83 @@ public class MockResponse extends AbstractResponse {
      */
     public ParsedHtml getParsedHtml() {
         return ParsedHtml.parse(this);
+    }
+
+    /**
+     * Retrieves the content of this response as parsed server-sent events
+     * (SSE).
+     * <p>The response text is interpreted according to the
+     * {@code text/event-stream} wire format. Events are separated by blank
+     * lines, multiple {@code data} fields of one event are joined by line
+     * feeds, and comment lines are captured as well, so that events that
+     * only consist of comments, like keep-alive heartbeats, are also
+     * represented.
+     *
+     * @return the list of events that were sent to this response
+     * @see MockEvent
+     * @since 1.10
+     */
+    public List<MockEvent> getEvents() {
+        var events = new ArrayList<MockEvent>();
+
+        var pending = new MockEvent();
+        for (var line : getText().split("\r\n|\r|\n", -1)) {
+            if (line.isEmpty()) {
+                if (!pending.isEmpty()) {
+                    events.add(pending);
+                    pending = new MockEvent();
+                }
+                continue;
+            }
+
+            String field;
+            String value;
+            var colon = line.indexOf(':');
+            if (0 == colon) {
+                pending.addComment(line.substring(1).startsWith(" ") ? line.substring(2) : line.substring(1));
+                continue;
+            } else if (colon > 0) {
+                field = line.substring(0, colon);
+                value = line.substring(colon + 1);
+                if (value.startsWith(" ")) {
+                    value = value.substring(1);
+                }
+            } else {
+                field = line;
+                value = "";
+            }
+
+            switch (field) {
+                case "event" -> pending.setName(value);
+                case "id" -> pending.setId(value);
+                case "data" -> pending.addDataLine(value);
+                case "retry" -> {
+                    try {
+                        pending.setRetry(Integer.parseInt(value));
+                    } catch (NumberFormatException e) {
+                        // ignore invalid retry values, just like browsers do
+                    }
+                }
+                default -> {
+                    // unknown fields are ignored, as prescribed by the SSE spec
+                }
+            }
+        }
+
+        // associate the captured template instances with the parsed events,
+        // every sent event corresponds to exactly one event on the wire
+        synchronized (eventTemplates_) {
+            for (var i = 0; i < events.size() && i < eventTemplates_.size(); i++) {
+                events.get(i).setTemplate(eventTemplates_.get(i));
+            }
+        }
+
+        return events;
+    }
+
+    @Override
+    protected void sseEventSent(Template template) {
+        eventTemplates_.add(template == null ? null : (Template) template.clone());
     }
 
     public String getContentType() {
@@ -665,6 +743,7 @@ public class MockResponse extends AbstractResponse {
 
     public PrintWriter getWriter()
     throws IOException {
+        markOutputStarted();
         mockOutputStream_.flush();
 
         /* if there is no writer yet */

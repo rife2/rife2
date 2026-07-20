@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello SSE</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx-ext-sse@2.2.3"></script>
+</head>
+<body>
+<h1>Server clock</h1>
+<div hx-ext="sse" sse-connect="{{v route:clock/}}" sse-swap="clock">
+    <!--v clock_row/-->
+</div>
+<!--b clock_row--><p>The server time is <strong>{{v time/}}</strong></p><!--/b-->
+</body>
+</html>

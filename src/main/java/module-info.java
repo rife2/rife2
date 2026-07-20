@@ -50,6 +50,8 @@ module rife {
     exports rife.continuations.exceptions;
     exports rife.database;
     exports rife.database.exceptions;
+    exports rife.database.migrations;
+    exports rife.database.migrations.exceptions;
     exports rife.database.queries;
     exports rife.database.querymanagers.generic;
     exports rife.database.querymanagers.generic.exceptions;
@@ -65,6 +67,7 @@ module rife {
     exports rife.forms;
     exports rife.ioc;
     exports rife.ioc.exceptions;
+    exports rife.json;
     exports rife.resources;
     exports rife.resources.exceptions;
     exports rife.scheduler;

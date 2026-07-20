@@ -134,6 +134,7 @@ public class HttpResponse extends AbstractResponse {
     @Override
     public PrintWriter getWriter()
         throws IOException {
+        markOutputStarted();
         return response_.getWriter();
     }
 

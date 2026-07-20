@@ -63,6 +63,7 @@ public class Server {
     private int minThreads_ = DEFAULT_MIN_THREADS;
     private int maxThreads_ = DEFAULT_MAX_THREADS;
     private int idleTimeout_ = DEFAULT_IDLE_TIMEOUT_MS;
+    private long connectionIdleTimeout_ = -1;
     private org.eclipse.jetty.server.Server server_;
 
     /**
@@ -187,6 +188,27 @@ public class Server {
      */
     public Server idleTimeout(int idleTimeout) {
         idleTimeout_ = idleTimeout;
+        return this;
+    }
+
+    /**
+     * Configures the connection idle timeout of the server connector in ms.
+     * <p>
+     * Jetty applies this timeout both to idle connections and to blocking
+     * writes that make no progress, so it bounds how long a sending thread
+     * can be stalled by the client of a server-sent events stream that
+     * stopped reading. Keep it longer than the
+     * {@link SseBroadcaster#heartbeat heartbeat} interval, so that healthy
+     * idle streams are kept alive.
+     * <p>
+     * Defaults to Jetty's own connector default of 30 seconds.
+     *
+     * @param idleTimeout the connection idle timeout in ms
+     * @return the instance of the server that's being configured
+     * @since 1.10
+     */
+    public Server connectionIdleTimeout(long idleTimeout) {
+        connectionIdleTimeout_ = idleTimeout;
         return this;
     }
 
@@ -338,6 +360,9 @@ public class Server {
             if (host_ != null) {
                 connector.setHost(host_);
             }
+            if (connectionIdleTimeout_ >= 0) {
+                connector.setIdleTimeout(connectionIdleTimeout_);
+            }
             server_.setConnectors(new Connector[]{connector});
         }
 
@@ -353,15 +378,19 @@ public class Server {
         var rife_filter = new RifeFilter();
         rife_filter.init(properties_, site);
         var filter_holder = new FilterHolder(rife_filter);
+        // required for detached SSE connections
+        filter_holder.setAsyncSupported(true);
 
         var ctx = new ServletContextHandler();
         ctx.setContextPath("/");
 
-        // setup default servlet
+        // set up default servlet
 
         var servlet_holder = new ServletHolder("default", DefaultServlet.class);
+        // required for detached SSE connections
+        servlet_holder.setAsyncSupported(true);
 
-        // setup resource bases
+        // set up resource bases
 
         var resource_factory = ResourceFactory.of(handler);
         var resource_list = new ArrayList<Resource>();

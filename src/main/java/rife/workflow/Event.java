@@ -7,7 +7,7 @@ package rife.workflow;
 /**
  * Events cause work to be resumed when they are waiting for the event type.
  *
- * @rife.apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
+ * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */

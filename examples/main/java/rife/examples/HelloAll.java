@@ -45,6 +45,9 @@ public class HelloAll extends Site implements MyServiceProvider {
         group(new HelloPathInfoMapping());
         group("/resources", resources = new HelloResources());
         group("/scheduler", new HelloScheduler());
+        group("/sse", new HelloSse());
+        group("/sse-database", new HelloSseDatabase());
+        group("/sse-workflow", new HelloSseWorkflow());
         group(new HelloSvg());
         group(new HelloTemplate());
         group("/validation", new HelloValidation());

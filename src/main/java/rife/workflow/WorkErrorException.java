@@ -14,7 +14,7 @@ import java.io.Serial;
  * The original exception that was thrown by the work is available through
  * {@link #getCause()}.
  *
- * @rife.apiNote The workflow engine is still in an ALPHA EXPERIMENTAL STAGE and might change.
+ * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see ErrorListener
  * @since 1.10

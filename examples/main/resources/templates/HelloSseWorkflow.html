@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello SSE Workflow</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx-ext-sse@2.2.3"></script>
+</head>
+<body>
+<h1>Rocket launch</h1>
+<button hx-post="{{v route:launch/}}" hx-swap="none">Launch</button>
+<div hx-ext="sse" sse-connect="{{v route:events/}}" sse-swap="countdown">
+    <!--v status_row/-->
+</div>
+<!--b status_row--><p><!--v status/--></p><!--/b-->
+</body>
+</html>

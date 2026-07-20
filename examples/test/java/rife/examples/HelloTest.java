@@ -6,11 +6,15 @@ package rife.examples;
 
 import org.junit.jupiter.api.Test;
 import rife.database.Datasource;
+import rife.engine.RequestMethod;
+import rife.test.MockRequest;
 import rife.examples.apis.MyService;
 import rife.examples.services.HelloService;
 import rife.test.MockConversation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HelloTest {
     @Test
@@ -24,6 +28,7 @@ class HelloTest {
         var m = new MockConversation(new HelloWorld());
         assertEquals("Hello World", m.doRequest("/hello").getText());
     }
+
 
     @Test
     void verifyHelloLink() {
@@ -43,7 +48,12 @@ class HelloTest {
     @Test
     void verifyHelloTemplate() {
         var m = new MockConversation(new HelloTemplate());
-        var t = m.doRequest("/template").getTemplate();
+        var response = m.doRequest("/template");
+        var t = response.getTemplate();
+        assertEquals("Bonjour", t.getValue("message"));
+        // the date renderer output is the current time, only assert that
+        // it rendered instead of raising RendererNotFoundException
+        assertFalse(response.getText().contains("Exception"));
         var link = t.getValue("route:templateHello");
         assertEquals("Hello World Template", m.doRequest(link).getText());
     }
@@ -135,5 +145,54 @@ class HelloTest {
               <p>some@email.com</p>
               <h2>Body</h2>
               <p>some body</p>""", r.getTemplate().getValue("content").trim());
+    }
+
+    @Test
+    void verifyHelloSse() {
+        var m = new MockConversation(new HelloSse());
+        try {
+            var page = m.doRequest("/").getText();
+            assertTrue(page.contains("sse-connect=\"http://localhost/clock\""));
+            assertTrue(page.contains("The server time is"));
+        } finally {
+            m.destroy();
+        }
+    }
+
+    @Test
+    void verifyHelloSseDatabase() {
+        var m = new MockConversation(new HelloSseDatabase());
+        try {
+            var events = m.doRequest("/events");
+
+            m.doRequest("/add", new MockRequest().method(RequestMethod.POST).parameter("description", "Buy milk"));
+            m.doRequest("/toggle?id=1", new MockRequest().method(RequestMethod.POST));
+            m.doRequest("/delete?id=1", new MockRequest().method(RequestMethod.POST));
+
+            var received = events.getEvents();
+            assertEquals(3, received.size());
+            assertEquals("inserted", received.get(0).getName());
+            assertTrue(received.get(0).getId().endsWith("-1"));
+            assertTrue(received.get(0).getData().contains("Buy milk"));
+            assertEquals("updated", received.get(1).getName());
+            assertTrue(received.get(1).getData().contains("hx-swap-oob=\"true\""));
+            assertEquals("deleted", received.get(2).getName());
+            assertTrue(received.get(2).getData().contains("hx-swap-oob=\"delete\""));
+
+            // the page embeds the last event ID for a gapless stream connection
+            assertTrue(m.doRequest("/").getText().contains("?lastEventId=" + received.get(2).getId()));
+        } finally {
+            m.destroy();
+        }
+    }
+
+    @Test
+    void verifyHelloSseWorkflow() {
+        var m = new MockConversation(new HelloSseWorkflow());
+        try {
+            assertTrue(m.doRequest("/").getText().contains("Standing by"));
+        } finally {
+            m.destroy();
+        }
     }
 }
