@@ -47,6 +47,7 @@ public class HelloAll extends Site implements MyServiceProvider {
         group("/scheduler", new HelloScheduler());
         group("/sse", new HelloSse());
         group("/sse-database", new HelloSseDatabase());
+        group("/sse-svg", new HelloSseSvg());
         group("/sse-workflow", new HelloSseWorkflow());
         group(new HelloSvg());
         group(new HelloTemplate());

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello SSE SVG</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="https://unpkg.com/htmx-ext-sse@2.2.3"></script>
+    <style>
+        svg { max-width: 24em; height: auto; }
+    </style>
+</head>
+<body>
+<h1>Live SVG clock</h1>
+<div hx-ext="sse" sse-connect="{{v route:clock/}}" sse-swap="clock">
+    <!--v clock/-->
+</div>
+</body>
+</html>

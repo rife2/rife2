@@ -187,6 +187,20 @@ class HelloTest {
     }
 
     @Test
+    void verifyHelloSseSvg() {
+        var m = new MockConversation(new HelloSseSvg());
+        try {
+            var page = m.doRequest("/").getText();
+            assertTrue(page.contains("sse-connect=\"http://localhost/clock\""));
+            // the initial render embeds the fully rendered clock
+            assertTrue(page.contains("<svg"));
+            assertTrue(page.contains("rotate("));
+        } finally {
+            m.destroy();
+        }
+    }
+
+    @Test
     void verifyHelloSseWorkflow() {
         var m = new MockConversation(new HelloSseWorkflow());
         try {
