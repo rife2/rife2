@@ -9,6 +9,7 @@ import rife.bld.WebProject;
 import java.io.File;
 
 import static rife.bld.operations.TemplateType.HTML;
+import static rife.bld.operations.TemplateType.SVG;
 
 public class ExamplesBuild extends WebProject {
     public ExamplesBuild(Rife2Build mainBuild) {
@@ -25,7 +26,7 @@ public class ExamplesBuild extends WebProject {
         libStandaloneDirectory = libTestDirectory();
 
         precompileOperation()
-            .templateTypes(HTML);
+            .templateTypes(HTML, SVG);
         compileOperation()
             .compileMainClasspath(mainBuild.buildMainDirectory().getAbsolutePath())
             .compileTestClasspath(mainBuild.buildMainDirectory().getAbsolutePath())

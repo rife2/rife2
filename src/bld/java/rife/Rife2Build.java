@@ -59,13 +59,15 @@ public class Rife2Build extends AbstractRife2Build {
         var core_src_test_java_directory = new File(core_src_test_directory, "java");
         var core_src_test_resources_directory = new File(core_src_test_directory, "resources");
         var core_src_main_resources_templates_directory = new File(core_src_main_resources_directory, "templates");
+        coreTemplatesDirectory_ = core_src_main_resources_templates_directory;
+        nativeConfigDirectory_ = new File(buildDirectory(), "native-config");
 
         antlr4Operation
             .sourceDirectories(List.of(new File(core_src_main_directory, "antlr")));
 
         precompileOperation()
             .sourceDirectories(core_src_main_resources_templates_directory)
-            .templateTypes(HTML, XML, SQL, TXT, JSON);
+            .templateTypes(HTML, XML, SQL, TXT, JSON, SVG);
 
         compileOperation()
             .mainSourceDirectories(antlr4Operation.outputDirectory(), core_src_main_java_directory)
@@ -75,7 +77,7 @@ public class Rife2Build extends AbstractRife2Build {
                 .addAll(List.of("-encoding", "UTF-8"));
 
         jarOperation()
-            .sourceDirectories(core_src_main_resources_directory)
+            .sourceDirectories(core_src_main_resources_directory, nativeConfigDirectory_)
             .excluded(Pattern.compile("^\\Q" + core_src_main_resources_templates_directory.getAbsolutePath() + "\\E.*"));
 
         jarAgentOperation
@@ -200,6 +202,69 @@ public class Rife2Build extends AbstractRife2Build {
                 FileUtils.deleteDirectory(tmp_dir);
             }
         }
+    }
+
+    final File coreTemplatesDirectory_;
+    final File nativeConfigDirectory_;
+
+    @BuildCommand(value = "generate-native-config", summary = "Generates the GraalVM native-image reflection config for the precompiled templates")
+    public void generateNativeConfig()
+    throws Exception {
+        // every precompiled template class is instantiated reflectively at
+        // runtime, so each template resource needs a reflection entry for
+        // GraalVM native image; generating them from the actual template
+        // resources keeps the config from going stale; the types have to
+        // match those of the precompile operation
+        var template_pattern = Pattern.compile(".*\\.(html|xml|sql|txt|json|svg)$");
+        var entries = new java.util.TreeSet<String>();
+        for (var dir : List.of(srcMainResourcesTemplatesDirectory(), coreTemplatesDirectory_)) {
+            for (var file : FileUtils.getFileList(dir, template_pattern, null)) {
+                var normalized = file.replace(File.separatorChar, '/');
+                var extension_index = normalized.lastIndexOf('.');
+                var type = normalized.substring(extension_index + 1);
+                var name = normalized.substring(0, extension_index).replace('/', '.');
+                entries.add("rife.template." + type + "." + name);
+            }
+        }
+
+        var config = new StringBuilder("[\n");
+        var first = true;
+        for (var entry : entries) {
+            if (!first) {
+                config.append(",\n");
+            }
+            first = false;
+            config.append("""
+                  {
+                    "name": "%s",
+                    "methods": [
+                      {
+                        "name": "<init>",
+                        "parameterTypes": []
+                      },
+                      {
+                        "name": "isModified",
+                        "parameterTypes": [
+                          "rife.resources.ResourceFinder",
+                          "java.lang.String"
+                        ]
+                      }
+                    ]
+                  }""".formatted(entry));
+        }
+        config.append("\n]\n");
+
+        var config_directory = new File(nativeConfigDirectory_, "META-INF/native-image/rife-templates");
+        config_directory.mkdirs();
+        FileUtils.writeString(config.toString(), new File(config_directory, "reflect-config.json"));
+        System.out.println("Generated native-image reflection config for " + entries.size() + " precompiled templates.");
+    }
+
+    @Override
+    public void jar()
+    throws Exception {
+        generateNativeConfig();
+        super.jar();
     }
 
     final JarOperation jarAgentOperation = new JarOperation();
