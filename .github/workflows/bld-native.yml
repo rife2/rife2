@@ -51,3 +51,32 @@ jobs:
           grep -q "event: clock" clock-stream.txt || (echo "missing clock events on the stream" && exit 1)
           grep -q "rotate(" clock-stream.txt || (echo "missing rendered svg on the stream" && exit 1)
           kill $SERVER_PID
+
+      - name: Instrument the examples ahead of time
+        run: >-
+          java
+          -cp "build/dist/rife2-$(cat src/main/resources/RIFE_VERSION).jar:build/main_examples"
+          rife.instrument.InstrumentationDeployer -verbose -d build/instrumented_examples build/main_examples
+
+      - name: Build the native continuations example
+        run: >-
+          native-image --no-fallback
+          -cp "build/instrumented_examples:build/dist/rife2-$(cat src/main/resources/RIFE_VERSION).jar:lib/provided/*:lib/provided/modules/*:build/main_examples"
+          -o build/counter-native rife.examples.HelloCounterContinuations
+
+      - name: Verify native continuations resume across requests
+        run: |
+          build/counter-native &
+          COUNTER_PID=$!
+          for i in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:8080/count && break
+            sleep 0.5
+          done
+          R1=$(curl -sf http://localhost:8080/count)
+          echo "$R1" | grep -q "^1 " || (echo "unexpected first response: $R1" && exit 1)
+          URL=$(echo "$R1" | grep -o "href='[^']*'" | cut -d"'" -f2)
+          R2=$(curl -sf "$URL")
+          echo "$R2" | grep -q "^2 " || (echo "continuation did not resume: $R2" && exit 1)
+          URL2=$(echo "$R2" | grep -o "href='[^']*'" | cut -d"'" -f2)
+          curl -sf "$URL2" | grep -q "^3 " || (echo "second resume failed" && exit 1)
+          kill $COUNTER_PID
