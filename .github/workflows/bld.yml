@@ -5,6 +5,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     services:
       oracle:
@@ -127,6 +128,7 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
+    timeout-minutes: 60
 
     strategy:
       matrix:
@@ -167,6 +169,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    timeout-minutes: 60
 
     strategy:
       matrix:
