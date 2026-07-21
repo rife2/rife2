@@ -212,7 +212,10 @@ public class TestDatabaseScheduler {
 
         public Collection<Task> getExecutedTasks() {
             synchronized (this) {
-                return executedTasks_;
+                // a snapshot, tasks that are still in flight when the
+                // scheduler is stopped can otherwise be added while the
+                // collection is being iterated over
+                return new ArrayList<>(executedTasks_);
             }
         }
 
