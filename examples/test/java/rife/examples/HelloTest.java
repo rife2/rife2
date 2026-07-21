@@ -195,6 +195,22 @@ class HelloTest {
             // the initial render embeds the fully rendered clock
             assertTrue(page.contains("<svg"));
             assertTrue(page.contains("rotate("));
+            assertTrue(page.contains("real time"));
+
+            // the speed of the clock is server state, changing it from one
+            // request reaches every connected stream
+            var stream = m.doRequest("/clock");
+            m.doRequest("/faster", new MockRequest().method(RequestMethod.POST));
+            m.doRequest("/backwards", new MockRequest().method(RequestMethod.POST));
+
+            var events = stream.getEvents();
+            assertTrue(events.stream().anyMatch(e -> "clock".equals(e.getName())));
+            var speeds = events.stream()
+                .filter(e -> "speed".equals(e.getName()))
+                .map(e -> e.getData())
+                .toList();
+            assertTrue(speeds.contains("Now running <strong>2x faster</strong>"));
+            assertTrue(speeds.contains("Now running <strong>2x backwards</strong>"));
         } finally {
             m.destroy();
         }

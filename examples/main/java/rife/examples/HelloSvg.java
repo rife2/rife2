@@ -16,6 +16,10 @@ public class HelloSvg extends Site {
     static final int M_UNIT = DEGREES / 60;
 
     static void fillClock(Template t) {
+        fillClock(t, System.currentTimeMillis());
+    }
+
+    static void fillClock(Template t, long timeMillis) {
         for (int h = 0; h < DEGREES; h += H_UNIT) {
             t.setValue("degree", h);
             t.appendBlock("marks", "hour-mark");
@@ -27,6 +31,7 @@ public class HelloSvg extends Site {
         }
 
         var now = Calendar.getInstance();
+        now.setTimeInMillis(timeMillis);
         var hour = now.get(Calendar.HOUR_OF_DAY);
         var minute = now.get(Calendar.MINUTE);
         var second = now.get(Calendar.SECOND);

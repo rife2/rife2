@@ -6,13 +6,30 @@
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <script src="https://unpkg.com/htmx-ext-sse@2.2.3"></script>
     <style>
-        svg { max-width: 24em; height: auto; }
+        svg { max-width: 20em; height: auto; display: block; }
+        button { font-size: 1em; padding: 0.3em 0.8em; }
     </style>
 </head>
-<body>
-<h1>Live SVG clock</h1>
-<div hx-ext="sse" sse-connect="{{v route:clock/}}" sse-swap="clock">
+<body hx-ext="sse" sse-connect="{{v route:clock/}}">
+<h1>Shared clock</h1>
+<div sse-swap="clock">
     <!--v clock/-->
 </div>
+<p sse-swap="speed">
+    <!--v speed_row/-->
+</p>
+<div>
+    <button type="button" hx-post="{{v route:backwards/}}" hx-swap="none">backwards</button>
+    <button type="button" hx-post="{{v route:slower/}}" hx-swap="none">slower</button>
+    <button type="button" hx-post="{{v route:stop/}}" hx-swap="none">stop</button>
+    <button type="button" hx-post="{{v route:faster/}}" hx-swap="none">faster</button>
+    <button type="button" hx-post="{{v route:now/}}" hx-swap="none">real time</button>
+</div>
+<p>The server owns this clock: it decides what time the hands show, and how
+    fast and in which direction that time moves. Open this page in another
+    window, in a different browser, or on your phone, then press the buttons
+    anywhere. Every viewer follows the same clock, which is what a browser
+    can't do on its own.</p>
+<!--b speed_row-->Now running <strong>{{v speed/}}</strong><!--/b-->
 </body>
 </html>
