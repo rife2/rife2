@@ -5,8 +5,8 @@
 package rife.examples;
 
 import rife.database.Datasource;
-import rife.database.migrations.DbMigration;
 import rife.database.migrations.DbMigrations;
+import rife.database.migrations.ReversibleDbMigration;
 import rife.database.querymanagers.generic.GenericQueryManager;
 import rife.database.querymanagers.generic.GenericQueryManagerFactory;
 import rife.database.querymanagers.generic.SseGqmBridge;
@@ -81,7 +81,7 @@ public class HelloSseDatabase extends Site {
 
     // the initial schema is the structure that the generic query manager
     // expects for the Task bean
-    static class CreateTaskSchema extends DbMigration {
+    static class CreateTaskSchema extends ReversibleDbMigration {
         public void up() {
             add(m -> GenericQueryManagerFactory.instance(m.getDatasource(), Task.class).install());
         }
@@ -91,7 +91,7 @@ public class HelloSseDatabase extends Site {
         }
     }
 
-    static class IndexTaskDone extends DbMigration {
+    static class IndexTaskDone extends ReversibleDbMigration {
         public void up() {
             add(createIndex("task_done_idx").table("Task").column("done"));
         }
