@@ -122,7 +122,7 @@ jobs:
           -DtestsBadgeApiKey=${{ secrets.TESTS_BADGE_API_KEY }}
 
       - name: Run reporter
-        if: always() && steps.tests.outcome == 'failure'
+        if: always() && steps.tests.outcome == 'failure' && hashFiles('build/test-results/test/TEST-junit-jupiter.xml') != ''
         run: ./bld --offline reporter --all
 
   build-macos:
@@ -162,7 +162,7 @@ jobs:
           ./bld test
 
       - name: Run reporter
-        if: always() && steps.tests.outcome == 'failure'
+        if: always() && steps.tests.outcome == 'failure' && hashFiles('build/test-results/test/TEST-junit-jupiter.xml') != ''
         run: ./bld --offline reporter --all
 
   build-windows:
@@ -205,5 +205,5 @@ jobs:
           .\bld.bat test
 
       - name: Run reporter
-        if: always() && steps.tests.outcome == 'failure'
+        if: always() && steps.tests.outcome == 'failure' && hashFiles('build/test-results/test/TEST-junit-jupiter.xml') != ''
         run: .\bld.bat --offline reporter --all
