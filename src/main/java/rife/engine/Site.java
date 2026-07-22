@@ -12,6 +12,7 @@ import rife.tools.StringUtils;
 import rife.workflow.Workflow;
 
 import java.io.File;
+import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
@@ -29,6 +30,8 @@ public class Site extends Router {
      * @since 1.0
      */
     public final int RND = new Random().nextInt();
+
+    final SecureRandom csrfRandom_ = new SecureRandom();
 
     final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
 

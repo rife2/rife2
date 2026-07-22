@@ -119,4 +119,23 @@ public class CookieBuilder {
         cookie_.setAttribute(name, value);
         return this;
     }
+
+    /**
+     * Sets the {@code SameSite} attribute of the cookie, which determines
+     * whether the browser sends it along with requests that originate from
+     * another site.
+     * <p>{@link SameSite#LAX} keeps the cookie away from cross-site form
+     * submissions, which is what makes it a first line of defense against
+     * cross-site request forgery.
+     *
+     * @param policy the {@code SameSite} policy of the cookie
+     * @return the {@code CookieBuilder} instance
+     * @see SameSite
+     * @since 1.10
+     */
+    public CookieBuilder sameSite(SameSite policy) {
+        if (null == policy) throw new IllegalArgumentException("policy can't be null");
+
+        return attribute("SameSite", policy.attributeValue());
+    }
 }

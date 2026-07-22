@@ -13,6 +13,7 @@ import rife.authentication.elements.exceptions.UndefinedLandingRouteException;
 import rife.authentication.elements.exceptions.UndefinedLoginRouteException;
 import rife.engine.Context;
 import rife.engine.Route;
+import rife.engine.SameSite;
 
 /**
  * Configuration class that determines how the authentication element implementations
@@ -34,6 +35,7 @@ public class AuthConfig {
     public static final int DEFAULT_REMEMBER_MAX_AGE = 60 * 60 * 24 * 30 * 3;  // three months
     public static final boolean DEFAULT_ALLOW_REMEMBER = true;
     public static final boolean DEFAULT_ENFORCE_AUTHENTICATION = true;
+    public static final SameSite DEFAULT_COOKIE_SAME_SITE = SameSite.LAX;
     public static final Class<RoleUser> DEFAULT_CREDENTIALS_CLASS = RoleUser.class;
 
     private SessionValidator<?, ?, ?> sessionValidator_;
@@ -41,6 +43,7 @@ public class AuthConfig {
     private Route landingRoute_;
     private String identityAttributeName_ = DEFAULT_IDENTITY_ATTRIBUTE_NAME;
     private String authCookieName_ = DEFAULT_AUTH_COOKIE_NAME;
+    private SameSite cookieSameSite_ = DEFAULT_COOKIE_SAME_SITE;
     private String rememberCookieName_ = DEFAULT_REMEMBER_COOKIE_NAME;
     private int rememberMaxAge_ = DEFAULT_REMEMBER_MAX_AGE;
     private boolean allowRemember_ = DEFAULT_ALLOW_REMEMBER;
@@ -195,6 +198,37 @@ public class AuthConfig {
      */
     public String authCookieName() {
         return authCookieName_;
+    }
+
+    /**
+     * Sets the {@code SameSite} policy of the authentication and remember
+     * cookies.
+     * <p>This defaults to {@link SameSite#LAX}, which keeps the cookies
+     * away from cross-site form submissions and is a first line of defense
+     * against cross-site request forgery.
+     *
+     * @param policy the {@code SameSite} policy of the cookies
+     * @return this {@code AuthConfig} instance
+     * @see #cookieSameSite()
+     * @since 1.10
+     */
+    public AuthConfig cookieSameSite(SameSite policy) {
+        if (null == policy) throw new IllegalArgumentException("policy can't be null");
+
+        cookieSameSite_ = policy;
+        return this;
+    }
+
+    /**
+     * Retrieves the {@code SameSite} policy of the authentication and
+     * remember cookies.
+     *
+     * @return the {@code SameSite} policy of the cookies
+     * @see #cookieSameSite(SameSite)
+     * @since 1.10
+     */
+    public SameSite cookieSameSite() {
+        return cookieSameSite_;
     }
 
     /**

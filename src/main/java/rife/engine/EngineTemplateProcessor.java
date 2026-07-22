@@ -5,6 +5,7 @@
 package rife.engine;
 
 import rife.authentication.elements.Identified;
+import rife.config.RifeConfig;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
 import rife.template.TemplateEncoder;
@@ -21,6 +22,7 @@ class EngineTemplateProcessor {
     public static final String ID_CONTEXT_PARAM_RANDOM = "context:paramRandom";
     public static final String ID_CONTEXT_PARAM_CONT_ID = "context:paramContId";
     public static final String ID_CONTEXT_CONT_ID = "context:contId";
+    public static final String ID_CONTEXT_CSRF_TOKEN = "context:csrfToken";
 
     private final Context context_;
     private final Template template_;
@@ -93,6 +95,12 @@ class EngineTemplateProcessor {
                 template_.setValue(ID_CONTEXT_CONT_ID, context_.continuationId());
             }
             setValues.add(ID_CONTEXT_CONT_ID);
+        }
+
+        if (template_.hasValueId(ID_CONTEXT_CSRF_TOKEN) &&
+            !template_.isValueSet(ID_CONTEXT_CSRF_TOKEN)) {
+            template_.setValue(ID_CONTEXT_CSRF_TOKEN, context_.csrfToken());
+            setValues.add(ID_CONTEXT_CSRF_TOKEN);
         }
     }
 
@@ -228,9 +236,16 @@ class EngineTemplateProcessor {
                 if (!template_.isValueSet(route_value_id)) {
                     var route = resolveRoute(captured_groups[1]);
                     if (route != null) {
-                        var segments = context_.urlFor(route).generateSegments();
+                        var url_builder = context_.urlFor(route);
+                        // when a CSRF token is active for this request, it's
+                        // added to the form as a hidden input; an extra token
+                        // on a form that doesn't need it is harmless, and the
+                        // CsrfProtected element enforces it where required
+                        if (context_.hasCsrfToken()) {
+                            url_builder.param(RifeConfig.engine().getCsrfParameterName(), context_.csrfToken());
+                        }
                         var builder = new StringBuilder();
-                        segments.appendFormInputParameters(builder);
+                        url_builder.generateSegments().appendFormInputParameters(builder);
                         template_.setValue(route_value_id, builder.toString());
                         setValues.add(route_value_id);
                     }

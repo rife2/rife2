@@ -149,20 +149,16 @@ class HelloTest {
 
     @Test
     void verifyHelloSse() {
-        var m = new MockConversation(new HelloSse());
-        try {
+        try (var m = new MockConversation(new HelloSse())) {
             var page = m.doRequest("/").getText();
             assertTrue(page.contains("sse-connect=\"http://localhost/clock\""));
             assertTrue(page.contains("The server time is"));
-        } finally {
-            m.destroy();
         }
     }
 
     @Test
     void verifyHelloSseDatabase() {
-        var m = new MockConversation(new HelloSseDatabase());
-        try {
+        try (var m = new MockConversation(new HelloSseDatabase())) {
             var events = m.doRequest("/events");
 
             m.doRequest("/add", new MockRequest().method(RequestMethod.POST).parameter("description", "Buy milk"));
@@ -181,15 +177,12 @@ class HelloTest {
 
             // the page embeds the last event ID for a gapless stream connection
             assertTrue(m.doRequest("/").getText().contains("?lastEventId=" + received.get(2).getId()));
-        } finally {
-            m.destroy();
         }
     }
 
     @Test
     void verifyHelloSseSvg() {
-        var m = new MockConversation(new HelloSseSvg());
-        try {
+        try (var m = new MockConversation(new HelloSseSvg())) {
             var page = m.doRequest("/").getText();
             assertTrue(page.contains("sse-connect=\"http://localhost/clock\""));
             // the initial render embeds the fully rendered clock
@@ -211,18 +204,13 @@ class HelloTest {
                 .toList();
             assertTrue(speeds.contains("Now running <strong>2x faster</strong>"));
             assertTrue(speeds.contains("Now running <strong>2x backwards</strong>"));
-        } finally {
-            m.destroy();
         }
     }
 
     @Test
     void verifyHelloSseWorkflow() {
-        var m = new MockConversation(new HelloSseWorkflow());
-        try {
+        try (var m = new MockConversation(new HelloSseWorkflow())) {
             assertTrue(m.doRequest("/").getText().contains("Standing by"));
-        } finally {
-            m.destroy();
         }
     }
 }

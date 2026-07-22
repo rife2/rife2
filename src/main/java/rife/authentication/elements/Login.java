@@ -247,7 +247,8 @@ public class Login extends Identified implements SessionAttributes {
                     .path("/")
                     .maxAge(auth_config.rememberMaxAge())
                     .secure(c.scheme().equals("https"))
-                    .httpOnly(true));
+                    .httpOnly(true)
+                    .sameSite(auth_config.cookieSameSite()));
             }
         }
 
@@ -260,7 +261,8 @@ public class Login extends Identified implements SessionAttributes {
             c.addCookie(new CookieBuilder(auth_config.authCookieName(), authid)
                 .path("/")
                 .secure(c.scheme().equals("https"))
-                .httpOnly(true));
+                .httpOnly(true)
+                .sameSite(auth_config.cookieSameSite()));
 
             var session_validator = auth_config.sessionValidator();
             assert session_validator != null;

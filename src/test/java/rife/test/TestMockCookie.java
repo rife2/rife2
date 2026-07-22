@@ -27,7 +27,9 @@ public class TestMockCookie {
         assertEquals(mock1.getComment(), cookie1.getComment());
         assertEquals(mock1.getDomain(), cookie1.getDomain());
         assertEquals(mock1.getMaxAge(), cookie1.getMaxAge());
-        assertEquals(mock1.getPath(), cookie1.getPath());
+        // a cookie without a path keeps the default path
+        assertNull(cookie1.getPath());
+        assertEquals(MockCookie.DEFAULT_PATH, mock1.getPath());
         assertEquals(mock1.getSecure(), cookie1.getSecure());
         assertEquals(mock1.getVersion(), cookie1.getVersion());
         assertEquals(mock1.isHttpOnly(), cookie1.isHttpOnly());
@@ -51,6 +53,40 @@ public class TestMockCookie {
         assertEquals(mock2.getSecure(), cookie2.getSecure());
         assertEquals(mock2.getVersion(), cookie2.getVersion());
         assertEquals(mock2.isHttpOnly(), cookie2.isHttpOnly());
+    }
+
+    @Test
+    void testConstructorCookieAttributes() {
+        var cookie1 = new Cookie("name1", "value1");
+        assertNull(new MockCookie(cookie1).getAttribute("SameSite"));
+
+        // the attributes that don't have their own accessors, like
+        // SameSite, are part of the cookie too
+        var cookie2 = new Cookie("name2", "value2");
+        cookie2.setAttribute("SameSite", "Lax");
+        cookie2.setAttribute("Partitioned", "");
+
+        var mock2 = new MockCookie(cookie2);
+        assertEquals("Lax", mock2.getAttribute("SameSite"));
+        assertEquals("", mock2.getAttribute("Partitioned"));
+    }
+
+    @Test
+    void testDefaultPathIsTheSameCookie() {
+        var conversation = new MockConversation(new rife.engine.Site() {
+            public void setup() {
+            }
+        });
+
+        // a cookie without a path and one with the default path are the
+        // same cookie, the second one replaces the first
+        conversation.cookie(new Cookie("name", "first"));
+        var explicit = new Cookie("name", "second");
+        explicit.setPath(MockCookie.DEFAULT_PATH);
+        conversation.cookie(explicit);
+
+        assertEquals(1, conversation.getCookies().length);
+        assertEquals("second", conversation.getCookieValue("name"));
     }
 
     @Test

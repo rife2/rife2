@@ -24,6 +24,8 @@ import rife.tools.exceptions.BeanUtilsException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.*;
 
 /**
@@ -46,6 +48,12 @@ public class Context {
 
 
     /**
+     * Status code (403) indicating the server understood the request but refused to fulfill it.
+     */
+    public static final int SC_FORBIDDEN = 403;
+
+
+    /**
      * Status code (500) indicating an error inside the HTTP server which prevented it from fulfilling the request.
      */
     public static final int SC_INTERNAL_SERVER_ERROR = 500;
@@ -61,6 +69,7 @@ public class Context {
 
     private Route processedRoute_ = null;
     private SseConnection sseConnection_ = null;
+    private String csrfToken_ = null;
     private Element processedElement_ = null;
 
     Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
@@ -2663,6 +2672,122 @@ public class Context {
         if (null == broadcaster) throw new IllegalArgumentException("broadcaster can't be null");
 
         return establishSseConnection(broadcaster);
+    }
+
+    /**
+     * Ensures that a CSRF token is established for this request, generating
+     * a new one and setting its cookie when the browser doesn't have one
+     * yet.
+     * <p>Once a token is active for a request, the {@code route:inputs:}
+     * filtered tag adds it to the forms it generates, and the token is
+     * available on its own through the {@code context:csrfToken} template
+     * value, for the headers that JavaScript sends. The
+     * {@link rife.engine.elements.CsrfProtected} element calls this on the
+     * pages that display protected forms.
+     * <p>This doesn't return the token, use {@link #csrfToken()} to obtain
+     * its value.
+     *
+     * @see #csrfToken()
+     * @see rife.engine.elements.CsrfProtected
+     * @since 1.10
+     */
+    public void ensureCsrfToken() {
+        if (csrfToken_ != null) {
+            return;
+        }
+
+        var cookie_name = RifeConfig.engine().getCsrfCookieName();
+        var token = cookieValue(cookie_name);
+        if (token == null || token.isEmpty()) {
+            var bytes = new byte[32];
+            site_.csrfRandom_.nextBytes(bytes);
+            token = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+            addCookie(new CookieBuilder(cookie_name, token)
+                .path("/")
+                .secure(scheme().equals("https"))
+                .httpOnly(true)
+                .sameSite(SameSite.LAX));
+        }
+
+        csrfToken_ = token;
+    }
+
+    /**
+     * Retrieves the CSRF token of the browser that performs this request,
+     * establishing one with {@link #ensureCsrfToken()} when the browser
+     * doesn't have one yet. The same token is returned for the rest of this
+     * request.
+     *
+     * @return the CSRF token of this browser
+     * @see #ensureCsrfToken()
+     * @see rife.engine.elements.CsrfProtected
+     * @since 1.10
+     */
+    public String csrfToken() {
+        ensureCsrfToken();
+        return csrfToken_;
+    }
+
+    /**
+     * Indicates whether a CSRF token is available for this request, either
+     * because one was already established while processing it, or because
+     * the browser sent its token cookie.
+     * <p>Unlike {@link #csrfToken()} this doesn't create a token, so it can
+     * be used to decide whether to include the token without minting one
+     * for browsers that don't have it. The {@code route:inputs:} filtered
+     * tag uses it to add the token to the forms of the pages where it's
+     * active.
+     *
+     * @return {@code true} when a CSRF token is available; or
+     * <p>{@code false} otherwise
+     * @see #csrfToken()
+     * @since 1.10
+     */
+    public boolean hasCsrfToken() {
+        if (csrfToken_ != null) {
+            return true;
+        }
+
+        var cookie = cookieValue(RifeConfig.engine().getCsrfCookieName());
+        return cookie != null && !cookie.isEmpty();
+    }
+
+    /**
+     * Verifies that this request provides the CSRF token of the browser
+     * that performs it.
+     * <p>The token is looked up in the request parameter and in the request
+     * header that {@code RifeConfig.engine()} configures, in that order.
+     *
+     * @throws CsrfTokenMissingException when the browser has no token
+     *                                   cookie, or when the request
+     *                                   provides no token
+     * @throws CsrfTokenInvalidException when the provided token doesn't
+     *                                   correspond to the token cookie
+     * @see rife.engine.elements.CsrfProtected
+     * @since 1.10
+     */
+    public void verifyCsrfToken() {
+        var expected = cookieValue(RifeConfig.engine().getCsrfCookieName());
+        if (expected == null || expected.isEmpty()) {
+            throw new CsrfTokenMissingException("this browser has no CSRF token cookie");
+        }
+
+        var provided = parameter(RifeConfig.engine().getCsrfParameterName());
+        if (provided == null || provided.isEmpty()) {
+            provided = header(RifeConfig.engine().getCsrfHeaderName());
+        }
+        if (provided == null || provided.isEmpty()) {
+            throw new CsrfTokenMissingException("the request provides neither the '" +
+                RifeConfig.engine().getCsrfParameterName() + "' parameter nor the '" +
+                RifeConfig.engine().getCsrfHeaderName() + "' header");
+        }
+
+        // a constant-time comparison, so that the token can't be guessed
+        // by measuring how long the verification takes
+        if (!MessageDigest.isEqual(expected.getBytes(StandardCharsets.UTF_8),
+                                   provided.getBytes(StandardCharsets.UTF_8))) {
+            throw new CsrfTokenInvalidException();
+        }
     }
 
     SseConnection sseConnection() {

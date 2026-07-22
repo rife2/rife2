@@ -16,6 +16,13 @@ import java.time.Instant;
  * @since 1.0
  */
 public class MockCookie extends Cookie {
+    /**
+     * The path of a cookie that doesn't specify one.
+     *
+     * @since 1.10
+     */
+    public static final String DEFAULT_PATH = "/";
+
     private final Instant creationTime_;
 
     /**
@@ -27,7 +34,7 @@ public class MockCookie extends Cookie {
      */
     public MockCookie(String name, String value) {
         super(name, value);
-        setPath("/");
+        setPath(DEFAULT_PATH);
         creationTime_ = Instant.now();
     }
 
@@ -41,9 +48,13 @@ public class MockCookie extends Cookie {
         this(cookie.getName(), cookie.getValue());
         if (cookie.getDomain() != null) setDomain(cookie.getDomain());
         setMaxAge(cookie.getMaxAge());
-        setPath(cookie.getPath());
+        // a null path would clear the default set by the delegated constructor
+        if (cookie.getPath() != null) setPath(cookie.getPath());
         setSecure(cookie.getSecure());
         setHttpOnly(cookie.isHttpOnly());
+        for (var attribute : cookie.getAttributes().entrySet()) {
+            setAttribute(attribute.getKey(), attribute.getValue());
+        }
     }
 
     /**

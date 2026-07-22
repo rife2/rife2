@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestRouterDestroy {
     @Test
@@ -71,6 +72,33 @@ public class TestRouterDestroy {
         m.destroy();
 
         assertEquals(List.of("grouped", "site"), order);
+
+        // destroying more than once has no additional effect
+        m.destroy();
+        m.close();
+
+        assertEquals(List.of("grouped", "site"), order);
+    }
+
+    @Test
+    void testDestroyThroughAutoCloseable() {
+        var order = new ArrayList<String>();
+        var site = new Site() {
+            public void setup() {
+                get("/hello", c -> c.print("Hello"));
+            }
+
+            public void destroy() {
+                order.add("site");
+            }
+        };
+
+        try (var m = new MockConversation(site)) {
+            assertEquals("Hello", m.doRequest("/hello").getText());
+            assertTrue(order.isEmpty());
+        }
+
+        assertEquals(List.of("site"), order);
     }
 
     @Test

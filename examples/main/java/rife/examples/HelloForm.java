@@ -6,6 +6,7 @@ package rife.examples;
 
 import rife.engine.*;
 import rife.engine.annotations.Parameter;
+import rife.engine.elements.CsrfProtected;
 
 import static rife.engine.RequestMethod.GET;
 
@@ -17,6 +18,8 @@ public class HelloForm extends Site {
             var t = c.template("HelloForm");
 
             if (c.method() == GET) {
+                // the route:inputs: tag adds the CSRF token automatically,
+                // since the form submits to a route that CsrfProtected guards
                 t.setBlock("content", "form");
             } else {
                 t.setValueEncoded("name", name);
@@ -28,6 +31,12 @@ public class HelloForm extends Site {
     }
 
     Route form = getPost("/form", MyForm::new);
+
+    public void setup() {
+        // the submission of the form is verified, a refused request gets a
+        // 403 straight from the element
+        before(new CsrfProtected());
+    }
 
     public static void main(String[] args) {
         new Server().start(new HelloForm());

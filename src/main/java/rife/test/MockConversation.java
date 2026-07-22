@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class MockConversation {
+public class MockConversation implements AutoCloseable {
     static final String SESSION_ID_COOKIE = "JSESSIONID";
     static final String SESSION_ID_URL = "jsessionid";
     static final String SESSION_URL_PREFIX = ";" + SESSION_ID_URL + "=";
@@ -70,13 +70,36 @@ public class MockConversation {
     /**
      * Tears down this conversation's site, calling {@code destroy()} on
      * the site and on all its grouped routers.
-     * <p>This allows the teardown lifecycle of a site to be tested out
-     * of container.
+     * <p>This allows the teardown lifecycle of a site to be tested out of
+     * container, and releases the resources that the site holds on to, for
+     * instance schedulers, executors or SSE broadcasters. Destroying a
+     * conversation more than once has no additional effect.
+     * <p>Unlike the teardown of a web application in a servlet container,
+     * the active {@code Datasource} and {@code Scheduler} instances are not
+     * closed and stopped, since those are shared by the whole JVM and other
+     * tests can still be using them.
+     * <p>This is also called by {@link #close()}, which makes it possible
+     * to use a conversation as a resource:
+     * <pre>try (var conversation = new MockConversation(new MySite())) {
+     *     assertEquals("Hello", conversation.doRequest("/hello").getText());
+     * }</pre>
      *
+     * @see #close()
      * @since 1.10
      */
     public void destroy() {
         gate_.destroy();
+    }
+
+    /**
+     * Tears down this conversation's site by calling {@link #destroy()}.
+     *
+     * @see #destroy()
+     * @since 1.10
+     */
+    @Override
+    public void close() {
+        destroy();
     }
 
     /**
@@ -518,8 +541,12 @@ public class MockConversation {
             cookie_id.append(cookie.getDomain());
         }
         cookie_id.append("\n");
-        if (cookie.getPath() != null) {
+        // a cookie that doesn't specify a path is stored with the default
+        // path, so that it's the same cookie as one that specifies it
+        if (cookie.getPath() != null && !cookie.getPath().isEmpty()) {
             cookie_id.append(cookie.getPath());
+        } else {
+            cookie_id.append(MockCookie.DEFAULT_PATH);
         }
         cookie_id.append("\n");
         if (cookie.getName() != null) {

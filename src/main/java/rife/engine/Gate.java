@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 public class Gate {
     private Site site_ = null;
     private Throwable initException_ = null;
+    private boolean destroyed_ = false;
 
     /**
      * Set up the gate with the provided {@code Site}.
@@ -50,10 +51,19 @@ public class Gate {
     /**
      * Tears down the gate and the associated {@code Site}, calling
      * {@code destroy()} on the site and on all its grouped routers.
+     * <p>Tearing down a gate that has already been torn down has no
+     * additional effect, the {@code destroy()} methods are only called
+     * once.
      *
      * @since 1.6.1
      */
     public void destroy() {
+        synchronized (this) {
+            if (destroyed_) {
+                return;
+            }
+            destroyed_ = true;
+        }
         site_.shutdown();
     }
 
