@@ -25,7 +25,10 @@ class ResumableClassAdapter extends ClassVisitor {
     private final NoOpAnnotationVisitor annotationVisitor_ = new NoOpAnnotationVisitor();
 
     ResumableClassAdapter(ContinuationConfigInstrument config, MetricsClassVisitor metrics, TypesClassVisitor types, String className, ClassVisitor classVisitor) {
-        super(ASM9);
+        // Keep the delegate on ClassVisitor itself so that class-file metadata
+        // we don't adapt explicitly (such as nest host/member attributes) is
+        // preserved by its default visit methods.
+        super(ASM9, classVisitor);
         config_ = config;
         metrics_ = metrics;
         types_ = types;
@@ -66,12 +69,12 @@ class ResumableClassAdapter extends ClassVisitor {
             entryMethodDesc_.equals(desc)) {
             if (adapt_) {
                 if (!metrics_.makeResumable()) {
-                    return new ResumableMethodAdapter(config_, null, classVisitor_.visitMethod(access, name, desc, signature, exceptions), className_, false, -1, 0);
+                    return new ResumableMethodAdapter(config_, null, classVisitor_.visitMethod(access, name, desc, signature, exceptions), className_, access, desc, false, -1, 0);
                 } else {
-                    return new ResumableMethodAdapter(config_, types_, classVisitor_.visitMethod(access, name, desc, signature, exceptions), className_, true, metrics_.getMaxLocals(), metrics_.getPauseCount());
+                    return new ResumableMethodAdapter(config_, types_, classVisitor_.visitMethod(access, name, desc, signature, exceptions), className_, access, desc, true, metrics_.getMaxLocals(), metrics_.getPauseCount());
                 }
             } else {
-                return new ResumableMethodAdapter(config_, null, null, null, false, -1, 0);
+                return new ResumableMethodAdapter(config_, null, null, null, access, desc, false, -1, 0);
             }
         }
 

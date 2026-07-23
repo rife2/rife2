@@ -28,7 +28,7 @@ public class LazyLoadTransformer extends RifeTransformer {
             is_constrained = new ConstrainedDetector(new ClassBytesLoader(loader)).isConstrained(classname_dotted_interned, classfileBuffer);
 
             if (is_constrained) {
-                return LazyLoadAccessorsBytecodeTransformer.addLazyLoadToBytes(classfileBuffer);
+                return LazyLoadAccessorsBytecodeTransformer.addLazyLoadToBytes(classfileBuffer, loader);
             }
         } catch (Throwable ignored) {
         }

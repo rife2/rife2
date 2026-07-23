@@ -210,9 +210,13 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                         currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, "[L" + desc + ";"));
                     }
                 }
-                case CHECKCAST, INSTANCEOF -> {
+                case CHECKCAST -> {
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
                     currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, desc));
+                }
+                case INSTANCEOF -> {
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.POP));
+                    currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, TypesContext.CAT1_INT));
                 }
             }
         }
@@ -221,18 +225,50 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
     /**
      * Visits a LDC instruction.
      *
-     * @param cst the constant to be loaded on the stack. This parameter must be
-     *            a non-null {@link java.lang.Integer Integer}, a {@link java.lang.Float
-     *            Float}, a {@link java.lang.Long Long}, a {@link java.lang.Double
-     *            Double} or a {@link String String}.
+     * @param cst the constant to be loaded on the stack. This is an {@link Integer},
+     *            {@link Float}, {@link Long}, {@link Double}, {@link String},
+     *            {@link Type}, {@link Handle}, or {@link ConstantDynamic} value.
      */
     public void visitLdcInsn(Object cst) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Type:visitLdcInsn            (" + cst + ")");
 
         if (currentNode_ != null) {
-            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, Type.getInternalName(cst.getClass())));
+            String type;
+            if (cst instanceof Integer) {
+                type = TypesContext.CAT1_INT;
+            } else if (cst instanceof Float) {
+                type = TypesContext.CAT1_FLOAT;
+            } else if (cst instanceof Long) {
+                type = TypesContext.CAT2_LONG;
+            } else if (cst instanceof Double) {
+                type = TypesContext.CAT2_DOUBLE;
+            } else if (cst instanceof String) {
+                type = "java/lang/String";
+            } else if (cst instanceof Type value) {
+                type = value.getSort() == Type.METHOD ? "java/lang/invoke/MethodType" : "java/lang/Class";
+            } else if (cst instanceof Handle) {
+                type = "java/lang/invoke/MethodHandle";
+            } else if (cst instanceof ConstantDynamic value) {
+                type = ldcType(value.getDescriptor());
+            } else {
+                throw new IllegalArgumentException("Unsupported LDC constant type: " + cst.getClass().getName());
+            }
+            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, type));
         }
+    }
+
+    private String ldcType(String descriptor) {
+        var type = Type.getType(descriptor);
+        return switch (type.getSort()) {
+            case Type.BOOLEAN, Type.BYTE, Type.CHAR, Type.INT, Type.SHORT -> TypesContext.CAT1_INT;
+            case Type.FLOAT -> TypesContext.CAT1_FLOAT;
+            case Type.LONG -> TypesContext.CAT2_LONG;
+            case Type.DOUBLE -> TypesContext.CAT2_DOUBLE;
+            case Type.OBJECT -> type.getInternalName();
+            case Type.ARRAY -> type.getDescriptor();
+            default -> throw new IllegalArgumentException("Unsupported LDC descriptor: " + descriptor);
+        };
     }
 
     /**
@@ -700,13 +736,11 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
 
         currentNode_.addInstruction(new TypesInstruction(TypesOpcode.LABEL, ++labelCount_));
 
-        // if the label starts with an exception type, change the sort of
-        // the created node and add the exception type as the first type
-        // on the stack
+        // If the label starts an exception handler, mark its sort. The
+        // expanded stack-map frame supplies the caught exception type.
         var exception_type = classVisitor_.getMetrics().nextExceptionType();
         if (exception_type != null) {
             currentNode_.setSort(TypesNode.EXCEPTION);
-            currentNode_.addInstruction(new TypesInstruction(TypesOpcode.PUSH, exception_type));
         }
     }
 
@@ -780,6 +814,7 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
             var successor = node.getSuccessors();
             while (successor != null) {
                 successor_node = labelMapping_.get(successor.getLabel());
+                successor_node.addPredecessor();
 
                 if (!successor_node.isProcessed()) {
                     successor_node.setProcessed(true);
@@ -794,18 +829,22 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
                 successor = successor.getNextSuccessor();
             }
             // handle a possible following node
-            if (node.getFollowingNode() != null &&
-                !node.getFollowingNode().isProcessed()) {
+            if (node.getFollowingNode() != null) {
                 following_node = node.getFollowingNode();
+                following_node.addPredecessor();
 
-                following_node.setProcessed(true);
-                following_node.setPredecessor(false, node);
+                if (!following_node.isProcessed()) {
+                    following_node.setProcessed(true);
+                    following_node.setPredecessor(false, node);
 
-                // push the previous node on the stack
-                following_node.setNextToProcess(stack);
-                stack = following_node;
+                    // push the previous node on the stack
+                    following_node.setNextToProcess(stack);
+                    stack = following_node;
+                }
             }
         }
+
+        validateFrameCheckpoints();
 
         classVisitor_.setPauseContexts(pauseContexts_);
         classVisitor_.setLabelContexts(labelContexts_);
@@ -814,8 +853,12 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
     private void processInstructions(TypesNode node) {
         // set up the context for the node
         TypesContext context = null;
+        // Stack-map frames are authoritative at control-flow checkpoints.
+        if (node.getFrameContext() != null) {
+            context = contextFromFrame(node);
+        }
         // if it's the first node, create a new context
-        if (null == node.getPredecessor()) {
+        else if (null == node.getPredecessor()) {
             context = new TypesContext();
         }
         // otherwise retrieve the previous context
@@ -1081,6 +1124,23 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
         }
     }
 
+    private TypesContext contextFromFrame(TypesNode node) {
+        var frame_context = node.getFrameContext();
+        var context = new TypesContext(new HashMap<>(frame_context.getVars()), frame_context.getStackClone());
+        context.setSort(node.getSort());
+        return context;
+    }
+
+    private void validateFrameCheckpoints() {
+        var nodes = new HashSet<>(labelMapping_.values());
+        for (var node : nodes) {
+            if (node.getFrameContext() == null &&
+                (node.getPredecessorCount() > 1 || node.getSort() == TypesNode.EXCEPTION)) {
+                throw new IllegalStateException("Continuation control-flow join is missing a stack-map frame");
+            }
+        }
+    }
+
     /**
      * Visits a line number declaration.
      *
@@ -1180,6 +1240,64 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
         if (ContinuationDebug.LOGGER.isLoggable(Level.FINEST))
             ContinuationDebug.LOGGER.finest(" Code:visitFrame              (" + type + ", " + nLocal + ", " + Arrays.toString(local) + ", " + nStack + ", " + Arrays.toString(stack) + ")");
+
+        if (currentNode_ == null) {
+            throw new IllegalStateException("Stack-map frame has no associated continuation block");
+        }
+        if (type != F_NEW) {
+            throw new IllegalArgumentException("Continuation type analysis requires expanded stack-map frames");
+        }
+
+        var context = new TypesContext();
+        var local_index = 0;
+        for (var i = 0; i < nLocal; i++) {
+            var frame_type = frameType(local[i]);
+            if (frame_type != null) {
+                context.setVar(local_index, frame_type);
+            }
+            local_index += frameSize(local[i]);
+        }
+        for (var i = 0; i < nStack; i++) {
+            var frame_type = frameType(stack[i]);
+            if (frame_type == null) {
+                throw new IllegalArgumentException("Invalid TOP value on the continuation operand stack");
+            }
+            context.push(frame_type);
+        }
+        context.setSort(currentNode_.getSort());
+        currentNode_.setFrameContext(context);
+    }
+
+    private int frameSize(Object type) {
+        return LONG.equals(type) || DOUBLE.equals(type) ? 2 : 1;
+    }
+
+    private String frameType(Object type) {
+        if (TOP.equals(type)) {
+            return null;
+        }
+        if (INTEGER.equals(type)) {
+            return TypesContext.CAT1_INT;
+        }
+        if (FLOAT.equals(type)) {
+            return TypesContext.CAT1_FLOAT;
+        }
+        if (LONG.equals(type)) {
+            return TypesContext.CAT2_LONG;
+        }
+        if (DOUBLE.equals(type)) {
+            return TypesContext.CAT2_DOUBLE;
+        }
+        if (NULL.equals(type)) {
+            return TypesContext.TYPE_NULL;
+        }
+        if (type instanceof String value) {
+            return value;
+        }
+        if (UNINITIALIZED_THIS.equals(type) || type instanceof Label) {
+            throw new IllegalArgumentException("Continuations cannot preserve uninitialized frame values");
+        }
+        throw new IllegalArgumentException("Unsupported stack-map frame type: " + type);
     }
 
     /**
@@ -1192,4 +1310,3 @@ class TypesMethodVisitor extends MethodVisitor implements Opcodes {
             ContinuationDebug.LOGGER.finest(" Type:visitEnd                ()");
     }
 }
-

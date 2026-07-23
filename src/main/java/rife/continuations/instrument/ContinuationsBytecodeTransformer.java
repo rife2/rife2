@@ -36,6 +36,23 @@ public abstract class ContinuationsBytecodeTransformer {
      */
     public static byte[] transformIntoResumableBytes(ContinuationConfigInstrument configInstrument, byte[] rawBytes, String classname)
     throws ClassNotFoundException {
+        return transformIntoResumableBytes(configInstrument, rawBytes, classname, ContinuationsBytecodeTransformer.class.getClassLoader());
+    }
+
+    /**
+     * Perform the class transformation using the provided class loader when
+     * computing stack map frames.
+     *
+     * @param configInstrument the instrumentation configuration
+     * @param rawBytes         the original class bytes
+     * @param classname        the class name
+     * @param classLoader      the loader that resolves application classes
+     * @return the transformed bytes, or {@code null} when no transformation is needed
+     * @throws ClassNotFoundException when an error occurs
+     * @since 1.10
+     */
+    public static byte[] transformIntoResumableBytes(ContinuationConfigInstrument configInstrument, byte[] rawBytes, String classname, ClassLoader classLoader)
+    throws ClassNotFoundException {
         // adapts the class on the fly
         byte[] resumable_bytes = null;
         var reader_flags = ClassReader.SKIP_FRAMES;
@@ -50,12 +67,19 @@ public abstract class ContinuationsBytecodeTransformer {
                 ContinuationDebug.LOGGER.finest("TYPES:");
                 var types_reader = new ClassReader(rawBytes);
                 var types_visitor = new TypesClassVisitor(configInstrument, metrics_visitor, classname);
-                types_reader.accept(types_visitor, reader_flags);
+                // Expanded stack-map frames provide the verifier's merged local
+                // and operand types at control-flow joins. The types pass uses
+                // them as authoritative checkpoints and only simulates the
+                // straight-line instructions between them.
+                types_reader.accept(types_visitor, ClassReader.EXPAND_FRAMES);
                 ContinuationDebug.LOGGER.finest("\n");
 
                 ContinuationDebug.LOGGER.finest("SOURCE:");
                 var resumable_reader = new ClassReader(rawBytes);
-                var resumable_writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+                var resumable_writer = new ContinuationClassWriter(
+                    ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES,
+                    rawBytes,
+                    classLoader);
                 ClassVisitor resumable_visitor = new ResumableClassAdapter(configInstrument, metrics_visitor, types_visitor, classname, resumable_writer);
                 resumable_reader.accept(resumable_visitor, reader_flags);
                 resumable_bytes = resumable_writer.toByteArray();

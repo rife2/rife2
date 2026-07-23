@@ -93,7 +93,7 @@ public class InstrumentationDeployer {
                     // the java agent registers its transformers
                     for (var config : continuations_configs) {
                         try {
-                            var result = ContinuationsBytecodeTransformer.transformIntoResumableBytes(config, current, name);
+                            var result = ContinuationsBytecodeTransformer.transformIntoResumableBytes(config, current, name, loader);
                             if (result != null) {
                                 current = result;
                                 continuations_entries.put(name, config);
@@ -111,7 +111,7 @@ public class InstrumentationDeployer {
 
                     try {
                         if (new ConstrainedDetector(new ClassBytesLoader(loader)).isConstrained(name, current)) {
-                            var lazy = LazyLoadAccessorsBytecodeTransformer.addLazyLoadToBytes(current);
+                            var lazy = LazyLoadAccessorsBytecodeTransformer.addLazyLoadToBytes(current, loader);
                             if (lazy != null) {
                                 current = lazy;
                             }

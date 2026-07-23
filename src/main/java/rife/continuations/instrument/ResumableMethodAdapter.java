@@ -22,6 +22,7 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
     private final String className_;
     private final boolean visit_;
     private final boolean adapt_;
+    private final int firstNonParameterLocal_;
 
     private int contextIndex_ = -1;
     private int callTargetIndex_ = -1;
@@ -47,8 +48,10 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         }
     }
 
-    ResumableMethodAdapter(ContinuationConfigInstrument config, TypesClassVisitor types, MethodVisitor methodVisitor, String className, boolean adapt, int maxLocals, int pauseCount) {
-        super(ASM9);
+    ResumableMethodAdapter(ContinuationConfigInstrument config, TypesClassVisitor types, MethodVisitor methodVisitor, String className, int access, String descriptor, boolean adapt, int maxLocals, int pauseCount) {
+        // Preserve method metadata that this adapter doesn't transform
+        // explicitly, including type annotations and parameter metadata.
+        super(ASM9, methodVisitor);
 
         config_ = config;
         types_ = types;
@@ -56,6 +59,11 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
         className_ = className;
         visit_ = (methodVisitor_ != null);
         adapt_ = adapt;
+        var first_non_parameter_local = (access & ACC_STATIC) == 0 ? 1 : 0;
+        for (var argument : Type.getArgumentTypes(descriptor)) {
+            first_non_parameter_local += argument.getSize();
+        }
+        firstNonParameterLocal_ = first_non_parameter_local;
         contextIndex_ = maxLocals;
         callTargetIndex_ = contextIndex_ + 1;
         answerIndex_ = callTargetIndex_ + 1;
@@ -441,7 +449,17 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                 continue;
             }
 
-            switch (context.getVarType(i)) {
+            var var_type = context.getVarType(i);
+            if (var_type == Type.LONG || var_type == Type.DOUBLE) {
+                continue;
+            }
+
+            Label skip_parameter_restore = null;
+            if (i < firstNonParameterLocal_) {
+                skip_parameter_restore = beginParameterRestore(i);
+            }
+
+            switch (var_type) {
                 case Type.INT -> {
                     debugMessage("CONT: restore local : " + i + ", int");
                     methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
@@ -474,13 +492,27 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     }
                 }
             }
+
+            if (skip_parameter_restore != null) {
+                methodVisitor_.visitLabel(skip_parameter_restore);
+            }
         }
         for (var i = 1; i <= maxLocalIndex_; i++) {
             if (!context.hasVar(i)) {
                 continue;
             }
 
-            switch (context.getVarType(i)) {
+            var var_type = context.getVarType(i);
+            if (var_type != Type.LONG && var_type != Type.DOUBLE) {
+                continue;
+            }
+
+            Label skip_parameter_restore = null;
+            if (i < firstNonParameterLocal_) {
+                skip_parameter_restore = beginParameterRestore(i);
+            }
+
+            switch (var_type) {
                 case Type.LONG -> {
                     debugMessage("CONT: restore local : " + i + ", long");
                     methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
@@ -498,7 +530,24 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                     methodVisitor_.visitVarInsn(DSTORE, i);
                 }
             }
+
+            if (skip_parameter_restore != null) {
+                methodVisitor_.visitLabel(skip_parameter_restore);
+            }
         }
+    }
+
+    private Label beginParameterRestore(int index) {
+        var skip_restore = new Label();
+        methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
+        methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "rife/continuations/ContinuationContext", "getLocalVars", "()Lrife/continuations/ContinuationStack;", false);
+        addIntegerConst(index);
+        methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "rife/continuations/ContinuationStack", "getType", "(I)I", false);
+        // In-range but unstored slots contain -1, while out-of-range slots
+        // report NONE (0). Only a positive type proves that this runtime path
+        // executed a mirrored store for the parameter.
+        methodVisitor_.visitJumpInsn(IFLE, skip_restore);
+        return skip_restore;
     }
 
     /**
@@ -599,8 +648,11 @@ class ResumableMethodAdapter extends MethodVisitor implements Opcodes {
                 default -> {
                     debugMessage("CONT: restore operand : " + i + ", " + type);
                     if (TypesContext.TYPE_NULL.equals(type)) {
+                        methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
+                        methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "rife/continuations/ContinuationContext", "getLocalStack", "()Lrife/continuations/ContinuationStack;", false);
+                        methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "rife/continuations/ContinuationStack", "popReference", "()Ljava/lang/Object;", false);
+                        methodVisitor_.visitInsn(POP);
                         methodVisitor_.visitInsn(ACONST_NULL);
-                        methodVisitor_.visitVarInsn(ASTORE, i);
                     } else {
                         methodVisitor_.visitVarInsn(ALOAD, contextIndex_);
                         methodVisitor_.visitMethodInsn(INVOKEVIRTUAL, "rife/continuations/ContinuationContext", "getLocalStack", "()Lrife/continuations/ContinuationStack;", false);

@@ -8,6 +8,8 @@ import rife.continuations.ContinuationConfigInstrument;
 import rife.instrument.RifeTransformer;
 
 import java.security.ProtectionDomain;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A bytecode transformer that will modify classes so that they
@@ -19,6 +21,8 @@ import java.security.ProtectionDomain;
  * @since 1.0
  */
 public class ContinuationsTransformer extends RifeTransformer {
+    private static final Logger LOGGER = Logger.getLogger(ContinuationsTransformer.class.getName());
+
     private final ContinuationConfigInstrument configInstrument_;
     private final String property_;
 
@@ -38,11 +42,15 @@ public class ContinuationsTransformer extends RifeTransformer {
         System.getProperties().setProperty(property_, Boolean.TRUE.toString());
 
         try {
-            var result = ContinuationsBytecodeTransformer.transformIntoResumableBytes(configInstrument_, classfileBuffer, classNameInternal.replace('/', '.'));
+            var result = ContinuationsBytecodeTransformer.transformIntoResumableBytes(configInstrument_, classfileBuffer, classNameInternal.replace('/', '.'), loader);
             if (result != null) {
                 return result;
             }
         } catch (ClassNotFoundException e) {
+            LOGGER.log(
+                Level.SEVERE,
+                "Unable to instrument continuation class '" + classNameInternal.replace('/', '.') + "'. The original class bytes will be used.",
+                e);
             return classfileBuffer;
         }
 

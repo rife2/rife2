@@ -24,6 +24,8 @@ class TypesNode {
     private boolean processed_ = false;
     private TypesNode nextToProcess_ = null;
     private TypesNode predecessor_ = null;
+    private TypesContext frameContext_ = null;
+    private int predecessorCount_ = 0;
 
     private int sort_ = REGULAR;
 
@@ -91,6 +93,22 @@ class TypesNode {
         return predecessor_;
     }
 
+    void addPredecessor() {
+        predecessorCount_++;
+    }
+
+    int getPredecessorCount() {
+        return predecessorCount_;
+    }
+
+    void setFrameContext(TypesContext frameContext) {
+        frameContext_ = frameContext;
+    }
+
+    TypesContext getFrameContext() {
+        return frameContext_;
+    }
+
     boolean getIsSuccessor() {
         return isSuccessor_;
     }
@@ -115,4 +133,3 @@ class TypesNode {
         return level_;
     }
 }
-

@@ -77,7 +77,7 @@ public class BasicContinuableClassLoader extends ClassLoader implements ClassByt
                 }
 
                 if (continuableDetector_.detect(bytes, false)) {
-                    var resume_bytes = ContinuationsBytecodeTransformer.transformIntoResumableBytes(config_, bytes, name);
+                    var resume_bytes = ContinuationsBytecodeTransformer.transformIntoResumableBytes(config_, bytes, name, this);
 
                     if (resume_bytes != null) {
                         bytes = resume_bytes;
