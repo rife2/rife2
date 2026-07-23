@@ -15,6 +15,8 @@ import rifetestmodels.Person;
 import rifetestmodels.PersonAnnotation;
 import rifetestmodels.PersonCallbacks;
 import rifetestmodels.PersonCloneable;
+import rifetestmodels.WideArguments;
+import rifetestmodels.WideArgumentsBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +26,22 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMetaData {
+    @Test
+    void testMergedParameterizedConstructor() {
+        var bean = new WideArgumentsBean(42);
+
+        assertEquals(42, bean.getValue());
+        assertSame(bean, ((WideArguments) bean).associatedBean());
+    }
+
+    @Test
+    void testMergedInterfaceWithWideArguments() {
+        var bean = new WideArgumentsBean(42);
+        var merged = (WideArguments) bean;
+
+        assertEquals("12:second:3.5:fourth", merged.combine(12L, "second", 3.5, "fourth"));
+    }
+
     @Test
     void testConstraintsValidation() {
         Person person = new Person();
