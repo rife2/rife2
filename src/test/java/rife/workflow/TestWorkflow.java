@@ -7,14 +7,18 @@ package rife.workflow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import rifeworkflowtests.CountdownWork;
+import rifeworkflowtests.DurableHandoffWork;
+import rifeworkflowtests.NestedPrivateFieldWork;
 import rifeworkflowtests.TestEventTypes;
 import rifeworkflowtests.WorkDep1;
 import rifeworkflowtests.WorkDep2;
 import rifeworkflowtests.WorkPauseType1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.LongAdder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -75,6 +79,58 @@ public class TestWorkflow {
         wf.waitForNoWork();
 
         assertEquals(2, work.getEvent().getData());
+    }
+
+    @Test
+    void testNestedWorkCanAccessPrivateEnclosingField()
+    throws Throwable {
+        var execute = NestedPrivateFieldWork.NestedWork.class.getMethod("execute", Workflow.class);
+        assertTrue(execute.getParameters()[0].isAnnotationPresent(NestedPrivateFieldWork.ParameterMarker.class));
+        assertTrue(execute.getAnnotatedParameterTypes()[0].isAnnotationPresent(NestedPrivateFieldWork.TypeMarker.class));
+
+        var errors = new CopyOnWriteArrayList<WorkErrorException>();
+        var workflow = new Workflow();
+        workflow.addErrorListener(errors::add);
+        var work = new NestedPrivateFieldWork.NestedWork();
+
+        workflow.start(work);
+        assertTrue(workflow.waitForPausedWork());
+        workflow.trigger(NestedPrivateFieldWork.eventType(), 42);
+        workflow.waitForNoWork();
+
+        assertTrue(errors.isEmpty());
+        assertEquals(42, work.getEvent().getData());
+    }
+
+    @Test
+    @Timeout(60)
+    void testDurableHandoffsOnCachedThreadPool()
+    throws Throwable {
+        final var runs = 25;
+        final var rounds = 20;
+        var expected = new ArrayList<Integer>();
+        for (var i = 1; i <= rounds; ++i) {
+            expected.add(i);
+        }
+
+        for (var run = 0; run < runs; ++run) {
+            var executor = Executors.newCachedThreadPool();
+            try {
+                var errors = new CopyOnWriteArrayList<WorkErrorException>();
+                var received = new CopyOnWriteArrayList<Integer>();
+                var workflow = new Workflow(executor);
+                workflow.addErrorListener(errors::add);
+
+                workflow.start(new DurableHandoffWork.Consumer(rounds, received));
+                workflow.start(new DurableHandoffWork.Producer(rounds));
+                workflow.waitForNoWork();
+
+                assertTrue(errors.isEmpty());
+                assertEquals(expected, received);
+            } finally {
+                executor.shutdownNow();
+            }
+        }
     }
 
     @Test

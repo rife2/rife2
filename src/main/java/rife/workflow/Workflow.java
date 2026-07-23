@@ -346,11 +346,9 @@ public class Workflow {
     throws InterruptedException {
         workLock_.lock();
         try {
-            if (activeWorkAndPauseCount_.get() == 0) {
-                return;
+            while (activeWorkAndPauseCount_.get() != 0) {
+                workFinished_.await();
             }
-
-            workFinished_.await();
         } finally {
             workLock_.unlock();
         }
