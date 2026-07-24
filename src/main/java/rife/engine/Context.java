@@ -586,7 +586,9 @@ public class Context {
      * <p>Because the response genuinely differs on these headers, this adds
      * {@code HX-Request} and {@code HX-History-Restore-Request} to the
      * response's {@code Vary} header, so a cache never hands the full page to
-     * an htmx request or the other way around.
+     * an htmx request or the other way around. Using this instead of a
+     * hand-written {@link #isHxRequest()} branch keeps the history-restoration
+     * guard and the {@code Vary} header from being forgotten.
      *
      * @param template the template to print
      * @param blockId  the id of the block to send on an htmx request
@@ -3172,16 +3174,21 @@ public class Context {
     /**
      * Indicates whether the current request was issued by htmx.
      * <p>This reads the {@code HX-Request} header that htmx sets on every
-     * request it makes. It's a plain read with no side effects. When you
-     * shape the response based on it, keep caches correct by declaring the
-     * dependency with {@link #varyOn varyOn("HX-Request")}, or use
-     * {@link #printHtmxFragment}, which does that for you.
+     * request it makes. It's a plain read with no side effects, so consulting
+     * it for logging or a decision that doesn't change the output is free.
+     * <p>To serve a fragment to htmx and the full page otherwise, prefer
+     * {@link #printHtmxFragment}: it makes that choice, guards the
+     * {@link #isHxHistoryRestoreRequest() history-restoration} case, and
+     * declares {@code Vary} for you. Branch on this method by hand only when
+     * that helper doesn't fit, and then declare the dependency with {@link
+     * #varyOn varyOn("HX-Request")}, or a shared cache may hand the fragment to
+     * a browser or the full page to htmx.
      *
      * @return {@code true} when this is an htmx request; {@code false}
      * otherwise
-     * @see #printBlock
      * @see #printHtmxFragment
      * @see #varyOn
+     * @see #printBlock
      * @since 1.10
      */
     public boolean isHxRequest() {
@@ -3207,12 +3214,18 @@ public class Context {
      * Indicates whether the current request is htmx restoring a page from its
      * history after a cache miss, reading the
      * {@code HX-History-Restore-Request} header.
-     * <p>Such a request expects the <em>whole</em> page, not a fragment, so
-     * {@link #printHtmxFragment} treats it as a normal request. It's a plain
+     * <p>Such a request expects the <em>whole</em> page, not a fragment, since
+     * htmx replaces the entire document when restoring from history and a
+     * fragment would corrupt back/forward navigation. {@link
+     * #printHtmxFragment} serves the full page for you. If you instead
+     * hand-roll a fragment-or-page branch on {@link #isHxRequest()}, guard it
+     * with this method too, or a history restore that carries the same
+     * parameters as a fragment request will receive a fragment. It's a plain
      * read with no side effects.
      *
      * @return {@code true} when this is an htmx history-restoration request
      * @see #printHtmxFragment
+     * @see #isHxRequest()
      * @since 1.10
      */
     public boolean isHxHistoryRestoreRequest() {
