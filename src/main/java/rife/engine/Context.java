@@ -19,6 +19,7 @@ import rife.template.exceptions.TemplateException;
 import rife.tools.ArrayUtils;
 import rife.tools.BeanUtils;
 import rife.tools.StringUtils;
+import rife.json.Json;
 import rife.tools.exceptions.BeanUtilsException;
 
 import java.io.OutputStream;
@@ -70,6 +71,7 @@ public class Context {
     private Route processedRoute_ = null;
     private SseConnection sseConnection_ = null;
     private String csrfToken_ = null;
+    private Set<String> variedHeaders_ = null;
     private Element processedElement_ = null;
 
     Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
@@ -505,6 +507,102 @@ public class Context {
 
         // print the element contents with the auto-generated values
         response_.print(template);
+    }
+
+    /**
+     * Prints a single named block of a template to the response.
+     * <p>The template's filtered tags (values, routes, application and
+     * context tags) are processed just as with {@link #print(Template)}, but
+     * only the content of the requested block is written out, not the whole
+     * template. This is the low-level primitive for sending HTML fragments to
+     * htmx and other hypermedia libraries.
+     * <p>To serve the full page on a normal request and just a block on an
+     * htmx request, prefer {@link #printHtmxFragment}, which makes that choice
+     * for you and, unlike a bare {@link #isHxRequest()} check, still serves the
+     * full page when htmx is restoring a page from its history. Reach for
+     * {@code printBlock} directly when you specifically want a block, such as
+     * an htmx out-of-band update: give the block's root element an
+     * {@code hx-swap-oob} attribute in the template and print it after the main
+     * content, and htmx swaps it in wherever it belongs.
+     * <pre>c.print(mainTemplate);          // the primary swap
+     * c.printBlock(mainTemplate, "cartBadge"); // an hx-swap-oob block, updated too</pre>
+     *
+     * @param template the template whose block should be printed
+     * @param blockId  the id of the block to print
+     * @throws TemplateException          if an error occurs while processing
+     *                                    the template
+     * @throws EngineException            if an error occurs during the output
+     * @throws SseOutputRefusedException  when an SSE connection has been
+     *                                    established for this request
+     * @see #printHtmxFragment
+     * @see #print(Template)
+     * @since 1.10
+     */
+    public void printBlock(Template template, String blockId)
+    throws TemplateException {
+        ensureNoSseConnection();
+
+        if (template == null) {
+            return;
+        }
+
+        if (!template.hasAttribute(Context.class.getName())) {
+            template.setAttribute(Context.class.getName(), this);
+        }
+
+        new EngineTemplateProcessor(this, template).processTemplate();
+
+        // set the content type
+        if (!response_.isContentTypeSet()) {
+            var content_type = template.getDefaultContentType();
+            if (null == content_type) {
+                content_type = RifeConfig.engine().getDefaultContentType();
+            }
+
+            response_.setContentType(content_type);
+        }
+
+        response_.print(template.getBlock(blockId));
+    }
+
+    /**
+     * Prints a template as a full page or as one of its blocks, depending on
+     * whether the request came from htmx.
+     * <p>This is the whole "one element serves both" pattern in a single call:
+     * on a normal request the entire template is printed with {@link
+     * #print(Template)}, and on an {@link #isHxRequest() htmx request} only the
+     * named block is printed with {@link #printBlock}. Pair it with a block
+     * value ({@code <!--bv blockId-->}) and the same element handles the full
+     * page and the fragment with no branching of its own:
+     * <pre>get("/books", c -&gt; {
+     *     var t = c.template("books");
+     *     // ... fill it ...
+     *     c.printHtmxFragment(t, "list");   // full page normally, just the list to htmx
+     * });</pre>
+     * <p>An htmx {@link #isHxHistoryRestoreRequest() history-restoration
+     * request} is deliberately served the full page, since htmx replaces the
+     * whole document when restoring from history and a fragment would corrupt
+     * back/forward navigation.
+     *
+     * @param template the template to print
+     * @param blockId  the id of the block to send on an htmx request
+     * @throws TemplateException          if an error occurs while processing
+     *                                    the template
+     * @throws EngineException            if an error occurs during the output
+     * @throws SseOutputRefusedException  when an SSE connection has been
+     *                                    established for this request
+     * @see #isHxRequest()
+     * @see #printBlock
+     * @see #print(Template)
+     * @since 1.10
+     */
+    public void printHtmxFragment(Template template, String blockId)
+    throws TemplateException {
+        if (isHxRequest() && !isHxHistoryRestoreRequest()) {
+            printBlock(template, blockId);
+        } else {
+            print(template);
+        }
     }
 
     /**
@@ -3050,5 +3148,343 @@ public class Context {
      */
     public void setStatus(int statusCode) {
         response_.setStatus(statusCode);
+    }
+
+    // ---------------------------------------------------------------------
+    // htmx integration
+    //
+    // Request-side accessors read the HX-* headers that htmx sends, so an
+    // element can tell an htmx request apart from a full page load and adapt
+    // its response. Response-side helpers set the HX-* headers that htmx acts
+    // on, typed instead of hand-written, and route-aware so history URLs and
+    // redirects survive refactoring. None of this couples RIFE2 to htmx: the
+    // accessors are plain header reads and the setters plain header writes.
+    // ---------------------------------------------------------------------
+
+    /**
+     * Indicates whether the current request was issued by htmx.
+     * <p>This reads the {@code HX-Request} header that htmx sets on every
+     * request it makes. Consulting it also adds {@code HX-Request} to the
+     * response's {@code Vary} header, so caches and proxies keep the
+     * full-page and the htmx-fragment variants of the same URL apart.
+     *
+     * @return {@code true} when this is an htmx request; {@code false}
+     * otherwise
+     * @see #printBlock
+     * @since 1.10
+     */
+    public boolean isHxRequest() {
+        varyOn("HX-Request");
+        return "true".equals(header("HX-Request"));
+    }
+
+    /**
+     * Indicates whether the current request was made by an htmx-boosted link
+     * or form, reading the {@code HX-Boosted} header.
+     * <p>Consulting this adds {@code HX-Boosted} to the response's {@code Vary}
+     * header, so a cache keeps a boosted response apart from an ordinary one.
+     *
+     * @return {@code true} when this is an htmx-boosted request
+     * @since 1.10
+     */
+    public boolean isHxBoosted() {
+        varyOn("HX-Boosted");
+        return "true".equals(header("HX-Boosted"));
+    }
+
+    /**
+     * Indicates whether the current request is htmx restoring a page from its
+     * history after a cache miss, reading the
+     * {@code HX-History-Restore-Request} header.
+     * <p>Such a request expects the <em>whole</em> page, not a fragment, so
+     * {@link #printHtmxFragment} treats it as a normal request. Consulting this
+     * adds {@code HX-History-Restore-Request} to the response's {@code Vary}
+     * header.
+     *
+     * @return {@code true} when this is an htmx history-restoration request
+     * @see #printHtmxFragment
+     * @since 1.10
+     */
+    public boolean isHxHistoryRestoreRequest() {
+        varyOn("HX-History-Restore-Request");
+        return "true".equals(header("HX-History-Restore-Request"));
+    }
+
+    /**
+     * Returns the {@code id} of the element that triggered an htmx request,
+     * from the {@code HX-Trigger} request header.
+     *
+     * @return the triggering element's id, or {@code null} if absent
+     * @since 1.10
+     */
+    public String hxTriggerId() {
+        return header("HX-Trigger");
+    }
+
+    /**
+     * Returns the {@code name} of the element that triggered an htmx request,
+     * from the {@code HX-Trigger-Name} request header.
+     *
+     * @return the triggering element's name, or {@code null} if absent
+     * @since 1.10
+     */
+    public String hxTriggerName() {
+        return header("HX-Trigger-Name");
+    }
+
+    /**
+     * Returns the {@code id} of the target element of an htmx request, from
+     * the {@code HX-Target} request header.
+     *
+     * @return the target element's id, or {@code null} if absent
+     * @since 1.10
+     */
+    public String hxTarget() {
+        return header("HX-Target");
+    }
+
+    /**
+     * Returns the browser's current URL at the time of the htmx request, from
+     * the {@code HX-Current-URL} request header.
+     *
+     * @return the current URL, or {@code null} if absent
+     * @since 1.10
+     */
+    public String hxCurrentUrl() {
+        return header("HX-Current-URL");
+    }
+
+    /**
+     * Returns the user's response to an {@code hx-prompt}, from the
+     * {@code HX-Prompt} request header.
+     *
+     * @return the prompt response, or {@code null} if absent
+     * @since 1.10
+     */
+    public String hxPrompt() {
+        return header("HX-Prompt");
+    }
+
+    /**
+     * Tells htmx to do a client-side redirect to a new location without a
+     * full page reload, by setting the {@code HX-Location} response header.
+     *
+     * @param url the location to navigate to
+     * @since 1.10
+     */
+    public void hxLocation(String url) {
+        setHeader("HX-Location", url);
+    }
+
+    /**
+     * Tells htmx to do a client-side redirect to a route without a full page
+     * reload, by setting the {@code HX-Location} response header.
+     *
+     * @param route the route to navigate to
+     * @since 1.10
+     */
+    public void hxLocation(Route route) {
+        setHeader("HX-Location", urlFor(route).toString());
+    }
+
+    /**
+     * Tells htmx to do a full-page redirect, by setting the
+     * {@code HX-Redirect} response header.
+     *
+     * @param url the location to redirect to
+     * @since 1.10
+     */
+    public void hxRedirect(String url) {
+        setHeader("HX-Redirect", url);
+    }
+
+    /**
+     * Tells htmx to do a full-page redirect to a route, by setting the
+     * {@code HX-Redirect} response header.
+     *
+     * @param route the route to redirect to
+     * @since 1.10
+     */
+    public void hxRedirect(Route route) {
+        setHeader("HX-Redirect", urlFor(route).toString());
+    }
+
+    /**
+     * Tells htmx to refresh the whole page, by setting the {@code HX-Refresh}
+     * response header.
+     *
+     * @since 1.10
+     */
+    public void hxRefresh() {
+        setHeader("HX-Refresh", "true");
+    }
+
+    /**
+     * Tells htmx to push a new URL into the browser history, by setting the
+     * {@code HX-Push-Url} response header.
+     *
+     * @param url the URL to push
+     * @since 1.10
+     */
+    public void hxPushUrl(String url) {
+        setHeader("HX-Push-Url", url);
+    }
+
+    /**
+     * Tells htmx to push a route's URL into the browser history, by setting
+     * the {@code HX-Push-Url} response header. Because the URL comes from the
+     * route, it survives renaming and refactoring.
+     *
+     * @param route the route whose URL to push
+     * @since 1.10
+     */
+    public void hxPushUrl(Route route) {
+        setHeader("HX-Push-Url", urlFor(route).toString());
+    }
+
+    /**
+     * Tells htmx to replace the current URL in the browser history, by
+     * setting the {@code HX-Replace-Url} response header.
+     *
+     * @param url the replacement URL
+     * @since 1.10
+     */
+    public void hxReplaceUrl(String url) {
+        setHeader("HX-Replace-Url", url);
+    }
+
+    /**
+     * Tells htmx to replace the current URL in the browser history with a
+     * route's URL, by setting the {@code HX-Replace-Url} response header.
+     *
+     * @param route the route whose URL replaces the current one
+     * @since 1.10
+     */
+    public void hxReplaceUrl(Route route) {
+        setHeader("HX-Replace-Url", urlFor(route).toString());
+    }
+
+    /**
+     * Tells htmx to swap the response into a different target than the
+     * triggering element's, by setting the {@code HX-Retarget} response
+     * header to a CSS selector.
+     *
+     * @param cssSelector the CSS selector of the new target
+     * @since 1.10
+     */
+    public void hxRetarget(String cssSelector) {
+        setHeader("HX-Retarget", cssSelector);
+    }
+
+    /**
+     * Tells htmx to change how the response is swapped in, by setting the
+     * {@code HX-Reswap} response header to an {@code hx-swap} value such as
+     * {@code outerHTML} or {@code beforeend}.
+     *
+     * @param swapStyle the swap style to use
+     * @since 1.10
+     */
+    public void hxReswap(String swapStyle) {
+        setHeader("HX-Reswap", swapStyle);
+    }
+
+    /**
+     * Tells htmx to select only part of the response for swapping, by setting
+     * the {@code HX-Reselect} response header to a CSS selector.
+     *
+     * @param cssSelector the CSS selector to select from the response
+     * @since 1.10
+     */
+    public void hxReselect(String cssSelector) {
+        setHeader("HX-Reselect", cssSelector);
+    }
+
+    /**
+     * Triggers a client-side event as soon as the response is received, by
+     * setting the {@code HX-Trigger} response header to the event name.
+     *
+     * @param event the name of the event to trigger
+     * @since 1.10
+     */
+    public void hxTrigger(String event) {
+        setHeader("HX-Trigger", event);
+    }
+
+    /**
+     * Triggers a client-side event with a data payload as soon as the
+     * response is received, by setting the {@code HX-Trigger} response header.
+     * <p>The payload is serialized to JSON with RIFE2's own
+     * {@link Json} support, so records, beans, maps and collections all work
+     * without an extra dependency.
+     *
+     * @param event the name of the event to trigger
+     * @param data  the payload delivered as the event's detail
+     * @since 1.10
+     */
+    public void hxTrigger(String event, Object data) {
+        setHeader("HX-Trigger", hxEventJson(event, data));
+    }
+
+    /**
+     * Triggers a client-side event after the settle step, by setting the
+     * {@code HX-Trigger-After-Settle} response header to the event name.
+     *
+     * @param event the name of the event to trigger
+     * @since 1.10
+     */
+    public void hxTriggerAfterSettle(String event) {
+        setHeader("HX-Trigger-After-Settle", event);
+    }
+
+    /**
+     * Triggers a client-side event with a data payload after the settle step,
+     * by setting the {@code HX-Trigger-After-Settle} response header.
+     *
+     * @param event the name of the event to trigger
+     * @param data  the payload delivered as the event's detail
+     * @since 1.10
+     */
+    public void hxTriggerAfterSettle(String event, Object data) {
+        setHeader("HX-Trigger-After-Settle", hxEventJson(event, data));
+    }
+
+    /**
+     * Triggers a client-side event after the swap step, by setting the
+     * {@code HX-Trigger-After-Swap} response header to the event name.
+     *
+     * @param event the name of the event to trigger
+     * @since 1.10
+     */
+    public void hxTriggerAfterSwap(String event) {
+        setHeader("HX-Trigger-After-Swap", event);
+    }
+
+    /**
+     * Triggers a client-side event with a data payload after the swap step,
+     * by setting the {@code HX-Trigger-After-Swap} response header.
+     *
+     * @param event the name of the event to trigger
+     * @param data  the payload delivered as the event's detail
+     * @since 1.10
+     */
+    public void hxTriggerAfterSwap(String event, Object data) {
+        setHeader("HX-Trigger-After-Swap", hxEventJson(event, data));
+    }
+
+    // adds a header to the response's Vary once, so that consulting several
+    // request headers to shape the response builds up a correct cache key
+    private void varyOn(String header) {
+        if (variedHeaders_ == null) {
+            variedHeaders_ = new HashSet<>();
+        }
+        if (variedHeaders_.add(header)) {
+            addHeader("Vary", header);
+        }
+    }
+
+    private static String hxEventJson(String event, Object data) {
+        // Json.toString serializes the whole payload graph, including beans and
+        // records nested in maps, collections and arrays
+        return "{" + Json.toString(event) + ":" + Json.toString(data) + "}";
     }
 }

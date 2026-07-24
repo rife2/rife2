@@ -23,6 +23,7 @@ class EngineTemplateProcessor {
     public static final String ID_CONTEXT_PARAM_CONT_ID = "context:paramContId";
     public static final String ID_CONTEXT_CONT_ID = "context:contId";
     public static final String ID_CONTEXT_CSRF_TOKEN = "context:csrfToken";
+    public static final String ID_CONTEXT_HTMX_HEADERS = "context:htmxHeaders";
 
     private final Context context_;
     private final Template template_;
@@ -101,6 +102,20 @@ class EngineTemplateProcessor {
             !template_.isValueSet(ID_CONTEXT_CSRF_TOKEN)) {
             template_.setValue(ID_CONTEXT_CSRF_TOKEN, context_.csrfToken());
             setValues.add(ID_CONTEXT_CSRF_TOKEN);
+        }
+
+        if (template_.hasValueId(ID_CONTEXT_HTMX_HEADERS) &&
+            !template_.isValueSet(ID_CONTEXT_HTMX_HEADERS)) {
+            // when a CSRF token is active for this request, emit an hx-headers
+            // attribute so every htmx request carries the token in the header
+            // that CsrfProtected also accepts; when there's no token, this
+            // stays empty and the attribute simply isn't rendered
+            if (context_.hasCsrfToken()) {
+                var header_name = RifeConfig.engine().getCsrfHeaderName();
+                template_.setValue(ID_CONTEXT_HTMX_HEADERS,
+                    "hx-headers='{\"" + header_name + "\":\"" + context_.csrfToken() + "\"}'");
+            }
+            setValues.add(ID_CONTEXT_HTMX_HEADERS);
         }
     }
 

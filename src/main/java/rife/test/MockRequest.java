@@ -906,6 +906,24 @@ public class MockRequest implements Request {
     }
 
     /**
+     * Marks this request as coming from htmx, by setting the {@code HX-Request}
+     * header that htmx sends on every request.
+     * <p>This makes it a one-liner to exercise the htmx side of an element that
+     * serves both a full page and a fragment, so a test can assert both paths:
+     * <pre>var full     = m.doRequest("/books");
+     * var fragment = m.doRequest("/books", new MockRequest().htmx());</pre>
+     * <p>Other {@code HX-*} request headers can be added by chaining
+     * {@link #header}, for instance {@code new MockRequest().htmx().header("HX-Target", "list")}.
+     *
+     * @return this {@code MockRequest} instance, so method calls can be chained
+     * @see rife.engine.Context#isHxRequest()
+     * @since 1.10
+     */
+    public MockRequest htmx() {
+        return header("HX-Request", "true");
+    }
+
+    /**
      * Sets a request header with the given name and integer value. If the
      * header had already been set, the new value overwrites the previous one.
      * The containsHeader method can be used to test for the presence of a
