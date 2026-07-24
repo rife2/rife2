@@ -54,12 +54,15 @@ public class TestHtmx {
     }
 
     @Test
-    void testVaryHeaderAdded() {
+    void testAccessorsDoNotVary() {
         var m = new MockConversation(new RequestSite());
-        // even a non-htmx request that consults isHxRequest() must vary, so a
-        // cached full page is never handed to an htmx request for the same URL
-        var response = m.doRequest("/info");
-        assertEquals("HX-Request", response.getHeader("Vary"));
+        // the htmx accessors are plain reads: consulting them, whether or not
+        // the response actually differs on the header, never adds a Vary entry
+        // on its own. Declaring the dependency is the caller's choice, through
+        // varyOn or printHtmxFragment.
+        assertNull(m.doRequest("/info").getHeader("Vary"), "a plain read does not vary");
+        assertNull(m.doRequest("/info", new MockRequest().htmx()).getHeader("Vary"),
+            "an htmx read does not vary either");
     }
 
     // exercises printBlock directly through the manual full-page-or-fragment
@@ -70,6 +73,9 @@ public class TestHtmx {
             get("/books", c -> {
                 var t = c.template("htmx_fragment");
                 t.setValueEncoded("item", "Refactoring");
+                // a manual branch shapes the response on HX-Request, so it
+                // declares its own Vary; printHtmxFragment would do this for us
+                c.varyOn("HX-Request");
                 if (c.isHxRequest()) {
                     c.printBlock(t, "list");
                 } else {
@@ -113,9 +119,13 @@ public class TestHtmx {
     @Test
     void testPrintHtmxFragmentFullPage() {
         var m = new MockConversation(new PrintHtmxFragmentSite());
-        var text = m.doRequest("/books").getText();
+        var response = m.doRequest("/books");
+        var text = response.getText();
         assertTrue(text.contains("<h1>full page</h1>"), "a normal request gets the whole page");
         assertTrue(text.contains("LIST:Refactoring"), "with the block value rendered in place");
+        // even the full-page path varies, so a cache won't later hand this page
+        // to an htmx request for the same URL
+        assertTrue(response.getHeaders("Vary").contains("HX-Request"), "the full-page response still varies");
     }
 
     @Test
@@ -124,7 +134,9 @@ public class TestHtmx {
         var response = m.doRequest("/books", new MockRequest().htmx());
         assertEquals("LIST:Refactoring", response.getText().trim(), "an htmx request gets just the block");
         assertFalse(response.getText().contains("<h1>"), "the surrounding page is not sent");
-        assertEquals("HX-Request", response.getHeader("Vary"));
+        var vary = response.getHeaders("Vary");
+        assertTrue(vary.contains("HX-Request"), "varies on HX-Request");
+        assertTrue(vary.contains("HX-History-Restore-Request"), "varies on the history-restore header");
     }
 
     @Test
@@ -214,14 +226,27 @@ public class TestHtmx {
             "the response varies on the history-restore header");
     }
 
+    // manual content negotiation declares its own Vary through the public helper
+    static class VarySite extends Site {
+        public void setup() {
+            get("/negotiated", c -> {
+                c.varyOn("HX-Request", "HX-Boosted");
+                c.varyOn("HX-Request"); // idempotent: the second call adds nothing
+                c.print(c.isHxBoosted() ? "boosted" : "plain");
+            });
+        }
+    }
+
     @Test
-    void testBoostedVariesOnBoostedHeader() {
-        var m = new MockConversation(new RequestSite());
-        // /info consults both isHxRequest and isHxBoosted, so both headers must
-        // be in Vary, or a cache could serve a boosted response to a plain one
-        var vary = m.doRequest("/info", new MockRequest().htmx()).getHeaders("Vary");
+    void testVaryOnDeclaresAndDeduplicates() {
+        var m = new MockConversation(new VarySite());
+        // an element that branches on the headers itself declares the whole set
+        // it varies on, so a cache can't serve a boosted response to a plain one
+        var vary = m.doRequest("/negotiated", new MockRequest().htmx()).getHeaders("Vary");
         assertTrue(vary.contains("HX-Request"), "varies on HX-Request");
         assertTrue(vary.contains("HX-Boosted"), "varies on HX-Boosted");
+        assertEquals(1, vary.stream().filter("HX-Request"::equals).count(), "HX-Request is added only once");
+        assertEquals(2, vary.size(), "no duplicate Vary entries build up");
     }
 
     // a CSRF-protected page whose template emits the htmx headers attribute

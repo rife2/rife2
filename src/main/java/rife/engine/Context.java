@@ -583,6 +583,10 @@ public class Context {
      * request} is deliberately served the full page, since htmx replaces the
      * whole document when restoring from history and a fragment would corrupt
      * back/forward navigation.
+     * <p>Because the response genuinely differs on these headers, this adds
+     * {@code HX-Request} and {@code HX-History-Restore-Request} to the
+     * response's {@code Vary} header, so a cache never hands the full page to
+     * an htmx request or the other way around.
      *
      * @param template the template to print
      * @param blockId  the id of the block to send on an htmx request
@@ -594,10 +598,14 @@ public class Context {
      * @see #isHxRequest()
      * @see #printBlock
      * @see #print(Template)
+     * @see #varyOn
      * @since 1.10
      */
     public void printHtmxFragment(Template template, String blockId)
     throws TemplateException {
+        // the chosen response differs on both headers, so a cache must key on
+        // them; this is the divergence point, where varying is always correct
+        varyOn("HX-Request", "HX-History-Restore-Request");
         if (isHxRequest() && !isHxHistoryRestoreRequest()) {
             printBlock(template, blockId);
         } else {
@@ -3164,31 +3172,34 @@ public class Context {
     /**
      * Indicates whether the current request was issued by htmx.
      * <p>This reads the {@code HX-Request} header that htmx sets on every
-     * request it makes. Consulting it also adds {@code HX-Request} to the
-     * response's {@code Vary} header, so caches and proxies keep the
-     * full-page and the htmx-fragment variants of the same URL apart.
+     * request it makes. It's a plain read with no side effects. When you
+     * shape the response based on it, keep caches correct by declaring the
+     * dependency with {@link #varyOn varyOn("HX-Request")}, or use
+     * {@link #printHtmxFragment}, which does that for you.
      *
      * @return {@code true} when this is an htmx request; {@code false}
      * otherwise
      * @see #printBlock
+     * @see #printHtmxFragment
+     * @see #varyOn
      * @since 1.10
      */
     public boolean isHxRequest() {
-        varyOn("HX-Request");
         return "true".equals(header("HX-Request"));
     }
 
     /**
      * Indicates whether the current request was made by an htmx-boosted link
      * or form, reading the {@code HX-Boosted} header.
-     * <p>Consulting this adds {@code HX-Boosted} to the response's {@code Vary}
-     * header, so a cache keeps a boosted response apart from an ordinary one.
+     * <p>It's a plain read with no side effects. When the response depends on
+     * it, declare that with {@link #varyOn varyOn("HX-Boosted")} so a cache
+     * keeps a boosted response apart from an ordinary one.
      *
      * @return {@code true} when this is an htmx-boosted request
+     * @see #varyOn
      * @since 1.10
      */
     public boolean isHxBoosted() {
-        varyOn("HX-Boosted");
         return "true".equals(header("HX-Boosted"));
     }
 
@@ -3197,16 +3208,14 @@ public class Context {
      * history after a cache miss, reading the
      * {@code HX-History-Restore-Request} header.
      * <p>Such a request expects the <em>whole</em> page, not a fragment, so
-     * {@link #printHtmxFragment} treats it as a normal request. Consulting this
-     * adds {@code HX-History-Restore-Request} to the response's {@code Vary}
-     * header.
+     * {@link #printHtmxFragment} treats it as a normal request. It's a plain
+     * read with no side effects.
      *
      * @return {@code true} when this is an htmx history-restoration request
      * @see #printHtmxFragment
      * @since 1.10
      */
     public boolean isHxHistoryRestoreRequest() {
-        varyOn("HX-History-Restore-Request");
         return "true".equals(header("HX-History-Restore-Request"));
     }
 
@@ -3471,14 +3480,32 @@ public class Context {
         setHeader("HX-Trigger-After-Swap", hxEventJson(event, data));
     }
 
-    // adds a header to the response's Vary once, so that consulting several
-    // request headers to shape the response builds up a correct cache key
-    private void varyOn(String header) {
+    /**
+     * Declares that the response depends on one or more request headers, by
+     * adding each to the response's {@code Vary} header so a cache keeps
+     * responses that differ on those headers apart.
+     * <p>Reach for this when you shape the response from a request header you
+     * read, such as branching on {@link #isHxRequest()} or {@link
+     * #isHxBoosted()} to serve different content. The htmx accessors are plain
+     * reads and don't vary on their own, precisely so that reading a header
+     * for logging or a decision that doesn't change the output never fragments
+     * a cache. {@link #printHtmxFragment} declares its own variance, so this is
+     * only needed when you do the branching yourself. Each name is added at
+     * most once per request, so repeated calls are harmless.
+     *
+     * @param headers the request header names the response varies on
+     * @see #isHxRequest()
+     * @see #printHtmxFragment
+     * @since 1.10
+     */
+    public void varyOn(String... headers) {
         if (variedHeaders_ == null) {
             variedHeaders_ = new HashSet<>();
         }
-        if (variedHeaders_.add(header)) {
-            addHeader("Vary", header);
+        for (var header : headers) {
+            if (variedHeaders_.add(header)) {
+                addHeader("Vary", header);
+            }
         }
     }
 
