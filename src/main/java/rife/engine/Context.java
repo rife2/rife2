@@ -3500,7 +3500,9 @@ public class Context {
      */
     public void varyOn(String... headers) {
         if (variedHeaders_ == null) {
-            variedHeaders_ = new HashSet<>();
+            // HTTP header names are case-insensitive, so dedup that way too;
+            // the first-seen spelling is the one written to Vary
+            variedHeaders_ = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         }
         for (var header : headers) {
             if (variedHeaders_.add(header)) {

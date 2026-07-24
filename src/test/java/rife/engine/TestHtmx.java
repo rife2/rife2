@@ -232,6 +232,7 @@ public class TestHtmx {
             get("/negotiated", c -> {
                 c.varyOn("HX-Request", "HX-Boosted");
                 c.varyOn("HX-Request"); // idempotent: the second call adds nothing
+                c.varyOn("hx-request"); // a case variant of the same header, also deduped
                 c.print(c.isHxBoosted() ? "boosted" : "plain");
             });
         }
@@ -246,7 +247,9 @@ public class TestHtmx {
         assertTrue(vary.contains("HX-Request"), "varies on HX-Request");
         assertTrue(vary.contains("HX-Boosted"), "varies on HX-Boosted");
         assertEquals(1, vary.stream().filter("HX-Request"::equals).count(), "HX-Request is added only once");
-        assertEquals(2, vary.size(), "no duplicate Vary entries build up");
+        // "hx-request" is the same header as "HX-Request", so it doesn't add a
+        // second entry; header names are compared case-insensitively
+        assertEquals(2, vary.size(), "case variants and repeats don't build up duplicate Vary entries");
     }
 
     // a CSRF-protected page whose template emits the htmx headers attribute
