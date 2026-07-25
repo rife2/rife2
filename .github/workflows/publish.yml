@@ -1,0 +1,63 @@
+name: publish-snapshots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-rife2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v7
+        with:
+          clean: true
+          submodules: "true"
+          fetch-depth: 0
+
+      - name: Check version is SNAPSHOT
+        shell: bash
+        run: |
+          VERSION=$(tr -d '[:space:]' < src/main/resources/RIFE_VERSION)
+          echo "Current version: $VERSION"
+          if ! echo "$VERSION" | grep -q 'SNAPSHOT$'; then
+            echo "::error:: Version '$VERSION' is not a SNAPSHOT. Aborting publish."
+            exit 1
+          fi
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: "corretto"
+          java-version: 17
+
+      - name: Download dependencies
+        run: ./bld download
+
+      - name: Import key
+        run: echo "${{ secrets.SIGN_SECRET_KEY }}" | gpg --batch --import
+
+      - name: Compile source
+        run: ./bld clean compile
+
+      - name: Run tests
+        run: ./bld test
+
+      - name: Publish
+        run: >-
+          ./bld publish
+          -Dbld.repo.github=https://maven.pkg.github.com/rife2/rife2
+          -Dbld.repo.github.username=${{ secrets.GH_USERNAME }}
+          -Dbld.repo.github.password=${{ secrets.GH_PASSWORD }}
+          -Dbld.repo.rife2-snapshots=https://repo.rife2.com/snapshots/
+          -Dbld.repo.rife2-snapshots.username=${{ secrets.RIFE2_USERNAME }}
+          -Dbld.repo.rife2-snapshots.password=${{ secrets.RIFE2_PASSWORD }}
+          -Dbld.repo.central-snapshots=https://central.sonatype.com/repository/maven-snapshots/
+          -Dbld.repo.central-snapshots.username=${{ secrets.SONATYPE_USER }}
+          -Dbld.repo.central-snapshots.password=${{ secrets.SONATYPE_PASSWORD }}
+          -Dsign.key=${{ secrets.SIGN_KEY }}
+          -Dsign.passphrase=${{ secrets.SIGN_PASSPHRASE }}
+
+      - name: Delete GnuPG data
+        if: always()
+        run: rm -rfv $HOME/.gnupg
