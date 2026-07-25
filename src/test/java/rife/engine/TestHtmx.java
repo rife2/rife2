@@ -167,6 +167,27 @@ public class TestHtmx {
             get("/trigger-array", c -> c.hxTrigger("notes", new Note[]{new Note("info", "a")}));
             get("/trigger-settle", c -> c.hxTriggerAfterSettle("settled"));
             get("/trigger-swap", c -> c.hxTriggerAfterSwap("swapped"));
+            get("/trigger-multi", c -> {
+                c.hxTrigger("refreshList");
+                c.hxTrigger("showNote", new Note("info", "saved"));
+                c.hxTriggerAfterSettle("settled");
+            });
+            get("/trigger-multi-plain", c -> {
+                c.hxTrigger("first");
+                c.hxTrigger("second");
+            });
+            get("/trigger-same-event", c -> {
+                c.hxTrigger("note", new Note("info", "a"));
+                c.hxTrigger("note", new Note("warn", "b"));
+            });
+            get("/location-plain-builder", c -> c.hxLocation(new HxLocation("/spa")));
+            get("/location-context", c -> c.hxLocation(new HxLocation("/spa").target("#main").swap("outerHTML")));
+            get("/location-route-context", c -> c.hxLocation(new HxLocation(target).target("#main")));
+            get("/location-full", c -> c.hxLocation(new HxLocation("/spa")
+                .source("#src").event("click").select("#frag")
+                .values(new Note("info", "a")).headers(Map.of("X-Extra", "1"))));
+            get("/no-push", c -> c.hxNoPushUrl());
+            get("/no-replace", c -> c.hxNoReplaceUrl());
         }
     }
 
@@ -211,6 +232,64 @@ public class TestHtmx {
             m.doRequest("/trigger-map").getHeader("HX-Trigger"));
         assertEquals("{\"notes\":[{\"level\":\"info\",\"message\":\"a\"}]}",
             m.doRequest("/trigger-array").getHeader("HX-Trigger"));
+    }
+
+    @Test
+    void testTriggerAccumulation() {
+        var m = new MockConversation(new ResponseSite());
+
+        // independent calls compose into one header, in call order; the
+        // payload-less event carries a null detail in the JSON object form
+        var multi = m.doRequest("/trigger-multi");
+        assertEquals("{\"refreshList\":null,\"showNote\":{\"level\":\"info\",\"message\":\"saved\"}}",
+            multi.getHeader("HX-Trigger"));
+        // the settle header accumulates separately from HX-Trigger
+        assertEquals("settled", multi.getHeader("HX-Trigger-After-Settle"));
+
+        // two payload-less events switch from the plain name to the JSON form
+        assertEquals("{\"first\":null,\"second\":null}",
+            m.doRequest("/trigger-multi-plain").getHeader("HX-Trigger"));
+
+        // triggering the same event again replaces its payload, it doesn't duplicate
+        assertEquals("{\"note\":{\"level\":\"warn\",\"message\":\"b\"}}",
+            m.doRequest("/trigger-same-event").getHeader("HX-Trigger"));
+    }
+
+    @Test
+    void testLocationContext() {
+        var m = new MockConversation(new ResponseSite());
+
+        // a location without context stays the plain path, same as hxLocation(String)
+        assertEquals("/spa", m.doRequest("/location-plain-builder").getHeader("HX-Location"));
+
+        // context switches to htmx's JSON object form
+        assertEquals("{\"path\":\"/spa\",\"target\":\"#main\",\"swap\":\"outerHTML\"}",
+            m.doRequest("/location-context").getHeader("HX-Location"));
+
+        // a route resolves to its url inside the JSON form
+        var routed = m.doRequest("/location-route-context").getHeader("HX-Location");
+        assertTrue(routed.matches("\\{\"path\":\"[^\"]*/target\",\"target\":\"#main\"}"),
+            "the route resolves to its url: " + routed);
+
+        // the full context, with values and headers serialized as nested JSON
+        assertEquals("{\"path\":\"/spa\",\"source\":\"#src\",\"event\":\"click\",\"select\":\"#frag\"," +
+                     "\"values\":{\"level\":\"info\",\"message\":\"a\"},\"headers\":{\"X-Extra\":\"1\"}}",
+            m.doRequest("/location-full").getHeader("HX-Location"));
+    }
+
+    @Test
+    void testHistorySuppression() {
+        var m = new MockConversation(new ResponseSite());
+        // false suppresses the history update an hx-push-url or hx-replace-url
+        // attribute would otherwise perform
+        assertEquals("false", m.doRequest("/no-push").getHeader("HX-Push-Url"));
+        assertEquals("false", m.doRequest("/no-replace").getHeader("HX-Replace-Url"));
+    }
+
+    @Test
+    void testInvalidArguments() {
+        assertThrows(IllegalArgumentException.class, () -> new HxLocation((String) null));
+        assertThrows(IllegalArgumentException.class, () -> new HxLocation((Route) null));
     }
 
     @Test

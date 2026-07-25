@@ -72,6 +72,7 @@ public class Context {
     private SseConnection sseConnection_ = null;
     private String csrfToken_ = null;
     private Set<String> variedHeaders_ = null;
+    private Map<String, LinkedHashMap<String, Object>> hxTriggers_ = null;
     private Element processedElement_ = null;
 
     Context(String gateUrl, Site site, Request request, Response response, RouteMatch routeMatch) {
@@ -3292,6 +3293,7 @@ public class Context {
      * full page reload, by setting the {@code HX-Location} response header.
      *
      * @param url the location to navigate to
+     * @see #hxLocation(HxLocation)
      * @since 1.10
      */
     public void hxLocation(String url) {
@@ -3303,10 +3305,29 @@ public class Context {
      * reload, by setting the {@code HX-Location} response header.
      *
      * @param route the route to navigate to
+     * @see #hxLocation(HxLocation)
      * @since 1.10
      */
     public void hxLocation(Route route) {
         setHeader("HX-Location", urlFor(route).toString());
+    }
+
+    /**
+     * Tells htmx to do a client-side redirect with navigation context, by
+     * setting the {@code HX-Location} response header to its JSON form.
+     * <p>The {@link HxLocation} argument carries the context of the
+     * navigation, like the target to swap into or the swap style:
+     * <pre>c.hxLocation(new HxLocation(books).target("#main").swap("outerHTML"));</pre>
+     * <p>A location without any context is sent as the plain path, the same
+     * as {@link #hxLocation(String)}.
+     *
+     * @param location the location to navigate to, with its context
+     * @since 1.10
+     */
+    public void hxLocation(HxLocation location) {
+        if (null == location) throw new IllegalArgumentException("location can't be null");
+
+        setHeader("HX-Location", location.headerValue(this));
     }
 
     /**
@@ -3365,6 +3386,20 @@ public class Context {
     }
 
     /**
+     * Tells htmx not to push a URL into the browser history for this
+     * response, by setting the {@code HX-Push-Url} response header to
+     * {@code false}.
+     * <p>This suppresses the history entry that an {@code hx-push-url}
+     * attribute or a boosted element would otherwise record.
+     *
+     * @see #hxPushUrl(String)
+     * @since 1.10
+     */
+    public void hxNoPushUrl() {
+        setHeader("HX-Push-Url", "false");
+    }
+
+    /**
      * Tells htmx to replace the current URL in the browser history, by
      * setting the {@code HX-Replace-Url} response header.
      *
@@ -3384,6 +3419,20 @@ public class Context {
      */
     public void hxReplaceUrl(Route route) {
         setHeader("HX-Replace-Url", urlFor(route).toString());
+    }
+
+    /**
+     * Tells htmx not to replace the current URL in the browser history for
+     * this response, by setting the {@code HX-Replace-Url} response header
+     * to {@code false}.
+     * <p>This suppresses the URL replacement that an {@code hx-replace-url}
+     * attribute would otherwise perform.
+     *
+     * @see #hxReplaceUrl(String)
+     * @since 1.10
+     */
+    public void hxNoReplaceUrl() {
+        setHeader("HX-Replace-Url", "false");
     }
 
     /**
@@ -3423,74 +3472,91 @@ public class Context {
 
     /**
      * Triggers a client-side event as soon as the response is received, by
-     * setting the {@code HX-Trigger} response header to the event name.
+     * adding it to the {@code HX-Trigger} response header.
+     * <p>Calls accumulate: each one adds its event to the same header, so
+     * independent pieces of code can trigger their own events without
+     * overwriting each other. A single event without a payload travels as a
+     * plain event name; as soon as several events or a payload are involved,
+     * the header switches to htmx's JSON object form, where an event without
+     * a payload carries a {@code null} detail. Triggering the same event
+     * again replaces its payload.
      *
      * @param event the name of the event to trigger
      * @since 1.10
      */
     public void hxTrigger(String event) {
-        setHeader("HX-Trigger", event);
+        addHxTrigger("HX-Trigger", event, HX_NO_DATA);
     }
 
     /**
      * Triggers a client-side event with a data payload as soon as the
-     * response is received, by setting the {@code HX-Trigger} response header.
+     * response is received, by adding it to the {@code HX-Trigger} response
+     * header.
      * <p>The payload is serialized to JSON with RIFE2's own
      * {@link Json} support, so records, beans, maps and collections all work
-     * without an extra dependency.
+     * without an extra dependency. Calls accumulate like
+     * {@link #hxTrigger(String)}.
      *
      * @param event the name of the event to trigger
      * @param data  the payload delivered as the event's detail
      * @since 1.10
      */
     public void hxTrigger(String event, Object data) {
-        setHeader("HX-Trigger", hxEventJson(event, data));
+        addHxTrigger("HX-Trigger", event, data);
     }
 
     /**
-     * Triggers a client-side event after the settle step, by setting the
-     * {@code HX-Trigger-After-Settle} response header to the event name.
+     * Triggers a client-side event after the settle step, by adding it to the
+     * {@code HX-Trigger-After-Settle} response header.
+     * <p>Calls accumulate like {@link #hxTrigger(String)}, separately from
+     * the other trigger headers.
      *
      * @param event the name of the event to trigger
      * @since 1.10
      */
     public void hxTriggerAfterSettle(String event) {
-        setHeader("HX-Trigger-After-Settle", event);
+        addHxTrigger("HX-Trigger-After-Settle", event, HX_NO_DATA);
     }
 
     /**
      * Triggers a client-side event with a data payload after the settle step,
-     * by setting the {@code HX-Trigger-After-Settle} response header.
+     * by adding it to the {@code HX-Trigger-After-Settle} response header.
+     * <p>Calls accumulate like {@link #hxTrigger(String)}, separately from
+     * the other trigger headers.
      *
      * @param event the name of the event to trigger
      * @param data  the payload delivered as the event's detail
      * @since 1.10
      */
     public void hxTriggerAfterSettle(String event, Object data) {
-        setHeader("HX-Trigger-After-Settle", hxEventJson(event, data));
+        addHxTrigger("HX-Trigger-After-Settle", event, data);
     }
 
     /**
-     * Triggers a client-side event after the swap step, by setting the
-     * {@code HX-Trigger-After-Swap} response header to the event name.
+     * Triggers a client-side event after the swap step, by adding it to the
+     * {@code HX-Trigger-After-Swap} response header.
+     * <p>Calls accumulate like {@link #hxTrigger(String)}, separately from
+     * the other trigger headers.
      *
      * @param event the name of the event to trigger
      * @since 1.10
      */
     public void hxTriggerAfterSwap(String event) {
-        setHeader("HX-Trigger-After-Swap", event);
+        addHxTrigger("HX-Trigger-After-Swap", event, HX_NO_DATA);
     }
 
     /**
      * Triggers a client-side event with a data payload after the swap step,
-     * by setting the {@code HX-Trigger-After-Swap} response header.
+     * by adding it to the {@code HX-Trigger-After-Swap} response header.
+     * <p>Calls accumulate like {@link #hxTrigger(String)}, separately from
+     * the other trigger headers.
      *
      * @param event the name of the event to trigger
      * @param data  the payload delivered as the event's detail
      * @since 1.10
      */
     public void hxTriggerAfterSwap(String event, Object data) {
-        setHeader("HX-Trigger-After-Swap", hxEventJson(event, data));
+        addHxTrigger("HX-Trigger-After-Swap", event, data);
     }
 
     /**
@@ -3524,9 +3590,43 @@ public class Context {
         }
     }
 
-    private static String hxEventJson(String event, Object data) {
-        // Json.toString serializes the whole payload graph, including beans and
-        // records nested in maps, collections and arrays
-        return "{" + Json.toString(event) + ":" + Json.toString(data) + "}";
+    // marks an event that was added without a payload, distinct from an
+    // event whose payload is an explicit null
+    private static final Object HX_NO_DATA = new Object();
+
+    // accumulates an event in the given trigger header and rewrites the whole
+    // header, so that independent hxTrigger calls compose instead of
+    // overwriting one another
+    private void addHxTrigger(String headerName, String event, Object data) {
+        if (hxTriggers_ == null) {
+            hxTriggers_ = new HashMap<>();
+        }
+        var events = hxTriggers_.computeIfAbsent(headerName, k -> new LinkedHashMap<>());
+        events.put(event, data);
+        setHeader(headerName, hxTriggerHeaderValue(events));
+    }
+
+    private static String hxTriggerHeaderValue(Map<String, Object> events) {
+        if (1 == events.size()) {
+            var single = events.entrySet().iterator().next();
+            // a single event without a payload stays a plain event name
+            if (HX_NO_DATA == single.getValue()) {
+                return single.getKey();
+            }
+        }
+
+        // several events or a payload: htmx's JSON object form, with Json
+        // serializing each payload graph, including beans and records nested
+        // in maps, collections and arrays
+        var value = new StringBuilder("{");
+        for (var event : events.entrySet()) {
+            if (value.length() > 1) {
+                value.append(',');
+            }
+            value.append(Json.toString(event.getKey()));
+            value.append(':');
+            value.append(Json.toString(HX_NO_DATA == event.getValue() ? null : event.getValue()));
+        }
+        return value.append('}').toString();
     }
 }
