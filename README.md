@@ -13,8 +13,8 @@
 
 # Welcome
 
-RIFE2 is a full-stack, no-declaration, framework to quickly and effortlessly
-create web applications with modern Java.
+RIFE2 is a full-stack, no-declaration framework for building web applications
+in plain, type-safe Java.
 
 RIFE2 is built on the foundations of the original RIFE framework that was
 popular from 2002-2010. Since then, the world and Java have changed and many of
@@ -22,9 +22,11 @@ the original RIFE APIs could finally be replaced with pure Java, no-XML,
 no-YAML, leaving only type-safe expressive code.
 
 RIFE2 preserves most of the original features and adds new ones, for a fraction
-of the footprint and with even greater developer productivity than before.
-RIFE2 is created by Geert Bevin, one of the first Java Champions and speaker at
-many Java conferences.
+of the footprint and with even greater developer productivity than before. The
+whole framework ships as a single 2.5MB jar with zero dependencies, is an
+explicit Java module, and runs on Java 17 and later, tested on Java 17, 21, 25
+and 26. RIFE2 is created by Geert Bevin, one of the first Java Champions and
+speaker at many Java conferences.
 
 > **TIP:** If you use IntelliJ IDEA as your IDE, consider installing the
 > [RIFE2 IDEA Plug-in](https://github.com/rife2/rife2-idea).  
@@ -73,6 +75,16 @@ application, URLs are generated from the configuration you created without the
 risk of becoming stale, the logic-less templates are really purely content
 driven and can generate any text-based format (JSON, XML, HTML, SVG, SQL), ...
 and much more.
+
+RIFE2 keeps pace with modern Java too. On Java 21 and later, the embedded server
+runs every request on its own virtual thread, so you write ordinary blocking,
+sequential code with no reactive API or async plumbing to learn, and
+continuations and the workflow engine extend that same sequential model across
+requests. Because everything is plain, type-safe Java with no hidden XML, YAML
+or reflection, RIFE2 is a comfortable fit for AI coding assistants: the compiler
+and the agent both read your application's structure straight from the source,
+and its companion build tool, bld, can expose your build commands to agents over
+the Model Context Protocol.
 
 *RIFE2 is the red pill*, ready to show you how deep the rabbit hole can go, if
 you're up for it!
