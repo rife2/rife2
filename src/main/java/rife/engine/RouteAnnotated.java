@@ -256,9 +256,17 @@ abstract class RouteAnnotated implements Route {
                         var list_items = config.getStringItems(name);
                         if (list_items != null) {
                             var generic_type = field.getGenericType();
+                            Class<?> param_class = null;
                             if (generic_type instanceof ParameterizedType param_type &&
-                                param_type.getActualTypeArguments().length == 1 &&
-                                param_type.getActualTypeArguments()[0] instanceof Class<?> param_class) {
+                                param_type.getActualTypeArguments().length == 1) {
+                                // resolve the element type against the concrete
+                                // element class, so that generic supertypes work
+                                var erased = ClassUtils.erasedType(element.getClass(), param_type.getActualTypeArguments()[0]);
+                                if (erased != Object.class) {
+                                    param_class = erased;
+                                }
+                            }
+                            if (param_class != null) {
                                 var converted_list = new ArrayList<>();
                                 for (var item : list_items) {
                                     converted_list.add(Convert.fromString(item, param_class));
