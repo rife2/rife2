@@ -503,7 +503,12 @@ public class MockRequest implements Request {
 
         var uploaded_files = new UploadedFile[files.length];
         for (var i = 0; i < files.length; i++) {
-            var uploaded_file = new UploadedFile(files[i].getFileName(), files[i].getContentType());
+            var file_name = files[i].getFileName();
+            if (file_name != null && file_name.isEmpty()) {
+                // empty filename, probably an "empty" file param
+                file_name = null;
+            }
+            var uploaded_file = new UploadedFile(file_name, files[i].getContentType());
 
             try {
                 var tmp_file = File.createTempFile("upl", ".tmp", uploadDirectory_);

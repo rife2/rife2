@@ -21,7 +21,10 @@ import rife.tools.BeanUtils;
 import rife.tools.StringUtils;
 import rife.json.Json;
 import rife.tools.exceptions.BeanUtilsException;
+import rife.validation.ConstrainedUtils;
+import rife.validation.Validated;
 
+import java.beans.PropertyDescriptor;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -1812,6 +1815,9 @@ public class Context {
     /**
      * Fills the properties of an existing bean with the parameter values that were sent,
      * taking the provided prefix into account.
+     * <p>A parameter that is present with an empty value will reset the
+     * property to the value of a new bean instance, while an absent
+     * parameter will leave the property untouched.
      *
      * @param bean   the submission bean instance that will be filled
      * @param prefix the prefix that will be put in front of each property
@@ -1854,6 +1860,168 @@ public class Context {
             for (var uploaded_file_name : fileNames()) {
                 var file = file(uploaded_file_name);
                 BeanUtils.setUppercasedBeanProperty(uploaded_file_name, file, prefix, bean_properties, bean);
+            }
+        } catch (BeanUtilsException e) {
+            throw new EngineException(e);
+        }
+    }
+
+    /**
+     * Provides the values that a property receives when its parameter didn't
+     * arrive while its form field did.
+     * <p>A boolean property is entered through a checkbox, which browsers
+     * don't send when it isn't checked, so an absent parameter means
+     * {@code false} instead of whatever the property defaults to. The other
+     * properties are reset from a new bean instance, which the {@code null}
+     * return value asks for.
+     *
+     * @since 1.10
+     */
+    private String[] absentParameterValues(String parameterName, String prefix, Map<String, PropertyDescriptor> beanProperties) {
+        var property_name = parameterName;
+        if (prefix != null) {
+            if (!property_name.startsWith(prefix)) {
+                return null;
+            }
+            property_name = property_name.substring(prefix.length());
+        }
+
+        var property = beanProperties.get(property_name.toUpperCase());
+        if (property != null) {
+            var type = property.getPropertyType();
+            if (boolean.class == type || Boolean.class == type) {
+                return new String[]{"false"};
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Creates an instance of a bean and populates the properties of one of
+     * its validation groups with the parameter values that were sent.
+     * <p>This does the same as {@link #parametersBean(Object, String, String)},
+     * but with a newly created bean instance.
+     *
+     * @param beanClass the class of the submission bean
+     * @param prefix    the prefix that will be put in front of each property
+     *                  name, or {@code null}
+     * @param group     the name of the validation group whose properties
+     *                  will be populated
+     * @return the populated bean instance
+     * @see #parametersBean(Object, String, String)
+     * @since 1.10
+     */
+    public <BeanType> BeanType parametersBean(Class<BeanType> beanClass, String prefix, String group)
+    throws EngineException {
+        assert beanClass != null;
+
+        var bean_instance = getNewBeanInstance(beanClass);
+        parametersBean(bean_instance, prefix, group);
+        return bean_instance;
+    }
+
+    /**
+     * Fills the properties of a validation group of an existing bean with
+     * the parameter values that were sent.
+     * <p>The validation group declares which properties are part of the
+     * form. Only those properties will be populated, and a property whose
+     * parameter is absent will be reset instead of keeping its current
+     * value: a boolean property becomes {@code false} since browsers don't
+     * send checkboxes that aren't checked, the other properties are reset
+     * to the value of a new bean instance. A restored bean will thus reflect
+     * exactly what the form submitted, while the properties outside of the
+     * group preserve their current values.
+     * <p>Each property is populated through a single transport: a property
+     * with a {@code file} constraint is only assigned from file uploads,
+     * while the other properties are only assigned from regular parameter
+     * values. A file property is left untouched when no upload actually
+     * arrived, an absent file input never clears the stored content.
+     * <p>Since every property of the group is expected to be part of the
+     * form, a group should only contain the properties that are actually
+     * submitted. Controls that the browser doesn't send, like disabled ones,
+     * and partial submissions of a group's form will reset the properties
+     * that didn't arrive.
+     *
+     * @param bean   the submission bean instance that will be filled
+     * @param prefix the prefix that will be put in front of each property
+     *               name, or {@code null}
+     * @param group  the name of the validation group whose properties will
+     *               be populated
+     * @see #parametersBean(Class, String, String)
+     * @since 1.10
+     */
+    public void parametersBean(Object bean, String prefix, String group)
+    throws EngineException {
+        if (null == group) throw new IllegalArgumentException("group can't be null.");
+        if (null == bean) {
+            return;
+        }
+
+        if (!(bean instanceof Validated validated)) {
+            throw new EngineException("The bean class '" + bean.getClass().getName() + "' doesn't support validation groups");
+        }
+        var validation_group = validated.getGroup(group);
+        if (null == validation_group) {
+            throw new EngineException("The bean class '" + bean.getClass().getName() + "' doesn't contain the validation group '" + group + "'");
+        }
+
+        var group_properties = validation_group.getPropertyNames();
+        if (null == group_properties ||
+            group_properties.isEmpty()) {
+            return;
+        }
+
+        var constrained = ConstrainedUtils.makeConstrainedInstance(bean);
+
+        try {
+            var bean_properties = BeanUtils.getUppercasedBeanProperties(bean.getClass());
+
+            Object empty_bean = null;
+
+            for (var property_name : group_properties) {
+                var parameter_name = (null == prefix ? property_name : prefix + property_name);
+
+                var constrained_property = constrained == null ? null : constrained.getConstrainedProperty(property_name);
+
+                // a file property is only entered through uploads, every
+                // other property only through regular parameters
+                if (constrained_property != null &&
+                    constrained_property.isFile()) {
+                    // an unselected file input still produces an upload part,
+                    // only a part with an actual filename counts as an upload,
+                    // without one the stored content stays untouched
+                    UploadedFile uploaded = null;
+                    var uploaded_files = files(parameter_name);
+                    if (uploaded_files != null) {
+                        for (var candidate : uploaded_files) {
+                            if (candidate != null &&
+                                candidate.getName() != null) {
+                                uploaded = candidate;
+                                break;
+                            }
+                        }
+                    }
+                    if (uploaded != null) {
+                        BeanUtils.setUppercasedBeanProperty(parameter_name, uploaded, prefix, bean_properties, bean);
+                    }
+                    continue;
+                }
+
+                var parameter_values = parameterValues(parameter_name);
+                if (null == parameter_values) {
+                    parameter_values = absentParameterValues(parameter_name, prefix, bean_properties);
+                }
+
+                if (null == empty_bean &&
+                    (null == parameter_values ||
+                        0 == parameter_values.length ||
+                        null == parameter_values[0] ||
+                        parameter_values[0].isEmpty())) {
+                    empty_bean = getNewBeanInstance(bean.getClass());
+                }
+
+                BeanUtils.setUppercasedBeanProperty(parameter_name, parameter_values, prefix, bean_properties, bean, empty_bean);
             }
         } catch (BeanUtilsException e) {
             throw new EngineException(e);
