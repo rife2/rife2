@@ -24,6 +24,12 @@ class HelloTest {
     }
 
     @Test
+    void verifyHelloUndertow() {
+        var m = new MockConversation(new HelloUndertow());
+        assertEquals("Hello Undertow", m.doRequest("/hello").getText());
+    }
+
+    @Test
     void verifyHelloWorld() {
         var m = new MockConversation(new HelloWorld());
         assertEquals("Hello World", m.doRequest("/hello").getText());

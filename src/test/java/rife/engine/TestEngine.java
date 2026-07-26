@@ -159,6 +159,45 @@ public class TestEngine {
             }
         }
     }
+    
+    @Test
+    void testUndertowSimplePathInfo()
+    throws Exception {
+        try (final var server = new TestUndertowRunner(new Site() {
+            public void setup() {
+                get("/simple/pathinfo", PathInfoHandling.CAPTURE, c ->
+                    c.print("Just some text " + c.serverPort() + ':' + c.pathInfo()));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page;
+
+                page = webClient.getPage("http://localhost:8888/simple/pathinfo/some/path");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 8888:some/path", page.asNormalizedText());
+
+                page = webClient.getPage("http://localhost:8888/simple/pathinfo/");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 8888:", page.asNormalizedText());
+
+                page = webClient.getPage("http://localhost:8888/simple/pathinfo");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 8888:", page.asNormalizedText());
+
+                page = webClient.getPage("http://localhost:8888/simple/pathinfo/another_path_info");
+                assertEquals("text/html", page.getWebResponse().getContentType());
+                assertEquals("Just some text 8888:another_path_info", page.asNormalizedText());
+
+                try {
+                    webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+                    webClient.getPage("http://localhost:8888/simple/pathinfoddd");
+                    fail("Expecting 404");
+                } catch (FailingHttpStatusCodeException e) {
+                    // success
+                }
+            }
+        }
+    }
 
     @Test
     void testPathInfoMapping()
@@ -425,6 +464,34 @@ public class TestEngine {
     }
 
     @Test
+    void testUndertowHeaders()
+    throws Exception {
+        try (final var server = new TestUndertowRunner(new Site() {
+            public void setup() {
+                get("/headers", c -> {
+                    c.addHeader("Content-Disposition", "attachment; filename=thefile.zip");
+                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+                    cal.set(2002, Calendar.OCTOBER, 25, 19, 20, 58);
+                    c.addDateHeader("DateHeader", cal.getTimeInMillis());
+                    c.addHeader("IntHeader", 1212);
+
+                    c.print("headers");
+                });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final HtmlPage page = webClient.getPage("http://localhost:8888/headers");
+                assertTrue(page.getWebResponse().getResponseHeaders().size() > 4);
+                assertEquals("attachment; filename=thefile.zip",
+                    page.getWebResponse().getResponseHeaderValue("CONTENT-DISPOSITION"));
+                assertEquals("Fri, 25 Oct 2002 19:20:58 GMT",
+                    page.getWebResponse().getResponseHeaderValue("DATEHEADER"));
+                assertEquals("1212", page.getWebResponse().getResponseHeaderValue("INTHEADER"));
+            }
+        }
+    }
+
+    @Test
     void testCookies()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {
@@ -525,6 +592,56 @@ public class TestEngine {
     }
 
     @Test
+    void testUndertowCookies()
+    throws IOException {
+        try (final var server = new TestUndertowRunner(new Site() {
+            public void setup() {
+                get("/cookies1", c -> {
+                    var names = c.cookieNames();
+
+                    if (names.size() == 3 &&
+                        names.contains("cookie1") &&
+                        names.contains("cookie2") &&
+                        names.contains("cookie3") &&
+                        c.hasCookie("cookie1") &&
+                        c.hasCookie("cookie2") &&
+                        c.hasCookie("cookie3")) {
+                        c.addCookie(new CookieBuilder("cookie3", c.cookieValue("cookie1")));
+                        c.addCookie(new CookieBuilder("cookie4", c.cookieValue("cookie2")));
+                    }
+
+                    c.print("source");
+                });
+
+                get("/cookies2", c -> c.print(c.cookieValue("cookie2") + ',' + c.cookieValue("cookie3") + ','
+                    + c.cookieValue("cookie4")));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                var manager = webClient.getCookieManager();
+                manager.addCookie(new com.gargoylesoftware.htmlunit.util.Cookie("localhost", "cookie1",
+                    "firstcookie"));
+                manager.addCookie(new com.gargoylesoftware.htmlunit.util.Cookie("localhost", "cookie2",
+                    "secondcookie"));
+                manager.addCookie(new com.gargoylesoftware.htmlunit.util.Cookie("localhost", "cookie3",
+                    "thirdcookie"));
+
+                final HtmlPage page1 = webClient.getPage("http://localhost:8888/cookies1");
+                assertEquals(page1.getWebResponse().getContentAsString(), "source");
+
+                assertEquals(webClient.getCookieManager().getCookie("cookie3").getValue(), "firstcookie");
+                assertEquals(webClient.getCookieManager().getCookie("cookie4").getValue(), "secondcookie");
+
+                manager.addCookie(new com.gargoylesoftware.htmlunit.util.Cookie("localhost", "cookie4",
+                    "fourthcookie"));
+
+                final HtmlPage page2 = webClient.getPage("http://localhost:8888/cookies2");
+                assertEquals(page2.getWebResponse().getContentAsString(), "secondcookie,firstcookie,fourthcookie");
+            }
+        }
+    }
+
+    @Test
     void testContentlength()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
@@ -617,6 +734,24 @@ public class TestEngine {
         })) {
             try (final var webClient = new WebClient()) {
                 final UnexpectedPage page = webClient.getPage("http://localhost:8282/binary");
+                InputStream inputstream = page.getWebResponse().getContentAsStream();
+                byte[] integer_bytes = new byte[4];
+                assertEquals(4, inputstream.read(integer_bytes));
+                assertEquals(87634675, IntegerUtils.bytesToInt(integer_bytes));
+            }
+        }
+    }
+
+    @Test
+    void testUndertowBinary()
+    throws Exception {
+        try (final var server = new TestUndertowRunner(new Site() {
+            public void setup() {
+                get("/binary", c -> c.outputStream().write(IntegerUtils.intToBytes(87634675)));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final UnexpectedPage page = webClient.getPage("http://localhost:8888/binary");
                 InputStream inputstream = page.getWebResponse().getContentAsStream();
                 byte[] integer_bytes = new byte[4];
                 assertEquals(4, inputstream.read(integer_bytes));
