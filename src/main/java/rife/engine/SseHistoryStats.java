@@ -14,13 +14,20 @@ package rife.engine;
  * is the largest number of events that any reconnecting client had missed.
  * A capacity of about twice the maximum miss will cover every reconnection
  * that has been observed so far.
+ * <p>Note that the IDs in this snapshot are the bare sequence numbers that
+ * the broadcaster counts with, while the IDs that clients send back also
+ * carry the epoch of the broadcaster instance, so that they can't be
+ * compared to each other directly.
  *
  * @param capacity    the configured history capacity
  * @param buffered    the number of events that are currently buffered
- * @param oldestId    the ID of the oldest buffered event; or {@code 0}
- *                    when nothing is buffered
- * @param newestId    the ID of the most recently sent event; or {@code 0}
- *                    when nothing has been sent yet
+ * @param oldestId    the sequence number of the oldest buffered event; or
+ *                    {@code 0} when nothing is buffered. This is the bare
+ *                    number, while the ID that clients see also carries
+ *                    the broadcaster's epoch
+ * @param newestId    the sequence number of the most recently sent event;
+ *                    or {@code 0} when nothing has been sent yet, in the
+ *                    same bare form as {@code oldestId}
  * @param replays     the number of reconnections whose missed events were
  *                    replayed from the history
  * @param gaps        the number of reconnections that couldn't be replayed
@@ -28,7 +35,9 @@ package rife.engine;
  *                    the last received ID originated from a previous
  *                    application instance
  * @param maxMissedEvents the largest number of events that any reconnecting
- *                    client had missed
+ *                    client had missed, only counting the reconnections
+ *                    whose ID this broadcaster instance could still relate
+ *                    to its own history
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see SseBroadcaster#historyStats()
  * @see SseBroadcaster#history(int)

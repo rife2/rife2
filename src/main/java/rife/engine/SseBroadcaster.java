@@ -37,7 +37,8 @@ import java.util.logging.Logger;
  * // from anywhere else:
  * site.ticker.send(new ServerSentEvent().name("tick").data("42"));</pre>
  * <p>Connections whose clients have disconnected will automatically be
- * removed when sending to them fails. Sending a periodic
+ * removed when the servlet container reports that their request has ended,
+ * and otherwise when sending to them fails. Sending a periodic
  * {@link #comment(String) heartbeat comment} will both prevent
  * intermediaries from closing idle connections and reap the ones that have
  * disconnected.
@@ -569,9 +570,10 @@ public class SseBroadcaster implements AutoCloseable {
     /**
      * Retrieves the number of connections that are currently registered
      * with this broadcaster.
-     * <p>Stale connections are only detected when sending to them fails,
-     * which means that this count can include clients that have already
-     * disconnected.
+     * <p>Stale connections are detected when the servlet container reports
+     * that their request has ended, and otherwise when sending to them
+     * fails, which means that this count can still include clients that
+     * have already disconnected.
      *
      * @return the number of registered connections
      * @see #close(Predicate)

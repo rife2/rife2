@@ -290,10 +290,12 @@ public class SseConnection implements AutoCloseable {
 
     /**
      * Indicates whether this connection is still open.
-     * <p>A client disconnect is only detected when sending an event to it
-     * fails, which means that a stale connection can still report being
-     * open until the next event or {@link #comment(String) heartbeat} is
-     * sent.
+     * <p>A disconnect is detected when the servlet container reports that
+     * the asynchronous request has completed, timed out or errored, and
+     * otherwise when sending an event to the client fails. This means that
+     * a stale connection can still report being open until the container
+     * notices, or until the next event or {@link #comment(String)
+     * heartbeat} is sent.
      *
      * @return {@code true} when the connection is open; or
      * <p>{@code false} when it has been closed
