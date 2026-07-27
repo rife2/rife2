@@ -204,12 +204,13 @@ public class AuthConfig {
      * Sets the {@code SameSite} policy of the authentication and remember
      * cookies.
      * <p>This defaults to {@link SameSite#LAX}, which keeps the cookies
-     * away from cross-site form submissions and is a first line of defense
-     * against cross-site request forgery.
+     * away from cross-site form submissions and provides a first line of
+     * defense against cross-site request forgery.
      *
      * @param policy the {@code SameSite} policy of the cookies
      * @return this {@code AuthConfig} instance
      * @see #cookieSameSite()
+     * @see SameSite
      * @since 1.10
      */
     public AuthConfig cookieSameSite(SameSite policy) {
@@ -225,6 +226,7 @@ public class AuthConfig {
      *
      * @return the {@code SameSite} policy of the cookies
      * @see #cookieSameSite(SameSite)
+     * @see SameSite
      * @since 1.10
      */
     public SameSite cookieSameSite() {

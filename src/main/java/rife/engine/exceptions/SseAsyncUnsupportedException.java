@@ -8,10 +8,11 @@ import java.io.Serial;
 
 /**
  * Thrown when a detached server-sent events connection can't be established
- * because the request doesn't support asynchronous processing.
+ * since the request doesn't support asynchronous processing.
  * <p>The embedded {@code Server} and {@code TomcatServer} enable this
- * automatically. When deploying as a war archive, asynchronous support has
- * to be declared explicitly in {@code web.xml}.
+ * automatically. When you deploy as a war archive, asynchronous support has
+ * to be declared explicitly in {@code web.xml}, both for the RIFE2 filter
+ * and for every other filter and servlet in the chain of the request.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.10

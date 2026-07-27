@@ -197,7 +197,7 @@ public class Scheduler implements Runnable {
      * Set the time the schedule should sleep in between evaluating which tasks
      * to execute.
      * <p>
-     * This defaults to {@code 500} milliseconds.
+     * This defaults to {@code 30000} milliseconds.
      *
      * @param sleepTime the time to sleep between task evaluations in milliseconds
      * @since 1.0
@@ -232,8 +232,8 @@ public class Scheduler implements Runnable {
     /**
      * Indicates whether this scheduler is running or not.
      *
-     * @return {@code true} if this scheduler is running; ro
-     * {@code false} otherwise
+     * @return {@code true} if this scheduler is running; or
+     * <p>{@code false} otherwise
      * @since 1.0
      */
     public boolean isRunning() {

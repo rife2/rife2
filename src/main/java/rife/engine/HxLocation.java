@@ -10,13 +10,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Describes an htmx client-side navigation with its context, for the JSON
- * form of the {@code HX-Location} response header.
- * <p>A location that only carries a path is sent as the plain path string,
- * identical to {@link Context#hxLocation(String)}. Adding any piece of
- * context switches the header to htmx's JSON object form:
+ * Describes an htmx client-side navigation together with its context, for
+ * the JSON form of the {@code HX-Location} response header.
+ * <p>When a location only carries a path, it will be sent as the plain
+ * path string, exactly like {@link Context#hxLocation(String)} does. As
+ * soon as you add any piece of context, the header switches over to htmx's
+ * JSON object form:
  * <pre>c.hxLocation(new HxLocation(books).target("#main").swap("outerHTML"));</pre>
- * <p>sends:
+ * <p>which sends:
  * <pre>HX-Location: {"path":"/books","target":"#main","swap":"outerHTML"}</pre>
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -36,9 +37,10 @@ public class HxLocation {
     private Map<String, String> headers_;
 
     /**
-     * Creates a location for a URL.
+     * Creates a location that navigates to a URL.
      *
      * @param path the URL to navigate to
+     * @see #HxLocation(Route)
      * @since 1.10
      */
     public HxLocation(String path) {
@@ -49,11 +51,12 @@ public class HxLocation {
     }
 
     /**
-     * Creates a location for a route.
-     * <p>The route's URL is resolved when the header is set, so it survives
-     * renaming and refactoring.
+     * Creates a location that navigates to a route.
+     * <p>The URL of the route will only be resolved when the header is set,
+     * so that the navigation survives renaming and refactoring.
      *
      * @param route the route to navigate to
+     * @see #HxLocation(String)
      * @since 1.10
      */
     public HxLocation(Route route) {
@@ -64,10 +67,11 @@ public class HxLocation {
     }
 
     /**
-     * Sets the source element of the navigation request.
+     * Sets the element that is the source of the navigation request.
      *
      * @param cssSelector the CSS selector of the source element
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation source(String cssSelector) {
@@ -76,10 +80,11 @@ public class HxLocation {
     }
 
     /**
-     * Sets the event that triggers the navigation request.
+     * Sets the event that will trigger the navigation request.
      *
      * @param event the name of the event
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation event(String event) {
@@ -88,10 +93,11 @@ public class HxLocation {
     }
 
     /**
-     * Sets the element the response is swapped into.
+     * Sets the element that the response will be swapped into.
      *
      * @param cssSelector the CSS selector of the target element
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation target(String cssSelector) {
@@ -100,11 +106,13 @@ public class HxLocation {
     }
 
     /**
-     * Sets how the response is swapped in, with an {@code hx-swap} value
-     * such as {@code outerHTML} or {@code beforeend}.
+     * Sets the way in which the response will be swapped in.
+     * <p>This takes an {@code hx-swap} value, for instance
+     * {@code outerHTML} or {@code beforeend}.
      *
      * @param swapStyle the swap style to use
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation swap(String swapStyle) {
@@ -113,10 +121,11 @@ public class HxLocation {
     }
 
     /**
-     * Selects only part of the response for swapping.
+     * Selects only a part of the response for swapping.
      *
      * @param cssSelector the CSS selector to select from the response
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation select(String cssSelector) {
@@ -125,12 +134,13 @@ public class HxLocation {
     }
 
     /**
-     * Sets the values submitted with the navigation request.
-     * <p>The values are serialized to JSON with RIFE2's own {@link Json}
-     * support, so records, beans and maps all work.
+     * Sets the values that will be submitted with the navigation request.
+     * <p>The values will be serialized to JSON with RIFE2's own
+     * {@link Json} support, so that records, beans and maps all work.
      *
      * @param values the values to submit
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation values(Object values) {
@@ -139,10 +149,11 @@ public class HxLocation {
     }
 
     /**
-     * Sets the headers submitted with the navigation request.
+     * Sets the headers that will be submitted with the navigation request.
      *
      * @param headers the headers to submit
-     * @return this {@code HxLocation} instance, so calls can be chained
+     * @return this {@code HxLocation} instance, so that method calls can be
+     * chained
      * @since 1.10
      */
     public HxLocation headers(Map<String, String> headers) {
@@ -150,8 +161,6 @@ public class HxLocation {
         return this;
     }
 
-    // resolves the path and renders either the plain path string or htmx's
-    // JSON object form, depending on whether any context was added
     String headerValue(Context context) {
         var path = route_ != null ? context.urlFor(route_).toString() : path_;
         if (null == source_ && null == event_ && null == target_ &&

@@ -520,14 +520,15 @@ public class Context {
      * only the content of the requested block is written out, not the whole
      * template. This is the low-level primitive for sending HTML fragments to
      * htmx and other hypermedia libraries.
-     * <p>To serve the full page on a normal request and just a block on an
-     * htmx request, prefer {@link #printHtmxFragment}, which makes that choice
-     * for you and, unlike a bare {@link #isHxRequest()} check, still serves the
-     * full page when htmx is restoring a page from its history. Reach for
-     * {@code printBlock} directly when you specifically want a block, such as
-     * an htmx out-of-band update: give the block's root element an
-     * {@code hx-swap-oob} attribute in the template and print it after the main
-     * content, and htmx swaps it in wherever it belongs.
+     * <p>When you want to serve the full page on a normal request and just a
+     * block on an htmx request, you should use {@link #printHtmxFragment},
+     * which makes that choice for you and which, unlike a bare {@link
+     * #isHxRequest()} check, still serves the full page when htmx is restoring
+     * a page from its history. This method is what you use when you
+     * specifically want a block, such as an htmx out-of-band update. Give the
+     * block's root element an {@code hx-swap-oob} attribute in the template
+     * and print it after the main content, so that htmx swaps it in wherever
+     * it belongs.
      * <pre>c.print(mainTemplate);          // the primary swap
      * c.printBlock(mainTemplate, "cartBadge"); // an hx-swap-oob block, updated too</pre>
      *
@@ -3009,9 +3010,9 @@ public class Context {
      * Indicates whether a CSRF token is available for this request, either
      * because one was already established while processing it, or because
      * the browser sent its token cookie.
-     * <p>Unlike {@link #csrfToken()} this doesn't create a token, so it can
-     * be used to decide whether to include the token without minting one
-     * for browsers that don't have it. The {@code route:inputs:} filtered
+     * <p>Unlike {@link #csrfToken()} this method will not create a token, so
+     * that you can decide whether to include the token without minting one
+     * for browsers that don't have it yet. The {@code route:inputs:} filtered
      * tag uses it to add the token to the forms of the pages where it's
      * active.
      *
@@ -3348,13 +3349,13 @@ public class Context {
      * <p>To serve a fragment to htmx and the full page otherwise, prefer
      * {@link #printHtmxFragment}: it makes that choice, guards the
      * {@link #isHxHistoryRestoreRequest() history-restoration} case, and
-     * declares {@code Vary} for you. Branch on this method by hand only when
-     * that helper doesn't fit, and then declare the dependency with {@link
-     * #varyOn varyOn("HX-Request")}, or a shared cache may hand the fragment to
-     * a browser or the full page to htmx.
+     * declares {@code Vary} for you. You should only branch on this method
+     * yourself when that helper doesn't fit, and then declare the dependency
+     * with {@link #varyOn varyOn("HX-Request")}, since a shared cache could
+     * otherwise hand the fragment to a browser or the full page to htmx.
      *
-     * @return {@code true} when this is an htmx request; {@code false}
-     * otherwise
+     * @return {@code true} when this is an htmx request; or
+     * <p>{@code false} otherwise
      * @see #printHtmxFragment
      * @see #varyOn
      * @see #printBlock
@@ -3367,11 +3368,13 @@ public class Context {
     /**
      * Indicates whether the current request was made by an htmx-boosted link
      * or form, reading the {@code HX-Boosted} header.
-     * <p>It's a plain read with no side effects. When the response depends on
-     * it, declare that with {@link #varyOn varyOn("HX-Boosted")} so a cache
-     * keeps a boosted response apart from an ordinary one.
+     * <p>This method will only read the header without having any side
+     * effects. When the response depends on it, you should declare that with
+     * {@link #varyOn varyOn("HX-Boosted")} so that a cache keeps a boosted
+     * response apart from an ordinary one.
      *
-     * @return {@code true} when this is an htmx-boosted request
+     * @return {@code true} when this is an htmx-boosted request; or
+     * <p>{@code false} otherwise
      * @see #varyOn
      * @since 1.10
      */
@@ -3383,16 +3386,18 @@ public class Context {
      * Indicates whether the current request is htmx restoring a page from its
      * history after a cache miss, reading the
      * {@code HX-History-Restore-Request} header.
-     * <p>Such a request expects the <em>whole</em> page, not a fragment, since
-     * htmx replaces the entire document when restoring from history and a
-     * fragment would corrupt back/forward navigation. {@link
-     * #printHtmxFragment} serves the full page for you. If you instead
-     * hand-roll a fragment-or-page branch on {@link #isHxRequest()}, guard it
-     * with this method too, or a history restore that carries the same
-     * parameters as a fragment request will receive a fragment. It's a plain
-     * read with no side effects.
+     * <p>Such a request expects the whole page instead of a fragment, since
+     * htmx replaces the entire document when it restores from history, which
+     * means that a fragment would corrupt the back and forward navigation.
+     * {@link #printHtmxFragment} will serve the full page for you. If you
+     * branch between a fragment and a page yourself with {@link
+     * #isHxRequest()}, you should guard that branch with this method too,
+     * since a history restore that carries the same parameters as a fragment
+     * request would otherwise receive a fragment. This method will only read
+     * the header without having any side effects.
      *
-     * @return {@code true} when this is an htmx history-restoration request
+     * @return {@code true} when this is an htmx history-restoration request; or
+     * <p>{@code false} otherwise
      * @see #printHtmxFragment
      * @see #isHxRequest()
      * @since 1.10
@@ -3542,9 +3547,10 @@ public class Context {
     }
 
     /**
-     * Tells htmx to push a route's URL into the browser history, by setting
-     * the {@code HX-Push-Url} response header. Because the URL comes from the
-     * route, it survives renaming and refactoring.
+     * Tells htmx to push a route's URL into the browser history by setting
+     * the {@code HX-Push-Url} response header.
+     * <p>Since the URL is generated from the route, it will survive renaming
+     * and refactoring.
      *
      * @param route the route whose URL to push
      * @since 1.10
@@ -3731,14 +3737,16 @@ public class Context {
      * Declares that the response depends on one or more request headers, by
      * adding each to the response's {@code Vary} header so a cache keeps
      * responses that differ on those headers apart.
-     * <p>Reach for this when you shape the response from a request header you
-     * read, such as branching on {@link #isHxRequest()} or {@link
-     * #isHxBoosted()} to serve different content. The htmx accessors are plain
-     * reads and don't vary on their own, precisely so that reading a header
-     * for logging or a decision that doesn't change the output never fragments
-     * a cache. {@link #printHtmxFragment} declares its own variance, so this is
-     * only needed when you do the branching yourself. Each name is added at
-     * most once per request, so repeated calls are harmless.
+     * <p>You should use this method whenever you shape the response from a
+     * request header that you read, such as branching on {@link
+     * #isHxRequest()} or {@link #isHxBoosted()} to serve different content.
+     * The htmx accessors only read their headers and don't vary on their own,
+     * precisely so that reading a header for logging, or for a decision that
+     * doesn't change the output, never fragments a cache.
+     * {@link #printHtmxFragment} declares its own variance, which means that
+     * this method is only needed when you do the branching yourself. Each name
+     * is added at most once per request, so that repeated calls don't have any
+     * additional effect.
      *
      * @param headers the request header names the response varies on
      * @see #isHxRequest()

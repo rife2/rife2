@@ -12,6 +12,8 @@ import java.io.Serial;
  * session.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see CsrfTokenException
+ * @see CsrfTokenMissingException
  * @since 1.10
  */
 public class CsrfTokenInvalidException extends CsrfTokenException {

@@ -122,11 +122,11 @@ public class CookieBuilder {
 
     /**
      * Sets the {@code SameSite} attribute of the cookie, which determines
-     * whether the browser sends it along with requests that originate from
-     * another site.
-     * <p>{@link SameSite#LAX} keeps the cookie away from cross-site form
-     * submissions, which is what makes it a first line of defense against
-     * cross-site request forgery.
+     * whether the browser will send it along with the requests that
+     * originate from another site.
+     * <p>Using {@link SameSite#LAX} keeps the cookie away from cross-site
+     * form submissions, which is what makes it a first line of defense
+     * against cross-site request forgery.
      *
      * @param policy the {@code SameSite} policy of the cookie
      * @return the {@code CookieBuilder} instance

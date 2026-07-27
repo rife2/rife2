@@ -16,18 +16,19 @@ import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 /**
- * Bridges {@link GenericQueryManager} data changes to a server-sent events
- * (SSE) {@link SseBroadcaster}, so that every bean that is inserted, updated
- * or deleted through the query manager is pushed to all the connected SSE
- * clients.
+ * Bridges the data changes of a {@link GenericQueryManager} to a server-sent
+ * events (SSE) {@link SseBroadcaster}, so that every bean that is inserted,
+ * updated or deleted through the query manager is pushed to all the
+ * connected SSE clients.
  * <p>The bridge is registered like any other query manager listener:
  * <pre>manager.addListener(new SseGqmBridge&lt;&gt;(broadcaster));</pre>
- * <p>By default, the operation name ({@code inserted}, {@code updated} or
- * {@code deleted}) becomes the SSE event name, and the string representation
- * of the bean — or of the object ID for deletions — becomes the SSE event
- * data. Each operation's conversion can be customized individually, which
- * also makes it possible to render template fragments with
- * {@code setBean()}, or to filter operations by returning {@code null}:
+ * <p>By default, the name of the operation ({@code inserted},
+ * {@code updated} or {@code deleted}) becomes the SSE event name, and the
+ * string representation of the bean becomes the SSE event data, or the
+ * string representation of the object ID in case of deletions. The
+ * conversion of each operation can be customized individually, which also
+ * makes it possible to render template fragments with {@code setBean()}, or
+ * to filter operations out by returning {@code null}:
  * <pre>manager.addListener(new SseGqmBridge&lt;Product&gt;(broadcaster)
  *     .onInserted(product -&gt; {
  *         var t = TemplateFactory.HTML.get("catalog");
@@ -36,17 +37,17 @@ import java.util.logging.Logger;
  *     })
  *     .onDeleted(objectId -&gt; null));</pre>
  * <p>Restoring beans doesn't broadcast events, and neither do the
- * installation and removal of the database structure. Note that the bridge
- * only observes changes that are made through the query manager it is
- * registered with, modifications that reach the database in other ways are
- * not broadcast.
- * <p>The converters run on the thread that performs the database operation,
- * after that operation has completed. Since the database change has already
- * happened at that point, exceptions from the conversion or the broadcast
- * don't propagate to the database operation: they are passed to the
- * {@link #onError onError} handler, or logged to the {@code rife.engine}
- * logger when no handler was provided. Configure the converters before
- * registering the bridge as a listener.
+ * installation and the removal of the database structure. Note that this
+ * bridge only observes the changes that are made through the query manager
+ * that it is registered with, since modifications that reach the database
+ * in other ways aren't broadcast.
+ * <p>The converters run on the thread that performs the database
+ * operation, after that operation has completed. Since the database change
+ * has already happened at that point, exceptions from the conversion or
+ * from the broadcast don't propagate to the database operation: they are
+ * handed to the {@link #onError onError} handler, or logged to the
+ * {@code rife.engine} logger when no handler was provided. You should
+ * configure the converters before registering the bridge as a listener.
  *
  * @param <BeanType> the type of the bean that the query manager handles
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -66,6 +67,7 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
      *
      * @param broadcaster the broadcaster the converted events will be sent
      *                    to
+     * @see #json
      * @since 1.10
      */
     public SseGqmBridge(SseBroadcaster broadcaster) {
@@ -79,10 +81,10 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
 
     /**
      * Creates a new bridge whose conversions transmit JSON event data,
-     * suitable for clients that parse the events with
+     * which is suitable for clients that parse the events with
      * {@code JSON.parse(event.data)}.
-     * <p>Inserted and updated beans are converted to a JSON object of
-     * their properties with {@link ServerSentEvent#json}, deletions
+     * <p>Inserted and updated beans are converted to a JSON object of their
+     * properties with {@link ServerSentEvent#json}, while deletions
      * transmit a JSON object with the object ID as its {@code id} member.
      * The conversions can still be customized individually afterwards.
      *
@@ -91,6 +93,7 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
      * @param broadcaster the broadcaster the converted events will be sent
      *                    to
      * @return the new bridge instance
+     * @see ServerSentEvent#json
      * @since 1.10
      */
     public static <BeanType> SseGqmBridge<BeanType> json(SseBroadcaster broadcaster) {
@@ -102,11 +105,14 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
 
     /**
      * Customizes the conversion of inserted beans.
-     * <p>The converter returns the server-sent event to broadcast, or
-     * {@code null} to not broadcast anything for insertions.
+     * <p>The converter returns the server-sent event that will be
+     * broadcast, or {@code null} when nothing should be broadcast for
+     * insertions.
      *
      * @param converter the converter that will be used for inserted beans
      * @return this bridge instance
+     * @see #onUpdated
+     * @see #onDeleted
      * @since 1.10
      */
     public SseGqmBridge<BeanType> onInserted(Function<BeanType, ServerSentEvent> converter) {
@@ -118,11 +124,14 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
 
     /**
      * Customizes the conversion of updated beans.
-     * <p>The converter returns the server-sent event to broadcast, or
-     * {@code null} to not broadcast anything for updates.
+     * <p>The converter returns the server-sent event that will be
+     * broadcast, or {@code null} when nothing should be broadcast for
+     * updates.
      *
      * @param converter the converter that will be used for updated beans
      * @return this bridge instance
+     * @see #onInserted
+     * @see #onDeleted
      * @since 1.10
      */
     public SseGqmBridge<BeanType> onUpdated(Function<BeanType, ServerSentEvent> converter) {
@@ -135,11 +144,13 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
     /**
      * Customizes the conversion of deletions.
      * <p>The converter receives the object ID of the deleted bean and
-     * returns the server-sent event to broadcast, or {@code null} to not
-     * broadcast anything for deletions.
+     * returns the server-sent event that will be broadcast, or {@code null}
+     * when nothing should be broadcast for deletions.
      *
      * @param converter the converter that will be used for deletions
      * @return this bridge instance
+     * @see #onInserted
+     * @see #onUpdated
      * @since 1.10
      */
     public SseGqmBridge<BeanType> onDeleted(IntFunction<ServerSentEvent> converter) {
@@ -153,8 +164,8 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
      * Provides a handler for conversion and broadcast failures.
      * <p>The bridge is notified after the database operation has completed,
      * so a failure can't affect the result of a change that has already
-     * happened. By default failures are logged to the {@code rife.engine}
-     * logger, providing a handler replaces that behavior.
+     * happened. Failures are logged to the {@code rife.engine} logger by
+     * default, and providing a handler will replace that behavior.
      *
      * @param handler the handler that will receive conversion and broadcast
      *                failures
@@ -199,7 +210,7 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
                 broadcaster_.send(event);
             }
         } catch (Throwable e) {
-            // the database change has already been committed, a delivery
+            // the database change has already been committed, so a delivery
             // failure can't be allowed to fail the operation that caused it
             if (errorHandler_ != null) {
                 errorHandler_.accept(e);

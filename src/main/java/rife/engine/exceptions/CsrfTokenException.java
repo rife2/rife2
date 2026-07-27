@@ -7,10 +7,11 @@ package rife.engine.exceptions;
 import java.io.Serial;
 
 /**
- * Base class for the exceptions that a CSRF token verification raises, so
- * that they can be caught and handled together.
+ * Base class of the exceptions that the verification of a CSRF token
+ * raises, so that they can be caught and handled together.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see rife.engine.elements.CsrfProtected
  * @see CsrfTokenMissingException
  * @see CsrfTokenInvalidException
  * @since 1.10

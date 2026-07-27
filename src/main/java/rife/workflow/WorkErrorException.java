@@ -9,14 +9,15 @@ import java.io.Serial;
 /**
  * Reports the failure of {@link Work} that was executing in a
  * {@link Workflow}.
- * <p>The message describes which work failed and, when the failure was
- * caused by missing continuations instrumentation, how to resolve that.
- * The original exception that was thrown by the work is available through
- * {@link #getCause()}.
+ * <p>The message describes which work failed and, in case the failure was
+ * caused by missing continuations instrumentation, how you can resolve
+ * that. The original exception that was thrown by the work is available
+ * through {@link #getCause()}.
  *
  * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see ErrorListener
+ * @see Workflow#addErrorListener
  * @since 1.10
  */
 public class WorkErrorException extends RuntimeException {

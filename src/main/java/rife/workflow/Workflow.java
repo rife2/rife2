@@ -386,11 +386,12 @@ public class Workflow {
     /**
      * Adds a new error listener that will be notified when work fails with
      * an exception.
-     * <p>When no error listeners are registered, work failures are logged
-     * to the {@code rife.workflow} logger instead.
+     * <p>When no error listeners have been registered, work failures will
+     * be logged to the {@code rife.workflow} logger instead.
      *
      * @param listener the error listener that will be added
      * @see #removeErrorListener
+     * @see ErrorListener
      * @since 1.10
      */
     public void addErrorListener(final ErrorListener listener) {
@@ -402,9 +403,12 @@ public class Workflow {
 
     /**
      * Removes an error listener.
+     * <p>Once the listener has been removed, it will not be notified of any
+     * work failures anymore.
      *
      * @param listener the error listener that will be removed
      * @see #addErrorListener
+     * @see ErrorListener
      * @since 1.10
      */
     public void removeErrorListener(final ErrorListener listener) {

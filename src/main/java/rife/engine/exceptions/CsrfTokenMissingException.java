@@ -8,10 +8,12 @@ import java.io.Serial;
 
 /**
  * Thrown when a request that changes state doesn't provide a CSRF token,
- * either because the browser sent no token cookie, or because the request
- * carries neither the token parameter nor the token header.
+ * either because the browser didn't send a token cookie, or because the
+ * request carries neither the token parameter nor the token header.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see CsrfTokenException
+ * @see CsrfTokenInvalidException
  * @since 1.10
  */
 public class CsrfTokenMissingException extends CsrfTokenException {

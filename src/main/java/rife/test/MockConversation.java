@@ -68,12 +68,13 @@ public class MockConversation implements AutoCloseable {
     }
 
     /**
-     * Tears down this conversation's site, calling {@code destroy()} on
-     * the site and on all its grouped routers.
-     * <p>This allows the teardown lifecycle of a site to be tested out of
-     * container, and releases the resources that the site holds on to, for
-     * instance schedulers, executors or SSE broadcasters. Destroying a
-     * conversation more than once has no additional effect.
+     * Tears down this conversation's site by calling {@code destroy()} on
+     * the site and on all the routers that are grouped inside it.
+     * <p>This makes it possible to test the teardown lifecycle of a site
+     * out of container, while it also releases the resources that the site
+     * holds on to, for instance schedulers, executors or SSE broadcasters.
+     * Destroying a conversation more than once doesn't have any additional
+     * effect.
      * <p>Unlike the teardown of a web application in a servlet container,
      * the active {@code Datasource} and {@code Scheduler} instances are not
      * closed and stopped, since those are shared by the whole JVM and other
@@ -85,6 +86,7 @@ public class MockConversation implements AutoCloseable {
      * }</pre>
      *
      * @see #close()
+     * @see rife.engine.Router#destroy()
      * @since 1.10
      */
     public void destroy() {
@@ -93,6 +95,8 @@ public class MockConversation implements AutoCloseable {
 
     /**
      * Tears down this conversation's site by calling {@link #destroy()}.
+     * <p>This makes it possible to use a conversation inside a
+     * try-with-resources block.
      *
      * @see #destroy()
      * @since 1.10

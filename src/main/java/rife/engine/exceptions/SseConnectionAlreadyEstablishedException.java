@@ -10,8 +10,11 @@ import java.io.Serial;
  * Thrown when a server-sent events connection is established for a request
  * that already has one, since two connections over the same response would
  * interleave their event writes and corrupt the stream.
+ * <p>A request establishes its connection once, after which that same
+ * connection instance should be used for everything that it sends.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see SseConnectionAfterOutputException
  * @since 1.10
  */
 public class SseConnectionAlreadyEstablishedException extends EngineException {

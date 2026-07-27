@@ -24,11 +24,11 @@ import java.util.logging.Logger;
  * Manages a collection of detached server-sent events connections and
  * broadcasts events to all of them.
  * <p>A broadcaster is typically stored in a field of your {@link Site} and
- * passed to {@link Context#sse(SseBroadcaster)} inside the
- * element of an SSE route. The element returns immediately while the
- * connection stays open, and events can be pushed afterwards from anywhere
- * in the application: another element, a scheduled task, a workflow, or any
- * other thread.
+ * handed to {@link Context#sse(SseBroadcaster)} inside the element of an
+ * SSE route. The element returns immediately while the connection stays
+ * open, which makes it possible to push events afterwards from anywhere
+ * else in the application: another element, a scheduled task, a workflow,
+ * or any other thread.
  * <pre>public class MySite extends Site {
  *     final SseBroadcaster ticker = new SseBroadcaster();
  *     Route events = get("/events", c -&gt; c.sse(ticker));
@@ -36,16 +36,18 @@ import java.util.logging.Logger;
  *
  * // from anywhere else:
  * site.ticker.send(new ServerSentEvent().name("tick").data("42"));</pre>
- * <p>Connections whose clients have disconnected are automatically removed
- * when sending to them fails. Sending a periodic
- * {@link #comment(String) heartbeat comment} both prevents intermediaries
- * from closing idle connections and reaps disconnected ones.
- * <p>With {@link #history(int) event history} enabled, clients that
- * reconnect automatically receive the events they missed.
+ * <p>Connections whose clients have disconnected will automatically be
+ * removed when sending to them fails. Sending a periodic
+ * {@link #comment(String) heartbeat comment} will both prevent
+ * intermediaries from closing idle connections and reap the ones that have
+ * disconnected.
+ * <p>When {@link #history(int) event history} is enabled, clients that
+ * reconnect will automatically receive the events that they missed.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see SseConnection
  * @see ServerSentEvent
+ * @see Context#sse(SseBroadcaster)
  * @since 1.10
  */
 public class SseBroadcaster implements AutoCloseable {
@@ -72,64 +74,67 @@ public class SseBroadcaster implements AutoCloseable {
 
     /**
      * Enables event history with the provided capacity, so that clients
-     * that reconnect automatically receive the events they missed.
-     * <p>With history enabled, the broadcaster assigns the SSE ID of every
-     * event that carries a name, data or a template. IDs are composed of an
-     * epoch that identifies the broadcaster instance and a monotonically
-     * increasing sequence number, so that IDs from before an application
-     * restart can't be mistaken for positions in the new instance's
-     * sequence. Since application-assigned event IDs and
-     * broadcaster history are alternative reconnection strategies that
-     * can't be combined, sending an event that carries its own ID throws an
-     * {@code IllegalArgumentException}. The last {@code capacity} events
-     * are buffered, with template data captured at the moment of
+     * that reconnect automatically receive the events that they missed.
+     * <p>When history is enabled, the broadcaster assigns the SSE ID of
+     * every event that carries a name, data or a template. These IDs are
+     * composed of an epoch that identifies the broadcaster instance and of
+     * a monotonically increasing sequence number, so that IDs from before
+     * an application restart can't be mistaken for positions in the
+     * sequence of the new instance. Since application-assigned event IDs
+     * and broadcaster history are alternative reconnection strategies that
+     * can't be combined, sending an event that carries its own ID will
+     * throw an {@code IllegalArgumentException}. The last {@code capacity}
+     * events are buffered, with the template data captured at the moment of
      * broadcasting.
      * <p>When a browser reconnects, it transmits the ID of the last event
-     * it received, and the buffered events after that ID are replayed to it
-     * before it rejoins the live stream. Events that were
+     * that it received, and the buffered events after that ID will be
+     * replayed to it before it rejoins the live stream. Events that were
      * {@link #send(ServerSentEvent, Predicate) targeted with a filter} are
-     * only replayed to connections that match the filter: the filters are
-     * re-evaluated at replay time, and an exception thrown by a filter
-     * propagates to the reconnecting request. The
-     * {@code lastEventId} request parameter is honored the same way as the
-     * reconnection header, which allows pages to receive the events that
-     * occurred between their rendering and the establishment of the stream.
-     * <p>When a client reconnects after missing more events than the
-     * history contains, nothing is replayed and the reconnection is
+     * only replayed to the connections that match the filter: the filters
+     * are re-evaluated at replay time, and an exception that is thrown by a
+     * filter propagates to the reconnecting request. The
+     * {@code lastEventId} request parameter is honored in the same way as
+     * the reconnection header, which allows pages to receive the events
+     * that occurred between their rendering and the establishment of the
+     * stream.
+     * <p>When a client reconnects after having missed more events than the
+     * history contains, nothing will be replayed and the reconnection is
      * reported by {@link #historyStats()} and logged to the
      * {@code rife.engine} logger. Reconnections that present an ID from
-     * before an application restart are reported the same way, since the
-     * history doesn't bridge restarts. The capacity should be sized to
-     * cover the events that can occur during the longest disconnection that
-     * should be bridged seamlessly, applications typically handle longer
-     * gaps by rendering the full state on the page. Since the reconnection
-     * ID is provided by the client, each reconnection can request up to
-     * {@code capacity} events to be replayed, keep the capacity
-     * proportionate for streams that are accessible without
-     * authentication.
-     * <p>Heartbeat comments are not buffered and don't receive IDs. Only
-     * events that are sent through the broadcaster are part of the history,
-     * events that are sent directly to an individual connection bypass it.
-     * The history is kept in memory and doesn't survive an application
-     * restart.
+     * before an application restart are reported in the same way, since the
+     * history doesn't bridge restarts. You should size the capacity so that
+     * it covers the events that can occur during the longest disconnection
+     * that has to be bridged seamlessly, since applications typically
+     * handle longer gaps by rendering the full state on the page. Note that
+     * the reconnection ID is provided by the client, which means that each
+     * reconnection can request up to {@code capacity} events to be
+     * replayed, so you should keep the capacity proportionate for streams
+     * that are accessible without authentication.
+     * <p>Heartbeat comments aren't buffered and don't receive IDs. Only the
+     * events that are sent through the broadcaster become part of the
+     * history, since events that are sent directly to an individual
+     * connection bypass it. The history is kept in memory and doesn't
+     * survive an application restart.
      * <p>Events are delivered to the connections outside of the internal
      * history lock. When multiple threads broadcast concurrently, the order
      * in which their events reach an individual connection isn't
-     * guaranteed, even though the history preserves the ID order, and such
-     * events can be delivered again after a reconnection. Events that are
-     * broadcast sequentially from a single thread always arrive in order.
-     * A connection whose client stops reading without disconnecting can
-     * block a sending thread while writing to it, and since the write
-     * doesn't fail, the heartbeat can't reap such a connection: it's only
-     * reaped when the servlet container's connection timeout fails the
-     * write. Bound that timeout in the container configuration — with the
-     * embedded servers through {@link Server#connectionIdleTimeout} or
-     * {@link TomcatServer#connectionTimeout} — and keep it longer than the
+     * guaranteed, even though the history preserves the order of the IDs,
+     * and such events can be delivered again after a reconnection. Events
+     * that are broadcast sequentially from a single thread will always
+     * arrive in order. A connection whose client stops reading without
+     * disconnecting can block a sending thread while it's being written to,
+     * and since that write doesn't fail, the heartbeat can't reap such a
+     * connection: it's only reaped when the connection timeout of the
+     * servlet container fails the write. You should bound that timeout in
+     * the container configuration, which is done for the embedded servers
+     * through {@link Server#connectionIdleTimeout} or
+     * {@link TomcatServer#connectionTimeout}, and keep it longer than the
      * heartbeat interval.
      *
      * @param capacity the number of events to buffer
      * @return this broadcaster instance
      * @see #historyStats()
+     * @see #lastEventId()
      * @since 1.10
      */
     public SseBroadcaster history(int capacity) {
@@ -236,8 +241,8 @@ public class SseBroadcaster implements AutoCloseable {
         if (last_epoch != epoch_ ||
             last > lastEventId_) {
             // the ID originates from another broadcaster instance, most
-            // likely from before an application restart, the history can't
-            // bridge it
+            // likely from before an application restart, so the history
+            // can't bridge it
             gaps_ += 1;
             Logger.getLogger("rife.engine").fine(() ->
                 "An SSE client reconnected with last event ID " + last_raw + " while the newest " +
@@ -279,12 +284,14 @@ public class SseBroadcaster implements AutoCloseable {
 
     /**
      * Sends an event to all the open connections of this broadcaster.
-     * <p>Connections that fail to receive the event are closed and removed.
+     * <p>Connections that fail to receive the event will be closed and
+     * removed.
      *
      * @param event the event to broadcast
      * @return the number of connections that received the event; an event
      * without any fields set isn't sent and returns {@code 0}
      * @throws IllegalArgumentException when the event is {@code null}
+     * @see #send(ServerSentEvent, Predicate)
      * @since 1.10
      */
     public int send(ServerSentEvent event) {
@@ -296,21 +303,23 @@ public class SseBroadcaster implements AutoCloseable {
      * a filter.
      * <p>The filter receives each connection and can inspect its
      * {@link SseConnection#context() context} to decide whether the event
-     * should be sent to it, for instance based on the authenticated identity
-     * or on request parameters:
+     * should be sent to it, for instance based on the authenticated
+     * identity or on the request parameters:
      * <pre>broadcaster.send(event, connection -&gt; {
      *     var identity = Identified.getIdentity(connection.context());
      *     return identity != null &amp;&amp; identity.getAttributes().isInRole("admin");
      * });</pre>
-     * <p>A connection's context is the request that established it, so the
-     * authentication state and the parameters that a filter sees are those
-     * from the moment the client connected. Connections whose context is no
-     * longer appropriate, for instance after a logout, can be terminated
-     * with {@link #close(Predicate)}.
-     * <p>Connections that fail to receive the event are closed and removed.
-     * Connections that are filtered out are left untouched.
-     * <p>Exceptions thrown by the filter propagate to the caller, and the
-     * connections that weren't evaluated yet don't receive the event.
+     * <p>The context of a connection is the request that established it,
+     * which means that the authentication state and the parameters that a
+     * filter sees are the ones from the moment the client connected.
+     * Connections whose context is no longer appropriate, for instance
+     * after a logout, can be terminated with {@link #close(Predicate)}.
+     * <p>Connections that fail to receive the event will be closed and
+     * removed, while the connections that are filtered out are left
+     * untouched.
+     * <p>Exceptions that are thrown by the filter propagate to the caller,
+     * and the connections that weren't evaluated yet won't receive the
+     * event.
      *
      * @param event  the event to broadcast
      * @param filter the filter that determines which connections receive
@@ -319,6 +328,8 @@ public class SseBroadcaster implements AutoCloseable {
      * without any fields set isn't sent and returns {@code 0}
      * @throws IllegalArgumentException when the event or the filter is
      *                                  {@code null}
+     * @see #send(ServerSentEvent)
+     * @see #close(Predicate)
      * @since 1.10
      */
     public int send(ServerSentEvent event, Predicate<SseConnection> filter) {
@@ -410,7 +421,7 @@ public class SseBroadcaster implements AutoCloseable {
         var template = event.template();
         if (template != null) {
             // capture the template with the value assignments that are
-            // active at the moment of broadcasting, the filtered tags are
+            // active at the moment of broadcasting; the filtered tags are
             // resolved against each receiving connection at replay time
             var capture = (Template) template.clone();
             if (event.templateBlockId() != null) {
@@ -429,6 +440,7 @@ public class SseBroadcaster implements AutoCloseable {
      * @param data the data of the event
      * @return the number of connections that received the event
      * @see #send(ServerSentEvent)
+     * @see #send(Template)
      * @since 1.10
      */
     public int send(CharSequence data) {
@@ -438,12 +450,13 @@ public class SseBroadcaster implements AutoCloseable {
     /**
      * Sends an event with the content of the provided template as its data
      * to all the open connections of this broadcaster.
-     * <p>The template's filtered tags are resolved against the context of
-     * each individual connection.
+     * <p>The filtered tags of the template will be resolved against the
+     * context of each individual connection.
      *
      * @param template the template whose content will be used as event data
      * @return the number of connections that received the event
      * @see #send(ServerSentEvent)
+     * @see #send(Template, String)
      * @since 1.10
      */
     public int send(Template template) {
@@ -453,14 +466,15 @@ public class SseBroadcaster implements AutoCloseable {
     /**
      * Sends an event with the content of a single template block as its
      * data to all the open connections of this broadcaster.
-     * <p>The template's filtered tags are resolved against the context of
-     * each individual connection.
+     * <p>The filtered tags of the template will be resolved against the
+     * context of each individual connection.
      *
      * @param template the template that contains the block
      * @param blockId  the ID of the block whose content will be used as
      *                 event data
      * @return the number of connections that received the event
      * @see #send(ServerSentEvent)
+     * @see #send(Template)
      * @since 1.10
      */
     public int send(Template template, String blockId) {
@@ -469,7 +483,7 @@ public class SseBroadcaster implements AutoCloseable {
 
     /**
      * Sends a comment line to all the open connections, typically used as a
-     * keep-alive heartbeat that also reaps stale connections.
+     * keep-alive heartbeat that also reaps the stale connections.
      *
      * @param comment the comment text
      * @return the number of connections that received the comment
@@ -485,21 +499,21 @@ public class SseBroadcaster implements AutoCloseable {
      * Automatically sends a keep-alive comment to all the open connections
      * at a fixed interval.
      * <p>Heartbeats prevent intermediaries from closing idle connections
-     * and reap connections whose clients have disconnected, which would
+     * and reap the connections whose clients have disconnected, which would
      * otherwise hold on to their resources until the next
      * application-initiated broadcast. A client that stops reading without
-     * disconnecting stalls its write instead of failing it, such a
-     * connection is only reaped when the servlet container's connection
-     * timeout fails the write. Intervals in the range of 15 to 30 seconds
-     * are typical, and should stay shorter than the container's connection
-     * timeout so that healthy idle streams are kept alive: the embedded
-     * Jetty {@link Server} closes connections that are idle for 30 seconds
-     * by default, so with that default a 15 second heartbeat is
-     * appropriate, while a 30 second heartbeat races the timeout. Embedded
-     * Tomcat defaults to 60 seconds.
+     * disconnecting stalls its write instead of failing it, so such a
+     * connection is only reaped when the connection timeout of the servlet
+     * container fails the write. Intervals in the range of 15 to 30 seconds
+     * are typical, and they should stay shorter than the connection timeout
+     * of the container so that healthy idle streams are kept alive: the
+     * embedded Jetty {@link Server} closes connections that have been idle
+     * for 30 seconds by default, which makes a 15 second heartbeat
+     * appropriate with that default, while a 30 second heartbeat races the
+     * timeout. Embedded Tomcat defaults to 60 seconds.
      * <p>The heartbeat runs on a daemon thread. Calling this method again
-     * replaces the previous interval, {@link #stopHeartbeat()} stops the
-     * heartbeat, and {@link #close()} stops it as well.
+     * will replace the previous interval, while {@link #stopHeartbeat()}
+     * stops the heartbeat, as does {@link #close()}.
      *
      * @param interval the interval between heartbeats
      * @return this broadcaster instance
@@ -524,7 +538,7 @@ public class SseBroadcaster implements AutoCloseable {
                     comment("keep-alive");
                 } catch (Throwable e) {
                     // failures of individual connections are already handled
-                    // by the send logic, never let anything else cancel the
+                    // by the send logic; never let anything else cancel the
                     // heartbeat schedule
                 }
             }, interval.toNanos(), interval.toNanos(), TimeUnit.NANOSECONDS);
@@ -556,9 +570,11 @@ public class SseBroadcaster implements AutoCloseable {
      * Retrieves the number of connections that are currently registered
      * with this broadcaster.
      * <p>Stale connections are only detected when sending to them fails,
-     * so this count can include clients that have already disconnected.
+     * which means that this count can include clients that have already
+     * disconnected.
      *
      * @return the number of registered connections
+     * @see #close(Predicate)
      * @since 1.10
      */
     public int connectionCount() {
@@ -570,11 +586,14 @@ public class SseBroadcaster implements AutoCloseable {
      * {@link #history(int) history} is enabled.
      * <p>Pages can embed this ID in the URL of their SSE connection as the
      * {@code lastEventId} parameter, so that the events that occur between
-     * the page render and the establishment of the stream are replayed.
+     * the rendering of the page and the establishment of the stream will be
+     * replayed.
      *
-     * @return the ID of the most recently sent event; or the ID with
-     * sequence number {@code 0} when no event has been sent yet
+     * @return the ID of the most recently sent event; or
+     * <p>the ID with sequence number {@code 0} when no event has been sent
+     * yet
      * @see #history
+     * @see SseConnection#lastEventId()
      * @since 1.10
      */
     public String lastEventId() {
@@ -584,11 +603,12 @@ public class SseBroadcaster implements AutoCloseable {
     }
 
     /**
-     * Retrieves a snapshot of the event history state, intended to help
-     * with tuning the {@link #history(int) history} capacity.
+     * Retrieves a snapshot of the state of the event history, which is
+     * intended to help you tune the {@link #history(int) history} capacity.
      *
      * @return the current history statistics
      * @see SseHistoryStats
+     * @see #history
      * @since 1.10
      */
     public SseHistoryStats historyStats() {
@@ -602,9 +622,9 @@ public class SseBroadcaster implements AutoCloseable {
 
     /**
      * Closes the connections of this broadcaster that match a filter.
-     * <p>This allows connections to be terminated when their context is no
-     * longer appropriate, for instance after the user they belong to logged
-     * out or lost a permission:
+     * <p>This makes it possible to terminate connections when their context
+     * is no longer appropriate, for instance after the user that they
+     * belong to logged out or lost a permission:
      * <pre>broadcaster.close(connection -&gt; {
      *     var identity = Identified.getIdentity(connection.context());
      *     return identity != null &amp;&amp; identity.getLogin().equals(login);
@@ -617,6 +637,8 @@ public class SseBroadcaster implements AutoCloseable {
      * @param filter the filter that determines which connections are closed
      * @return the number of connections that were closed
      * @throws IllegalArgumentException when the filter is {@code null}
+     * @see #close()
+     * @see #send(ServerSentEvent, Predicate)
      * @since 1.10
      */
     public int close(Predicate<SseConnection> filter) {
@@ -639,6 +661,7 @@ public class SseBroadcaster implements AutoCloseable {
      * register, subsequent events will be sent to them, and a heartbeat can
      * be established again.
      *
+     * @see #close(Predicate)
      * @since 1.10
      */
     @Override

@@ -10,8 +10,11 @@ import java.io.Serial;
  * Thrown when regular response output is used after a server-sent events
  * connection has been established for the request, since that output would
  * corrupt the event stream.
+ * <p>Once a connection has been established, you should send everything
+ * that the client has to receive as events through that connection.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see SseConnectionAfterOutputException
  * @since 1.10
  */
 public class SseOutputRefusedException extends EngineException {

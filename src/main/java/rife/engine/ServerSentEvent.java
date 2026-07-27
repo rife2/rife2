@@ -17,18 +17,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A single server-sent event that can be sent through an {@link SseConnection}
- * or broadcast to all the connections of an {@link SseBroadcaster}.
- * <p>All the fields are optional, they will only be part of the event on the
- * wire when they have been set. Events are built fluently:
+ * A {@code ServerSentEvent} object describes a single server-sent event that
+ * can be sent through an {@link SseConnection} or broadcast to all the
+ * connections of an {@link SseBroadcaster}.
+ * <p>All the fields are optional, since they will only be part of the event
+ * on the wire when they have been set. Events are built fluently:
  * <pre>sse.send(new ServerSentEvent().name("update").id("42").data("changed"));</pre>
  * <p>Data can be provided as text with {@code data()}, or as a
  * {@link Template} or a single template block with {@code template()} and
- * {@code templateBlock()}. Templates are processed exactly like
- * {@link Context#print(Template)} processes them, with
- * all the filtered tags resolved against the context of each receiving
- * connection, making them convenient for sending HTML fragments, for
- * instance for the htmx {@code sse} extension.
+ * {@code templateBlock()}. Templates will be processed exactly like
+ * {@link Context#print(Template)} processes them, with all the filtered
+ * tags resolved against the context of each receiving connection, which
+ * makes them convenient for sending HTML fragments, for instance for the
+ * htmx {@code sse} extension.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see SseConnection
@@ -45,13 +46,14 @@ public class ServerSentEvent {
     private String templateBlockId_ = null;
 
     /**
-     * Sets the event name, transmitted as the {@code event} field.
+     * Sets the event name, which is transmitted as the {@code event} field.
      * <p>Browsers dispatch named events to the listener that was registered
      * for that particular name.
      *
      * @param name the name of the event
      * @return this event instance
      * @throws IllegalArgumentException when the name contains line breaks
+     * @see #id
      * @since 1.10
      */
     public ServerSentEvent name(String name) {
@@ -61,20 +63,23 @@ public class ServerSentEvent {
     }
 
     /**
-     * Sets the event ID, transmitted as the {@code id} field.
+     * Sets the event ID, which is transmitted as the {@code id} field.
      * <p>Browsers echo the last received ID back in the
      * {@code Last-Event-ID} header when they reconnect, which can be
      * retrieved with {@link SseConnection#lastEventId()}.
-     * <p>Event IDs are the application's reconnection strategy. Broadcasters
-     * with {@link SseBroadcaster#history(int) history} enabled assign their
-     * own IDs and refuse events that carry one.
+     * <p>Event IDs that you set yourself are the reconnection strategy of
+     * your application. Broadcasters that have
+     * {@link SseBroadcaster#history(int) history} enabled assign their own
+     * IDs and will refuse events that carry one.
      *
      * @param id the ID of the event
      * @return this event instance
      * @throws IllegalArgumentException when the ID contains line breaks or
-     *                                  NUL characters, browsers ignore IDs
-     *                                  with NUL characters when tracking
-     *                                  their last event ID
+     *                                  NUL characters, since browsers
+     *                                  ignore IDs with NUL characters when
+     *                                  they track their last event ID
+     * @see #name
+     * @see SseConnection#lastEventId()
      * @since 1.10
      */
     public ServerSentEvent id(String id) {
@@ -94,8 +99,8 @@ public class ServerSentEvent {
     }
 
     /**
-     * Sets the reconnection time in milliseconds, transmitted as the
-     * {@code retry} field.
+     * Sets the reconnection time in milliseconds, which is transmitted as
+     * the {@code retry} field.
      *
      * @param milliseconds the reconnection time in milliseconds
      * @return this event instance
@@ -119,6 +124,8 @@ public class ServerSentEvent {
      *
      * @param comment the comment text
      * @return this event instance
+     * @see SseBroadcaster#comment
+     * @see SseConnection#comment
      * @since 1.10
      */
     public ServerSentEvent comment(String comment) {
@@ -129,13 +136,15 @@ public class ServerSentEvent {
     }
 
     /**
-     * Adds data to the event, transmitted as {@code data} fields.
-     * <p>This method can be called multiple times, each call adds another
-     * line of data. Data that itself contains line breaks will automatically
-     * be transmitted as multiple {@code data} fields.
+     * Adds data to the event, which is transmitted as {@code data} fields.
+     * <p>This method can be called multiple times, since each call adds
+     * another line of data. Data that itself contains line breaks will
+     * automatically be transmitted as multiple {@code data} fields.
      *
      * @param data the data to add
      * @return this event instance
+     * @see #json
+     * @see #template
      * @since 1.10
      */
     public ServerSentEvent data(CharSequence data) {
@@ -147,15 +156,15 @@ public class ServerSentEvent {
 
     /**
      * Adds the compact JSON representation of a value as the data of the
-     * event, transmitted as a {@code data} field.
-     * <p>This accepts the same values as {@link Json#toString(Object)} —
+     * event, which is transmitted as a {@code data} field.
+     * <p>This accepts the same values as {@link Json#toString(Object)}:
      * strings, numbers, booleans, {@code null}, maps, collections, arrays,
-     * dates, temporals, enums, {@link JsonObject} and {@link JsonArray} —
-     * and additionally converts beans and records, as well as the elements
-     * of collections, through {@link Json#from}.
-     * <p>Since compact JSON contains no line breaks, the value is always
-     * transmitted as a single {@code data} field, which clients can parse
-     * directly with {@code JSON.parse(event.data)}.
+     * dates, temporals, enums, {@link JsonObject} and {@link JsonArray}.
+     * Beans and records are additionally converted through
+     * {@link Json#from}, as are the elements of collections.
+     * <p>Since compact JSON contains no line breaks, the value will always
+     * be transmitted as a single {@code data} field, which clients can
+     * parse directly with {@code JSON.parse(event.data)}.
      *
      * @param value the value whose JSON representation will be added as
      *              event data
@@ -196,13 +205,14 @@ public class ServerSentEvent {
      * {@link Context#print(Template)} processes it, resolving all the
      * filtered tags against the context of each connection that receives
      * the event.
-     * <p>A single trailing line break of the template content is not
+     * <p>A single trailing line break of the template content isn't
      * transmitted, since it's a template file convention rather than
      * meaningful event data.
      *
      * @param template the template whose content will be used as event data
      * @return this event instance
      * @see #templateBlock
+     * @see #data
      * @since 1.10
      */
     public ServerSentEvent template(Template template) {
@@ -217,14 +227,15 @@ public class ServerSentEvent {
      * {@link Context#print(Template)} processes it, after which only the
      * content of the provided block is used, with the value assignments
      * that are active at that moment.
-     * <p>This allows a page template and the event fragments that update it
-     * to be maintained in the same template file.
+     * <p>This makes it possible to maintain a page template and the event
+     * fragments that update it in the same template file.
      *
      * @param template the template that contains the block
      * @param blockId  the ID of the block whose content will be used as
      *                 event data
      * @return this event instance
      * @see #template
+     * @see #data
      * @since 1.10
      */
     public ServerSentEvent templateBlock(Template template, String blockId) {

@@ -9,7 +9,7 @@ import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 
 /**
- * Wraps a {@code Cookie} by tracking the creation time and allowing max-age
+ * Extends a {@code Cookie} by tracking the creation time and allowing max-age
  * expiration to be evaluated.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -17,8 +17,9 @@ import java.time.Instant;
  */
 public class MockCookie extends Cookie {
     /**
-     * The path of a cookie that doesn't specify one.
+     * The path that is used for a cookie that doesn't specify one itself.
      *
+     * @see Cookie#setPath(String)
      * @since 1.10
      */
     public static final String DEFAULT_PATH = "/";

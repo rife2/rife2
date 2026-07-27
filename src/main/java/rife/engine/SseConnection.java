@@ -15,17 +15,17 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * A single server-sent events (SSE) connection to a client.
+ * An {@code SseConnection} instance represents a single server-sent events
+ * (SSE) connection to a client.
  * <p>An SSE connection is obtained inside an element through
- * {@link Context#sse()} or
- * {@link Context#sse(SseBroadcaster)}. Creating it prepares
- * the response for event streaming: the content type is set to
+ * {@link Context#sse()} or {@link Context#sse(SseBroadcaster)}. Creating it
+ * prepares the response for event streaming: the content type is set to
  * {@code text/event-stream}, response buffering is disabled, and the
- * headers are flushed to the client so that it knows the stream has been
- * established. Every event that is sent afterwards is immediately flushed
- * to the client.
- * <p>The first variant keeps the element in control of the connection, which
- * stays open for as long as the element is executing:
+ * headers are flushed to the client so that it knows that the stream has
+ * been established. Every event that is sent afterwards will immediately be
+ * flushed to the client.
+ * <p>The first variant keeps the element in control of the connection,
+ * which stays open for as long as the element is executing:
  * <pre>get("/events", c -&gt; {
  *     var sse = c.sse();
  *     while (sse.isOpen()) {
@@ -34,20 +34,22 @@ import java.nio.charset.StandardCharsets;
  *     }
  * });</pre>
  * <p>The second variant registers the connection with an
- * {@link SseBroadcaster} and detaches it from the element, which
- * returns immediately while the connection stays open. Events can then be
- * pushed from anywhere in the application through the broadcaster.
- * <p>Sending an event to a client that has disconnected marks the
+ * {@link SseBroadcaster} and detaches it from the element, which returns
+ * immediately while the connection stays open. Events can then be pushed
+ * from anywhere in the application through the broadcaster.
+ * <p>Sending an event to a client that has disconnected will mark the
  * connection as closed, which can be detected with {@link #isOpen()}.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see ServerSentEvent
  * @see SseBroadcaster
+ * @see Context#sse()
+ * @see Context#sse(SseBroadcaster)
  * @since 1.10
  */
 public class SseConnection implements AutoCloseable {
     /**
-     * The content type of server-sent events streams.
+     * The content type that is used for server-sent events streams.
      *
      * @since 1.10
      */
@@ -140,12 +142,16 @@ public class SseConnection implements AutoCloseable {
 
     /**
      * Sends an event to the client of this connection.
-     * <p>The event is immediately flushed. When the client has disconnected,
-     * the connection is marked as closed and {@code false} is returned.
+     * <p>The event will immediately be flushed. When the client has
+     * disconnected, the connection is marked as closed and {@code false} is
+     * returned.
      *
      * @param event the event to send
      * @return {@code true} when the event was sent successfully; or
      * <p>{@code false} when the connection was closed
+     * @see #send(CharSequence)
+     * @see #send(Template)
+     * @see #isOpen()
      * @since 1.10
      */
     public boolean send(ServerSentEvent event) {
@@ -175,8 +181,8 @@ public class SseConnection implements AutoCloseable {
         }
 
         synchronized (this) {
-            // re-check after acquiring the monitor, the connection can have
-            // been closed while the event was being formatted
+            // re-check after acquiring the monitor, since the connection
+            // can have been closed while the event was being formatted
             if (!open_) {
                 return false;
             }
@@ -204,6 +210,7 @@ public class SseConnection implements AutoCloseable {
      * @return {@code true} when the event was sent successfully; or
      * <p>{@code false} when the connection was closed
      * @see #send(ServerSentEvent)
+     * @see #send(Template)
      * @since 1.10
      */
     public boolean send(CharSequence data) {
@@ -212,11 +219,14 @@ public class SseConnection implements AutoCloseable {
 
     /**
      * Sends an event with the content of the provided template as its data.
+     * <p>The filtered tags of the template will be resolved against the
+     * context of this connection.
      *
      * @param template the template whose content will be used as event data
      * @return {@code true} when the event was sent successfully; or
      * <p>{@code false} when the connection was closed
      * @see #send(ServerSentEvent)
+     * @see #send(Template, String)
      * @since 1.10
      */
     public boolean send(Template template) {
@@ -226,6 +236,8 @@ public class SseConnection implements AutoCloseable {
     /**
      * Sends an event with the content of a single template block as its
      * data.
+     * <p>The filtered tags of the template will be resolved against the
+     * context of this connection.
      *
      * @param template the template that contains the block
      * @param blockId  the ID of the block whose content will be used as
@@ -233,6 +245,7 @@ public class SseConnection implements AutoCloseable {
      * @return {@code true} when the event was sent successfully; or
      * <p>{@code false} when the connection was closed
      * @see #send(ServerSentEvent)
+     * @see #send(Template)
      * @since 1.10
      */
     public boolean send(Template template, String blockId) {
@@ -246,6 +259,7 @@ public class SseConnection implements AutoCloseable {
      * @return {@code true} when the comment was sent successfully; or
      * <p>{@code false} when the connection was closed
      * @see #send(ServerSentEvent)
+     * @see SseBroadcaster#heartbeat
      * @since 1.10
      */
     public boolean comment(String comment) {
@@ -256,12 +270,14 @@ public class SseConnection implements AutoCloseable {
      * Retrieves the ID of the last event that the client received.
      * <p>Browsers transmit this through the {@code Last-Event-ID} request
      * header when they reconnect. When that header is absent, the
-     * {@code lastEventId} request parameter is used instead, which allows
-     * pages to provide the ID of the last event that was rendered as part
-     * of the stream URL for the initial connection.
+     * {@code lastEventId} request parameter is used instead, which makes it
+     * possible for pages to provide the ID of the last event that was
+     * rendered as part of the stream URL of the initial connection.
      *
-     * @return the last event ID; or {@code null} when the client didn't
-     * provide one
+     * @return the last event ID; or
+     * <p>{@code null} when the client didn't provide one
+     * @see SseBroadcaster#lastEventId()
+     * @see SseBroadcaster#history(int)
      * @since 1.10
      */
     public String lastEventId() {
@@ -275,11 +291,13 @@ public class SseConnection implements AutoCloseable {
     /**
      * Indicates whether this connection is still open.
      * <p>A client disconnect is only detected when sending an event to it
-     * fails, so a stale connection can still report being open until the
-     * next event or {@link #comment(String) heartbeat} is sent.
+     * fails, which means that a stale connection can still report being
+     * open until the next event or {@link #comment(String) heartbeat} is
+     * sent.
      *
      * @return {@code true} when the connection is open; or
      * <p>{@code false} when it has been closed
+     * @see #close()
      * @since 1.10
      */
     public boolean isOpen() {
@@ -291,6 +309,7 @@ public class SseConnection implements AutoCloseable {
      * connection.
      *
      * @return this connection's context
+     * @see SseBroadcaster#send(ServerSentEvent, java.util.function.Predicate)
      * @since 1.10
      */
     public Context context() {
@@ -299,9 +318,10 @@ public class SseConnection implements AutoCloseable {
 
     /**
      * Closes this connection.
-     * <p>For detached connections, this completes the underlying
-     * asynchronous request and ends the response.
+     * <p>For detached connections, this will complete the underlying
+     * asynchronous request and end the response.
      *
+     * @see #isOpen()
      * @since 1.10
      */
     @Override

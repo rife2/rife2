@@ -95,9 +95,9 @@ public abstract class AbstractResponse implements Response {
      * channel has been handed out, after which an SSE connection can no
      * longer be established for this response.
      * <p>Back-end implementations call this when their writer is obtained,
-     * the output paths of {@code AbstractResponse} record it themselves.
-     * The state is sticky: it survives buffer clearing and the closing of
-     * the output stream.
+     * while the output paths of {@code AbstractResponse} record it
+     * themselves. This state is sticky since it survives the clearing of
+     * the buffer and the closing of the output stream.
      *
      * @since 1.10
      */
@@ -122,8 +122,8 @@ public abstract class AbstractResponse implements Response {
     }
 
     /**
-     * Called for each server-sent event that was written to this response.
-     * <p>By default, this method does nothing. It is intended for testing
+     * Notifies that a server-sent event was written to this response.
+     * <p>This method does nothing by default and is intended for testing
      * infrastructure that wants to capture the state of the events that
      * were sent, like the out-of-container testing API does.
      *

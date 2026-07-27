@@ -131,15 +131,16 @@ public class MockResponse extends AbstractResponse {
     /**
      * Retrieves the content of this response as parsed server-sent events
      * (SSE).
-     * <p>The response text is interpreted according to the
+     * <p>The text of the response will be interpreted according to the
      * {@code text/event-stream} wire format. Events are separated by blank
-     * lines, multiple {@code data} fields of one event are joined by line
-     * feeds, and comment lines are captured as well, so that events that
-     * only consist of comments, like keep-alive heartbeats, are also
-     * represented.
+     * lines, the multiple {@code data} fields of a single event are joined
+     * by line feeds, and the comment lines are captured as well, so that
+     * the events that only consist of comments, like keep-alive
+     * heartbeats, are represented too.
      *
      * @return the list of events that were sent to this response
      * @see MockEvent
+     * @see #getText
      * @since 1.10
      */
     public List<MockEvent> getEvents() {

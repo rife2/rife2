@@ -10,17 +10,17 @@ import rife.engine.ServerSentEvent;
 import java.util.function.Function;
 
 /**
- * Bridges workflow events to a server-sent events (SSE)
- * {@link SseBroadcaster}, so that every event that is triggered or
- * informed about in a {@link Workflow} is pushed to all the connected SSE
- * clients.
+ * Bridges the events of a {@link Workflow} to a server-sent events (SSE)
+ * {@link SseBroadcaster}, so that every event that is triggered or informed
+ * about in the workflow is pushed to all the connected SSE clients.
  * <p>The bridge is registered like any other workflow listener:
  * <pre>workflow.addListener(new SseWorkflowBridge(broadcaster));</pre>
  * <p>By default, a workflow event is converted with the string
- * representation of its type as the SSE event name, and the string
- * representation of its data as the SSE event data. A custom converter can
- * be provided instead, which also makes it possible to render templates as
- * event data or to filter events by returning {@code null}:
+ * representation of its type as the SSE event name, and with the string
+ * representation of its data as the SSE event data. You can provide a
+ * custom converter instead, which also makes it possible to render
+ * templates as event data, or to filter events out by returning
+ * {@code null}:
  * <pre>workflow.addListener(new SseWorkflowBridge(broadcaster, event -&gt; {
  *     if (event.getType() != MyTypes.PROGRESS) return null;
  *     var t = TemplateFactory.HTML.get("progress_fragment");
@@ -28,8 +28,8 @@ import java.util.function.Function;
  *     return new ServerSentEvent().name("progress").template(t);
  * }));</pre>
  * <p>The converter runs on the thread that triggers the workflow event, and
- * exceptions it throws propagate to the caller of the trigger, while paused
- * work is still resumed.
+ * the exceptions that it throws propagate to the caller of the trigger,
+ * while the paused work is still resumed.
  *
  * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
@@ -44,11 +44,13 @@ public class SseWorkflowBridge implements EventListener {
     /**
      * Creates a new bridge that converts workflow events with the default
      * conversion: the string representation of the event type becomes the
-     * SSE event name and the string representation of the event data, when
-     * present, becomes the SSE event data.
+     * SSE event name, and the string representation of the event data, when
+     * it's present, becomes the SSE event data.
      *
      * @param broadcaster the broadcaster the converted events will be sent
      *                    to
+     * @see #SseWorkflowBridge(SseBroadcaster, Function)
+     * @see #json
      * @since 1.10
      */
     public SseWorkflowBridge(SseBroadcaster broadcaster) {
@@ -58,13 +60,14 @@ public class SseWorkflowBridge implements EventListener {
     /**
      * Creates a new bridge with a custom event converter.
      * <p>The converter receives every workflow event and returns the
-     * server-sent event to broadcast, or {@code null} to not broadcast
-     * anything for that workflow event.
+     * server-sent event that will be broadcast, or {@code null} when
+     * nothing should be broadcast for that workflow event.
      *
      * @param broadcaster the broadcaster the converted events will be sent
      *                    to
      * @param converter   the converter that will be used to convert
      *                    workflow events into server-sent events
+     * @see #SseWorkflowBridge(SseBroadcaster)
      * @since 1.10
      */
     public SseWorkflowBridge(SseBroadcaster broadcaster, Function<Event, ServerSentEvent> converter) {
@@ -77,15 +80,17 @@ public class SseWorkflowBridge implements EventListener {
 
     /**
      * Creates a new bridge whose conversion transmits JSON event data,
-     * suitable for clients that parse the events with
+     * which is suitable for clients that parse the events with
      * {@code JSON.parse(event.data)}.
      * <p>The string representation of the workflow event type becomes the
-     * SSE event name, like the default conversion, and the event data,
-     * when present, is converted with {@link ServerSentEvent#json}.
+     * SSE event name, just like it does with the default conversion, while
+     * the event data, when it's present, is converted with
+     * {@link ServerSentEvent#json}.
      *
      * @param broadcaster the broadcaster the converted events will be sent
      *                    to
      * @return the new bridge instance
+     * @see ServerSentEvent#json
      * @since 1.10
      */
     public static SseWorkflowBridge json(SseBroadcaster broadcaster) {

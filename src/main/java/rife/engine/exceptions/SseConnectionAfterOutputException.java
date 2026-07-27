@@ -10,8 +10,12 @@ import java.io.Serial;
  * Thrown when a server-sent events connection is established for a request
  * whose response output has already been produced or handed out, since that
  * content would precede the event stream and corrupt it.
+ * <p>You should establish the connection before anything is written to the
+ * response of the request.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @see SseOutputRefusedException
+ * @see SseConnectionAlreadyEstablishedException
  * @since 1.10
  */
 public class SseConnectionAfterOutputException extends EngineException {

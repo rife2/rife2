@@ -14,8 +14,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Corresponds to a single event that was parsed from a server-sent events
- * (SSE) response, as a result of {@link MockResponse#getEvents()}.
+ * A {@code MockEvent} instance corresponds to a single event that was
+ * parsed from a server-sent events (SSE) response, as it is provided by
+ * {@link MockResponse#getEvents()}.
+ * <p>This makes it possible to assert on the individual fields of the
+ * events that an element streamed, without having to parse the raw
+ * response text yourself.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see MockResponse#getEvents()
@@ -65,11 +69,12 @@ public class MockEvent {
     }
 
     /**
-     * Retrieves the name of this event, transmitted as the {@code event}
-     * field.
+     * Retrieves the name of this event, which was transmitted as the
+     * {@code event} field.
      *
-     * @return this event's name; or {@code null} when it was an unnamed
-     * event
+     * @return this event's name; or
+     * <p>{@code null} when it was an unnamed event
+     * @see #getId()
      * @since 1.10
      */
     public String getName() {
@@ -77,9 +82,12 @@ public class MockEvent {
     }
 
     /**
-     * Retrieves the ID of this event, transmitted as the {@code id} field.
+     * Retrieves the ID of this event, which was transmitted as the
+     * {@code id} field.
      *
-     * @return this event's ID; or {@code null} when no ID was provided
+     * @return this event's ID; or
+     * <p>{@code null} when no ID was provided
+     * @see #getName()
      * @since 1.10
      */
     public String getId() {
@@ -87,11 +95,11 @@ public class MockEvent {
     }
 
     /**
-     * Retrieves the reconnection time in milliseconds, transmitted as the
-     * {@code retry} field.
+     * Retrieves the reconnection time in milliseconds, which was
+     * transmitted as the {@code retry} field.
      *
-     * @return this event's reconnection time; or {@code -1} when none was
-     * provided
+     * @return this event's reconnection time; or
+     * <p>{@code -1} when none was provided
      * @since 1.10
      */
     public int getRetry() {
@@ -101,7 +109,8 @@ public class MockEvent {
     /**
      * Retrieves the comments of this event.
      *
-     * @return this event's comments; or an empty list when there were none
+     * @return this event's comments; or
+     * <p>an empty list when there were none
      * @since 1.10
      */
     public List<String> getComments() {
@@ -110,10 +119,13 @@ public class MockEvent {
 
     /**
      * Retrieves the data of this event, with multiple {@code data} fields
-     * joined by line feeds, the same way browsers assemble the event data.
+     * joined by line feeds, in the same way that browsers assemble the
+     * event data.
      *
-     * @return this event's data; or {@code null} when the event carried no
-     * data
+     * @return this event's data; or
+     * <p>{@code null} when the event carried no data
+     * @see #getDataAsJsonObject()
+     * @see #getTemplate()
      * @since 1.10
      */
     public String getData() {
@@ -129,6 +141,7 @@ public class MockEvent {
      * @return this event's data as a JSON object
      * @throws JsonParseException when the data isn't a valid JSON object
      * @see #getData
+     * @see #getDataAsBean
      * @since 1.10
      */
     public JsonObject getDataAsJsonObject() {
@@ -154,11 +167,12 @@ public class MockEvent {
      * Retrieves the template instance that provided the data of this event.
      * <p>The template is captured with the value assignments that were
      * active at the moment the event was sent, which makes it possible to
-     * assert on the values of streamed fragments without parsing the event
-     * data.
+     * assert on the values of streamed fragments without having to parse
+     * the event data.
      *
      * @return the template that provided this event's data; or
      * <p>{@code null} when the event's data didn't come from a template
+     * @see #getData
      * @since 1.10
      */
     public Template getTemplate() {
