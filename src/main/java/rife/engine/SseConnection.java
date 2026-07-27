@@ -311,7 +311,7 @@ public class SseConnection implements AutoCloseable {
      * connection.
      *
      * @return this connection's context
-     * @see SseBroadcaster#send(ServerSentEvent, java.util.function.Predicate)
+     * @see SseBroadcaster#send(ServerSentEvent, SseConnectionFilter)
      * @since 1.10
      */
     public Context context() {

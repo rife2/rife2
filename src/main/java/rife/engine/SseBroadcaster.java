@@ -17,7 +17,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 /**
@@ -70,7 +69,7 @@ public class SseBroadcaster implements AutoCloseable {
     private long gaps_ = 0;
     private long maxMissedEvents_ = 0;
 
-    private record HistoryEntry(long id, ServerSentEvent event, Predicate<SseConnection> filter) {
+    private record HistoryEntry(long id, ServerSentEvent event, SseConnectionFilter filter) {
     }
 
     /**
@@ -90,10 +89,10 @@ public class SseBroadcaster implements AutoCloseable {
      * <p>When a browser reconnects, it transmits the ID of the last event
      * that it received, and the buffered events after that ID will be
      * replayed to it before it rejoins the live stream. Events that were
-     * {@link #send(ServerSentEvent, Predicate) targeted with a filter} are
-     * only replayed to the connections that match the filter: the filters
-     * are re-evaluated at replay time, and an exception that is thrown by a
-     * filter propagates to the reconnecting request. The
+     * {@link #send(ServerSentEvent, SseConnectionFilter) targeted with a
+     * filter} are only replayed to the connections that match the filter:
+     * the filters are executed again at replay time, and an exception that
+     * is thrown by a filter propagates to the reconnecting request. The
      * {@code lastEventId} request parameter is honored in the same way as
      * the reconnection header, which allows pages to receive the events
      * that occurred between their rendering and the establishment of the
@@ -184,7 +183,7 @@ public class SseBroadcaster implements AutoCloseable {
 
             var complete = true;
             for (var entry : replay) {
-                if (!entry.filter().test(connection)) {
+                if (!entry.filter().accepts(connection)) {
                     continue;
                 }
                 if (!connection.send(entry.event(), formatId(entry.id()))) {
@@ -292,7 +291,7 @@ public class SseBroadcaster implements AutoCloseable {
      * @return the number of connections that received the event; an event
      * without any fields set isn't sent and returns {@code 0}
      * @throws IllegalArgumentException when the event is {@code null}
-     * @see #send(ServerSentEvent, Predicate)
+     * @see #send(ServerSentEvent, SseConnectionFilter)
      * @since 1.10
      */
     public int send(ServerSentEvent event) {
@@ -314,7 +313,8 @@ public class SseBroadcaster implements AutoCloseable {
      * which means that the authentication state and the parameters that a
      * filter sees are the ones from the moment the client connected.
      * Connections whose context is no longer appropriate, for instance
-     * after a logout, can be terminated with {@link #close(Predicate)}.
+     * after a logout, can be terminated with
+     * {@link #close(SseConnectionFilter)}.
      * <p>Connections that fail to receive the event will be closed and
      * removed, while the connections that are filtered out are left
      * untouched.
@@ -330,10 +330,10 @@ public class SseBroadcaster implements AutoCloseable {
      * @throws IllegalArgumentException when the event or the filter is
      *                                  {@code null}
      * @see #send(ServerSentEvent)
-     * @see #close(Predicate)
+     * @see #close(SseConnectionFilter)
      * @since 1.10
      */
-    public int send(ServerSentEvent event, Predicate<SseConnection> filter) {
+    public int send(ServerSentEvent event, SseConnectionFilter filter) {
         if (null == event) throw new IllegalArgumentException("event can't be null");
         if (null == filter) throw new IllegalArgumentException("filter can't be null");
 
@@ -374,7 +374,7 @@ public class SseBroadcaster implements AutoCloseable {
         return sendToConnections(targets, event, filter, id_override);
     }
 
-    private int sendToConnections(Iterable<SseConnection> targets, ServerSentEvent event, Predicate<SseConnection> filter, String idOverride) {
+    private int sendToConnections(Iterable<SseConnection> targets, ServerSentEvent event, SseConnectionFilter filter, String idOverride) {
         // events without a template have the same payload for every
         // recipient and are formatted only once
         byte[] preformatted = null;
@@ -384,7 +384,7 @@ public class SseBroadcaster implements AutoCloseable {
 
         var sent = 0;
         for (var connection : targets) {
-            if (!filter.test(connection)) {
+            if (!filter.accepts(connection)) {
                 continue;
             }
             var delivered = preformatted != null ?
@@ -576,7 +576,7 @@ public class SseBroadcaster implements AutoCloseable {
      * have already disconnected.
      *
      * @return the number of registered connections
-     * @see #close(Predicate)
+     * @see #close(SseConnectionFilter)
      * @since 1.10
      */
     public int connectionCount() {
@@ -632,23 +632,23 @@ public class SseBroadcaster implements AutoCloseable {
      *     return identity != null &amp;&amp; identity.getLogin().equals(login);
      * });</pre>
      * <p>The filter receives each connection like
-     * {@link #send(ServerSentEvent, Predicate)} does, with the context of
-     * the request that established the connection. The event history and
+     * {@link #send(ServerSentEvent, SseConnectionFilter)} does, with the
+     * context of the request that established the connection. The event history and
      * the {@link #heartbeat heartbeat} are unaffected.
      *
      * @param filter the filter that determines which connections are closed
      * @return the number of connections that were closed
      * @throws IllegalArgumentException when the filter is {@code null}
      * @see #close()
-     * @see #send(ServerSentEvent, Predicate)
+     * @see #send(ServerSentEvent, SseConnectionFilter)
      * @since 1.10
      */
-    public int close(Predicate<SseConnection> filter) {
+    public int close(SseConnectionFilter filter) {
         if (null == filter) throw new IllegalArgumentException("filter can't be null");
 
         var closed = 0;
         for (var connection : connections_) {
-            if (filter.test(connection)) {
+            if (filter.accepts(connection)) {
                 connection.close();
                 closed += 1;
             }
@@ -663,7 +663,7 @@ public class SseBroadcaster implements AutoCloseable {
      * register, subsequent events will be sent to them, and a heartbeat can
      * be established again.
      *
-     * @see #close(Predicate)
+     * @see #close(SseConnectionFilter)
      * @since 1.10
      */
     @Override

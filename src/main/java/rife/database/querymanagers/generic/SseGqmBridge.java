@@ -6,10 +6,10 @@ package rife.database.querymanagers.generic;
 
 import rife.engine.ServerSentEvent;
 import rife.engine.SseBroadcaster;
+import rife.engine.SseErrorListener;
 import rife.tools.ExceptionUtils;
 
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
@@ -45,13 +45,14 @@ import java.util.logging.Logger;
  * operation, after that operation has completed. Since the database change
  * has already happened at that point, exceptions from the conversion or
  * from the broadcast don't propagate to the database operation: they are
- * handed to the {@link #onError onError} handler, or logged to the
- * {@code rife.engine} logger when no handler was provided. You should
+ * handed to the {@link #onError onError} listener, or logged to the
+ * {@code rife.engine} logger when no listener was provided. You should
  * configure the converters before registering the bridge as a listener.
  *
  * @param <BeanType> the type of the bean that the query manager handles
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see SseBroadcaster
+ * @see SseErrorListener
  * @see GenericQueryManager#addListener
  * @since 1.10
  */
@@ -60,7 +61,7 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
     private Function<BeanType, ServerSentEvent> inserted_;
     private Function<BeanType, ServerSentEvent> updated_;
     private IntFunction<ServerSentEvent> deleted_;
-    private Consumer<Throwable> errorHandler_ = null;
+    private SseErrorListener errorListener_ = null;
 
     /**
      * Creates a new bridge with the default conversions.
@@ -161,21 +162,25 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
     }
 
     /**
-     * Provides a handler for conversion and broadcast failures.
+     * Provides a listener for conversion and broadcast failures.
      * <p>The bridge is notified after the database operation has completed,
-     * so a failure can't affect the result of a change that has already
+     * so that a failure can't affect the result of a change that has already
      * happened. Failures are logged to the {@code rife.engine} logger by
-     * default, and providing a handler will replace that behavior.
+     * default, and providing a listener will replace that behavior.
+     * <p>A listener that fails itself can't affect the operation either,
+     * since its failure is logged together with the failure that it was
+     * given.
      *
-     * @param handler the handler that will receive conversion and broadcast
-     *                failures
+     * @param listener the listener that will receive conversion and
+     *                 broadcast failures
      * @return this bridge instance
+     * @see SseErrorListener
      * @since 1.10
      */
-    public SseGqmBridge<BeanType> onError(Consumer<Throwable> handler) {
-        if (null == handler) throw new IllegalArgumentException("handler can't be null");
+    public SseGqmBridge<BeanType> onError(SseErrorListener listener) {
+        if (null == listener) throw new IllegalArgumentException("listener can't be null");
 
-        errorHandler_ = handler;
+        errorListener_ = listener;
         return this;
     }
 
@@ -212,11 +217,22 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
         } catch (Throwable e) {
             // the database change has already been committed, so a delivery
             // failure can't be allowed to fail the operation that caused it
-            if (errorHandler_ != null) {
-                errorHandler_.accept(e);
-            } else {
-                Logger.getLogger("rife.engine").severe("SSE delivery failed after a completed database change\n" + ExceptionUtils.getExceptionStackTrace(e));
+            reportError(e);
+        }
+    }
+
+    private void reportError(Throwable error) {
+        if (errorListener_ != null) {
+            try {
+                errorListener_.errorOccurred(error);
+                return;
+            } catch (Throwable t) {
+                // a listener that fails can't fail the operation either, and
+                // the failure it was given would go unreported otherwise
+                Logger.getLogger("rife.engine").severe("The SSE error listener failed to handle a delivery failure\n" + ExceptionUtils.getExceptionStackTrace(t));
             }
         }
+
+        Logger.getLogger("rife.engine").severe("SSE delivery failed after a completed database change\n" + ExceptionUtils.getExceptionStackTrace(error));
     }
 }

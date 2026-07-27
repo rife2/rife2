@@ -199,4 +199,45 @@ public class TestSseGqmBridge {
             manager.remove();
         }
     }
+
+    @Test
+    void testFailingErrorListenerDoesntFailTheOperation() {
+        var site = new EventsSite();
+        var m = new MockConversation(site);
+        m.doRequest("/events");
+
+        var manager = createManager("sse_gqm_listener_failure");
+        manager.install();
+        try {
+            var notified = new java.util.ArrayList<Throwable>();
+            manager.addListener(new SseGqmBridge<Product>(site.broadcaster)
+                .onInserted(product -> {
+                    throw new IllegalStateException("converter failure");
+                })
+                .onError(error -> {
+                    notified.add(error);
+                    throw new IllegalStateException("listener failure");
+                }));
+
+            // a listener that fails is contained just like the delivery
+            // failure that it was given, so the mutation still succeeds
+            var product = new Product();
+            product.setName("ACME");
+            var id = manager.save(product);
+            assertNotNull(manager.restore(id));
+            assertEquals("ACME", manager.restore(id).getName());
+
+            // the listener did receive the original failure
+            assertEquals(1, notified.size());
+            assertEquals("converter failure", notified.get(0).getMessage());
+
+            // and the following mutations are still delivered to it
+            var second = new Product();
+            second.setName("Uwyn");
+            manager.save(second);
+            assertEquals(2, notified.size());
+        } finally {
+            manager.remove();
+        }
+    }
 }
