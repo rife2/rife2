@@ -55,9 +55,9 @@ public class Rife2Build extends AbstractRife2Build {
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
             .include(dependency("net.imagej", "ij", imagej_version).excludeSources())
-            .include(module("io.undertow", "undertow-core", undertow_version).excludeSources())
-            .include(module("io.undertow", "undertow-servlet", undertow_servlet_version).excludeSources())
-            .include(module("org.jboss.xnio", "xnio-api", xnio_version).excludeSources());;
+            .include(dependency("io.undertow", "undertow-core", undertow_version))
+            .include(dependency("io.undertow", "undertow-servlet", undertow_servlet_version))
+            .include(dependency("org.jboss.xnio", "xnio-api", xnio_version));;
 
         var core_directory = new File(workDirectory(), "core");
         var core_src_directory = new File(core_directory, "src");
