@@ -1484,6 +1484,15 @@ public class TestSse {
 
     @Test
     @Timeout(120)
+    void testUndertowEventStream()
+    throws Exception {
+        try (final var server = new TestUndertowRunner(createCountSite())) {
+            assertEquals(EXPECTED_COUNT_STREAM, requestEventStream(8888));
+        }
+    }
+
+    @Test
+    @Timeout(120)
     void testTemplateBlockStream()
     throws Exception {
         try (final var server = new TestServerRunner(new BlockSite())) {
@@ -1544,6 +1553,20 @@ public class TestSse {
             }
         })) {
             broadcastEventStream(8282, broadcaster);
+        }
+    }
+
+    @Test
+    @Timeout(120)
+    void testUndertowDetachedBroadcast()
+    throws Exception {
+        var broadcaster = new SseBroadcaster();
+        try (final var server = new TestUndertowRunner(new Site() {
+            public void setup() {
+                get("/stream", c -> c.sse(broadcaster));
+            }
+        })) {
+            broadcastEventStream(8888, broadcaster);
         }
     }
 
@@ -1656,6 +1679,40 @@ public class TestSse {
         } finally {
             tomcat.stop();
             tomcat.destroy();
+            RifeConfig.engine().setPrettyEngineExceptions(pretty);
+        }
+    }
+
+    @Test
+    @Timeout(120)
+    void testUndertowNonAsyncDeploymentDiagnostic()
+    throws Exception {
+        var pretty = RifeConfig.engine().getPrettyEngineExceptions();
+        RifeConfig.engine().setPrettyEngineExceptions(false);
+
+        var broadcaster = new SseBroadcaster();
+        var server = new TestUndertowNonAsyncRunner(new Site() {
+            public void setup() {
+                get("/element", c -> c.sse().send(new ServerSentEvent().name("ok").data("hi")));
+                get("/broadcast", c -> c.sse(broadcaster));
+            }
+        }, 8887);
+        try {
+            var client = HttpClient.newHttpClient();
+
+            var element = client.send(
+                HttpRequest.newBuilder(URI.create("http://localhost:8887/element")).timeout(Duration.ofSeconds(15)).build(),
+                HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, element.statusCode());
+            assertEquals("event: ok\ndata: hi\n\n", element.body());
+
+            var broadcast = client.send(
+                HttpRequest.newBuilder(URI.create("http://localhost:8887/broadcast")).timeout(Duration.ofSeconds(15)).build(),
+                HttpResponse.BodyHandlers.ofString());
+            assertEquals(500, broadcast.statusCode());
+            assertEquals(0, broadcaster.connectionCount());
+        } finally {
+            server.close();
             RifeConfig.engine().setPrettyEngineExceptions(pretty);
         }
     }

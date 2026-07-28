@@ -415,9 +415,11 @@ public class UndertowServer {
         try {
             var rifeFilter = new RifeFilter();
             rifeFilter.init(properties_, site);
-            var rifeFilterInfo = new FilterInfo("RIFE2", RifeFilter.class, new ImmediateInstanceFactory<>(rifeFilter));
-            var defaultServlet = Servlets.servlet("default-servlet", DefaultServlet.class).addMapping("/");
-
+            var rifeFilterInfo = new FilterInfo("RIFE2", RifeFilter.class, new ImmediateInstanceFactory<>(rifeFilter))
+                .setAsyncSupported(true);
+            var defaultServlet = Servlets.servlet("default-servlet", DefaultServlet.class)
+                .addMapping("/")
+                .setAsyncSupported(true);
             DeploymentInfo deployment = deployment()
                 .setClassLoader(UndertowServer.class.getClassLoader())
                 .setContextPath("/")
