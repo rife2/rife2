@@ -4,8 +4,6 @@
  */
 package rife.continuations.exceptions;
 
-import rife.tools.exceptions.ControlFlowRuntimeException;
-
 import java.io.Serial;
 
 /**
@@ -14,7 +12,7 @@ import java.io.Serial;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class MissingActiveContinuationConfigRuntimeException extends RuntimeException implements ControlFlowRuntimeException {
+public class MissingActiveContinuationConfigRuntimeException extends RuntimeException {
     @Serial private static final long serialVersionUID = 7401871623085473212L;
 
     /**
