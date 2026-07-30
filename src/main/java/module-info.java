@@ -13,6 +13,9 @@ module rife {
     requires static org.eclipse.jetty.ee10.servlet;
     requires static org.jsoup;
     requires static tomcat.embed.core;
+    requires static undertow.core;
+    requires static undertow.servlet;
+    requires static xnio.api;
 
     exports rife;
     exports rife.authentication;

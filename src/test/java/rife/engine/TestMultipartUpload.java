@@ -68,5 +68,13 @@ public class TestMultipartUpload {
         try (final var server = new TestTomcatRunner(createUploadSite())) {
             assertEquals("200:the query param,again;the text param;the file content", postMultipart(8282));
         }
+    } 
+    
+    @Test
+    void testUndertowMultipartUpload()
+    throws Exception {
+        try (final var server = new TestUndertowRunner(createUploadSite())) {
+            assertEquals("200:the query param,again;the text param;the file content", postMultipart(8888));
+        }
     }
 }

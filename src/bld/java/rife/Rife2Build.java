@@ -35,6 +35,9 @@ public class Rife2Build extends AbstractRife2Build {
         var jetty_version = version(12,1,11);
         var jsoup_version = version(1,22,2);
         var tomcat_version = version(11,0,24);
+        var undertow_version = version("2.4.2.Final");
+        var undertow_servlet_version = version("2.3.26.Final");
+        var xnio_version = version("3.8.17.Final");
 
         scope(provided)
             .include(module("org.jsoup", "jsoup", jsoup_version))
@@ -42,13 +45,19 @@ public class Rife2Build extends AbstractRife2Build {
             .include(module("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
             .include(module("org.apache.tomcat.embed", "tomcat-embed-core", tomcat_version).excludeSources())
             .include(module("org.apache.tomcat.embed", "tomcat-embed-jasper", tomcat_version))
-            .include(module("net.imagej", "ij", imagej_version).excludeSources());
+            .include(module("net.imagej", "ij", imagej_version).excludeSources())
+            .include(module("io.undertow", "undertow-core", undertow_version).excludeSources())
+            .include(module("io.undertow", "undertow-servlet", undertow_servlet_version).excludeSources())
+            .include(module("org.jboss.xnio", "xnio-api", xnio_version).excludeSources());
         scope(test)
             .include(dependency("org.junit-pioneer", "junit-pioneer", version(2,3,0)))
             .include(dependency("org.jsoup", "jsoup", jsoup_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10", jetty_version))
             .include(dependency("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
-            .include(dependency("net.imagej", "ij", imagej_version).excludeSources());
+            .include(dependency("net.imagej", "ij", imagej_version).excludeSources())
+            .include(dependency("io.undertow", "undertow-core", undertow_version))
+            .include(dependency("io.undertow", "undertow-servlet", undertow_servlet_version))
+            .include(dependency("org.jboss.xnio", "xnio-api", xnio_version));;
 
         var core_directory = new File(workDirectory(), "core");
         var core_src_directory = new File(core_directory, "src");
