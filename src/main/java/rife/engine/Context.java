@@ -1724,7 +1724,7 @@ public class Context {
      * <p>This bean is not serialized or de-serialized, each property
      * corresponds to a parameter and is individually sent by the client.
      *
-     * @param beanClass the class of the submission bean
+     * @param beanClass the class of the bean
      * @return the populated bean instance
      * @see #parametersBean(Class, String)
      * @see #parametersBean(Object)
@@ -1748,7 +1748,7 @@ public class Context {
      * <p>This bean is not serialized or de-serialized, each property
      * corresponds to a parameter and is individually sent by the client.
      *
-     * @param beanClass the class of the submission bean
+     * @param beanClass the class of the bean
      * @param prefix    the prefix that will be put in front of each property
      *                  name
      * @return the populated bean instance
@@ -1796,7 +1796,7 @@ public class Context {
     /**
      * Fills the properties of an existing bean with the parameter values.
      *
-     * @param bean the submission bean instance that will be filled
+     * @param bean the bean instance that will be filled
      * @see #parametersBean(Class)
      * @see #parametersBean(Class, String)
      * @see #parametersBean(Object, String)
@@ -1820,7 +1820,7 @@ public class Context {
      * property to the value of a new bean instance, while an absent
      * parameter will leave the property untouched.
      *
-     * @param bean   the submission bean instance that will be filled
+     * @param bean   the bean instance that will be filled
      * @param prefix the prefix that will be put in front of each property
      *               name
      * @see #parametersBean(Class)
@@ -1887,7 +1887,7 @@ public class Context {
             property_name = property_name.substring(prefix.length());
         }
 
-        var property = beanProperties.get(property_name.toUpperCase());
+        var property = beanProperties.get(property_name.toUpperCase(Locale.ROOT));
         if (property != null) {
             var type = property.getPropertyType();
             if (boolean.class == type || Boolean.class == type) {
@@ -1904,7 +1904,7 @@ public class Context {
      * <p>This does the same as {@link #parametersBean(Object, String, String)},
      * but with a newly created bean instance.
      *
-     * @param beanClass the class of the submission bean
+     * @param beanClass the class of the bean
      * @param prefix    the prefix that will be put in front of each property
      *                  name, or {@code null}
      * @param group     the name of the validation group whose properties
@@ -1944,7 +1944,7 @@ public class Context {
      * and partial submissions of a group's form will reset the properties
      * that didn't arrive.
      *
-     * @param bean   the submission bean instance that will be filled
+     * @param bean   the bean instance that will be filled
      * @param prefix the prefix that will be put in front of each property
      *               name, or {@code null}
      * @param group  the name of the validation group whose properties will
@@ -1968,8 +1968,48 @@ public class Context {
         }
 
         var group_properties = validation_group.getPropertyNames();
-        if (null == group_properties ||
-            group_properties.isEmpty()) {
+        if (null == group_properties) {
+            return;
+        }
+
+        parametersBean(bean, prefix, group_properties);
+    }
+
+    /**
+     * Fills a selection of the properties of an existing bean with the
+     * parameter values that were sent.
+     * <p>Only the provided properties will be populated, and a property
+     * whose parameter is absent will be reset instead of keeping its current
+     * value: a boolean property becomes {@code false} since browsers don't
+     * send checkboxes that aren't checked, the other properties are reset to
+     * the value of a new bean instance. A restored bean will thus reflect
+     * exactly what the form submitted, while the properties that aren't
+     * provided preserve their current values.
+     * <p>Each property is populated through a single transport: a property
+     * with a {@code file} constraint is only assigned from file uploads,
+     * while the other properties are only assigned from regular parameter
+     * values. A file property is left untouched when no upload actually
+     * arrived, an absent file input never clears the stored content.
+     * <p>Since every provided property is expected to be part of the form,
+     * you should only provide the ones that are actually submitted. Controls
+     * that the browser doesn't send, like disabled ones, and partial
+     * submissions will reset the properties that didn't arrive.
+     *
+     * @param bean       the bean instance that will be filled
+     * @param prefix     the prefix that will be put in front of each
+     *                   property name, or {@code null}
+     * @param properties the names of the properties that will be populated
+     * @see #parametersBean(Object, String, String)
+     * @since 1.10
+     */
+    public void parametersBean(Object bean, String prefix, Collection<String> properties)
+    throws EngineException {
+        if (null == properties) throw new IllegalArgumentException("properties can't be null.");
+        if (null == bean) {
+            return;
+        }
+
+        if (properties.isEmpty()) {
             return;
         }
 
@@ -1980,10 +2020,28 @@ public class Context {
 
             Object empty_bean = null;
 
-            for (var property_name : group_properties) {
-                var parameter_name = (null == prefix ? property_name : prefix + property_name);
+            // the properties are named by whoever asks for them, which doesn't
+            // have to match the case that the bean declares and doesn't have
+            // to name a property of it at all
+            // they're resolved to what the bean calls them before anything is
+            // assigned, so that two names for one property don't take turns
+            // filling it in and emptying it again
+            var selected = new LinkedHashSet<PropertyDescriptor>();
+            for (var property_name : properties) {
+                if (null == property_name ||
+                    property_name.isEmpty()) {
+                    continue;
+                }
+                var descriptor = bean_properties.get(property_name.toUpperCase(Locale.ROOT));
+                if (descriptor != null) {
+                    selected.add(descriptor);
+                }
+            }
 
-                var constrained_property = constrained == null ? null : constrained.getConstrainedProperty(property_name);
+            for (var descriptor : selected) {
+                var canonical_name = descriptor.getName();
+                var parameter_name = (null == prefix ? canonical_name : prefix + canonical_name);
+                var constrained_property = constrained == null ? null : constrained.getConstrainedProperty(canonical_name);
 
                 // a file property is only entered through uploads, every
                 // other property only through regular parameters

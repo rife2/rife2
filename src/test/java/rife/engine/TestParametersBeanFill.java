@@ -14,6 +14,7 @@ import rife.validation.ConstrainedProperty;
 import rife.validation.MetaData;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -145,6 +146,14 @@ public class TestParametersBeanFill {
                 c.parametersBean(person, null, "profile");
                 c.print(state(person));
             });
+            post("/selected/named", c -> {
+                var person = storedPerson();
+                // two names for one property, and names that the bean doesn't
+                // have at all
+                c.parametersBean(person, null,
+                    java.util.Arrays.asList("name", "NAME", "active", "ACTIVE", "nosuchproperty", "", null));
+                c.print(state(person));
+            });
             post("/group/prefix", c -> {
                 var person = storedPerson();
                 c.parametersBean(person, "p_", "profile");
@@ -163,8 +172,23 @@ public class TestParametersBeanFill {
                 }
             });
             post("/group/null", c -> {
+                String group = null;
                 try {
-                    c.parametersBean(storedPerson(), null, null);
+                    c.parametersBean(storedPerson(), null, group);
+                    c.print("no exception");
+                } catch (IllegalArgumentException e) {
+                    c.print("illegal argument");
+                }
+            });
+            post("/properties/case", c -> {
+                var person = storedPerson();
+                c.parametersBean(person, null, java.util.List.of("CONTENT"));
+                c.print(String.valueOf(person.getContent()));
+            });
+            post("/properties/null", c -> {
+                Collection<String> properties = null;
+                try {
+                    c.parametersBean(storedPerson(), null, properties);
                     c.print("no exception");
                 } catch (IllegalArgumentException e) {
                     c.print("illegal argument");
@@ -198,6 +222,39 @@ public class TestParametersBeanFill {
             .method(RequestMethod.POST)
             .parameter("name", "new name"));
         assertEquals("7,new name,null,false,stored notes,stored content,null", response.getText());
+    }
+
+    @Test
+    void testSelectedPropertiesAreFoundWhateverTheLocaleIs() {
+        var previous = java.util.Locale.getDefault();
+        try {
+            // a Turkish locale uppercases an i to one with a dot, so a
+            // property is filed under one name and looked up under another
+            // unless both use the same locale
+            java.util.Locale.setDefault(new java.util.Locale("tr", "TR"));
+            var conversation = new MockConversation(new FillSite());
+
+            var response = conversation.doRequest("/selected/named", new MockRequest()
+                .method(RequestMethod.POST)
+                .parameter("name", "new name")
+                .parameter("active", "false"));
+            assertEquals("7,new name,stored@email.com,false,stored notes,stored content,stored bio", response.getText());
+        } finally {
+            java.util.Locale.setDefault(previous);
+        }
+    }
+
+    @Test
+    void testSelectedPropertiesAreResolvedBeforeAnythingIsAssigned() {
+        var conversation = new MockConversation(new FillSite());
+
+        // one property named twice would otherwise fill itself in and then
+        // empty itself again, and a name that the bean doesn't have is
+        // nothing to assign
+        var response = conversation.doRequest("/selected/named", new MockRequest()
+            .method(RequestMethod.POST)
+            .parameter("name", "new name"));
+        assertEquals("7,new name,stored@email.com,false,stored notes,stored content,stored bio", response.getText());
     }
 
     @Test
@@ -268,6 +325,12 @@ public class TestParametersBeanFill {
             .method(RequestMethod.POST).parameter("name", "x")).getText());
         assertEquals("illegal argument", conversation.doRequest("/group/null", new MockRequest()
             .method(RequestMethod.POST).parameter("name", "x")).getText());
+        assertEquals("illegal argument", conversation.doRequest("/properties/null", new MockRequest()
+            .method(RequestMethod.POST).parameter("name", "x")).getText());
+        // a property is assigned whatever the case of the name that asked
+        // for it, so its constraints have to be found the same way
+        assertEquals("stored content", conversation.doRequest("/properties/case", new MockRequest()
+            .method(RequestMethod.POST).parameter("CONTENT", "not an upload")).getText());
         assertEquals("engine exception", conversation.doRequest("/group/unsupported", new MockRequest()
             .method(RequestMethod.POST).parameter("name", "x")).getText());
     }
