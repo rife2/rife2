@@ -20,7 +20,7 @@ public class CrudArticle extends MetaData {
         addConstraint(new ConstrainedProperty("id").identifier(true).editable(false));
         addConstraint(new ConstrainedProperty("title").notNull(true).notEmpty(true).maxLength(60).listed(true).position(0));
         addConstraint(new ConstrainedProperty("author").maxLength(40).listed(true).position(1));
-        addConstraint(new ConstrainedProperty("status").inList("draft", "published", "archived").defaultValue("draft").listed(true).position(2));
+        addConstraint(new ConstrainedProperty("status").inList("draft", "published", "archived").maxLength(20).defaultValue("draft").listed(true).position(2));
         addConstraint(new ConstrainedProperty("featured").listed(true).position(3));
         addConstraint(new ConstrainedProperty("body").maxLength(2000));
         // deliberately not marked as not editable, since being the ordinal
