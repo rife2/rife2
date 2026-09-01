@@ -60,4 +60,4 @@ jobs:
 
       - name: Delete GnuPG data
         if: always()
-        run: rm -rfv $HOME/.gnupg
+        run: rm -rfv "$HOME/.gnupg"
