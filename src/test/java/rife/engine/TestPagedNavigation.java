@@ -8,9 +8,40 @@ import rife.web.PagedNavigation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestPagedNavigation {
     HtmlPage page = null;
+
+    @Test
+    void testExtraParametersRideAlong()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/carried", c -> {
+                    var t = c.template("paged_navigation");
+                    var offset = c.parameterInt("offset");
+                    t.setValue("offset", offset);
+                    PagedNavigation.generate(c, t, 80, 10, offset, 3, "offset",
+                        java.util.Map.of("filter", new String[]{"kept"}));
+                    c.print(t.getBlock("content"));
+                });
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                page = webClient.getPage("http://localhost:8181/carried");
+                var response = page.getWebResponse().getContentAsString();
+                // every link keeps the extra parameter next to its own offset
+                assertTrue(response.contains("?filter=kept&offset=10") ||
+                           response.contains("?offset=10&filter=kept"), response);
+                page = page.getAnchorByText("next").click();
+                var next = page.getWebResponse().getContentAsString();
+                assertTrue(next.startsWith("10 : "), next);
+                assertTrue(next.contains("filter=kept&offset=20") ||
+                           next.contains("offset=20&filter=kept"), next);
+            }
+        }
+    }
 
     @Test
     void testDefaults()

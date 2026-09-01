@@ -214,6 +214,33 @@ public class PagedNavigation {
      * @since 1.1
      */
     public static void generate(Context context, Template template, long count, int limit, long offset, int span, String parameter) {
+        generate(context, template, count, limit, offset, span, parameter, java.util.Map.of());
+    }
+
+    /**
+     * Generates the paged navigation for the given context, template and
+     * range configuration. This version additionally includes the provided
+     * parameters in every generated link, so that state like a search term
+     * or a sort order survives moving to another page.
+     *
+     * @param context    The context that is populating the template, whose exit
+     *                   will be triggered and whose output will be set.
+     * @param template   The template that will be used for the generation of
+     *                   the navigation.
+     * @param count      The total number of items that are being paged.
+     * @param limit      The maximum of items that will be shown in a range on a
+     *                   page.
+     * @param offset     The starting offset of the range that is currently
+     *                   visible.
+     * @param span       The maximum number of ranges that will be shown as
+     *                   immediately accessible absolute ranges.
+     * @param parameter  The name of the parameter that will contain the value of the
+     *                   new range offset when the url if followed.
+     * @param parameters The additional parameters that every generated link
+     *                   will carry.
+     * @since 1.10
+     */
+    public static void generate(Context context, Template template, long count, int limit, long offset, int span, String parameter, java.util.Map<String, String[]> parameters) {
         var range_count = (long) ceil(((double) count) / limit);
         if (range_count < 0) {
             range_count = 0;
@@ -244,10 +271,10 @@ public class PagedNavigation {
             template.setBlock(ID_FIRST_RANGE, ID_FIRST_RANGE_DISABLED);
             template.setBlock(ID_PREVIOUS_RANGE, ID_PREVIOUS_RANGE_DISABLED);
         } else {
-            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).param(parameter, first_offset));
+            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, first_offset));
             template.setBlock(ID_FIRST_RANGE, ID_FIRST_RANGE);
 
-            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).param(parameter, previous_offset));
+            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, previous_offset));
             template.setBlock(ID_PREVIOUS_RANGE, ID_PREVIOUS_RANGE);
         }
 
@@ -256,10 +283,10 @@ public class PagedNavigation {
             template.setBlock(ID_NEXT_RANGE, ID_NEXT_RANGE_DISABLED);
             template.setBlock(ID_LAST_RANGE, ID_LAST_RANGE_DISABLED);
         } else {
-            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).param(parameter, next_offset));
+            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, next_offset));
             template.setBlock(ID_NEXT_RANGE, ID_NEXT_RANGE);
 
-            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).param(parameter, last_offset));
+            template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, last_offset));
             template.setBlock(ID_LAST_RANGE, ID_LAST_RANGE);
         }
 
@@ -284,7 +311,7 @@ public class PagedNavigation {
                 offset < absolute_range_offset + limit) {
                 template.appendBlock(ID_ABSOLUTE_RANGES, ID_ABSOLUTE_RANGE_DISABLED);
             } else {
-                template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).param(parameter, String.valueOf((int) absolute_range_offset)));
+                template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, String.valueOf((int) absolute_range_offset)));
                 template.appendBlock(ID_ABSOLUTE_RANGES, ID_ABSOLUTE_RANGE);
             }
             absolute_range_offset += limit;
