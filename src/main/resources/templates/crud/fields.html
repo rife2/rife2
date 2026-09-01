@@ -1,0 +1,25 @@
+<!--b errors--><ul class="crud-errors"><!--v crud:errorItems--><!--/v--></ul><!--/b-->
+<!--b errorItem--><li>{{v crud:message/}}</li><!--/b-->
+
+<!--b field--><div class="crud-field{{v crud:invalid/}}"><label for="crud-{{v crud:property/}}">{{v crud:label/}}<!--v crud:required--><!--/v--></label><!--v crud:control--><!--/v--><!--v crud:help--><!--/v--><!--v crud:error--><!--/v--><!--v crud:conflict--><!--/v--></div><!--/b-->
+<!--b invalid--> crud-invalid<!--/b-->
+<!--b required--> <abbr title="required">*</abbr><!--/b-->
+<!--b error--><p class="crud-fielderror">{{v crud:message/}}</p><!--/b-->
+<!--b conflict--><p class="crud-conflict">Now stored: {{v crud:conflictValue/}}</p><!--/b-->
+<!--b conflict:empty--><p class="crud-conflict">Now stored: nothing.</p><!--/b-->
+
+<!--b input--><input class="crud-input" id="crud-{{v crud:property/}}" name="{{v crud:property/}}" type="{{v crud:type/}}" value="{{v crud:value/}}"{{v crud:attributes/}}><!--/b-->
+<!--b textarea--><textarea class="crud-textarea" id="crud-{{v crud:property/}}" name="{{v crud:property/}}" rows="5"{{v crud:attributes/}}>{{v crud:value/}}</textarea><!--/b-->
+<!--b checkbox--><input type="checkbox" class="crud-checkbox" id="crud-{{v crud:property/}}" name="{{v crud:property/}}" value="true"{{v crud:checked/}}><!--/b-->
+<!--b checked--> checked<!--/b-->
+<!--b select--><select class="crud-select" id="crud-{{v crud:property/}}" name="{{v crud:property/}}"><!--v crud:options--><!--/v--></select><!--/b-->
+<!--b option--><option value="{{v crud:optionValue/}}">{{v crud:optionLabel/}}</option><!--/b-->
+<!--b option:selected--><option value="{{v crud:optionValue/}}" selected>{{v crud:optionLabel/}}</option><!--/b-->
+<!--b option:empty--><option value=""></option><!--/b-->
+
+<!--b attribute:maxlength--> maxlength="{{v crud:maxlength/}}"<!--/b-->
+<!--b attribute:step--> step="any"<!--/b-->
+<!--b attribute:required--> required<!--/b-->
+<!--b help--><p class="crud-help">{{v crud:helpText/}}</p><!--/b-->
+
+<!--b section--><fieldset class="crud-section"><legend>{{v crud:sectionLabel/}}</legend><!--v crud:sectionFields--><!--/v--></fieldset><!--/b-->

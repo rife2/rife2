@@ -21,6 +21,9 @@
     },
     {
       "pattern":"\\Qorg/eclipse/jetty/version/build.properties\\E"
+    },
+    {
+      "pattern":"\\Qrife/crud/style.css\\E"
     }
   ]},
   "bundles":[

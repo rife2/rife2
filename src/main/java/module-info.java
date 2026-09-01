@@ -48,6 +48,8 @@ module rife {
     exports rife.continuations;
     exports rife.continuations.basic;
     exports rife.continuations.exceptions;
+    exports rife.crud;
+    exports rife.crud.exceptions;
     exports rife.database;
     exports rife.database.exceptions;
     exports rife.database.migrations;

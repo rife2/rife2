@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{v crud:title/}}</title>
+<link rel="stylesheet" href="{{v crud:styleUrl/}}">
+{{v crud:head/}}
+</head>
+<body class="crud-admin{{v crud:entityClass/}}{{v crud:pageClass/}}">
+<header class="crud-header">
+  <a class="crud-brand" href="{{v crud:dashboardUrl/}}">{{v crud:title/}}</a>
+  <!--v crud:environment--><!--/v-->
+  <nav class="crud-menu"><!--v crud:menu--><!--/v--></nav>
+</header>
+<!--v crud:flash--><!--/v-->
+<main class="crud-main"><!--v crud:content--><!--/v--></main>
+
+<!--b crud:environment:present--><span class="crud-env">{{v crud:environmentName/}}</span><!--/b-->
+
+<!--b crud:menuItem--><a class="{{v crud:menuClass/}}" href="{{v crud:menuUrl/}}">{{v crud:menuLabel/}}</a><!--/b-->
+
+<!--b crud:flash:present--><p class="crud-flash" role="status">{{v crud:flashMessage/}}</p><!--/b-->
+
+<!--b crud:forbidden-->
+<h1>Not allowed</h1>
+<div class="crud-empty">
+  <p>You don't have access to {{v crud:entityLabel/}}.</p>
+</div>
+<!--/b-->
+
+<!--b crud:dashboard-->
+<h1>Overview</h1>
+<ul class="crud-cards"><!--v crud:cards--><!--/v--></ul>
+<!--/b-->
+<!--b crud:card--><li><a href="{{v crud:cardUrl/}}"><span class="crud-card-label">{{v crud:cardLabel/}}</span><span class="crud-card-count">{{v crud:cardCount/}}</span></a></li><!--/b-->
+
+<!--b crud:browse-->
+<div class="crud-toolbar">
+  <h1>{{v crud:entityLabelPlural/}}</h1>
+  <!--v crud:search--><!--/v-->
+  <a class="crud-button crud-primary" href="{{v crud:addUrl/}}">Add {{v crud:entityLabel/}}</a>
+</div>
+<div class="crud-tablewrap">
+<table class="crud-table">
+<thead><tr><!--v crud:columnHeaders--><!--/v--><!--v crud:moveHeader--><!--/v--><th scope="col">Actions</th></tr></thead>
+<tbody><!--v crud:rows--><!--/v--></tbody>
+</table>
+</div>
+<nav class="crud-pages"><!--v crud:navigation--><!--/v--></nav>
+<!--/b-->
+<!--b crud:columnHeader--><th scope="col">{{v crud:columnLabel/}}</th><!--/b-->
+<!--b crud:columnHeader:sortable--><th scope="col"{{v crud:sortAria/}}><a class="crud-sort" href="{{v crud:sortUrl/}}">{{v crud:columnLabel/}}<!--v crud:sortMarker--><!--/v--></a></th><!--/b-->
+<!--b crud:sortAria:asc--> aria-sort="ascending"<!--/b-->
+<!--b crud:sortAria:desc--> aria-sort="descending"<!--/b-->
+<!--b crud:sortMarker:asc--> <span class="crud-sortmarker" aria-hidden="true">&#9650;</span><!--/b-->
+<!--b crud:sortMarker:desc--> <span class="crud-sortmarker" aria-hidden="true">&#9660;</span><!--/b-->
+<!--b crud:search:present--><form class="crud-search" method="get" action="{{v crud:searchUrl/}}"><!--v crud:searchSort--><!--/v--><input type="search" name="search" value="{{v crud:searchTerm/}}" placeholder="Search" aria-label="Search {{v crud:entityLabelPlural/}}"><button class="crud-button" type="submit">Search</button></form><!--/b-->
+<!--b crud:searchSort:present--><input type="hidden" name="sort" value="{{v crud:sortProperty/}}"><input type="hidden" name="dir" value="{{v crud:sortDir/}}"><!--/b-->
+<!--b crud:moveHeader:present--><th scope="col">Order</th><!--/b-->
+<!--b crud:row--><tr><!--v crud:cells--><!--/v--><!--v crud:moveCell--><!--/v--><td class="crud-actions"><!--v crud:rowActions--><!--/v--></td></tr><!--/b-->
+<!--b crud:cell--><td>{{v crud:cellValue/}}</td><!--/b-->
+<!--b crud:cell:badge--><td><span class="crud-badge{{v crud:badgeStyle/}}">{{v crud:cellValue/}}</span></td><!--/b-->
+<!--b crud:badgeStyle:present--> crud-badge-{{v crud:badgeStyleName/}}<!--/b-->
+<!--b crud:cell:html--><td>{{v crud:cellHtml/}}</td><!--/b-->
+<!--b crud:moveCell:present--><td class="crud-move"><!--v crud:moveActions--><!--/v--></td><!--/b-->
+<!--b crud:moveUp--><form method="post" action="{{v crud:moveUrl/}}"><!--v route:inputs:--><!--/v--><button type="submit" title="Move up" aria-label="Move up">&#9650;</button></form><!--/b-->
+<!--b crud:moveUp:disabled--><span class="crud-disabled" aria-hidden="true">&#9650;</span><!--/b-->
+<!--b crud:moveDown--><form method="post" action="{{v crud:moveUrl/}}"><!--v route:inputs:--><!--/v--><button type="submit" title="Move down" aria-label="Move down">&#9660;</button></form><!--/b-->
+<!--b crud:moveDown:disabled--><span class="crud-disabled" aria-hidden="true">&#9660;</span><!--/b-->
+<!--b crud:editAction--><a class="crud-button" href="{{v crud:editUrl/}}">Edit</a><!--/b-->
+<!--b crud:deleteAction--><a class="crud-button crud-danger" href="{{v crud:deleteUrl/}}">Delete</a><!--/b-->
+<!--b crud:customAction--><form method="post" action="{{v crud:actionUrl/}}"><!--v route:inputs:--><!--/v--><button class="crud-button" type="submit">{{v crud:actionLabel/}}</button></form><!--/b-->
+<!--b crud:customAction:confirm--><form method="get" action="{{v crud:actionUrl/}}"><!--v crud:actionState--><!--/v--><button class="crud-button" type="submit">{{v crud:actionLabel/}}</button></form><!--/b-->
+<!--b crud:stateInput--><input type="hidden" name="{{v crud:stateName/}}" value="{{v crud:stateValue/}}"><!--/b-->
+
+<!--b crud:empty-->
+<div class="crud-toolbar"><h1>{{v crud:entityLabelPlural/}}</h1></div>
+<div class="crud-empty">
+  <p>There are no {{v crud:entityLabelPlural/}} yet.</p>
+  <a class="crud-button crud-primary" href="{{v crud:addUrl/}}">Add the first one</a>
+</div>
+<!--/b-->
+
+<!--b crud:noresults-->
+<div class="crud-toolbar">
+  <h1>{{v crud:entityLabelPlural/}}</h1>
+  <!--v crud:search--><!--/v-->
+</div>
+<div class="crud-empty">
+  <p>No {{v crud:entityLabelPlural/}} match '{{v crud:searchTerm/}}'.</p>
+  <a class="crud-button" href="{{v crud:browseUrl/}}">Show all</a>
+</div>
+<!--/b-->
+
+<!--b crud:form-->
+<h1>{{v crud:formTitle/}}</h1>
+<!--v errors--><!--/v-->
+<form class="crud-form" method="post" action="{{v crud:formUrl/}}">
+<!--v route:inputs:--><!--/v-->
+<!--v crud:baseline--><!--/v-->
+<!--v crud:fields--><!--/v-->
+<div class="crud-formactions">
+  <button class="crud-button crud-primary" type="submit">{{v crud:submitLabel/}}</button>
+  <a class="crud-button" href="{{v crud:cancelUrl/}}">Cancel</a>
+</div>
+</form>
+<!--/b-->
+
+<!--b crud:delete-->
+<h1>Delete {{v crud:entityLabel/}}</h1>
+<p class="crud-warning">This can't be undone.</p>
+<dl class="crud-details"><!--v crud:details--><!--/v--></dl>
+<form class="crud-form" method="post" action="{{v crud:formUrl/}}">
+<!--v route:inputs:--><!--/v-->
+<div class="crud-formactions">
+  <button class="crud-button crud-danger" type="submit">Delete</button>
+  <a class="crud-button" href="{{v crud:cancelUrl/}}">Cancel</a>
+</div>
+</form>
+<!--/b-->
+
+<!--b crud:confirm-->
+<h1>{{v crud:actionLabel/}} {{v crud:entityLabel/}}</h1>
+<dl class="crud-details"><!--v crud:details--><!--/v--></dl>
+<form class="crud-form" method="post" action="{{v crud:formUrl/}}">
+<!--v route:inputs:--><!--/v-->
+<div class="crud-formactions">
+  <button class="crud-button crud-primary" type="submit">{{v crud:actionLabel/}}</button>
+  <a class="crud-button" href="{{v crud:cancelUrl/}}">Cancel</a>
+</div>
+</form>
+<!--/b-->
+<!--b crud:detail--><dt>{{v crud:detailLabel/}}</dt><dd>{{v crud:detailValue/}}</dd><!--/b-->
+<!--b crud:baseline:present--><input type="hidden" name="crudBaseline" value="{{v crud:baselineDigest/}}"><!--/b-->
+</body>
+</html>
