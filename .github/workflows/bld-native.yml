@@ -41,7 +41,7 @@ jobs:
         run: |
           build/sse-svg-native &
           SERVER_PID=$!
-          for i in $(seq 1 60); do
+          for _ in $(seq 1 60); do
             curl -sf -o /dev/null http://localhost:8080/ && break
             sleep 0.5
           done
@@ -69,7 +69,7 @@ jobs:
         run: |
           build/counter-native &
           COUNTER_PID=$!
-          for i in $(seq 1 60); do
+          for _ in $(seq 1 60); do
             curl -sf -o /dev/null http://localhost:8080/count && break
             sleep 0.5
           done
