@@ -3,6 +3,40 @@ name: bld-native-ci
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
+  packaging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v7
+        with:
+          clean: true
+          submodules: 'true'
+          fetch-depth: 0
+
+      # the java version that the framework targets doesn't work out a
+      # resource lookup on its own, so it's the version that reveals whether
+      # everything the framework ships with was registered for an image
+      - name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          distribution: 'graalvm-community'
+          java-version: '17'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache bld dependencies
+        uses: actions/cache@v6
+        with:
+          path: lib
+          key: ${{ runner.os }}-bld-native-lib
+
+      # the module path and a native image are the two ways that what the
+      # framework ships beside its classes goes missing, and neither can be
+      # noticed by a test on the class path
+      - name: Verify what the framework ships with stays reachable
+        run: ./bld clean download compile test-modular test-native
+
   native-image:
     runs-on: ubuntu-latest
     timeout-minutes: 60

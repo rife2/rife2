@@ -13,9 +13,11 @@ import rife.bld.publish.*;
 import rife.tools.FileUtils;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.regex.Pattern;
@@ -293,6 +295,130 @@ public class Rife2Build extends AbstractRife2Build {
     throws Exception {
         jarAgent();
         super.test();
+    }
+
+    @BuildCommand(value = "test-modular", summary = "Verifies that what the framework ships beside its classes is reachable when it runs as a named module")
+    public void testModular()
+    throws Exception {
+        jar();
+
+        // a resource that sits in an exported package is only provided to
+        // the module that holds it, and no test on the class path can tell
+        // that apart from a resource that simply isn't there
+        var probe_directory = new File(buildDirectory(), "modular");
+        var source_directory = new File(probe_directory, "src/rife");
+        var classes_directory = new File(probe_directory, "classes");
+        source_directory.mkdirs();
+        classes_directory.mkdirs();
+
+        var probe = new File(source_directory, "ModularProbe.java");
+        FileUtils.writeString("""
+            package rife;
+
+            import rife.template.TemplateFactory;
+
+            public class ModularProbe {
+                public static void main(String[] args)
+                throws Exception {
+                    if (!"rife".equals(ModularProbe.class.getModule().getName())) {
+                        throw new AssertionError("the probe has to run inside the module of the framework");
+                    }
+
+                    var version = Version.getVersion();
+                    if (null == version || version.isBlank()) {
+                        throw new AssertionError("the version resource didn't come out of the module");
+                    }
+
+                    var template = TemplateFactory.HTML.get("errors.rife.engine_error");
+                    if (!template.getContent().contains("errors occurred")) {
+                        throw new AssertionError("the error template didn't come out of the module");
+                    }
+
+                    System.out.println("the module hands out its own resources (version " + version + ")");
+                }
+            }
+            """, probe);
+
+        var module_path = new StringJoiner(File.pathSeparator);
+        module_path.add(new File(new File(buildDirectory(), "dist"), jarFileName()).getAbsolutePath());
+        for (var jar : compileClasspathJars()) {
+            module_path.add(jar.getAbsolutePath());
+        }
+        for (var jar : providedClasspathJars()) {
+            module_path.add(jar.getAbsolutePath());
+        }
+
+        run(List.of(compilerTool(), "--module-path", module_path.toString(),
+            "--patch-module", "rife=" + new File(probe_directory, "src").getAbsolutePath(),
+            "--add-modules", "rife", "-d", classes_directory.getAbsolutePath(), probe.getAbsolutePath()));
+        run(List.of(javaTool(), "--module-path", module_path.toString(),
+            "--patch-module", "rife=" + classes_directory.getAbsolutePath(),
+            "--add-modules", "rife", "-m", "rife/rife.ModularProbe"));
+    }
+
+    @BuildCommand(value = "test-native", summary = "Verifies that what the framework ships beside its classes is embedded in a native image")
+    public void testNative()
+    throws Exception {
+        jar();
+
+        // a resource is only embedded in an image when it was registered for
+        // it, which the java version that this targets doesn't work out on its
+        // own the way the later ones do
+        var probe_directory = new File(buildDirectory(), "native");
+        var classes_directory = new File(probe_directory, "classes");
+        classes_directory.mkdirs();
+
+        var probe = new File(probe_directory, "NativeResourceProbe.java");
+        FileUtils.writeString("""
+            public class NativeResourceProbe {
+                public static void main(String[] args) {
+                    if (null == NativeResourceProbe.class.getResourceAsStream("/RIFE_VERSION")) {
+                        System.out.println("the version resource isn't embedded in the native image");
+                        System.exit(3);
+                    }
+
+                    System.out.println("the native image embeds what the framework ships beside its classes");
+                }
+            }
+            """, probe);
+
+        var jar = new File(new File(buildDirectory(), "dist"), jarFileName()).getAbsolutePath();
+        // the probe is built for the version that this targets, since the
+        // image is allowed to be made by a toolchain of that version
+        run(List.of(compilerTool(), "--release", "17", "-d", classes_directory.getAbsolutePath(), probe.getAbsolutePath()));
+        run(List.of(nativeImageTool(), "-cp", classes_directory.getAbsolutePath() + File.pathSeparator + jar,
+            "--no-fallback", "-o", new File(probe_directory, "resource-probe").getAbsolutePath(), "NativeResourceProbe"));
+        run(List.of(new File(probe_directory, "resource-probe").getAbsolutePath()));
+    }
+
+    /**
+     * Only the name of the tool becomes the compiler, since the path that
+     * leads to it is allowed to hold 'java' as well.
+     */
+    private String compilerTool() {
+        var tool = Path.of(javaTool());
+        return tool.resolveSibling(tool.getFileName().toString().replaceFirst("java", "javac")).toString();
+    }
+
+    private String nativeImageTool() {
+        for (var home : new String[]{System.getenv("GRAALVM_HOME"), System.getenv("JAVA_HOME")}) {
+            if (home != null) {
+                var tool = Path.of(home, "bin", "native-image");
+                if (tool.toFile().exists()) {
+                    return tool.toString();
+                }
+            }
+        }
+
+        return "native-image";
+    }
+
+    private void run(List<String> command)
+    throws Exception {
+        var process = new ProcessBuilder(command).inheritIO().start();
+        if (process.waitFor() != 0) {
+            throw new AssertionError("the framework isn't able to hand out what it ships with: " + String.join(" ", command));
+        }
     }
 
     @BuildCommand(summary = "Creates all the distribution artifacts")
