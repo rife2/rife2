@@ -132,9 +132,9 @@ public class Rife2Build extends AbstractRife2Build {
                 .overview(new File(srcMainJavaDirectory(), "overview.html"));
 
         publishOperation()
-            .repository(version.isSnapshot() ? repository("rife2-snapshots") : repository("rife2-releases"))
-            .repository(version.isSnapshot() ? repository("central-snapshots") : repository("central-releases"))
-            .repository(repository("github"))
+            .repository(version.isSnapshot() ? "rife2-snapshots" : "rife2-releases")
+            .repository(version.isSnapshot() ? "central-snapshots" : "central-releases")
+            .repository("github")
             .info(new PublishInfo()
                 .groupId("com.uwyn.rife2")
                 .artifactId("rife2")
