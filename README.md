@@ -13,20 +13,17 @@
 
 # Welcome
 
-RIFE2 is a full-stack, no-declaration framework for building web applications
-in plain, type-safe Java.
+RIFE2 is a full-stack framework for building web applications in plain,
+type-safe Java.
 
-RIFE2 is built on the foundations of the original RIFE framework that was
-popular from 2002-2010. Since then, the world and Java have changed and many of
-the original RIFE APIs could finally be replaced with pure Java, no-XML,
-no-YAML, leaving only type-safe expressive code.
+Routing, templates, forms, persistence and tests are all ordinary Java code,
+with no XML, YAML or reflection magic. The compiler and your IDE understand your
+whole application, giving you completion, refactoring, navigation and type
+checking everywhere.
 
-RIFE2 preserves most of the original features and adds new ones, for a fraction
-of the footprint and with even greater developer productivity than before. The
-whole framework ships as a single 2.5MB jar with zero dependencies, is an
+The whole framework ships as a single 2.5MB jar with zero dependencies, is an
 explicit Java module, and runs on Java 17 and later, tested on Java 17, 21, 25
-and 26. RIFE2 is created by Geert Bevin, one of the first Java Champions and
-speaker at many Java conferences.
+and 26.
 
 > **TIP:** If you use IntelliJ IDEA as your IDE, consider installing the
 > [RIFE2 IDEA Plug-in](https://github.com/rife2/rife2-idea).  
@@ -38,8 +35,8 @@ contains a lot more information.**
 **The [RIFE2 Javadocs](https://rife2.github.io/rife2/) complement the
 documentation with many more details.**
 
-**See RIFE2 in action on [rife2.com](https://rife2.com), with minimal
-interactive examples that each link to their own source.**
+**See RIFE2 in action on [rife2.com](https://rife2.com), where fifteen examples
+each run live on the page and link to their own source.**
 
 <a href="https://www.youtube.com/watch?feature=player_embedded&v=AZWzYwAHDIE" target="_blank">
  <img src="https://img.youtube.com/vi/AZWzYwAHDIE/maxresdefault.jpg" alt="Watch the video" width="640" height="360" border="0" />
@@ -95,19 +92,58 @@ that can be reversed and previewed,
 converts beans and records, and applications can be built into a
 [GraalVM native image](https://github.com/rife2/rife2/wiki/GraalVM-Native-Image).
 
-RIFE2 keeps pace with modern Java too. On Java 21 and later, the embedded server
-runs every request on its own virtual thread, so you write ordinary blocking,
-sequential code with no reactive API or async plumbing to learn, and
-continuations and the workflow engine extend that same sequential model across
-requests. Because everything is plain, type-safe Java with no hidden XML, YAML
-or reflection, RIFE2 is a comfortable fit for AI coding assistants: the compiler
-and the agent both read your application's structure straight from the source,
-and its companion build tool, bld, can expose your build commands to agents over
-the Model Context Protocol. An [llms.txt](https://rife2.com/llms.txt) at the
-rife2.com site root gives agents a curated index of the documentation.
+## Virtual threads by default
+
+On Java 21 and later, RIFE2's embedded server runs every request on its own
+virtual thread, with no configuration. You write ordinary blocking code: a
+database query, an HTTP call or a file read parks only that thread instead of
+tying up a pooled request thread. There is no reactive API and no async plumbing
+to learn, and blocking code can scale to many concurrent I/O-bound requests
+because virtual threads are cheap to create and park. When deployed to an
+external servlet container, RIFE2 leaves request threading to the container.
+Either way, it fits the rest of RIFE2, which offers the same sequential model:
+continuations
+pause and resume a flow across requests, and the workflow engine coordinates
+concurrent tasks as straight-line code that waits on events.
+
+## Built for AI-assisted development
+
+RIFE2's design suits AI coding assistants. Everything is plain, type-safe Java:
+no XML or YAML, no required annotations, and no reflection magic, so the
+compiler and the agent both read your application's structure straight from the
+source. Nothing is hidden: routes are fields,
+elements are classes, and templates are files, all discoverable by reading the
+code. The framework is a single 2.5MB jar with zero dependencies, built by
+[bld](https://rife2.com/bld) in plain Java, so there is less machinery to
+reverse engineer, and bld can expose your build commands to agents over the
+[Model Context Protocol](https://modelcontextprotocol.io). Out-of-container
+tests exercise the whole request cycle in memory for a fast compile-and-test
+loop, and an [llms.txt](https://rife2.com/llms.txt) at the rife2.com site root
+gives agents an index of the framework's documentation.
 
 *RIFE2 is the red pill*, ready to show you how deep the rabbit hole can go, if
 you're up for it!
+
+## Features
+
+**Web** : engine with continuations, clean-URL path mapping, out-of-container
+testing, form building, dynamic validation, server-sent events with replay,
+htmx integration, customizable authentication, CSRF protection.
+
+**Runtime and deployment** : embedded Jetty or Tomcat, virtual threads by
+default, Jakarta EE 10/11 war deployment, GraalVM native images with
+continuations, explicit Java module, hierarchical configuration, persisted
+scheduler, dependency injection, workflow engine with continuations.
+
+**Data** : database query builders, generic query manager, declarative
+migrations, bean-centric metadata and constraints, JSON with bean conversion,
+content management.
+
+**Templates and content** : bidirectional logic-less templates, localization,
+RSS, Atom and JSON feeds, WebJars, resource abstraction.
+
+**Tooling** : pure Java build system ([bld](https://rife2.com/bld)),
+[IntelliJ IDEA plugin](https://github.com/rife2/rife2-idea), Gradle plugin.
 
 # Quickstart
 
@@ -130,6 +166,12 @@ Then `cd` into the new application and run it:
 
 ```console
 ./bld compile run
+```
+
+Or on Windows:
+
+```console
+bld.bat compile run
 ```
 
 The generated project builds with [bld](https://rife2.com/bld), but that's only
@@ -344,3 +386,11 @@ us on [Discord](https://discord.gg/DZRYPtkb6J).
 
 **Read more in the [full documentation](https://github.com/rife2/rife2/wiki)
 and [RIFE2 Javadocs](https://rife2.github.io/rife2/).**
+
+## About RIFE2
+
+RIFE2 builds on the foundations of the original RIFE framework that was popular
+from 2002 to 2010. It preserves most of the original features and adds new ones,
+for a fraction of the footprint and with even greater developer productivity.
+RIFE2 is created and maintained by Geert Bevin, veteran Java coder and one of
+the first Java Champions.
