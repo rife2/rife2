@@ -202,7 +202,7 @@ Out-of-container testing is a first-class citizen in RIFE2, directly interacting
 with your `Site` class to simulate full request-response interactions,
 without having to spin up a servlet container.
 
-This is how you could test the example above with JUnit 5:
+This is how you could test the example above with JUnit:
 
 ```java
 class HelloTest {
