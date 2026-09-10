@@ -417,7 +417,7 @@ public class Server {
         // configure the handler
 
         handler.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));
-        handler.addServlet(servlet_holder, "/*");
+        handler.addServlet(servlet_holder, "/");
 
         // Register the handler
 
