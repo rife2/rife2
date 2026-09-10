@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello htmx</title>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body>
+<h1>Languages</h1>
+<input hx-get="{{v route:languages/}}"
+       hx-target="#list"
+       hx-swap="innerHTML"
+       hx-trigger="keyup changed delay:250ms, search"
+       type="search"
+       name="q"
+       autocomplete="off"
+       value="{{v param:q}}{{/v}}">
+
+<div id="list" aria-live="polite">
+    <!--v list/-->
+</div>
+</body>
+</html>
+
+<!--bv list-->
+<ul>
+    <!--v rows/-->
+    <!--b row--><li><!--v name/--></li><!--/b-->
+</ul>
+<!--/bv-->

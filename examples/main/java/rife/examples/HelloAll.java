@@ -41,6 +41,7 @@ public class HelloAll extends Site implements MyServiceProvider {
         group("/continuations", continuations = new HelloFormContinuations());
         group("/generic", gqm = new HelloGenericQueryManager());
         group(group = new HelloGroup());
+        group("/htmx", new HelloHtmx());
         group(new HelloLink());
         group(new HelloPathInfoMapping());
         group("/resources", resources = new HelloResources());
