@@ -38,6 +38,9 @@ contains a lot more information.**
 **The [RIFE2 Javadocs](https://rife2.github.io/rife2/) complement the
 documentation with many more details.**
 
+**See RIFE2 in action on [rife2.com](https://rife2.com), with minimal
+interactive examples that each link to their own source.**
+
 <a href="https://www.youtube.com/watch?feature=player_embedded&v=AZWzYwAHDIE" target="_blank">
  <img src="https://img.youtube.com/vi/AZWzYwAHDIE/maxresdefault.jpg" alt="Watch the video" width="640" height="360" border="0" />
 </a>
@@ -84,12 +87,37 @@ requests. Because everything is plain, type-safe Java with no hidden XML, YAML
 or reflection, RIFE2 is a comfortable fit for AI coding assistants: the compiler
 and the agent both read your application's structure straight from the source,
 and its companion build tool, bld, can expose your build commands to agents over
-the Model Context Protocol.
+the Model Context Protocol. An [llms.txt](https://rife2.com/llms.txt) at the
+rife2.com site root gives agents a curated index of the documentation.
 
 *RIFE2 is the red pill*, ready to show you how deep the rabbit hole can go, if
 you're up for it!
 
 # Quickstart
+
+## Create a project
+
+Nothing needs to be installed, this one-liner scaffolds a ready-to-run RIFE2
+application:
+
+```console
+bash -c "$(curl -fsSL https://rife2.com/create.sh)"
+```
+
+Or on Windows:
+
+```console
+irm https://rife2.com/create.ps1 | iex
+```
+
+Then `cd` into the new application and run it:
+
+```console
+./bld compile run
+```
+
+The generated project builds with [bld](https://rife2.com/bld), but that's only
+one option: RIFE2 projects can just as well be built with Gradle or Maven.
 
 ## Hello World Example
 
@@ -109,7 +137,7 @@ public class HelloWorld extends Site {
 
 The `main` method spins up the integrated embedded Jetty server, so that you can
 immediately start coding. The same `HelloWorld` class can be added as a
-parameter value to your `web.xml`, requiring absolute no changes to your code
+parameter value to your `web.xml`, requiring absolutely no changes to your code
 between development and production.
 
 Out-of-container testing is a first-class citizen in RIFE2, directly interacting
@@ -291,7 +319,8 @@ Thanks for reading until the end!
 
 This was merely a quick introduction to whet your appetite, RIFE2 comes with a
 comprehensive and easy to read manual with many examples and pragmatic
-explanations.
+explanations. You can also see RIFE2 in action on
+[rife2.com](https://rife2.com), where each live example links to its own source.
 
 If you have any questions, suggestions, ideas or just want to chat, feel free
 to post on the [forums](https://forum.uwyn.com) or to join
