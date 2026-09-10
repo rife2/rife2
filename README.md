@@ -79,6 +79,22 @@ risk of becoming stale, the logic-less templates are really purely content
 driven and can generate any text-based format (JSON, XML, HTML, SVG, SQL), ...
 and much more.
 
+The features that RIFE2 1.10 adds follow the same pattern.
+[Server-sent events](https://github.com/rife2/rife2/wiki/Server-Sent-Events) are
+bridged into the generic query manager and the workflow engine, so saving a bean
+anywhere in the application updates the list in every connected browser, and an
+event can carry a template that is resolved against each receiving connection.
+[CSRF protection](https://github.com/rife2/rife2/wiki/CSRF-Protection) reuses the
+route tags that already generate your form inputs, so an existing form carries
+the token without a template change. There's
+[htmx support](https://github.com/rife2/rife2/wiki/htmx-Support) in the web
+engine, declarative
+[database migrations](https://github.com/rife2/rife2/wiki/Database-Migrations)
+that can be reversed and previewed,
+[JSON](https://github.com/rife2/rife2/wiki/JSON) parsing and generation that
+converts beans and records, and applications can be built into a
+[GraalVM native image](https://github.com/rife2/rife2/wiki/GraalVM-Native-Image).
+
 RIFE2 keeps pace with modern Java too. On Java 21 and later, the embedded server
 runs every request on its own virtual thread, so you write ordinary blocking,
 sequential code with no reactive API or async plumbing to learn, and
