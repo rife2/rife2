@@ -5,6 +5,7 @@
 package rife.engine;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
@@ -38,6 +39,7 @@ public class TomcatServer {
     private boolean isContext_ = false;
     private int port_ = 8080;
     private int connectionTimeout_ = -1;
+    private Thread stopAtShutdown_ = null;
 
     /**
      * Instantiates a new embedded Tomcat server.
@@ -266,6 +268,18 @@ public class TomcatServer {
             throw new RuntimeException(e);
         }
 
+        // tears down the site when the JVM shuts down, for instance on SIGTERM
+        var tomcat = tomcat_;
+        stopAtShutdown_ = new Thread(() -> {
+            try {
+                tomcat.stop();
+                tomcat.destroy();
+            } catch (LifecycleException ignore) {
+                // do nothing
+            }
+        });
+        Runtime.getRuntime().addShutdownHook(stopAtShutdown_);
+
         return this;
     }
 
@@ -275,6 +289,15 @@ public class TomcatServer {
      * @since 1.7.1
      */
     public void stop() {
+        if (stopAtShutdown_ != null) {
+            try {
+                Runtime.getRuntime().removeShutdownHook(stopAtShutdown_);
+            } catch (IllegalStateException ignore) {
+                // the JVM is already shutting down
+            }
+            stopAtShutdown_ = null;
+        }
+
         try {
             tomcat_.stop();
             tomcat_.destroy();

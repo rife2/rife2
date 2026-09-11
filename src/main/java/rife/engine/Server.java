@@ -349,6 +349,8 @@ public class Server {
         }
 
         server_ = new org.eclipse.jetty.server.Server(thread_pool);
+        // tears down the site when the JVM shuts down, for instance on SIGTERM
+        server_.setStopAtShutdown(true);
 
         // create the servlet context handler
 
