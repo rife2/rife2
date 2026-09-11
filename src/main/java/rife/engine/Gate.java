@@ -110,6 +110,7 @@ public class Gate {
         // check if an exception occurred during the initialization
         if (initException_ != null) {
             handleRequestException(initException_, new Context(gateUrl, site_, request, response, null));
+            response.close();
             return true;
         }
 

@@ -29,6 +29,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestEngine {
     @Test
+    void testSetupErrorPage()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                throw new RuntimeException("setup failure");
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                webClient.getOptions().setJavaScriptEnabled(false);
+                var content = webClient.getPage("http://localhost:8181/anything").getWebResponse().getContentAsString();
+                assertTrue(content.contains("setup failure"), content);
+            }
+        }
+    }
+
+    @Test
     void testSimplePlain()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
