@@ -86,6 +86,8 @@ class EngineTemplateProcessor {
             !template_.isValueSet(ID_CONTEXT_PARAM_CONT_ID)) {
             if (context_.continuationId() != null) {
                 template_.setValue(ID_CONTEXT_PARAM_CONT_ID, SpecialParameters.CONT_ID + "=" + context_.continuationId());
+            } else {
+                blankUnavailableValue(ID_CONTEXT_PARAM_CONT_ID);
             }
             setValues.add(ID_CONTEXT_PARAM_CONT_ID);
         }
@@ -94,6 +96,8 @@ class EngineTemplateProcessor {
             !template_.isValueSet(ID_CONTEXT_CONT_ID)) {
             if (context_.continuationId() != null) {
                 template_.setValue(ID_CONTEXT_CONT_ID, context_.continuationId());
+            } else {
+                blankUnavailableValue(ID_CONTEXT_CONT_ID);
             }
             setValues.add(ID_CONTEXT_CONT_ID);
         }
@@ -114,8 +118,17 @@ class EngineTemplateProcessor {
                 var header_name = RifeConfig.engine().getCsrfHeaderName();
                 template_.setValue(ID_CONTEXT_HTMX_HEADERS,
                     "hx-headers='{\"" + header_name + "\":\"" + context_.csrfToken() + "\"}'");
+            } else {
+                blankUnavailableValue(ID_CONTEXT_HTMX_HEADERS);
             }
             setValues.add(ID_CONTEXT_HTMX_HEADERS);
+        }
+    }
+
+    // otherwise a value without default content would be rendered as its tag
+    private void blankUnavailableValue(String id) {
+        if (!template_.hasDefaultValue(id)) {
+            template_.blankValue(id);
         }
     }
 

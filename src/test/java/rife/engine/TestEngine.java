@@ -46,6 +46,24 @@ public class TestEngine {
     }
 
     @Test
+    void testUnavailableContextValues()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/values", c -> c.print(c.template("context_values_unset")));
+                get("/defaults", c -> c.print(c.template("context_values_default")));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                final HtmlPage values = webClient.getPage("http://localhost:8181/values");
+                assertEquals("<p>||</p>\n", values.getWebResponse().getContentAsString());
+                final HtmlPage defaults = webClient.getPage("http://localhost:8181/defaults");
+                assertEquals("<p>a|b|c</p>\n", defaults.getWebResponse().getContentAsString(), "default content still applies");
+            }
+        }
+    }
+
+    @Test
     void testSimplePlain()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
