@@ -89,7 +89,8 @@ engine, declarative
 [database migrations](https://github.com/rife2/rife2/wiki/Database-Migrations)
 that can be reversed and previewed,
 [JSON](https://github.com/rife2/rife2/wiki/JSON) parsing and generation that
-converts beans and records, and applications can be built into a
+converts beans and records, and ahead-of-time instrumentation, so continuations
+work without the java agent, also in a
 [GraalVM native image](https://github.com/rife2/rife2/wiki/GraalVM-Native-Image).
 
 ## Virtual threads by default
