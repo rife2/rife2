@@ -567,7 +567,7 @@ public class Context {
             response_.setContentType(content_type);
         }
 
-        response_.print(template.getBlock(blockId));
+        response_.printBlock(template, blockId);
     }
 
     /**

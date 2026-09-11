@@ -104,6 +104,22 @@ public interface Response {
     throws EngineException;
 
     /**
+     * Prints the content of one block of a template to the request text
+     * output.
+     *
+     * @param template the template whose block will be printed
+     * @param blockId  the id of the block that will be printed
+     * @throws rife.engine.exceptions.EngineException if an error
+     *                                                occurs during the output of the block content
+     * @see #print(Template)
+     * @since 1.10.1
+     */
+    default void printBlock(Template template, String blockId)
+    throws EngineException {
+        print(template.getBlock(blockId));
+    }
+
+    /**
      * Clears the text buffer is it's enabled.
      * <p>If the text buffer is disabled, this method does nothing.
      *

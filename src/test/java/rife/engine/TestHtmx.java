@@ -140,6 +140,24 @@ public class TestHtmx {
     }
 
     @Test
+    void testPrintHtmxFragmentKeepsTemplate() {
+        var m = new MockConversation(new PrintHtmxFragmentSite());
+        var response = m.doRequest("/books", new MockRequest().htmx());
+        var template = response.getTemplate();
+        assertNotNull(template, "a fragment response exposes the template it came from");
+        assertEquals("Refactoring", template.getValue("item"));
+        assertEquals(template.getBlock("list"), response.getText());
+    }
+
+    @Test
+    void testPrintBlockKeepsTemplate() {
+        var m = new MockConversation(new FragmentSite());
+        var response = m.doRequest("/books", new MockRequest().htmx());
+        assertNotNull(response.getTemplate(), "printBlock exposes the template it came from");
+        assertEquals("Refactoring", response.getTemplate().getValue("item"));
+    }
+
+    @Test
     void testHtmxMockRequestHelper() {
         var m = new MockConversation(new RequestSite());
         // htmx() sets HX-Request; other HX-* headers still chain via header()

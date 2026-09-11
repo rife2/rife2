@@ -103,9 +103,12 @@ public class MockResponse extends AbstractResponse {
 
     /**
      * Retrieves the template instance that was printed to the response.
+     * <p>This is also the template when only one of its blocks was printed,
+     * as {@link rife.engine.Context#printBlock} and {@link
+     * rife.engine.Context#printHtmxFragment} do for an htmx request.
      *
      * @return the template instance that was printed to the response; or
-     * <p>{@code null} of no template was printed to the response
+     * <p>{@code null} if no template was printed to the response
      * @see #getBytes
      * @see #getText
      * @see #getParsedHtml
@@ -409,6 +412,13 @@ public class MockResponse extends AbstractResponse {
         template_ = template;
 
         super.print(template);
+    }
+
+    public void printBlock(Template template, String blockId)
+    throws EngineException {
+        template_ = template;
+
+        super.printBlock(template, blockId);
     }
 
     protected void _setContentType(String contentType) {
