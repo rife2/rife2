@@ -24,6 +24,7 @@ class EngineTemplateProcessor {
     public static final String ID_CONTEXT_CONT_ID = "context:contId";
     public static final String ID_CONTEXT_CSRF_TOKEN = "context:csrfToken";
     public static final String ID_CONTEXT_HTMX_HEADERS = "context:htmxHeaders";
+    public static final String ID_WEBAPP_RELOAD_SCRIPT = "webapp:reloadScript";
 
     private final Context context_;
     private final Template template_;
@@ -58,6 +59,17 @@ class EngineTemplateProcessor {
             !template_.isValueSet(ID_WEBAPP_ROOT_URL)) {
             template_.setValue(ID_WEBAPP_ROOT_URL, context_.webappRootUrl(-1));
             setValues.add(ID_WEBAPP_ROOT_URL);
+        }
+
+        if (template_.hasValueId(ID_WEBAPP_RELOAD_SCRIPT) &&
+            !template_.isValueSet(ID_WEBAPP_RELOAD_SCRIPT)) {
+            var reload_endpoint = context_.site().reloadEndpoint();
+            if (reload_endpoint != null) {
+                template_.setValue(ID_WEBAPP_RELOAD_SCRIPT, reload_endpoint.script(context_.gateUrl()));
+            } else {
+                blankUnavailableValue(ID_WEBAPP_RELOAD_SCRIPT);
+            }
+            setValues.add(ID_WEBAPP_RELOAD_SCRIPT);
         }
 
         if (template_.hasValueId(ID_SERVER_ROOT_URL) &&

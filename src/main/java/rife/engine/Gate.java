@@ -26,6 +26,7 @@ public class Gate {
     private Site site_ = null;
     private Throwable initException_ = null;
     private boolean destroyed_ = false;
+    private boolean usesReloadEndpoint_ = false;
 
     /**
      * Set up the gate with the provided {@code Site}.
@@ -38,12 +39,21 @@ public class Gate {
         site.properties_.setParent(properties);
         site_ = site;
 
+        // set up before the site, so that a page showing a setup error still reloads after the fix
+        usesReloadEndpoint_ = site.acquireReloadEndpoint() != null;
+
         if (!site.deployed_) {
             try {
                 site_.setup();
                 site_.deploy();
             } catch (Throwable e) {
-                handleSiteInitException(e);
+                try {
+                    handleSiteInitException(e);
+                } catch (Throwable rethrown) {
+                    // the site never came up, so nothing else will tear the endpoint down
+                    closeReloadEndpoint();
+                    throw rethrown;
+                }
             }
         }
     }
@@ -64,7 +74,13 @@ public class Gate {
             }
             destroyed_ = true;
         }
-        site_.shutdown();
+        try {
+            if (site_ != null) {
+                site_.shutdown();
+            }
+        } finally {
+            closeReloadEndpoint();
+        }
     }
 
     /**
@@ -106,10 +122,29 @@ public class Gate {
             elementUrl = elementUrl.substring(0, path_parameters_index);
         }
 
+        var reload_endpoint = site_.reloadEndpoint();
+        if (reload_endpoint != null &&
+            ReloadEndpoint.PATH.equals(elementUrl)) {
+            try {
+                if (!reload_endpoint.connect(new Context(gateUrl, site_, request, response, null))) {
+                    response.close();
+                }
+            } catch (Throwable e) {
+                // for instance a servlet container that doesn't support asynchronous requests,
+                // answering with an error stops the browser from reconnecting in a loop
+                Logger.getLogger("rife.engine").warning("Couldn't establish the reload connection\n" + ExceptionUtils.getExceptionStackTrace(e));
+                response.setStatus(503);
+                response.close();
+            }
+            return true;
+        }
+
         // Handle the request
         // check if an exception occurred during the initialization
         if (initException_ != null) {
-            handleRequestException(initException_, new Context(gateUrl, site_, request, response, null));
+            var context = new Context(gateUrl, site_, request, response, null);
+            handleRequestException(initException_, context);
+            injectReloadScript(context, response);
             response.close();
             return true;
         }
@@ -132,6 +167,7 @@ public class Gate {
                 if (sse_connection != null) {
                     sse_connection.close();
                 }
+                injectReloadScript(context, response);
                 response.close();
             }
         } catch (RedirectException e) {
@@ -165,11 +201,27 @@ public class Gate {
                 sse_connection.close();
             } else {
                 handleRequestException(e, context);
+                injectReloadScript(context, response);
                 response.close();
             }
         }
 
         return true;
+    }
+
+    private void closeReloadEndpoint() {
+        if (usesReloadEndpoint_ &&
+            site_ != null) {
+            usesReloadEndpoint_ = false;
+            site_.releaseReloadEndpoint();
+        }
+    }
+
+    private void injectReloadScript(Context context, Response response) {
+        var reload_endpoint = site_.reloadEndpoint();
+        if (reload_endpoint != null) {
+            reload_endpoint.inject(context, response);
+        }
     }
 
     private static boolean isDetached(Response response) {
