@@ -21,6 +21,15 @@ import java.util.logging.Logger;
  * @since 1.0
  */
 public class Router {
+    /**
+     * The prefix of the URL paths that RIFE2 keeps for its own endpoints, for
+     * instance the one that reloads the browser during development. A route
+     * that's registered under it can be shadowed by them.
+     *
+     * @since 1.11
+     */
+    public static final String RESERVED_PATH_PREFIX = "/__rife__/";
+
     final HierarchicalProperties properties_ = new HierarchicalProperties();
     final List<Route> before_ = new ArrayList<>();
     final List<Route> after_ = new ArrayList<>();
@@ -1619,6 +1628,11 @@ public class Router {
     }
 
     final Route registerRoute(Route route) {
+        if (route.path() != null &&
+            route.path().startsWith(RESERVED_PATH_PREFIX)) {
+            Logger.getLogger("rife.engine").warning("The route path '" + route.path() + "' lies under " + RESERVED_PATH_PREFIX +
+                ", which RIFE2 keeps for its own endpoints, they can shadow the route.");
+        }
         ensurePreDeployment();
         switch (route.pathInfoHandling().type()) {
             case NONE -> {

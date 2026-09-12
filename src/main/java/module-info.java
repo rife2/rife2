@@ -3,6 +3,8 @@ module rife {
     requires java.desktop;
     requires java.instrument;
     requires java.logging;
+    requires static java.management;
+    requires static jdk.management;
     requires java.prefs;
     requires java.sql;
     requires java.xml;
