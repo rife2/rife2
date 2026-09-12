@@ -228,57 +228,72 @@ public class TomcatServer {
         var rifeFilter = new RifeFilter();
         rifeFilter.init(properties_, site);
 
-        var filerDef = new FilterDef();
-        filerDef.setFilter(rifeFilter);
-        filerDef.setFilterName(filterName);
-        // required for detached SSE connections
-        filerDef.setAsyncSupported("true");
-        ctx.addFilterDef(filerDef);
-
-        var filterMap = new FilterMap();
-        filterMap.setFilterName(filterName);
-        filterMap.addURLPattern("/*");
-        ctx.addFilterMap(filterMap);
-
-        tomcat_.setPort(port_);
-
-        if (hostname_ != null) {
-            tomcat_.setHostname(hostname_);
-        }
-
-        users_.forEach((u, p) -> tomcat_.addUser(u, p));
-
-        roles_.forEach((u, r) -> tomcat_.addRole(u, r));
-
-        if (!isScanManifest_) {
-            var jarScanner = new StandardJarScanner();
-            jarScanner.setScanManifest(false);
-            ctx.setJarScanner(jarScanner);
-        }
-
-        // Tomcat opens the port only if called at least once
-        var connector = tomcat_.getConnector();
-        if (connectionTimeout_ >= 0) {
-            connector.setProperty("connectionTimeout", String.valueOf(connectionTimeout_));
-        }
-
         try {
-            tomcat_.start();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
-        // tears down the site when the JVM shuts down, for instance on SIGTERM
-        var tomcat = tomcat_;
-        stopAtShutdown_ = new Thread(() -> {
-            try {
-                tomcat.stop();
-                tomcat.destroy();
-            } catch (LifecycleException ignore) {
-                // do nothing
+            // the default doc base is the whole working directory, which is too broad to watch
+            var reload_endpoint = site.reloadEndpoint();
+            if (reload_endpoint != null &&
+                !".".equals(docBase_)) {
+                reload_endpoint.watch(docBase_);
             }
-        });
-        Runtime.getRuntime().addShutdownHook(stopAtShutdown_);
+
+            var filerDef = new FilterDef();
+            filerDef.setFilter(rifeFilter);
+            filerDef.setFilterName(filterName);
+            // required for detached SSE connections
+            filerDef.setAsyncSupported("true");
+            ctx.addFilterDef(filerDef);
+
+            var filterMap = new FilterMap();
+            filterMap.setFilterName(filterName);
+            filterMap.addURLPattern("/*");
+            ctx.addFilterMap(filterMap);
+
+            tomcat_.setPort(port_);
+
+            if (hostname_ != null) {
+                tomcat_.setHostname(hostname_);
+            }
+
+            users_.forEach((u, p) -> tomcat_.addUser(u, p));
+
+            roles_.forEach((u, r) -> tomcat_.addRole(u, r));
+
+            if (!isScanManifest_) {
+                var jarScanner = new StandardJarScanner();
+                jarScanner.setScanManifest(false);
+                ctx.setJarScanner(jarScanner);
+            }
+
+            // Tomcat opens the port only if called at least once
+            var connector = tomcat_.getConnector();
+            if (connectionTimeout_ >= 0) {
+                connector.setProperty("connectionTimeout", String.valueOf(connectionTimeout_));
+            }
+
+            try {
+                tomcat_.start();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            // tears down the site when the JVM shuts down, for instance on SIGTERM
+            var tomcat = tomcat_;
+            stopAtShutdown_ = new Thread(() -> {
+                try {
+                    tomcat.stop();
+                    tomcat.destroy();
+                } catch (LifecycleException ignore) {
+                    // do nothing
+                }
+            });
+            Runtime.getRuntime().addShutdownHook(stopAtShutdown_);
+
+        } catch (Throwable e) {
+            // the gate that took the endpoint is discarded with the server
+            site.releaseReloadEndpoint();
+            throw e;
+        }
 
         return this;
     }

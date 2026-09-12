@@ -379,56 +379,71 @@ public class Server {
 
         var rife_filter = new RifeFilter();
         rife_filter.init(properties_, site);
-        var filter_holder = new FilterHolder(rife_filter);
-        // required for detached SSE connections
-        filter_holder.setAsyncSupported(true);
-
-        var ctx = new ServletContextHandler();
-        ctx.setContextPath("/");
-
-        // set up default servlet
-
-        var servlet_holder = new ServletHolder("default", DefaultServlet.class);
-        // required for detached SSE connections
-        servlet_holder.setAsyncSupported(true);
-
-        // set up resource bases
-
-        var resource_factory = ResourceFactory.of(handler);
-        var resource_list = new ArrayList<Resource>();
-
-        // handle the optional static resource base
-
-        if (staticResourceBase_ != null) {
-            resource_list.add(resource_factory.newResource(staticResourceBase_));
-        }
-
-        // add support for webjars
 
         try {
-            var hits = Collections.list(Server.class.getClassLoader().getResources("META-INF/resources"));
-            for (var hit : hits) {
-                resource_list.add(resource_factory.newResource(hit));
+
+            var reload_endpoint = site.reloadEndpoint();
+            if (reload_endpoint != null &&
+                staticResourceBase_ != null) {
+                reload_endpoint.watch(staticResourceBase_);
             }
-        } catch (IOException e) {
-            Logger.getLogger("rife.engine").warning(ExceptionUtils.getExceptionStackTrace(e));
-        }
 
-        handler.setBaseResource(ResourceFactory.combine(resource_list));
+            var filter_holder = new FilterHolder(rife_filter);
+            // required for detached SSE connections
+            filter_holder.setAsyncSupported(true);
 
-        // configure the handler
+            var ctx = new ServletContextHandler();
+            ctx.setContextPath("/");
 
-        handler.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));
-        handler.addServlet(servlet_holder, "/");
+            // set up default servlet
 
-        // Register the handler
+            var servlet_holder = new ServletHolder("default", DefaultServlet.class);
+            // required for detached SSE connections
+            servlet_holder.setAsyncSupported(true);
 
-        server_.setHandler(handler);
+            // set up resource bases
 
-        try {
-            server_.start();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            var resource_factory = ResourceFactory.of(handler);
+            var resource_list = new ArrayList<Resource>();
+
+            // handle the optional static resource base
+
+            if (staticResourceBase_ != null) {
+                resource_list.add(resource_factory.newResource(staticResourceBase_));
+            }
+
+            // add support for webjars
+
+            try {
+                var hits = Collections.list(Server.class.getClassLoader().getResources("META-INF/resources"));
+                for (var hit : hits) {
+                    resource_list.add(resource_factory.newResource(hit));
+                }
+            } catch (IOException e) {
+                Logger.getLogger("rife.engine").warning(ExceptionUtils.getExceptionStackTrace(e));
+            }
+
+            handler.setBaseResource(ResourceFactory.combine(resource_list));
+
+            // configure the handler
+
+            handler.addFilter(filter_holder, "/*", EnumSet.of(DispatcherType.REQUEST));
+            handler.addServlet(servlet_holder, "/");
+
+            // Register the handler
+
+            server_.setHandler(handler);
+
+            try {
+                server_.start();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } catch (Throwable e) {
+            // the gate that took the endpoint is discarded with the server
+            site.releaseReloadEndpoint();
+            throw e;
         }
 
         return this;

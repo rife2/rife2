@@ -33,6 +33,41 @@ public class Site extends Router {
 
     final SecureRandom csrfRandom_ = new SecureRandom();
 
+    private final Object reloadLock_ = new Object();
+    private volatile ReloadEndpoint reloadEndpoint_ = null;
+    private int reloadEndpointGates_ = 0;
+
+    // the endpoint is shared by the gates that serve this site and stays
+    // until the last of them lets go of it
+    ReloadEndpoint acquireReloadEndpoint() {
+        synchronized (reloadLock_) {
+            if (null == reloadEndpoint_) {
+                reloadEndpoint_ = ReloadEndpoint.activate();
+            }
+            if (reloadEndpoint_ != null) {
+                reloadEndpointGates_++;
+            }
+            return reloadEndpoint_;
+        }
+    }
+
+    void releaseReloadEndpoint() {
+        synchronized (reloadLock_) {
+            if (null == reloadEndpoint_) {
+                return;
+            }
+            if (--reloadEndpointGates_ <= 0) {
+                reloadEndpoint_.close();
+                reloadEndpoint_ = null;
+                reloadEndpointGates_ = 0;
+            }
+        }
+    }
+
+    ReloadEndpoint reloadEndpoint() {
+        return reloadEndpoint_;
+    }
+
     final ContinuationManager continuationManager_ = new ContinuationManager(new EngineContinuationConfigRuntime(this));
 
     private Config config_ = new Config();

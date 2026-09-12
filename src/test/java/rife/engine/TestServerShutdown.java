@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,22 +59,7 @@ public class TestServerShutdown {
     throws Exception {
         var marker = new File(Files.createTempDirectory("rife2-shutdown").toFile(), "destroyed");
 
-        var command = new ArrayList<String>();
-        command.add(ProcessHandle.current().info().command().orElseThrow());
-        command.add("-cp");
-        command.add(System.getProperty("java.class.path"));
-        var module_path = System.getProperty("jdk.module.path");
-        if (module_path != null && !module_path.isEmpty()) {
-            command.add("-p");
-            command.add(module_path);
-            command.add("--add-modules");
-            command.add("ALL-MODULE-PATH");
-        }
-        command.add(DestroyRecordingSite.class.getName());
-        command.add(server);
-        command.add(marker.getAbsolutePath());
-
-        var process = new ProcessBuilder(command)
+        var process = new ProcessBuilder(TestJavaCommand.forMain(null, DestroyRecordingSite.class.getName(), server, marker.getAbsolutePath()))
             .redirectError(ProcessBuilder.Redirect.DISCARD)
             .start();
         try {
