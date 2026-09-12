@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -141,7 +142,7 @@ public class TestReloader {
 
     // the processes hold the log file open, Windows won't let the temporary
     // directory be removed until they're really gone
-    static void stopReloader(Process reloader, ProcessHandle application)
+    static void stopReloader(Process reloader, ProcessHandle application, Path output)
     throws Exception {
         var descendants = reloader.toHandle().descendants().toList();
         descendants.forEach(ProcessHandle::destroyForcibly);
@@ -157,14 +158,24 @@ public class TestReloader {
         if (application != null) {
             application.onExit().get(30, TimeUnit.SECONDS);
         }
+
+        // Windows keeps the log file that the processes wrote to in use for a
+        // while after they're gone, so it's not left to the temporary directory
+        for (var attempt = 0; attempt < 50 && Files.exists(output); attempt++) {
+            try {
+                Files.delete(output);
+            } catch (IOException e) {
+                Thread.sleep(100);
+            }
+        }
     }
 
     @Test
     @Timeout(value = 180, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
-    void testRestartsOnClassChanges(@TempDir Path classes, @TempDir Path logs)
+    void testRestartsOnClassChanges(@TempDir Path classes)
     throws Exception {
         var class_file = copySiteClass(classes);
-        var output = logs.resolve("reloader.log");
+        var output = Files.createTempFile("rife2-reloader", ".log");
 
         var reloader = startReloader(classes, output);
         ProcessHandle application = null;
@@ -180,16 +191,16 @@ public class TestReloader {
             reloader.destroyForcibly();
             application.onExit().get(30, TimeUnit.SECONDS);
         } finally {
-            stopReloader(reloader, application);
+            stopReloader(reloader, application, output);
         }
     }
 
     @Test
     @Timeout(value = 180, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
-    void testReportsAnExitAndKeepsWatching(@TempDir Path classes, @TempDir Path logs)
+    void testReportsAnExitAndKeepsWatching(@TempDir Path classes)
     throws Exception {
         var class_file = copySiteClass(classes);
-        var output = logs.resolve("reloader.log");
+        var output = Files.createTempFile("rife2-reloader", ".log");
 
         var reloader = startReloader(classes, output, "exit");
         try {
@@ -198,7 +209,7 @@ public class TestReloader {
             Files.setLastModifiedTime(class_file, FileTime.fromMillis(System.currentTimeMillis() + 5000));
             awaitOutput(output, "Restarting the application after class changes.");
         } finally {
-            stopReloader(reloader, null);
+            stopReloader(reloader, null, output);
         }
     }
 }
