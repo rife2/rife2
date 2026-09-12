@@ -139,11 +139,23 @@ public class TestReloader {
         return class_file;
     }
 
-    static void stopReloader(Process reloader, ProcessHandle application) {
-        reloader.toHandle().descendants().forEach(ProcessHandle::destroyForcibly);
+    // the processes hold the log file open, Windows won't let the temporary
+    // directory be removed until they're really gone
+    static void stopReloader(Process reloader, ProcessHandle application)
+    throws Exception {
+        var descendants = reloader.toHandle().descendants().toList();
+        descendants.forEach(ProcessHandle::destroyForcibly);
         reloader.destroyForcibly();
         if (application != null) {
             application.destroyForcibly();
+        }
+
+        reloader.waitFor(30, TimeUnit.SECONDS);
+        for (var descendant : descendants) {
+            descendant.onExit().get(30, TimeUnit.SECONDS);
+        }
+        if (application != null) {
+            application.onExit().get(30, TimeUnit.SECONDS);
         }
     }
 
