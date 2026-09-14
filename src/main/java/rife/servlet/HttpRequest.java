@@ -306,7 +306,28 @@ public class HttpRequest implements Request {
 
     @Override
     public String getScheme() {
+        var proxy_scheme = proxyRootScheme();
+        if (proxy_scheme != null) {
+            return proxy_scheme;
+        }
+
         return request_.getScheme();
+    }
+
+    // behind a reverse proxy the container only sees the proxied request, the
+    // configured proxy root URL is what browsers actually use
+    private static String proxyRootScheme() {
+        var proxy_root_url = RifeConfig.engine().getProxyRootUrl();
+        if (proxy_root_url == null) {
+            return null;
+        }
+
+        var separator = proxy_root_url.indexOf("://");
+        if (separator <= 0) {
+            return null;
+        }
+
+        return proxy_root_url.substring(0, separator).toLowerCase(Locale.ENGLISH);
     }
 
     @Override
@@ -321,6 +342,11 @@ public class HttpRequest implements Request {
 
     @Override
     public boolean isSecure() {
+        var proxy_scheme = proxyRootScheme();
+        if (proxy_scheme != null) {
+            return proxy_scheme.equals("https");
+        }
+
         return request_.isSecure();
     }
 

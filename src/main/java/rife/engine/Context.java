@@ -2841,8 +2841,10 @@ public class Context {
 
     /**
      * Returns the name of the scheme used to make this request.
+     * <p>When a proxy root URL is configured, this is the scheme of that URL.
      *
      * @return the name of the scheme used to make this request
+     * @see rife.config.RifeConfig.EngineConfig#setProxyRootUrl
      * @since 1.0
      */
     public String scheme() {
@@ -2875,8 +2877,10 @@ public class Context {
     /**
      * Returns a boolean indicating whether this request was made using a secure channel,
      * such as HTTPS.
+     * <p>When a proxy root URL is configured, this indicates whether that URL uses HTTPS.
      *
      * @return a boolean indicating whether the request was made using a secure channel
+     * @see rife.config.RifeConfig.EngineConfig#setProxyRootUrl
      * @since 1.0
      */
     public boolean secure() {
