@@ -9,6 +9,9 @@ import com.sun.management.VMOption;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -54,6 +57,13 @@ import java.util.stream.Collectors;
  * {@code webapp:reloadScript} value. Files that the
  * servlet container serves directly, for instance from a static resource
  * base, don't go through the engine and don't get the script.
+ * <p>
+ * Set the {@code rife.reload.debug} system property to debug the application.
+ * When a debugger already listens on that port, for instance an IDE in its
+ * listening mode, the application connects to it after every restart and
+ * starts suspended, so that even the earliest breakpoints are reached.
+ * Otherwise the application listens on the port for a debugger to attach to
+ * it. The port is 5005 when the property has no value.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.11
@@ -67,9 +77,19 @@ public class Reloader {
      */
     public static final String INSTANCE_PROPERTY = "rife.reload.instance";
 
+    /**
+     * The system property that makes the application debuggable through
+     * the port it holds, or through port 5005 when it has no value.
+     *
+     * @since 1.11
+     */
+    public static final String DEBUG_PROPERTY = "rife.reload.debug";
+
     static final String SUPERVISOR_PROPERTY = "rife.reload.supervisor";
     static final List<String> INHERITED_OPTIONS = List.of("JDK_JAVA_OPTIONS", "JAVA_TOOL_OPTIONS", "_JAVA_OPTIONS");
     static final List<String> DEBUG_OPTIONS = List.of("-agentlib:jdwp", "-Xrunjdwp");
+
+    static final int DEFAULT_DEBUG_PORT = 5005;
 
     private static final long STOP_TIMEOUT_MS = 10000;
 
@@ -80,12 +100,13 @@ public class Reloader {
     private final ReloadScanner scanner_;
     private Process process_ = null;
     private boolean stopped_ = false;
+    private String debugMessage_ = null;
 
     Reloader(String mainClass, List<String> arguments, List<Path> directories) {
         mainClass_ = mainClass;
         arguments_ = arguments;
         directories_ = directories;
-        jvmArguments_ = launcherOptionsRemoved(debuggingRemoved(ManagementFactory.getRuntimeMXBean().getInputArguments()), addedByLauncher());
+        jvmArguments_ = launcherOptionsRemoved(debuggingRemoved(ManagementFactory.getRuntimeMXBean().getInputArguments(), System.getProperty(DEBUG_PROPERTY) == null), addedByLauncher());
         scanner_ = new ReloadScanner(directories, ReloadScanner.CLASS_FILES);
     }
 
@@ -99,7 +120,7 @@ public class Reloader {
     public static void main(String[] args)
     throws Exception {
         if (args.length == 0) {
-            System.err.println("Usage: java -cp [classpath] " + Reloader.class.getName() + " [main class] [arguments]");
+            System.err.println("Usage: java [-D" + DEBUG_PROPERTY + "[=port]] -cp [classpath] " + Reloader.class.getName() + " [main class] [arguments]");
             System.exit(1);
         }
 
@@ -157,7 +178,7 @@ public class Reloader {
         }
 
         process_ = null;
-        var command = command(mainClass_, arguments_, UUID.randomUUID().toString(), jvmArguments_, System.getProperty("java.class.path"));
+        var command = command(mainClass_, arguments_, UUID.randomUUID().toString(), launchArguments(), System.getProperty("java.class.path"));
         var builder = new ProcessBuilder(command).inheritIO();
         clearInheritedOptions(builder.environment());
         process_ = builder.start();
@@ -208,9 +229,66 @@ public class Reloader {
         return command;
     }
 
+    // an IDE that listens for the application is joined right away, otherwise
+    // the application waits for a debugger to attach to it
+    private List<String> launchArguments() {
+        var port = debugPort(System.getProperty(DEBUG_PROPERTY));
+        if (null == port) {
+            return jvmArguments_;
+        }
+
+        var listening = portInUse(port);
+        var arguments = new ArrayList<String>();
+        arguments.add(debugOption(port, listening));
+        arguments.addAll(jvmArguments_);
+
+        var message = listening ?
+            "The application connects to the debugger that listens on port " + port + "." :
+            "The application listens for a debugger on port " + port + ".";
+        if (!message.equals(debugMessage_)) {
+            debugMessage_ = message;
+            System.out.println(message);
+        }
+        return arguments;
+    }
+
+    static Integer debugPort(String property) {
+        if (null == property) {
+            return null;
+        }
+        if (property.isBlank()) {
+            return DEFAULT_DEBUG_PORT;
+        }
+        try {
+            return Integer.parseInt(property.trim());
+        } catch (NumberFormatException e) {
+            System.out.println("The debug port '" + property + "' isn't a number, the application can't be debugged.");
+            return null;
+        }
+    }
+
+    static String debugOption(int port, boolean debuggerListening) {
+        if (debuggerListening) {
+            return "-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=127.0.0.1:" + port;
+        }
+        return "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:" + port;
+    }
+
+    // binding tells whether a debugger already listens there, without making a
+    // connection that its listener would take for the application
+    static boolean portInUse(int port) {
+        try (var socket = new ServerSocket()) {
+            socket.setReuseAddress(true);
+            socket.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), port));
+            return false;
+        } catch (IOException e) {
+            return true;
+        }
+    }
+
     // only one JVM at a time can listen on the debugger's address, handing the
     // options to the application would keep it from starting at all
-    static List<String> debuggingRemoved(List<String> jvmArguments) {
+    static List<String> debuggingRemoved(List<String> jvmArguments, boolean suggestProperty) {
         var result = new ArrayList<String>();
         var removed = false;
         for (var argument : jvmArguments) {
@@ -220,8 +298,8 @@ public class Reloader {
                 result.add(argument);
             }
         }
-        if (removed) {
-            System.out.println("The debugging options are left out of the application, only the reloader itself uses them.");
+        if (removed && suggestProperty) {
+            System.out.println("The debugger is attached to the reloader, set -D" + DEBUG_PROPERTY + "[=port] to debug the application instead.");
         }
         return result;
     }

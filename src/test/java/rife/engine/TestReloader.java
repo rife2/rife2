@@ -9,14 +9,19 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.attribute.FileTime;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +78,7 @@ public class TestReloader {
             "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005",
             "-Xrunjdwp:transport=dt_socket,address=5006",
             "-Dname=value");
-        assertEquals(List.of("-Xmx1g", "-Dname=value"), Reloader.debuggingRemoved(arguments));
+        assertEquals(List.of("-Xmx1g", "-Dname=value"), Reloader.debuggingRemoved(arguments, false));
     }
 
     // a launcher's own options come back as the JVM's arguments, the JVM
@@ -85,9 +90,53 @@ public class TestReloader {
             Reloader.launcherOptionsRemoved(arguments, "-XX:+EnableJVMCI"::equals));
     }
 
+    @Test
+    void testDebugPortAndOptions() {
+        assertNull(Reloader.debugPort(null));
+        assertEquals(Reloader.DEFAULT_DEBUG_PORT, Reloader.debugPort(""));
+        assertEquals(7007, Reloader.debugPort(" 7007 "));
+        assertNull(Reloader.debugPort("nope"));
+        assertEquals("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005", Reloader.debugOption(5005, false));
+        assertEquals("-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=127.0.0.1:6006", Reloader.debugOption(6006, true));
+    }
+
+    @Test
+    void testPortInUse()
+    throws Exception {
+        int port;
+        try (var socket = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
+            port = socket.getLocalPort();
+            assertTrue(Reloader.portInUse(port), "a listening socket occupies the port");
+        }
+        assertFalse(Reloader.portInUse(port), "a closed socket frees the port");
+    }
+
+    static final String JDWP_HANDSHAKE = "JDWP-Handshake";
+
+    // the debugger greets first, the application answers with the same bytes
+    static String handshake(Socket socket)
+    throws IOException {
+        socket.getOutputStream().write(JDWP_HANDSHAKE.getBytes(StandardCharsets.US_ASCII));
+        socket.getOutputStream().flush();
+        return new String(socket.getInputStream().readNBytes(JDWP_HANDSHAKE.length()), StandardCharsets.US_ASCII);
+    }
+
+    static int freePort()
+    throws IOException {
+        try (var socket = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
+            return socket.getLocalPort();
+        }
+    }
+
     static Process startReloader(Path classes, Path output, String... arguments)
     throws Exception {
-        var command = new java.util.ArrayList<>(TestJavaCommand.forMain(classes.toString(), Reloader.class.getName(), ReloadedSite.class.getName()));
+        return startReloader(classes, output, List.of(), arguments);
+    }
+
+    static Process startReloader(Path classes, Path output, List<String> jvmOptions, String... arguments)
+    throws Exception {
+        var command = new ArrayList<>(TestJavaCommand.forMain(classes.toString(), Reloader.class.getName(), ReloadedSite.class.getName()));
+        command.addAll(1, jvmOptions);
         command.addAll(List.of(arguments));
         return new ProcessBuilder(command)
             .redirectErrorStream(true)
@@ -192,6 +241,61 @@ public class TestReloader {
             application.onExit().get(30, TimeUnit.SECONDS);
         } finally {
             stopReloader(reloader, application, output);
+        }
+    }
+
+    @Test
+    @Timeout(value = 180, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    void testApplicationListensForADebugger(@TempDir Path classes)
+    throws Exception {
+        copySiteClass(classes);
+        var output = Files.createTempFile("rife2-reloader", ".log");
+        var port = freePort();
+
+        var reloader = startReloader(classes, output, List.of("-D" + Reloader.DEBUG_PROPERTY + "=" + port));
+        try {
+            awaitOutput(output, "The application listens for a debugger on port " + port);
+
+            var deadline = System.currentTimeMillis() + 60000;
+            while (true) {
+                try (var socket = new Socket(InetAddress.getLoopbackAddress(), port)) {
+                    socket.setSoTimeout(10000);
+                    assertEquals(JDWP_HANDSHAKE, handshake(socket), "the application answers a debugger");
+                    break;
+                } catch (IOException e) {
+                    if (System.currentTimeMillis() > deadline) {
+                        throw e;
+                    }
+                    Thread.sleep(100);
+                }
+            }
+        } finally {
+            stopReloader(reloader, null, output);
+        }
+    }
+
+    @Test
+    @Timeout(value = 180, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    void testApplicationConnectsToAListeningDebugger(@TempDir Path classes)
+    throws Exception {
+        copySiteClass(classes);
+        var output = Files.createTempFile("rife2-reloader", ".log");
+
+        try (var debugger = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
+            debugger.setSoTimeout(60000);
+            var port = debugger.getLocalPort();
+
+            var reloader = startReloader(classes, output, List.of("-D" + Reloader.DEBUG_PROPERTY + "=" + port));
+            try {
+                awaitOutput(output, "The application connects to the debugger that listens on port " + port);
+
+                try (var connection = debugger.accept()) {
+                    connection.setSoTimeout(10000);
+                    assertEquals(JDWP_HANDSHAKE, handshake(connection), "the application greets the listening debugger");
+                }
+            } finally {
+                stopReloader(reloader, null, output);
+            }
         }
     }
 
