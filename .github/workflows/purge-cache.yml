@@ -10,18 +10,26 @@ on:
 
 jobs:
   clear-cache:
-    if: github.event.inputs.confirm == 'yes'
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+    if: ${{ inputs.confirm == 'yes' }}
+    runs-on: ubuntu-latest
     permissions:
       actions: write
     steps:
-      - name: Purge bld caches for ${{ runner.os }}
+      - uses: actions/checkout@v4
+
+      - name: Purge all bld caches
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
-          echo "Purging all caches with key ${{ runner.os }}-bld-"
-          gh cache delete --all --key "${{ runner.os }}-bld-"
-          echo "Done for ${{ runner.os }}"
+          set -x
+          for PREFIX in Linux-bld- Windows-bld- macOS-bld-; do
+            echo "--- Purging $PREFIX ---"
+            # list returns "id  key  size  created"
+            gh cache list --key "$PREFIX" --limit 1000 | cut -f1 | while read -r id; do
+              [ -z "$id" ] && continue
+              echo "Deleting $id"
+              gh cache delete "$id" || true
+            done
+          done
+          echo "Done"
