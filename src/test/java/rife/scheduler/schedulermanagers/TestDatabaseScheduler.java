@@ -12,6 +12,7 @@ import rife.database.TestDatasources;
 import rife.scheduler.Executor;
 import rife.scheduler.Frequency;
 import rife.scheduler.Task;
+import rife.scheduler.TestRetryExecutor;
 import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.SchedulerManagerException;
 import rife.tools.ExceptionUtils;
@@ -185,6 +186,79 @@ public class TestDatabaseScheduler {
             }
 
             taskmanager.removeTask(task.getId());
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testOneshotTaskRetry(Datasource datasource)
+    throws Exception {
+        setup(datasource);
+
+        var scheduler = DatabaseSchedulingFactory.instance(datasource).createScheduler();
+        var executor = new TestRetryExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = executor.createTask();
+
+        task.setPlanned(System.currentTimeMillis());
+
+        scheduler.addExecutor(executor);
+        scheduler.setSleepTime(50);
+        var id = taskmanager.addTask(task);
+
+        try {
+            scheduler.start();
+            try {
+                executor.waitForExecutions(2);
+                assertEquals(2, executor.getExecutions());
+                assertNull(TestRetryExecutor.waitForConclusion(taskmanager, id));
+            } finally {
+                synchronized (scheduler) {
+                    scheduler.stop();
+                    scheduler.wait();
+                }
+            }
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testRepeatingTaskRetry(Datasource datasource)
+    throws Exception {
+        setup(datasource);
+
+        var scheduler = DatabaseSchedulingFactory.instance(datasource).createScheduler();
+        var executor = new TestRetryExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = executor.createTask();
+
+        task.setPlanned(System.currentTimeMillis());
+        task.setFrequency(Frequency.MINUTELY);
+
+        scheduler.addExecutor(executor);
+        scheduler.setSleepTime(50);
+        var id = taskmanager.addTask(task);
+
+        try {
+            scheduler.start();
+            try {
+                executor.waitForExecutions(2);
+                assertEquals(2, executor.getExecutions());
+                var concluded = TestRetryExecutor.waitForConclusion(taskmanager, id);
+                assertNotNull(concluded);
+                assertFalse(concluded.isBusy());
+                assertTrue(concluded.getPlanned() > System.currentTimeMillis());
+                assertEquals(Frequency.MINUTELY, concluded.getFrequency());
+            } finally {
+                synchronized (scheduler) {
+                    scheduler.stop();
+                    scheduler.wait();
+                }
+            }
         } finally {
             tearDown(datasource);
         }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import rife.scheduler.Executor;
 import rife.scheduler.Frequency;
 import rife.scheduler.Task;
+import rife.scheduler.TestRetryExecutor;
 import rife.scheduler.TestTasktypes;
 import rife.tools.ExceptionUtils;
 
@@ -189,6 +190,65 @@ public class TestMemoryScheduler {
         }
 
         taskmanager.removeTask(task.getId());
+    }
+
+    @Test
+    void testOneshotTaskRetry()
+    throws Exception {
+        var scheduler = new MemoryScheduling().createScheduler();
+        var executor = new TestRetryExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = executor.createTask();
+
+        task.setPlanned(System.currentTimeMillis());
+
+        scheduler.addExecutor(executor);
+        scheduler.setSleepTime(50);
+        var id = taskmanager.addTask(task);
+
+        scheduler.start();
+        try {
+            executor.waitForExecutions(2);
+            assertEquals(2, executor.getExecutions());
+            assertNull(TestRetryExecutor.waitForConclusion(taskmanager, id));
+        } finally {
+            synchronized (scheduler) {
+                scheduler.stop();
+                scheduler.wait();
+            }
+        }
+    }
+
+    @Test
+    void testRepeatingTaskRetry()
+    throws Exception {
+        var scheduler = new MemoryScheduling().createScheduler();
+        var executor = new TestRetryExecutor();
+        var taskmanager = scheduler.getTaskManager();
+        var task = executor.createTask();
+
+        task.setPlanned(System.currentTimeMillis());
+        task.setFrequency(Frequency.MINUTELY);
+
+        scheduler.addExecutor(executor);
+        scheduler.setSleepTime(50);
+        var id = taskmanager.addTask(task);
+
+        scheduler.start();
+        try {
+            executor.waitForExecutions(2);
+            assertEquals(2, executor.getExecutions());
+            var concluded = TestRetryExecutor.waitForConclusion(taskmanager, id);
+            assertNotNull(concluded);
+            assertFalse(concluded.isBusy());
+            assertTrue(concluded.getPlanned() > System.currentTimeMillis());
+            assertEquals(Frequency.MINUTELY, concluded.getFrequency());
+        } finally {
+            synchronized (scheduler) {
+                scheduler.stop();
+                scheduler.wait();
+            }
+        }
     }
 
     static class TestExecutor extends Executor {

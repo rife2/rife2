@@ -28,10 +28,12 @@ class ExecutorThread implements Runnable {
         } catch (TaskManagerException ignored) {
         } finally {
             try {
-                if (!successful_execution) {
-                    manager.rescheduleTask(task_, executor_.getRescheduleDelay(), null);
+                if (successful_execution) {
+                    manager.concludeTask(task_);
+                } else {
+                    manager.rescheduleTask(task_, System.currentTimeMillis() + executor_.getRescheduleDelay(), task_.getFrequency());
+                    manager.deactivateTask(task_.getId());
                 }
-                manager.concludeTask(task_);
             } catch (TaskManagerException e) {
                 throw new FatalTaskExecutionException(task_, e);
             }
