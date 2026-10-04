@@ -2134,11 +2134,10 @@ public class Context {
      * @since 1.0
      */
     public boolean isFileEmpty(String name) {
-        try (final var file = file(name)) {
-            return null == file ||
-                null == file.getFile() ||
-                0 == file.getFile().length();
-        }
+        var file = file(name);
+        return null == file ||
+            null == file.getFile() ||
+            0 == file.getFile().length();
     }
 
     /**

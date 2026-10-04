@@ -5,8 +5,12 @@
 package rife.engine;
 
 import org.junit.jupiter.api.Test;
+import rife.test.MockConversation;
+import rife.test.MockFileUpload;
+import rife.test.MockRequest;
 import rife.tools.FileUtils;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -68,5 +72,18 @@ public class TestMultipartUpload {
         try (final var server = new TestTomcatRunner(createUploadSite())) {
             assertEquals("200:the query param,again;the text param;the file content", postMultipart(8282));
         }
+    }
+
+    @Test
+    void testFileEmptyKeepsUpload() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                post("/upload", c -> c.print(c.isFileEmpty("doc") + ";" + FileUtils.readString(c.file("doc").getFile())));
+            }
+        });
+        var request = new MockRequest()
+            .method(RequestMethod.POST)
+            .file("doc", new MockFileUpload("doc.txt", new ByteArrayInputStream("the file content".getBytes(StandardCharsets.UTF_8)), "text/plain"));
+        assertEquals("false;the file content", conversation.doRequest("/upload", request).getText());
     }
 }
