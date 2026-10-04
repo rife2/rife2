@@ -46,7 +46,7 @@ public class RawContentStream extends InputStream {
                 index_ = 0;
             }
 
-            result = buffer_[index_++];
+            result = buffer_[index_++] & 0xFF;
 
             if (index_ >= buffer_.length) {
                 buffer_ = null;

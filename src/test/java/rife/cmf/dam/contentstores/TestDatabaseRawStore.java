@@ -25,6 +25,7 @@ import rife.tools.InnerClassException;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -260,6 +261,71 @@ public class TestDatabaseRawStore {
                         var received = FileUtils.readBytes((InputStream) contentData);
                         assertArrayEquals(raw, received);
                     } catch (FileUtilsErrorException e) {
+                        throwException(e);
+                    }
+                }
+            });
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testStoreContentDataAllByteValues(Datasource datasource) {
+        setup(datasource);
+        try {
+            final var id = new int[]{1};
+            final var manager = DatabaseContentFactory.instance(datasource);
+            final var insert = new Insert(datasource)
+                .into(RifeConfig.cmf().getTableContentInfo())
+                .fieldParameter("version")
+                .fieldParameter("repositoryId");
+            if ("org.apache.derby.jdbc.EmbeddedDriver".equals(datasource.getAliasedDriver())) {
+                insert.fieldsParametersExcluded(DatabaseContentInfo.class, new String[]{"contentId"});
+            } else {
+                insert.fieldsParameters(DatabaseContentInfo.class);
+            }
+            if ("com.mysql.cj.jdbc.Driver".equals(datasource.getAliasedDriver())) {
+                insert.fieldParameter("created");
+            }
+            manager.executeUpdate(insert, statement -> {
+                var content_info = new DatabaseContentInfo();
+                if (!"org.apache.derby.jdbc.EmbeddedDriver".equals(datasource.getAliasedDriver())) {
+                    content_info.setContentId(id[0]);
+                }
+                content_info.setFragment(false);
+                content_info.setPath("/testpath");
+                content_info.setMimeType(MimeType.RAW.toString());
+                content_info.setCreated(new Timestamp(new Date().getTime()));
+                statement
+                    .setInt("version", 1)
+                    .setInt("repositoryId", manager.executeGetFirstInt(new Select(datasource)
+                        .from(RifeConfig.cmf().getTableContentRepository())
+                        .field("repositoryId")
+                        .where("name", "=", ContentRepository.DEFAULT)))
+                    .setBean(content_info);
+            });
+
+            final var raw = new byte[256];
+            for (var i = 0; i < raw.length; i++) {
+                raw[i] = (byte) i;
+            }
+
+            var store = DatabaseRawStoreFactory.instance(datasource);
+            var content = new Content(MimeType.RAW, raw);
+            assertTrue(store.storeContentData(id[0], content, null));
+
+            store.useContentData(id[0], new ContentDataUserWithoutResult() {
+                public void useContentData(Object contentData)
+                throws InnerClassException {
+                    try {
+                        var stream = (InputStream) contentData;
+                        for (var i = 0; i < raw.length; i++) {
+                            assertEquals(i, stream.read());
+                        }
+                        assertEquals(-1, stream.read());
+                    } catch (IOException e) {
                         throwException(e);
                     }
                 }
