@@ -19,7 +19,11 @@ import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.database.queries.Insert;
 import rife.database.queries.Select;
+import rife.engine.Route;
+import rife.engine.Site;
+import rife.test.MockConversation;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -314,6 +318,59 @@ public class TestDatabaseTextStore {
             assertTrue(store.storeContentData(id[0], content, null));
 
             store.useContentData(id[0], contentData -> assertEquals(data, contentData));
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testServeContentDataNonAscii(Datasource datasource) {
+        setup(datasource);
+        try {
+            final var id = new int[]{1};
+            final var manager = DatabaseContentFactory.instance(datasource);
+            final var insert = new Insert(datasource)
+                .into(RifeConfig.cmf().getTableContentInfo())
+                .fieldParameter("version")
+                .fieldParameter("repositoryId");
+            if ("org.apache.derby.jdbc.EmbeddedDriver".equals(datasource.getAliasedDriver())) {
+                insert.fieldsParametersExcluded(DatabaseContentInfo.class, new String[]{"contentId"});
+            } else {
+                insert.fieldsParameters(DatabaseContentInfo.class);
+            }
+            if ("com.mysql.cj.jdbc.Driver".equals(datasource.getAliasedDriver())) {
+                insert.fieldParameter("created");
+            }
+            manager.executeUpdate(insert, statement -> {
+                var content_info = new DatabaseContentInfo();
+                if (!"org.apache.derby.jdbc.EmbeddedDriver".equals(datasource.getAliasedDriver())) {
+                    content_info.setContentId(id[0]);
+                }
+                content_info.setFragment(false);
+                content_info.setPath("/testpath");
+                content_info.setMimeType(MimeType.TEXT_PLAIN.toString());
+                content_info.setCreated(new Timestamp(new Date().getTime()));
+                statement
+                    .setInt("version", 1)
+                    .setInt("repositoryId", manager.executeGetFirstInt(new Select(datasource)
+                        .from(RifeConfig.cmf().getTableContentRepository())
+                        .field("repositoryId")
+                        .where("name", "=", ContentRepository.DEFAULT)))
+                    .setBean(content_info);
+            });
+
+            // multi-byte characters, with a surrogate pair that a 512 character read splits
+            final var data = "é".repeat(511) + "😀" + "ü".repeat(600);
+
+            var store = DatabaseTextStoreFactory.instance(datasource);
+            var content = new Content(MimeType.TEXT_PLAIN, data).fragment(true);
+            assertTrue(store.storeContentData(id[0], content, null));
+
+            var conversation = new MockConversation(new Site() {
+                final Route text = get("/text", c -> store.serveContentData(c, id[0]));
+            });
+            assertArrayEquals(data.getBytes(StandardCharsets.UTF_8), conversation.doRequest("/text").getBytes());
         } finally {
             tearDown(datasource);
         }

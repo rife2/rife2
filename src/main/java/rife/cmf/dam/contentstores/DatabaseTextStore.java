@@ -26,6 +26,7 @@ import rife.tools.StringUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
@@ -164,15 +165,12 @@ public abstract class DatabaseTextStore extends DatabaseContentStore {
     protected void outputContentColumn(ResultSet resultSet, OutputStream os)
     throws SQLException {
         var text_reader = resultSet.getCharacterStream("content");
-        var buffer = new char[512];
-        var size = 0;
         try {
-            while ((size = text_reader.read(buffer)) != -1) {
-                var string_buffer = new String(buffer, 0, size);
-                os.write(string_buffer.getBytes(StandardCharsets.UTF_8));
-            }
-
-            os.flush();
+            // a single writer keeps surrogate pairs that straddle reads intact,
+            // it's not closed since that would close the response
+            var writer = new OutputStreamWriter(os, StandardCharsets.UTF_8);
+            text_reader.transferTo(writer);
+            writer.flush();
         } catch (IOException e) {
             // don't do anything, the client has probably disconnected
         }
