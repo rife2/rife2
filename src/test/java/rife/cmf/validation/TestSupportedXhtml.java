@@ -69,6 +69,16 @@ public class TestSupportedXhtml {
     }
 
     @Test
+    void testValidateWithoutConstrainedProperty() {
+        var rule = new SupportedXhtml("xhtml", true);
+        var bean = new XhtmlBean();
+        bean.setXhtml("<p>some <b>html</b> here</p>");
+        rule.setBean(bean);
+        assertTrue(rule.validate());
+        assertNull(rule.getLoadingErrors());
+    }
+
+    @Test
     void testValidateUnsupportedFragment() {
         var rule = new SupportedXhtml("xhtml", true);
         var bean = new XhtmlBean();

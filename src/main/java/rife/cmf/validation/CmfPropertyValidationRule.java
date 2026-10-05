@@ -60,10 +60,12 @@ public abstract class CmfPropertyValidationRule extends PropertyValidationRule {
         // if the bean is constrained and a CmfProperty exists that corresponds to
         // the property name that's being checked, store the loaded data
         // and prevent it from loading twice
-		var constrained = ConstrainedUtils.makeConstrainedInstance(getBean());
+        var constrained = ConstrainedUtils.makeConstrainedInstance(getBean());
         if (constrained != null) {
-			var property = constrained.getConstrainedProperty(getPropertyName());
-            property.setCachedLoadedData(data);
+            var property = constrained.getConstrainedProperty(getPropertyName());
+            if (property != null) {
+                property.setCachedLoadedData(data);
+            }
         }
     }
 }
