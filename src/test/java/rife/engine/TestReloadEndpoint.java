@@ -21,8 +21,11 @@ import rife.test.MockConversation;
 import rife.test.MockRequest;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -434,8 +437,15 @@ public class TestReloadEndpoint {
             Thread.sleep(3000);
             assertFalse(reader.ready(), "watching the files of a resource base doesn't reload the browser by itself");
 
-            Files.writeString(style, "p{color:blue}");
-            assertTrue(readEvent(reader).contains("event:reload"), "a changed static file has to reload the browser");
+            var printed = captured(() -> {
+                try {
+                    Files.writeString(style, "p{color:blue}");
+                    assertTrue(readEvent(reader).contains("event:reload"), "a changed static file has to reload the browser");
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            });
+            assertTrue(printed.contains("Reloading the browser after changes to style.css."), printed);
         } finally {
             server.stop();
         }
@@ -521,6 +531,80 @@ public class TestReloadEndpoint {
             // can't pass because the connection quietly died
             Files.writeString(base.resolve("style.css"), "p{}");
             assertTrue(readEvent(reader).contains("event:reload"), "the stream was still alive");
+        } finally {
+            server.stop();
+        }
+    }
+
+    static String captured(Runnable action) {
+        var buffer = new ByteArrayOutputStream();
+        var out = System.out;
+        var err = System.err;
+        try (var stream = new PrintStream(buffer, true)) {
+            System.setOut(stream);
+            System.setErr(stream);
+            action.run();
+        } finally {
+            System.setOut(out);
+            System.setErr(err);
+        }
+        return buffer.toString();
+    }
+
+    @Test
+    void testStartReportsWhereTheApplicationRuns() {
+        var server = new Server[1];
+        var printed = captured(() -> server[0] = startServer(8197, site(), null));
+        try {
+            assertTrue(printed.contains("The application is running at http://localhost:8197, the browser reloads by itself."), printed);
+        } finally {
+            server[0].stop();
+        }
+
+        withoutReloader();
+        printed = captured(() -> server[0] = startServer(8197, site(), null));
+        try {
+            assertFalse(printed.contains("The application is running at"), printed);
+        } finally {
+            server[0].stop();
+        }
+    }
+
+    @Test
+    void testTomcatStartReportsWhereTheApplicationRuns(@TempDir Path base) {
+        var server = new TomcatServer[1];
+        var printed = captured(() -> server[0] = new TomcatServer().hostname("localhost").port(8287).addContext(base.toString()).start(site()));
+        try {
+            assertTrue(printed.contains("The application is running at http://localhost:8287, the browser reloads by itself."), printed);
+        } finally {
+            server[0].stop();
+        }
+    }
+
+    @Test
+    void testStartReportsATakenPort() {
+        var server = startServer(8198, site(), null);
+        try {
+            var printed = captured(() -> assertThrows(RuntimeException.class, () -> startServer(8198, site(), null)));
+            assertTrue(printed.contains("Port 8198 is already in use, is another application listening there?"), printed);
+        } finally {
+            server.stop();
+        }
+    }
+
+    // Tomcat binds every address, so only another Tomcat is sure to take its port
+    @Test
+    void testTomcatStartReportsATakenPort(@TempDir Path base) {
+        var server = new TomcatServer().hostname("localhost").port(8199).addContext(base.toString()).start(site());
+        try {
+            var tomcat = new TomcatServer[1];
+            var printed = captured(() -> tomcat[0] = new TomcatServer().hostname("localhost").port(8199).addContext(base.toString()).start(site()));
+            try {
+                assertTrue(printed.contains("Port 8199 is already in use, is another application listening there?"), printed);
+                assertFalse(printed.contains("The application is running at"), printed);
+            } finally {
+                tomcat[0].stop();
+            }
         } finally {
             server.stop();
         }

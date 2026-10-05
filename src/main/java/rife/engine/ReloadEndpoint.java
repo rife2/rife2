@@ -34,6 +34,20 @@ class ReloadEndpoint implements AutoCloseable {
     private final ScheduledExecutorService watcher_;
     private volatile boolean closed_ = false;
 
+    static boolean portTaken(Throwable e) {
+        for (var cause = e; cause != null; cause = cause.getCause()) {
+            if (cause instanceof java.net.BindException) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void reportRunning(String scheme, String host, int port) {
+        System.out.println("The application is running at " + scheme + "://" + (host == null ? "localhost" : host) + ":" + port +
+            ", the browser reloads by itself.");
+    }
+
     // the reloader launches the application itself, so it has to be the parent
     // process, which keeps a property that lingers in an environment or in a
     // startup script from opening this endpoint in a deployment
@@ -90,8 +104,6 @@ class ReloadEndpoint implements AutoCloseable {
             broadcaster_.close();
             throw e;
         }
-
-        Logger.getLogger("rife.engine").info("Reloading is active, the browser reloads through " + PATH);
     }
 
     private void endWithSupervisor() {
@@ -152,7 +164,9 @@ class ReloadEndpoint implements AutoCloseable {
     // the browser merely has to fetch the page again
     private void scan() {
         try {
-            if (scanner_.settled() && !closed_) {
+            var changes = scanner_.settled();
+            if (!changes.isEmpty() && !closed_) {
+                System.out.println("Reloading the browser after changes to " + ReloadScanner.describe(changes) + ".");
                 broadcaster_.send(new ServerSentEvent().name(EVENT_RELOAD).data(instance_));
             }
         } catch (Throwable e) {

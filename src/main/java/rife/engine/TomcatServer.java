@@ -6,6 +6,7 @@ package rife.engine;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
+import org.apache.catalina.LifecycleState;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
@@ -293,6 +294,13 @@ public class TomcatServer {
             // the gate that took the endpoint is discarded with the server
             site.releaseReloadEndpoint();
             throw e;
+        }
+
+        // Tomcat logs a port that couldn't be bound and starts without it
+        if (tomcat_.getConnector().getState() == LifecycleState.FAILED) {
+            System.err.println("Port " + port_ + " is already in use, is another application listening there?");
+        } else if (site.reloadEndpoint() != null) {
+            ReloadEndpoint.reportRunning("http", hostname_, tomcat_.getConnector().getLocalPort());
         }
 
         return this;

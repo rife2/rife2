@@ -22,6 +22,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -49,6 +50,7 @@ class ReloadScanner {
     private final Set<Path> present_ = new HashSet<>();
     private final Predicate<Path> files_;
     private Map<Path, FileStamp> snapshot_;
+    private final Set<Path> pending_ = new LinkedHashSet<>();
     private boolean changed_ = false;
     private boolean incomplete_;
     private boolean incompleteReported_ = false;
@@ -76,14 +78,14 @@ class ReloadScanner {
         incomplete_ = incomplete_ || !scan.complete();
     }
 
-    // reports that the files stopped changing rather than the change itself, so
-    // that a build which writes a batch of files only leads to one reload
-    synchronized boolean settled() {
+    // reports the files that stopped changing rather than each change, so that
+    // a build which writes a batch of files only leads to one reload
+    synchronized Set<Path> settled() {
         var scan = scan(directories_);
         if (!scan.complete()) {
             // the files that couldn't be read would look like they were deleted
             reportIncomplete();
-            return false;
+            return Set.of();
         }
         incompleteReported_ = false;
 
@@ -92,25 +94,53 @@ class ReloadScanner {
             // starting point instead of reporting the difference as a change
             incomplete_ = false;
             snapshot_ = scan.files();
+            pending_.clear();
             changed_ = false;
             stable_ = 0;
-            return false;
+            return Set.of();
         }
 
         if (!scan.files().equals(snapshot_)) {
+            pending_.addAll(changedFiles(snapshot_, scan.files()));
             snapshot_ = scan.files();
             changed_ = true;
             stable_ = 0;
-            return false;
+            return Set.of();
         }
 
         if (changed_ && ++stable_ >= STABLE_SCANS) {
             changed_ = false;
             stable_ = 0;
-            return true;
+            var result = new LinkedHashSet<>(pending_);
+            pending_.clear();
+            return result;
         }
 
-        return false;
+        return Set.of();
+    }
+
+    private static Set<Path> changedFiles(Map<Path, FileStamp> before, Map<Path, FileStamp> after) {
+        var result = new LinkedHashSet<Path>();
+        for (var entry : after.entrySet()) {
+            if (!entry.getValue().equals(before.get(entry.getKey()))) {
+                result.add(entry.getKey());
+            }
+        }
+        for (var path : before.keySet()) {
+            if (!after.containsKey(path)) {
+                result.add(path);
+            }
+        }
+        return result;
+    }
+
+    // a handful of names says what happened, a whole build's worth doesn't
+    static String describe(Set<Path> files) {
+        var names = files.stream().map(path -> path.getFileName().toString()).sorted().collect(Collectors.toList());
+        if (names.size() <= 5) {
+            return String.join(", ", names);
+        }
+        return String.join(", ", names.subList(0, 5)) + " and " + (names.size() - 5) + " more";
     }
 
     private void reportIncomplete() {

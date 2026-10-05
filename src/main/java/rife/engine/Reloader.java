@@ -47,8 +47,9 @@ import java.util.stream.Collectors;
  * <p>
  * Changes to other files don't restart the application, since templates and
  * resource bundles are reloaded while it runs, as long as their automatic
- * reloading is active and they aren't precompiled. The browser is told to
- * fetch the page again instead, also for the files of a static resource base.
+ * reloading is active and their sources are on the classpath. The browser is
+ * told to fetch the page again instead, also for the files of a static
+ * resource base.
  * <p>
  * The pages that the application renders itself get a small script that
  * reloads the browser as soon as the application has restarted. The script is
@@ -66,14 +67,14 @@ import java.util.stream.Collectors;
  * it. The port is 5005 when the property has no value.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
- * @since 1.11
+ * @since 1.11.0
  */
 public class Reloader {
     /**
      * The system property that identifies the running instance of an
      * application under the reloader, it's absent everywhere else.
      *
-     * @since 1.11
+     * @since 1.11.0
      */
     public static final String INSTANCE_PROPERTY = "rife.reload.instance";
 
@@ -81,7 +82,7 @@ public class Reloader {
      * The system property that makes the application debuggable through
      * the port it holds, or through port 5005 when it has no value.
      *
-     * @since 1.11
+     * @since 1.11.0
      */
     public static final String DEBUG_PROPERTY = "rife.reload.debug";
 
@@ -92,6 +93,8 @@ public class Reloader {
     static final int DEFAULT_DEBUG_PORT = 5005;
 
     private static final long STOP_TIMEOUT_MS = 10000;
+    // a debugger keeps the application paused, waiting long for it is pointless
+    private static final long STOP_TIMEOUT_DEBUGGING_MS = 2000;
 
     private final String mainClass_;
     private final List<String> arguments_;
@@ -101,6 +104,7 @@ public class Reloader {
     private Process process_ = null;
     private boolean stopped_ = false;
     private String debugMessage_ = null;
+    private boolean debuggerListening_ = false;
 
     Reloader(String mainClass, List<String> arguments, List<Path> directories) {
         mainClass_ = mainClass;
@@ -115,7 +119,7 @@ public class Reloader {
      *
      * @param args the main class of the application, followed by its
      *             arguments
-     * @since 1.11
+     * @since 1.11.0
      */
     public static void main(String[] args)
     throws Exception {
@@ -137,7 +141,7 @@ public class Reloader {
             System.out.println("The classpath has no directories with classes to watch, so the application " +
                 "won't be restarted. Run it from compiled classes rather than from an archive to reload it.");
         } else {
-            System.out.println("Watching for class changes in " +
+            System.out.println("Watching the classpath directories for class changes: " +
                 watched.stream().map(Path::toString).collect(Collectors.joining(", ")));
         }
 
@@ -145,15 +149,21 @@ public class Reloader {
 
         var exit_reported = false;
         while (true) {
-            if (scanner_.settled()) {
+            var changes = scanner_.settled();
+            if (!changes.isEmpty()) {
                 exit_reported = false;
-                System.out.println("Restarting the application after class changes.");
+                System.out.println("Restarting the application after class changes: " + ReloadScanner.describe(changes));
                 terminate();
                 launch();
             } else if (!exit_reported) {
                 var exit_code = exitCode();
                 if (exit_code != null) {
-                    System.out.println("The application exited with code " + exit_code + ", it will be restarted after class changes.");
+                    if (exit_code == 2 && debuggerListening_) {
+                        System.out.println("The application exited with code 2, nothing on the debug port accepted it as a debugger. " +
+                            "Pick another port or stop what listens there, it will be started again after the next class change.");
+                    } else {
+                        System.out.println("The application exited with code " + exit_code + ", it will be started again after the next class change.");
+                    }
                     exit_reported = true;
                 }
             }
@@ -205,9 +215,12 @@ public class Reloader {
 
         process_.destroy();
         try {
-            if (!process_.waitFor(STOP_TIMEOUT_MS, TimeUnit.MILLISECONDS)) {
-                System.out.println("The application didn't stop within " + STOP_TIMEOUT_MS / 1000 +
-                    " seconds and is being killed, its site was not destroyed.");
+            var debugging = System.getProperty(DEBUG_PROPERTY) != null;
+            var timeout = debugging ? STOP_TIMEOUT_DEBUGGING_MS : STOP_TIMEOUT_MS;
+            if (!process_.waitFor(timeout, TimeUnit.MILLISECONDS)) {
+                System.out.println("The application didn't stop within " + timeout / 1000 +
+                    " seconds and is being killed, its site was not destroyed." +
+                    (debugging ? " This happens when it's paused in the debugger." : ""));
                 process_.destroyForcibly().waitFor();
             }
         } catch (InterruptedException e) {
@@ -238,13 +251,17 @@ public class Reloader {
         }
 
         var listening = portInUse(port);
+        debuggerListening_ = listening;
         var arguments = new ArrayList<String>();
         arguments.add(debugOption(port, listening));
         arguments.addAll(jvmArguments_);
 
         var message = listening ?
-            "The application connects to the debugger that listens on port " + port + "." :
-            "The application listens for a debugger on port " + port + ".";
+            "The application connects to the debugger that listens on port " + port + ". " +
+                "If it doesn't start, that port isn't held by a debugger." :
+            "The application listens for a debugger on port " + port + ". Attach one after every restart, " +
+                "or start the debugger in listening mode before the reloader so that the application reconnects by itself " +
+                "(IntelliJ: Listen to remote JVM with auto restart, Eclipse: Socket Listen with connection limit 0).";
         if (!message.equals(debugMessage_)) {
             debugMessage_ = message;
             System.out.println(message);
@@ -260,9 +277,13 @@ public class Reloader {
             return DEFAULT_DEBUG_PORT;
         }
         try {
-            return Integer.parseInt(property.trim());
+            var port = Integer.parseInt(property.trim());
+            if (port < 1 || port > 65535) {
+                throw new NumberFormatException();
+            }
+            return port;
         } catch (NumberFormatException e) {
-            System.out.println("The debug port '" + property + "' isn't a number, the application can't be debugged.");
+            System.out.println("The debug port '" + property + "' isn't a port number, the application can't be debugged.");
             return null;
         }
     }
@@ -278,6 +299,8 @@ public class Reloader {
     // connection that its listener would take for the application
     static boolean portInUse(int port) {
         try (var socket = new ServerSocket()) {
+            // a debugger that was attached to the previous application leaves a
+            // connection in time-wait, which must not pass for a listener
             socket.setReuseAddress(true);
             socket.bind(new InetSocketAddress(InetAddress.getLoopbackAddress(), port));
             return false;

@@ -95,7 +95,11 @@ public class TestReloader {
         assertNull(Reloader.debugPort(null));
         assertEquals(Reloader.DEFAULT_DEBUG_PORT, Reloader.debugPort(""));
         assertEquals(7007, Reloader.debugPort(" 7007 "));
+        assertEquals(65535, Reloader.debugPort("65535"));
         assertNull(Reloader.debugPort("nope"));
+        assertNull(Reloader.debugPort("0"));
+        assertNull(Reloader.debugPort("-1"));
+        assertNull(Reloader.debugPort("65536"));
         assertEquals("-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005", Reloader.debugOption(5005, false));
         assertEquals("-agentlib:jdwp=transport=dt_socket,server=n,suspend=y,address=127.0.0.1:6006", Reloader.debugOption(6006, true));
     }
@@ -234,7 +238,7 @@ public class TestReloader {
             // the size stays the same, so this only moves the modification time
             Files.setLastModifiedTime(class_file, FileTime.fromMillis(System.currentTimeMillis() + 5000));
             awaitInstanceOtherThan(first);
-            awaitOutput(output, "Restarting the application after class changes.");
+            awaitOutput(output, "Restarting the application after class changes: " + class_file.getFileName());
 
             application = reloader.toHandle().children().findFirst().orElseThrow();
             reloader.destroyForcibly();
@@ -276,6 +280,36 @@ public class TestReloader {
 
     @Test
     @Timeout(value = 180, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+    void testApplicationRefusedByWhatListensOnTheDebugPort(@TempDir Path classes)
+    throws Exception {
+        copySiteClass(classes);
+        var output = Files.createTempFile("rife2-reloader", ".log");
+
+        try (var listener = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
+            var port = listener.getLocalPort();
+            var refusing = new Thread(() -> {
+                while (!listener.isClosed()) {
+                    try (var ignored = listener.accept()) {
+                        // a connection that's dropped without a handshake
+                    } catch (IOException e) {
+                        return;
+                    }
+                }
+            });
+            refusing.setDaemon(true);
+            refusing.start();
+
+            var reloader = startReloader(classes, output, List.of("-D" + Reloader.DEBUG_PROPERTY + "=" + port));
+            try {
+                awaitOutput(output, "The application exited with code 2, nothing on the debug port accepted it as a debugger.");
+            } finally {
+                stopReloader(reloader, null, output);
+            }
+        }
+    }
+
+    @Test
+    @Timeout(value = 180, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
     void testApplicationConnectsToAListeningDebugger(@TempDir Path classes)
     throws Exception {
         copySiteClass(classes);
@@ -308,10 +342,10 @@ public class TestReloader {
 
         var reloader = startReloader(classes, output, "exit");
         try {
-            awaitOutput(output, "The application exited with code 3");
+            awaitOutput(output, "The application exited with code 3, it will be started again after the next class change.");
 
             Files.setLastModifiedTime(class_file, FileTime.fromMillis(System.currentTimeMillis() + 5000));
-            awaitOutput(output, "Restarting the application after class changes.");
+            awaitOutput(output, "Restarting the application after class changes: " + class_file.getFileName());
         } finally {
             stopReloader(reloader, null, output);
         }

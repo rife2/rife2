@@ -441,9 +441,17 @@ public class Server {
             }
 
         } catch (Throwable e) {
+            if (ReloadEndpoint.portTaken(e)) {
+                System.err.println("Port " + port_ + " is already in use, is another application listening there?");
+            }
             // the gate that took the endpoint is discarded with the server
             site.releaseReloadEndpoint();
             throw e;
+        }
+
+        if (site.reloadEndpoint() != null) {
+            var port = ((ServerConnector) server_.getConnectors()[0]).getLocalPort();
+            ReloadEndpoint.reportRunning(sslKeyStorePath_ != null ? "https" : "http", host_, port);
         }
 
         return this;

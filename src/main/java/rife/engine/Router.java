@@ -26,7 +26,7 @@ public class Router {
      * instance the one that reloads the browser during development. A route
      * that's registered under it can be shadowed by them.
      *
-     * @since 1.11
+     * @since 1.11.0
      */
     public static final String RESERVED_PATH_PREFIX = "/__rife__/";
 

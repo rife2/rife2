@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -29,11 +31,45 @@ public class TestReloadScanner {
 
     // a change is only reported once the files have stopped changing for
     // several scans, so a build that writes in bursts reloads once
-    static void assertSettlesAfterChange(ReloadScanner scanner) {
-        assertFalse(scanner.settled(), "the change was seen but hasn't settled");
-        assertFalse(scanner.settled(), "one quiet scan isn't enough");
-        assertTrue(scanner.settled(), "the files stopped changing");
-        assertFalse(scanner.settled(), "a settled change is only reported once");
+    static Set<Path> assertSettlesAfterChange(ReloadScanner scanner) {
+        assertTrue(scanner.settled().isEmpty(), "the change was seen but hasn't settled");
+        assertTrue(scanner.settled().isEmpty(), "one quiet scan isn't enough");
+        var settled = scanner.settled();
+        assertFalse(settled.isEmpty(), "the files stopped changing");
+        assertTrue(scanner.settled().isEmpty(), "a settled change is only reported once");
+        return settled;
+    }
+
+    @Test
+    void testSettledNamesTheChangedFiles(@TempDir Path directory)
+    throws Exception {
+        Files.writeString(directory.resolve("A.class"), "a");
+        Files.writeString(directory.resolve("B.class"), "b");
+        Files.writeString(directory.resolve("C.class"), "c");
+        var scanner = new ReloadScanner(List.of(directory), ReloadScanner.CLASS_FILES);
+
+        Files.writeString(directory.resolve("A.class"), "aa");
+        Files.delete(directory.resolve("B.class"));
+        Files.writeString(directory.resolve("D.class"), "d");
+        assertEquals(Set.of(directory.resolve("A.class"), directory.resolve("B.class"), directory.resolve("D.class")),
+            assertSettlesAfterChange(scanner));
+
+        Files.writeString(directory.resolve("C.class"), "cc");
+        assertTrue(scanner.settled().isEmpty());
+        Files.writeString(directory.resolve("D.class"), "dd");
+        assertEquals(Set.of(directory.resolve("C.class"), directory.resolve("D.class")), assertSettlesAfterChange(scanner),
+            "every file that changed before things settled is named");
+    }
+
+    @Test
+    void testDescribeNamesAFewFiles() {
+        assertEquals("", ReloadScanner.describe(Set.of()));
+        assertEquals("A.class, B.class", ReloadScanner.describe(Set.of(Path.of("x/B.class"), Path.of("y/A.class"))));
+        var many = new LinkedHashSet<Path>();
+        for (var i = 0; i < 7; i++) {
+            many.add(Path.of("dir", "F" + i + ".class"));
+        }
+        assertEquals("F0.class, F1.class, F2.class, F3.class, F4.class and 2 more", ReloadScanner.describe(many));
     }
 
     @Test
@@ -43,7 +79,7 @@ public class TestReloadScanner {
         Files.writeString(class_file, "a");
 
         var scanner = new ReloadScanner(List.of(directory), ReloadScanner.CLASS_FILES);
-        assertFalse(scanner.settled(), "nothing changed yet");
+        assertTrue(scanner.settled().isEmpty(), "nothing changed yet");
 
         Files.writeString(class_file, "aa");
         assertSettlesAfterChange(scanner);
@@ -56,7 +92,7 @@ public class TestReloadScanner {
         Files.writeString(class_file, "a");
 
         var scanner = new ReloadScanner(List.of(directory), ReloadScanner.CLASS_FILES);
-        assertFalse(scanner.settled());
+        assertTrue(scanner.settled().isEmpty());
 
         Files.delete(class_file);
         assertSettlesAfterChange(scanner);
@@ -73,9 +109,9 @@ public class TestReloadScanner {
         var others = new ReloadScanner(List.of(directory), ReloadScanner.OTHER_FILES);
 
         Files.writeString(resource, "other notes");
-        assertFalse(classes.settled());
-        assertFalse(classes.settled());
-        assertFalse(classes.settled(), "a resource never restarts the application");
+        assertTrue(classes.settled().isEmpty());
+        assertTrue(classes.settled().isEmpty());
+        assertTrue(classes.settled().isEmpty(), "a resource never restarts the application");
 
         assertSettlesAfterChange(others);
     }
@@ -88,7 +124,7 @@ public class TestReloadScanner {
         Files.writeString(class_file, "aa");
 
         var scanner = new ReloadScanner(List.of(directory), ReloadScanner.CLASS_FILES);
-        assertFalse(scanner.settled());
+        assertTrue(scanner.settled().isEmpty());
 
         Files.writeString(class_file, "bb");
         Files.setLastModifiedTime(class_file, FileTime.fromMillis(System.currentTimeMillis() + 5000));
@@ -130,7 +166,7 @@ public class TestReloadScanner {
         Files.createSymbolicLink(fanned.resolve("two"), nested);
 
         var scanner = new ReloadScanner(List.of(directory), ReloadScanner.CLASS_FILES);
-        assertFalse(scanner.settled());
+        assertTrue(scanner.settled().isEmpty());
 
         Files.writeString(nested.resolve("B.class"), "b");
         assertSettlesAfterChange(scanner);
@@ -144,9 +180,9 @@ public class TestReloadScanner {
 
         var scanner = new ReloadScanner(List.of(), ReloadScanner.OTHER_FILES);
         scanner.add(base);
-        assertFalse(scanner.settled(), "watching a directory doesn't reload by itself");
-        assertFalse(scanner.settled());
-        assertFalse(scanner.settled());
+        assertTrue(scanner.settled().isEmpty(), "watching a directory doesn't reload by itself");
+        assertTrue(scanner.settled().isEmpty());
+        assertTrue(scanner.settled().isEmpty());
 
         Files.writeString(base.resolve("style.css"), "p{color:red}");
         assertSettlesAfterChange(scanner);
@@ -163,9 +199,9 @@ public class TestReloadScanner {
         assumeTrue(nested.toFile().setReadable(false), "the directory has to become unreadable for this test");
         assumeFalse(Files.isReadable(nested), "the directory has to be unreadable for this test");
         try {
-            assertFalse(scanner.settled());
-            assertFalse(scanner.settled());
-            assertFalse(scanner.settled(), "a directory that can't be read doesn't mean its files were deleted");
+            assertTrue(scanner.settled().isEmpty());
+            assertTrue(scanner.settled().isEmpty());
+            assertTrue(scanner.settled().isEmpty(), "a directory that can't be read doesn't mean its files were deleted");
         } finally {
             nested.toFile().setReadable(true);
         }
@@ -180,13 +216,13 @@ public class TestReloadScanner {
         Files.writeString(class_file, "a");
 
         var scanner = new ReloadScanner(List.of(classes), ReloadScanner.CLASS_FILES);
-        assertFalse(scanner.settled());
+        assertTrue(scanner.settled().isEmpty());
 
         Files.delete(class_file);
         Files.delete(classes);
-        assertFalse(scanner.settled());
-        assertFalse(scanner.settled());
-        assertFalse(scanner.settled(), "the directory is being rebuilt, its classes aren't gone");
+        assertTrue(scanner.settled().isEmpty());
+        assertTrue(scanner.settled().isEmpty());
+        assertTrue(scanner.settled().isEmpty(), "the directory is being rebuilt, its classes aren't gone");
 
         Files.createDirectories(classes);
         Files.writeString(class_file, "aaa");
