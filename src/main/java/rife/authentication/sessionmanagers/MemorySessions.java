@@ -54,6 +54,8 @@ public class MemorySessions implements SessionManager {
     }
 
     public void setSessionPurgeScale(int scale) {
+        if (scale <= 0) throw new IllegalArgumentException("scale has to be bigger than 0.");
+
         sessionPurgeScale_ = scale;
     }
 

@@ -50,6 +50,8 @@ public abstract class DatabaseRemember extends DbQueryManager implements Remembe
     }
 
     public void setRememberPurgeScale(int scale) {
+        if (scale <= 0) throw new IllegalArgumentException("scale has to be bigger than 0.");
+
         rememberPurgeScale_ = scale;
     }
 

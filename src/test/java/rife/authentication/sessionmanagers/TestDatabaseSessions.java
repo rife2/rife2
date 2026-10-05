@@ -24,6 +24,16 @@ public class TestDatabaseSessions {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    void testInvalidPurgeScale(Datasource datasource) {
+        var manager = DatabaseSessionsFactory.instance(datasource);
+        var scale = manager.getSessionPurgeScale();
+        assertThrows(IllegalArgumentException.class, () -> manager.setSessionPurgeScale(0));
+        assertThrows(IllegalArgumentException.class, () -> manager.setSessionPurgeScale(-1));
+        assertEquals(scale, manager.getSessionPurgeScale());
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     void testInstall(Datasource datasource) {
         var sessions = DatabaseSessionsFactory.instance(datasource);
 

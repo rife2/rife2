@@ -25,6 +25,16 @@ public class TestDatabaseRemember {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    void testInvalidPurgeScale(Datasource datasource) {
+        var manager = DatabaseRememberFactory.instance(datasource);
+        var scale = manager.getRememberPurgeScale();
+        assertThrows(IllegalArgumentException.class, () -> manager.setRememberPurgeScale(0));
+        assertThrows(IllegalArgumentException.class, () -> manager.setRememberPurgeScale(-1));
+        assertEquals(scale, manager.getRememberPurgeScale());
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     void testInstall(Datasource datasource) {
         var remember = DatabaseRememberFactory.instance(datasource);
 

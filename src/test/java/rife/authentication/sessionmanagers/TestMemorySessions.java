@@ -14,6 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestMemorySessions {
     @Test
+    void testInvalidPurgeScale() {
+        var sessions = new MemorySessions();
+        var scale = sessions.getSessionPurgeScale();
+        assertThrows(IllegalArgumentException.class, () -> sessions.setSessionPurgeScale(0));
+        assertThrows(IllegalArgumentException.class, () -> sessions.setSessionPurgeScale(-1));
+        assertEquals(scale, sessions.getSessionPurgeScale());
+    }
+
+    @Test
     void testStartSession() {
         var sessions = new MemorySessions();
         try {
