@@ -16,6 +16,7 @@ import rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException
 import rife.cmf.dam.contentstores.DatabaseImageStoreFactory;
 import rife.cmf.dam.contentstores.DatabaseRawStoreFactory;
 import rife.cmf.dam.contentstores.DatabaseTextStoreFactory;
+import rife.cmf.dam.contentstores.exceptions.StoreContentDataErrorException;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.database.Datasource;
 import rife.database.TestDatasources;
@@ -275,6 +276,21 @@ public class TestContentManager {
             } catch (UnknownContentRepositoryException e) {
                 assertEquals(e.getRepositoryName(), "mynewrep");
             }
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testStoreContentDataErrorRollsBack(Datasource datasource) {
+        setup(datasource);
+        try {
+            var manager = DatabaseContentFactory.instance(datasource);
+
+            var content = new Content(MimeType.IMAGE_PNG, "not an image".getBytes()).attribute("width", 20);
+            assertThrows(StoreContentDataErrorException.class, () -> manager.storeContent("/brokenimage", content, null));
+            assertNull(manager.getContentInfo("/brokenimage"));
         } finally {
             tearDown(datasource);
         }

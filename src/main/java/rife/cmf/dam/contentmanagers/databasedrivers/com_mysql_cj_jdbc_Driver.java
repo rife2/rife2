@@ -19,6 +19,7 @@ import rife.database.Datasource;
 import rife.database.DbConnection;
 import rife.database.DbPreparedStatement;
 import rife.database.DbPreparedStatementHandler;
+import rife.database.DbTransactionUser;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.CreateTable;
 import rife.database.queries.Insert;
@@ -154,69 +155,86 @@ public class com_mysql_cj_jdbc_Driver extends generic {
                 s.setInt("repositoryId", repository_id)
                     .setString("path", split_location.path()));
 
-            // store the content
-            final var ids_array = new int[1];
-            if (executeUpdate(storeContentInfo_, new DbPreparedStatementHandler<>() {
-                public DbPreparedStatement getPreparedStatement(Query query, DbConnection connection) {
-                    return connection.getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS);
-                }
+            Boolean result = null;
 
-                public int performUpdate(DbPreparedStatement statement) {
-                    statement
-                        .setString("path", split_location.path())
-                        .setString("mimeType", content.getMimeType().toString())
-                        .setBoolean("fragment", content.isFragment())
-                        .setDate("created", new java.sql.Date(System.currentTimeMillis()))
-                        .setInt("repositoryId", repository_id)
-                        .setInt("version", version);
-                    if (content.hasName()) {
-                        statement
-                            .setString("name", content.getName());
-                    } else {
-                        statement
-                            .setNull("name", Types.VARCHAR);
+            try {
+                result = inTransaction(new DbTransactionUser<>() {
+                    public Boolean useTransaction()
+                    throws InnerClassException {
+                        // store the content
+                        final var ids_array = new int[1];
+                        if (executeUpdate(storeContentInfo_, new DbPreparedStatementHandler<>() {
+                            public DbPreparedStatement getPreparedStatement(Query query, DbConnection connection) {
+                                return connection.getPreparedStatement(query, Statement.RETURN_GENERATED_KEYS);
+                            }
+
+                            public int performUpdate(DbPreparedStatement statement) {
+                                statement
+                                    .setString("path", split_location.path())
+                                    .setString("mimeType", content.getMimeType().toString())
+                                    .setBoolean("fragment", content.isFragment())
+                                    .setDate("created", new java.sql.Date(System.currentTimeMillis()))
+                                    .setInt("repositoryId", repository_id)
+                                    .setInt("version", version);
+                                if (content.hasName()) {
+                                    statement
+                                        .setString("name", content.getName());
+                                } else {
+                                    statement
+                                        .setNull("name", Types.VARCHAR);
+                                }
+
+                                var query_result = statement.executeUpdate();
+                                ids_array[0] = statement.getFirstGeneratedIntKey();
+                                return query_result;
+                            }
+                        }) > 0) {
+                            // store the attributes if there are some
+                            if (content.hasAttributes()) {
+                                for (var attribute : content.getAttributes().entrySet()) {
+                                    final var name = attribute.getKey();
+                                    final var value = attribute.getValue();
+
+                                    executeUpdate(storeContentAttribute_, s ->
+                                        s.setInt("contentId", ids_array[0])
+                                            .setString("name", name)
+                                            .setString("attVal", value));
+                                }
+                            }
+
+                            // put the actual content data in the content store
+                            try {
+                                if (!store.storeContentData(ids_array[0], content, transformer)) {
+                                    rollback();
+                                }
+                            } catch (ContentManagerException e) {
+                                throwException(e);
+                            }
+
+                            // store the content data properties if there are some
+                            if (content.hasProperties()) {
+                                for (var property : content.getProperties().entrySet()) {
+                                    final var name = property.getKey();
+                                    final var value = property.getValue();
+
+                                    executeUpdate(storeContentProperty_, s ->
+                                        s.setInt("contentId", ids_array[0])
+                                            .setString("name", name)
+                                            .setString("propVal", value));
+                                }
+                            }
+
+                            return true;
+                        }
+
+                        return false;
                     }
-
-                    var query_result = statement.executeUpdate();
-                    ids_array[0] = statement.getFirstGeneratedIntKey();
-                    return query_result;
-                }
-            }) > 0) {
-                // store the attributes if there are some
-                if (content.hasAttributes()) {
-                    for (var attribute : content.getAttributes().entrySet()) {
-                        final var name = attribute.getKey();
-                        final var value = attribute.getValue();
-
-                        executeUpdate(storeContentAttribute_, s ->
-                            s.setInt("contentId", ids_array[0])
-                                .setString("name", name)
-                                .setString("attVal", value));
-                    }
-                }
-
-                // put the actual content data in the content store
-                if (!store.storeContentData(ids_array[0], content, transformer)) {
-                    return false;
-                }
-
-                // store the content data properties if there are some
-                if (content.hasProperties()) {
-                    for (var property : content.getProperties().entrySet()) {
-                        final var name = property.getKey();
-                        final var value = property.getValue();
-
-                        executeUpdate(storeContentProperty_, s ->
-                            s.setInt("contentId", ids_array[0])
-                                .setString("name", name)
-                                .setString("propVal", value));
-                    }
-                }
-
-                return true;
+                });
+            } catch (InnerClassException e) {
+                throw (ContentManagerException) e.getCause();
             }
 
-            return false;
+            return result != null && result;
         }
     }
 }
