@@ -204,7 +204,8 @@ public class UrlBuilder {
         var parameters = new LinkedHashMap<String, String[]>();
 
         // detect which parameters are annotation for output and input and retrieve those that correspond
-        if (context_.route() instanceof RouteAnnotated) {
+        if (context_ != null &&
+            context_.route() instanceof RouteAnnotated) {
             var out_params = RouteAnnotated.getAnnotatedOutParameters(context_);
             if (context_.hasContinuationId()) {
                 // only add the continuation ID if the route is going to the same element class
@@ -235,7 +236,9 @@ public class UrlBuilder {
         }
 
         // use all the context out parameters
-        parameters.putAll(context_.parametersOut());
+        if (context_ != null) {
+            parameters.putAll(context_.parametersOut());
+        }
 
         // use all the explicitly provided parameters
         parameters.putAll(parameters_);
