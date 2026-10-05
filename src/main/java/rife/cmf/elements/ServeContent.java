@@ -11,9 +11,8 @@ import rife.database.Datasource;
 import rife.engine.Context;
 import rife.engine.Element;
 import rife.tools.ExceptionUtils;
+import rife.tools.StringUtils;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 public class ServeContent implements Element {
@@ -45,7 +44,7 @@ public class ServeContent implements Element {
             // get the content path from the path info
             content_path = c.pathInfo();
             if (content_path != null) {
-                content_path = URLDecoder.decode(content_path, StandardCharsets.UTF_8);
+                content_path = StringUtils.decodeUrl(content_path);
             }
 
             // filter the content path

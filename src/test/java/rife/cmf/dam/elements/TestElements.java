@@ -27,7 +27,12 @@ import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 
 import java.io.ByteArrayInputStream;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -385,6 +390,31 @@ public class TestElements {
         } finally {
             tearDown(datasource);
             RifeConfig.engine().setPassThroughSuffixes(RifeConfig.EngineConfig.DEFAULT_PASS_THROUGH_SUFFIXES);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testServeContentEncodedPath(Datasource datasource)
+    throws Exception {
+        setup(datasource);
+        try {
+            var manager = DatabaseContentFactory.instance(datasource);
+            manager.storeContent("/c++ notes", new Content(MimeType.RAW, "the notes".getBytes(StandardCharsets.UTF_8)), null);
+
+            try (final var server = new TestServerRunner(new Site() {
+                public void setup() {
+                    get("/serve", PathInfoHandling.CAPTURE, new ServeContent(datasource));
+                }
+            })) {
+                var client = HttpClient.newHttpClient();
+                var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve/c++%20notes")).build();
+                var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                assertEquals(200, response.statusCode());
+                assertEquals("the notes", response.body());
+            }
+        } finally {
+            tearDown(datasource);
         }
     }
 }
