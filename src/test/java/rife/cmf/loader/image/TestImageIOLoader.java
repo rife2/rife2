@@ -5,10 +5,13 @@
 package rife.cmf.loader.image;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import rife.cmf.MimeType;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 
+import javax.imageio.ImageIO;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -142,5 +145,21 @@ public class TestImageIOLoader {
         var image = loader.loadFromBytes(image_bytes, null);
 
         assertNull(image);
+    }
+
+    @Test
+    void testLoadFromBytesUnsupportedClosesStream(@TempDir File cacheDirectory) {
+        // a cached image stream holds a temporary file until it's closed
+        var use_cache = ImageIO.getUseCache();
+        var cache_directory = ImageIO.getCacheDirectory();
+        ImageIO.setUseCache(true);
+        ImageIO.setCacheDirectory(cacheDirectory);
+        try {
+            assertNull(new ImageIOLoader().loadFromBytes(new byte[]{2, 9, 7, 12, 45}, null));
+            assertArrayEquals(new String[0], cacheDirectory.list());
+        } finally {
+            ImageIO.setUseCache(use_cache);
+            ImageIO.setCacheDirectory(cache_directory);
+        }
     }
 }

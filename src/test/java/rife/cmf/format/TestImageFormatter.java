@@ -5,6 +5,7 @@
 package rife.cmf.format;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import rife.cmf.Content;
 import rife.cmf.MimeType;
 import rife.cmf.dam.exceptions.ContentManagerException;
@@ -17,9 +18,11 @@ import rife.cmf.transform.ImageContentTransformer;
 import rife.resources.ResourceFinderClasspath;
 import rife.tools.FileUtils;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,6 +44,26 @@ public class TestImageFormatter {
         var data_image_png = FileUtils.readBytes(image_resource_png);
 
         assertArrayEquals(data_image_png, result);
+    }
+
+    @Test
+    void testFormatClosesStreams(@TempDir File cacheDirectory)
+    throws Exception {
+        // a cached image stream holds a temporary file until it's closed
+        var use_cache = ImageIO.getUseCache();
+        var cache_directory = ImageIO.getCacheDirectory();
+        ImageIO.setUseCache(true);
+        ImageIO.setCacheDirectory(cacheDirectory);
+        try {
+            var data_image_gif = FileUtils.readBytes(ResourceFinderClasspath.instance().getResource("uwyn.gif"));
+            var result = new ImageFormatter().format(new Content(MimeType.IMAGE_PNG, data_image_gif), null);
+
+            assertArrayEquals(FileUtils.readBytes(ResourceFinderClasspath.instance().getResource("uwyn.png")), result);
+            assertArrayEquals(new String[0], cacheDirectory.list());
+        } finally {
+            ImageIO.setUseCache(use_cache);
+            ImageIO.setCacheDirectory(cache_directory);
+        }
     }
 
     @Test

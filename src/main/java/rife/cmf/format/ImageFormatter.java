@@ -19,7 +19,6 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
@@ -230,7 +229,6 @@ public class ImageFormatter implements Formatter<byte[], Image> {
 
         // write it out as the correct mimetype
         var bytes_out = new ByteArrayOutputStream();
-        var buffered_out = new BufferedOutputStream(bytes_out);
 
         try {
             // retrieve a supported writer
@@ -243,18 +241,18 @@ public class ImageFormatter implements Formatter<byte[], Image> {
             if (null == writer) {
                 throw new UnsupportedTargetMimeTypeException(content.getMimeType());
             }
-            var image_out = ImageIO.createImageOutputStream(buffered_out);
-            writer.setOutput(image_out);
-            if (content.getMimeType() == MimeType.IMAGE_JPEG) {
-                write_param = writer.getDefaultWriteParam();
-                write_param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                write_param.setCompressionQuality(0.85f);
-                write_param.setProgressiveMode(ImageWriteParam.MODE_DEFAULT);
+            try (var image_out = ImageIO.createImageOutputStream(bytes_out)) {
+                writer.setOutput(image_out);
+                if (content.getMimeType() == MimeType.IMAGE_JPEG) {
+                    write_param = writer.getDefaultWriteParam();
+                    write_param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                    write_param.setCompressionQuality(0.85f);
+                    write_param.setProgressiveMode(ImageWriteParam.MODE_DEFAULT);
+                }
+                writer.write(null, new IIOImage(buffer, null, null), write_param);
+            } finally {
+                writer.dispose();
             }
-            writer.write(null, new IIOImage(buffer, null, null), write_param);
-            writer.dispose();
-            bytes_out.flush();
-            bytes_out.close();
         } catch (IOException e) {
             throw new UnexpectedConversionErrorException(e);
         }

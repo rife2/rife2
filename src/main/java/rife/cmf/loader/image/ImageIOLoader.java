@@ -31,41 +31,36 @@ public class ImageIOLoader extends ImageContentLoaderBackend {
         MimeType mime_type = null;
 
         try {
-            var stream = ImageIO.createImageInputStream(input);
-            if (stream == null) {
-                throw new IIOException("Can't create an ImageInputStream");
-            }
-
-            var iter = ImageIO.getImageReaders(stream);
-            if (!iter.hasNext()) {
-                return null;
-            }
-
-            var reader = iter.next();
-
-            // detect if any of the reader mimetypes corresponds to a CMF supported one
-            var reader_mime_types = reader.getOriginatingProvider().getMIMETypes();
-            if (reader_mime_types != null) {
-                for (var reader_mime : reader_mime_types) {
-                    mime_type = MimeType.getMimeType(reader_mime);
-                    if (mime_type != null) {
-                        break;
-                    }
+            try (var stream = ImageIO.createImageInputStream(input)) {
+                if (stream == null) {
+                    throw new IIOException("Can't create an ImageInputStream");
                 }
-            }
 
-            // create an awt image
-            var param = reader.getDefaultReadParam();
-            reader.setInput(stream, true, true);
-            try {
-                image = reader.read(0, param);
-            } finally {
-                reader.dispose();
-                stream.close();
-            }
+                var iter = ImageIO.getImageReaders(stream);
+                if (!iter.hasNext()) {
+                    return null;
+                }
 
-            if (image == null) {
-                stream.close();
+                var reader = iter.next();
+                try {
+                    // detect if any of the reader mimetypes corresponds to a CMF supported one
+                    var reader_mime_types = reader.getOriginatingProvider().getMIMETypes();
+                    if (reader_mime_types != null) {
+                        for (var reader_mime : reader_mime_types) {
+                            mime_type = MimeType.getMimeType(reader_mime);
+                            if (mime_type != null) {
+                                break;
+                            }
+                        }
+                    }
+
+                    // create an awt image
+                    var param = reader.getDefaultReadParam();
+                    reader.setInput(stream, true, true);
+                    image = reader.read(0, param);
+                } finally {
+                    reader.dispose();
+                }
             }
 
             // wait until the image is fully loaded
