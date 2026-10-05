@@ -9,6 +9,10 @@ import rife.engine.*;
 import rife.template.TemplateFactory;
 import rife.tools.IntegerUtils;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -649,5 +653,31 @@ public class TestMocksEngine {
 
         assertEquals("/seven", conversation.doRequest("/seven").getText());
         assertEquals("fallback1", conversation.doRequest("/sevens").getText());
+    }
+
+    @Test
+    void testQueryParametersMatchServers()
+    throws Exception {
+        var site = new Site() {
+            public void setup() {
+                get("/params", c -> c.print(c.parameter("plus") + "|" + c.parameter("padded") + "|" + c.parameter("flag")));
+            }
+        };
+        var query = "/params?plus=a+b%2Bc&padded=YWI=&flag";
+        var expected = "a b+c|YWI=|";
+
+        assertEquals(expected, new MockConversation(site).doRequest(query).getText());
+        try (final var server = new TestServerRunner(site)) {
+            assertEquals(expected, getText("http://localhost:8181" + query));
+        }
+        try (final var server = new TestTomcatRunner(site)) {
+            assertEquals(expected, getText("http://localhost:8282" + query));
+        }
+    }
+
+    private static String getText(String url)
+    throws Exception {
+        var request = HttpRequest.newBuilder(new URI(url)).build();
+        return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString()).body();
     }
 }

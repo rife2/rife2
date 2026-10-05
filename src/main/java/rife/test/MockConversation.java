@@ -582,11 +582,13 @@ public class MockConversation implements AutoCloseable {
 
         var query_parts = StringUtils.split(query, "&");
         for (var query_part : query_parts) {
-            var parameter = StringUtils.split(query_part, "=");
-            if (2 == parameter.size()) {
-                var name = StringUtils.decodeUrl(parameter.get(0));
-                var value = StringUtils.decodeUrl(parameter.get(1));
-
+            // decoded like a servlet container decodes a query string
+            var separator = query_part.indexOf('=');
+            var raw_name = -1 == separator ? query_part : query_part.substring(0, separator);
+            var raw_value = -1 == separator ? "" : query_part.substring(separator + 1);
+            var name = StringUtils.decodeUrl(raw_name.replace('+', ' '));
+            var value = StringUtils.decodeUrl(raw_value.replace('+', ' '));
+            if (!name.isEmpty()) {
                 var values = parameters.get(name);
                 if (null == values) {
                     values = new String[]{value};
