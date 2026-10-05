@@ -13,9 +13,11 @@ import rife.tools.ExceptionUtils;
 import rife.tools.Localization;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -154,6 +156,29 @@ public class TestFrequency {
         } catch (FrequencyException e) {
             assertTrue(true);
         }
+    }
+
+    @Test
+    void testInvalidStep() {
+        for (var specification : new String[]{"*/0 * * * *", "1-5/0 * * * *", "1-5/-1 * * * *", "1-5/-2 * * * *", "31-20/0 * * * *", "* * 11-7/0 * *"}) {
+            assertTimeoutPreemptively(Duration.ofSeconds(1), () -> assertThrows(FrequencyException.class, () -> new Frequency(specification)), specification);
+        }
+        assertTimeoutPreemptively(Duration.ofSeconds(1), () -> assertThrows(FrequencyException.class, () -> new Frequency().everyMinute(0)));
+    }
+
+    @Test
+    void testStepBeyondRange()
+    throws FrequencyException {
+        var minutes = new byte[60];
+        Arrays.fill(minutes, (byte) -1);
+        minutes[50] = 50;
+        assertArrayEquals(minutes, new Frequency("50-55/100 * * * *").getMinutes());
+
+        minutes[50] = -1;
+        minutes[55] = 55;
+        assertArrayEquals(minutes, new Frequency("55-5/100 * * * *").getMinutes());
+
+        assertEquals(30, new Frequency("* * 30-5/100 * *").getDates()[29]);
     }
 
     @Test

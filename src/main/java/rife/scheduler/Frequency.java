@@ -848,6 +848,9 @@ public class Frequency {
                 // divider
                 if ((separator = current_part.indexOf("/")) != -1) {
                     divider = Byte.parseByte(current_part.substring(separator + 1));
+                    if (divider < 1) {
+                        throw new FrequencyException("invalid frequency part '" + part + "'");
+                    }
                     current_part = current_part.substring(0, separator);
                 }
 
@@ -863,8 +866,9 @@ public class Frequency {
                 }
                 // range
                 else if ((separator = current_part.indexOf("-")) != -1) {
-                    var left = Byte.parseByte(current_part.substring(0, separator));
-                    var right = Byte.parseByte(current_part.substring(separator + 1));
+                    // ints, stepping past the end would overflow a byte
+                    int left = Byte.parseByte(current_part.substring(0, separator));
+                    int right = Byte.parseByte(current_part.substring(separator + 1));
 
                     if (left < begin ||
                         left > end) {
@@ -900,12 +904,12 @@ public class Frequency {
                                 // but store the value of the rightmost
                                 // limit of the corresponding range
                                 if (underflowStorage[left - begin] < right) {
-                                    underflowStorage[left - begin] = right;
+                                    underflowStorage[left - begin] = (byte) right;
                                 }
                                 left += divider;
                             }
 
-                            left = (byte) (begin + (left - end) - 1);
+                            left = begin + (left - end) - 1;
 
                             // store the positions at which entries are located
                             // the positions contain the value of the rightmost
@@ -915,7 +919,7 @@ public class Frequency {
                             while (left <= right) {
                                 // preserve a later right limit
                                 if (overflowStorage[left - begin] < right) {
-                                    overflowStorage[left - begin] = right;
+                                    overflowStorage[left - begin] = (byte) right;
                                 }
                                 left += divider;
                             }
@@ -926,7 +930,7 @@ public class Frequency {
                                 left += divider;
                             }
 
-                            left = (byte) (begin + (left - end) - 1);
+                            left = begin + (left - end) - 1;
                         }
                     }
 
