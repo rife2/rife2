@@ -19,10 +19,12 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.LongAdder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -220,6 +222,42 @@ public class TestWorkflow {
             workflow.waitForNoWork();
 
             assertEquals(List.of(CountdownWork.Types.START, CountdownWork.Types.TICK, CountdownWork.Types.DONE), types);
+        }
+    }
+
+    @Test
+    @Timeout(10)
+    void testStartRejectedByExecutor()
+    throws Throwable {
+        var executor = Executors.newCachedThreadPool();
+        executor.shutdown();
+        var workflow = new Workflow(executor);
+
+        assertThrows(RejectedExecutionException.class, () -> workflow.start(new WorkPauseType1()));
+        assertThrows(RejectedExecutionException.class, () -> workflow.start(WorkPauseType1.class));
+        workflow.waitForNoWork();
+    }
+
+    @Test
+    @Timeout(10)
+    void testResumeRejectedByExecutor()
+    throws Throwable {
+        var executor = Executors.newCachedThreadPool();
+        try {
+            var errors = new CopyOnWriteArrayList<WorkErrorException>();
+            var workflow = new Workflow(executor);
+            workflow.addErrorListener(errors::add);
+            workflow.start(new WorkPauseType1());
+            assertTrue(workflow.waitForPausedWork());
+
+            executor.shutdown();
+            workflow.inform(TestEventTypes.TYPE1, 1);
+            workflow.waitForNoWork();
+
+            assertEquals(1, errors.size());
+            assertInstanceOf(RejectedExecutionException.class, errors.get(0).getCause());
+        } finally {
+            executor.shutdownNow();
         }
     }
 }

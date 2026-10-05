@@ -134,7 +134,7 @@ public class Workflow {
      */
     public Workflow start(final Class<? extends Work> klass) {
         activeWorkAndPauseCount_.incrementAndGet();
-        workExecutor_.submit(() -> {
+        submitWork(() -> {
             try {
                 runner_.start(klass);
             } catch (Throwable e) {
@@ -157,7 +157,7 @@ public class Workflow {
      */
     public Workflow start(Work work) {
         activeWorkAndPauseCount_.incrementAndGet();
-        workExecutor_.submit(() -> {
+        submitWork(() -> {
             try {
                 runner_.start(work);
             } catch (Throwable e) {
@@ -482,16 +482,31 @@ public class Workflow {
         if (null == id) return;
         // the active work count carries over from the paused continuation
         // that is being resumed, it was registered when the work paused
-        workExecutor_.submit(() -> {
-            try {
-                runner_.answer(id, callAnswer);
-            } catch (Throwable e) {
-                reportWorkError("that was resumed for an event", e);
-            } finally {
-                activeWorkAndPauseCount_.decrementAndGet();
-                signalWhenAllWorkFinished();
-            }
-        });
+        try {
+            submitWork(() -> {
+                try {
+                    runner_.answer(id, callAnswer);
+                } catch (Throwable e) {
+                    reportWorkError("that was resumed for an event", e);
+                } finally {
+                    activeWorkAndPauseCount_.decrementAndGet();
+                    signalWhenAllWorkFinished();
+                }
+            });
+        } catch (RejectedExecutionException e) {
+            reportWorkError("that was resumed for an event", e);
+        }
+    }
+
+    private void submitWork(Runnable work) {
+        try {
+            workExecutor_.submit(work);
+        } catch (RejectedExecutionException e) {
+            // rejected work never runs, so it can't release its own count
+            activeWorkAndPauseCount_.decrementAndGet();
+            signalWhenAllWorkFinished();
+            throw e;
+        }
     }
 
     private class EventTypeCallTargetRetriever implements CallTargetRetriever {
