@@ -283,6 +283,18 @@ public class TestMocksEngine {
     }
 
     @Test
+    void testPathInfoMappingWithCapturingGroups() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/pathinfo/groups", PathInfoHandling.MAP(m -> m.p("slug", "([a-z]+)(-[a-z]+)*").s().p("id", "\\d+")),
+                    c -> c.print(c.parameter("slug") + ":" + c.parameter("id")));
+            }
+        });
+
+        assertEquals("hello-big-world:42", conversation.doRequest("http://localhost/pathinfo/groups/hello-big-world/42").getText());
+    }
+
+    @Test
     void testHeadGetPathInfoMapping() {
         var conversation = new MockConversation(new Site() {
             public void setup() {

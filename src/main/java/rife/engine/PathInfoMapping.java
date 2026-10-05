@@ -22,6 +22,8 @@ import java.util.regex.PatternSyntaxException;
 public class PathInfoMapping {
     private final StringBuilder mappingRegexp_ = new StringBuilder();
     private final List<String> parameters_ = new ArrayList<>();
+    private final List<Integer> groups_ = new ArrayList<>();
+    private int groupCount_ = 0;
     private final List<PathInfoSegment> segments_ = new ArrayList<>();
     private Pattern regexp_ = null;
 
@@ -83,6 +85,9 @@ public class PathInfoMapping {
         }
 
         parameters_.add(name);
+        groups_.add(groupCount_ + 1);
+        // groups inside the regex are numbered after the one that wraps it
+        groupCount_ += 1 + pattern.matcher("").groupCount();
 
         mappingRegexp_.append('(');
         mappingRegexp_.append(regex);
@@ -96,6 +101,10 @@ public class PathInfoMapping {
 
     List<String> parameters() {
         return parameters_;
+    }
+
+    List<Integer> groups() {
+        return groups_;
     }
 
     List<PathInfoSegment> segments() {

@@ -91,9 +91,10 @@ public class Context {
                 for (var mapping : routeMatch_.route().pathInfoHandling().mappings()) {
                     var matcher = mapping.regexp().matcher(pathInfo());
                     if (matcher.matches()) {
-                        var i = 1;
-                        for (var param : mapping.parameters()) {
-                            params.put(param, new String[]{matcher.group(i++)});
+                        var parameters = mapping.parameters();
+                        var groups = mapping.groups();
+                        for (var i = 0; i < parameters.size(); i++) {
+                            params.put(parameters.get(i), new String[]{matcher.group(groups.get(i))});
                         }
                         break;
                     }
