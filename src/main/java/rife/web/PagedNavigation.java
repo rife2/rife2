@@ -311,7 +311,7 @@ public class PagedNavigation {
                 offset < absolute_range_offset + limit) {
                 template.appendBlock(ID_ABSOLUTE_RANGES, ID_ABSOLUTE_RANGE_DISABLED);
             } else {
-                template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, String.valueOf((int) absolute_range_offset)));
+                template.setValue(ID_ROUTE_OFFSET, context.urlFor(context.route()).params(parameters).param(parameter, String.valueOf(absolute_range_offset)));
                 template.appendBlock(ID_ABSOLUTE_RANGES, ID_ABSOLUTE_RANGE);
             }
             absolute_range_offset += limit;

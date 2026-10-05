@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.Test;
+import rife.test.MockConversation;
 import rife.web.PagedNavigation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -349,5 +350,23 @@ public class TestPagedNavigation {
                 assertEquals(page.getWebResponse().getContentAsString(), "0 : Pages: ( first prev <a href=\"http://localhost:8181/norangecount?offset=10\">next</a> <a href=\"http://localhost:8181/norangecount?offset=70\">last</a> |  1  <a href=\"http://localhost:8181/norangecount?offset=10\">2</a>  <a href=\"http://localhost:8181/norangecount?offset=20\">3</a>  <a href=\"http://localhost:8181/norangecount?offset=30\">4</a>  ...  )");
             }
         }
+    }
+
+    @Test
+    void testOffsetBeyondInt() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/large", c -> {
+                    var t = c.template("paged_navigation");
+                    var offset = c.parameterLong("offset");
+                    t.setValue("offset", offset);
+                    PagedNavigation.generate(c, t, 30_000_000_000L, 10, offset, 1);
+                    c.print(t.getBlock("content"));
+                });
+            }
+        });
+        var response = conversation.doRequest("/large?offset=3000000000").getText();
+        assertTrue(response.contains("offset=2999999990\">300000000</a>"), response);
+        assertTrue(response.contains("offset=3000000010\">300000002</a>"), response);
     }
 }
