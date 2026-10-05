@@ -285,12 +285,15 @@ public class Scheduler implements Runnable {
             }
         } finally {
             synchronized (this) {
-                thread_ = null;
-                notifyAll();
+                // a restart can already have replaced this thread
+                if (null == thread_ || Thread.currentThread() == thread_) {
+                    thread_ = null;
 
-                synchronized (activeSchedulers) {
-                    activeSchedulers.remove(this);
+                    synchronized (activeSchedulers) {
+                        activeSchedulers.remove(this);
+                    }
                 }
+                notifyAll();
             }
         }
     }

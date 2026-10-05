@@ -7,6 +7,7 @@ package rife.scheduler.schedulermanagers;
 import org.junit.jupiter.api.Test;
 import rife.scheduler.Executor;
 import rife.scheduler.Frequency;
+import rife.scheduler.Scheduler;
 import rife.scheduler.Task;
 import rife.scheduler.TestRetryExecutor;
 import rife.scheduler.TestTasktypes;
@@ -39,6 +40,24 @@ public class TestMemoryScheduler {
                 fail(ExceptionUtils.getExceptionStackTrace(e));
             }
         }
+    }
+
+    @Test
+    void testRestartScheduler()
+    throws Exception {
+        var scheduler = new MemoryScheduling().createScheduler();
+        scheduler.start();
+        synchronized (scheduler) {
+            scheduler.stop();
+            scheduler.start();
+
+            // the stopped thread notifies when it exits
+            scheduler.wait(1000);
+        }
+        assertTrue(scheduler.isRunning());
+
+        Scheduler.stopAllActiveSchedulers();
+        assertFalse(scheduler.isRunning());
     }
 
     @Test
