@@ -208,6 +208,15 @@ public class TestMemoryTaskOptions {
     }
 
     @Test
+    void testGetTaskOptionsNone()
+    throws SchedulerException {
+        var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
+        var task_id = scheduler.getTaskManager().addTask(new Task().type(TestTasktypes.UPLOAD_GROUPS).planned(System.currentTimeMillis()));
+
+        assertTrue(scheduler.getTaskOptionManager().getTaskOptions(task_id).isEmpty());
+    }
+
+    @Test
     void testGetTaskOptions() {
         var scheduler = new Scheduler(new MemoryTasks(), new MemoryTaskOptions());
         var task_manager = scheduler.getTaskManager();

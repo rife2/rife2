@@ -155,7 +155,11 @@ public class MemoryTaskOptions implements TaskOptionManager {
         if (taskId < 0) throw new IllegalArgumentException("taskId can't be negative.");
 
         synchronized (this) {
-            return Collections.unmodifiableCollection(taskOptionsMapping_.get(taskId));
+            var task_options = taskOptionsMapping_.get(taskId);
+            if (null == task_options) {
+                return Collections.emptyList();
+            }
+            return Collections.unmodifiableCollection(task_options);
         }
     }
 
