@@ -53,7 +53,22 @@ public class MockConversation implements AutoCloseable {
      */
     public MockConversation(Site site)
     throws EngineException {
-        properties_ = new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance());
+        this(site, new HierarchicalProperties().parent(HierarchicalProperties.createSystemInstance()));
+    }
+
+    /**
+     * Creates a new {@code MockConversation} instance for a particular
+     * site, with the properties that the site is set up with.
+     * <p>The properties are used as they are, system properties are only
+     * visible when they're part of their hierarchy.
+     *
+     * @param site       the site structure that will be tested
+     * @param properties the properties that will be used by this conversation
+     * @since 1.10.2
+     */
+    public MockConversation(Site site, HierarchicalProperties properties)
+    throws EngineException {
+        properties_ = properties;
 
         gate_ = new Gate();
         gate_.setup(properties_, site);

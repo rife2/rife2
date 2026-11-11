@@ -7,6 +7,7 @@ package rife.test;
 import org.junit.jupiter.api.Test;
 import rife.config.RifeConfig;
 import rife.engine.*;
+import rife.ioc.HierarchicalProperties;
 import rife.template.TemplateFactory;
 import rife.tools.IntegerUtils;
 
@@ -106,6 +107,29 @@ public class TestMocksEngine {
             assertEquals("User-agent: *", response.getText());
         } finally {
             RifeConfig.engine().setPassThroughSuffixes(suffixes);
+        }
+    }
+
+    @Test
+    void testSetupProperties() {
+        System.setProperty("TestMocksEngine.system", "leaked");
+        try {
+            var properties = new HierarchicalProperties().put("setting", "value");
+            var conversation = new MockConversation(new Site() {
+                String setting_;
+                String system_;
+
+                public void setup() {
+                    setting_ = properties().getValueString("setting");
+                    system_ = properties().getValueString("TestMocksEngine.system");
+                    get("/setting", c -> c.print(setting_ + ":" + system_));
+                }
+            }, properties);
+
+            assertSame(properties, conversation.properties());
+            assertEquals("value:null", conversation.doRequest("/setting").getText());
+        } finally {
+            System.clearProperty("TestMocksEngine.system");
         }
     }
 
