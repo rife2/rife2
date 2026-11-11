@@ -62,6 +62,31 @@ public class TestMocksEngine {
     }
 
     @Test
+    void testRedirectPermanent() {
+        var conversation = new MockConversation(new Site() {
+            final Route target = get("/target", c -> c.print("target"));
+
+            public void setup() {
+                get("/moved", c -> c.redirectPermanent(target));
+                post("/moved", c -> c.redirectPermanent("/target"));
+                get("/temporary", c -> c.redirect(target));
+            }
+        });
+
+        var response = conversation.doRequest("http://localhost/moved");
+        assertEquals(301, response.getStatus());
+        assertEquals("http://localhost/target", response.getHeader("Location"));
+
+        response = conversation.doRequest("http://localhost/moved", new MockRequest().method(RequestMethod.POST));
+        assertEquals(308, response.getStatus());
+        assertEquals("/target", response.getHeader("Location"));
+
+        response = conversation.doRequest("http://localhost/temporary");
+        assertEquals(302, response.getStatus());
+        assertEquals("http://localhost/target", response.getHeader("Location"));
+    }
+
+    @Test
     void testPassThroughSuffix() {
         var conversation = new MockConversation(new Site() {
             public void setup() {

@@ -942,6 +942,32 @@ public class TestEngine {
     }
 
     @Test
+    void testRedirectPermanent()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            final Route target = get("/target", c -> c.print("target"));
+
+            public void setup() {
+                get("/moved", c -> c.redirectPermanent(target));
+                post("/moved", c -> c.redirectPermanent(target));
+            }
+        })) {
+            var client = java.net.http.HttpClient.newHttpClient();
+
+            var response = client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/moved")).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals(301, response.statusCode());
+            assertEquals("http://localhost:8181/target", response.headers().firstValue("Location").orElse(null));
+
+            response = client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/moved"))
+                    .POST(java.net.http.HttpRequest.BodyPublishers.noBody()).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals(308, response.statusCode());
+            assertEquals("http://localhost:8181/target", response.headers().firstValue("Location").orElse(null));
+        }
+    }
+
+    @Test
     void testConfigResource()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {

@@ -13,14 +13,24 @@ public class RedirectException extends LightweightError implements ControlFlowRu
     @Serial private static final long serialVersionUID = -4659026261646459653L;
 
     private final String url_;
+    private final int status_;
 
     public RedirectException(Object url) {
+        this(url, 0);
+    }
+
+    public RedirectException(Object url, int status) {
         super();
 
         url_ = String.valueOf(url);
+        status_ = status;
     }
 
     public String getUrl() {
         return url_;
+    }
+
+    public int getStatus() {
+        return status_;
     }
 }

@@ -140,6 +140,10 @@ public class Gate {
                 // a committed event stream can't be redirected,
                 // end the connection instead
                 sse_connection.close();
+            } else if (e.getStatus() != 0) {
+                response.clearBuffer();
+                response.setStatus(e.getStatus());
+                response.setHeader("Location", e.getUrl());
             } else {
                 response.sendRedirect(e.getUrl());
             }

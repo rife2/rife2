@@ -50,6 +50,21 @@ public class Context {
      */
     public static final int SC_NOT_MODIFIED = 304;
 
+    /**
+     * Status code (301) indicating that the resource has permanently moved to the location in the response.
+     *
+     * @since 1.10.2
+     */
+    public static final int SC_MOVED_PERMANENTLY = 301;
+
+    /**
+     * Status code (308) indicating that the resource has permanently moved to the location in the response,
+     * and that the request method must not change.
+     *
+     * @since 1.10.2
+     */
+    public static final int SC_PERMANENT_REDIRECT = 308;
+
 
     /**
      * Status code (403) indicating the server understood the request but refused to fulfill it.
@@ -1227,6 +1242,49 @@ public class Context {
     public void redirect(Route route)
     throws RedirectException {
         throw new RedirectException(urlFor(route));
+    }
+
+    /**
+     * Interrupts the execution in this element and permanently redirects the
+     * client to another URL.
+     * <p>The response status is 301 for {@code GET} and {@code HEAD} requests
+     * and 308 for other request methods, so that their method is kept.
+     * Clients and search engines remember permanent redirects, only use them
+     * for locations that won't change back.
+     *
+     * @param url the URL to which the request will be redirected, {@code String.valueOf()}
+     *            will be called with this object, so a variety of types can be used
+     * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
+     *                           catch this exception
+     * @since 1.10.2
+     */
+    public void redirectPermanent(Object url)
+    throws RedirectException {
+        throw new RedirectException(url, permanentRedirectStatus());
+    }
+
+    /**
+     * Interrupts the execution in this element and permanently redirects the
+     * client to another route.
+     * <p>The response status is 301 for {@code GET} and {@code HEAD} requests
+     * and 308 for other request methods, so that their method is kept.
+     * Clients and search engines remember permanent redirects, only use them
+     * for locations that won't change back.
+     *
+     * @param route the route to which the request will be redirected
+     * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
+     *                           catch this exception
+     * @since 1.10.2
+     */
+    public void redirectPermanent(Route route)
+    throws RedirectException {
+        throw new RedirectException(urlFor(route), permanentRedirectStatus());
+    }
+
+    // 301 lets clients turn other methods into GET
+    private int permanentRedirectStatus() {
+        var method = method();
+        return method == RequestMethod.GET || method == RequestMethod.HEAD ? SC_MOVED_PERMANENTLY : SC_PERMANENT_REDIRECT;
     }
 
     /**
