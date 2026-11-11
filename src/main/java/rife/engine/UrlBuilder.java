@@ -252,42 +252,30 @@ public class UrlBuilder {
         }
         // handle path info mapping
         else if (route_.pathInfoHandling().type() == PathInfoType.MAP) {
+            mappings:
             for (var mapping : route_.pathInfoHandling().mappings()) {
                 if (parameters.keySet().containsAll(mapping.parameters())) {
                     var parameters_it = mapping.parameters().iterator();
 
                     var builder = new StringBuilder();
-                    String parameter_name;
-                    String[] parameter_value;
                     for (var segment : mapping.segments()) {
                         if (segment.isRegexp()) {
-                            if (!parameters_it.hasNext()) {
-                                continue;
-                            }
+                            var parameter_value = parameters.get(parameters_it.next());
 
-                            parameter_name = parameters_it.next();
-
-                            // ensure that the parameter has at least one value
-                            parameter_value = parameters.get(parameter_name);
+                            // a value that can't fill this mapping leaves it to the next ones
                             if (null == parameter_value ||
-                                parameter_value.length < 1) {
-                                continue;
+                                parameter_value.length < 1 ||
+                                !segment.pattern().matcher(parameter_value[0]).matches()) {
+                                continue mappings;
                             }
 
-                            // ensure that the parameter value corresponds to the
-                            // regexp pattern for it
-                            var matcher = segment.pattern().matcher(parameter_value[0]);
-                            if (!matcher.matches()) {
-                                continue;
-                            }
-
-                            // add the url-encoded parameter value to the path info
                             builder.append(StringUtils.encodeUrl(parameter_value[0]));
-                            parameters.remove(parameter_name);
                         } else {
                             builder.append(segment.text());
                         }
                     }
+
+                    mapping.parameters().forEach(parameters::remove);
 
                     // append the new path info
                     var path_info = builder.toString();
