@@ -200,6 +200,8 @@ public class TestMocksEngine {
                 head("/explicit-before", c -> c.addHeader("X-Route", "head"));
                 get("/explicit-before", c -> c.addHeader("X-Route", "get"));
                 post("/post", c -> c.print("post"));
+                head("/prefix", PathInfoHandling.CAPTURE, c -> c.addHeader("X-Route", "head"));
+                get("/prefix/page", c -> c.addHeader("X-Route", "get"));
             }
         });
 
@@ -224,6 +226,27 @@ public class TestMocksEngine {
         assertEquals("get", conversation.doRequest("/explicit-before").getHeader("X-Route"));
 
         assertEquals(404, conversation.doRequest("/post", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+
+        assertEquals("head", conversation.doRequest("/prefix/page", new MockRequest().method(RequestMethod.HEAD)).getHeader("X-Route"));
+        assertEquals("get", conversation.doRequest("/prefix/page").getHeader("X-Route"));
+    }
+
+    @Test
+    void testTrailingSlash() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/plain", c -> c.print("plain"));
+                get("/both", c -> c.print("both plain"));
+                get("/both", PathInfoHandling.CAPTURE, c -> c.print("both path info:" + c.pathInfo()));
+                get("/slash/", PathInfoHandling.CAPTURE, c -> c.print("slash path info:" + c.pathInfo()));
+                get("/slash", c -> c.print("slash plain"));
+                fallback(c -> c.print("fallback"));
+            }
+        });
+
+        assertEquals("fallback", conversation.doRequest("/plain/").getText());
+        assertEquals("both path info:", conversation.doRequest("/both/").getText());
+        assertEquals("slash path info:", conversation.doRequest("/slash/").getText());
     }
 
     @Test

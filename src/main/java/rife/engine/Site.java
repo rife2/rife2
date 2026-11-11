@@ -13,10 +13,8 @@ import rife.workflow.Workflow;
 
 import java.io.File;
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
 
 /**
  * The main site of your web application, which is also the
@@ -49,7 +47,7 @@ public class Site extends Router {
      * <p>{@code null} if the URL and path info aren't registered in this site
      * @since 1.0
      */
-    private Route resolveUrl(Request request, String url, String pathInfo)
+    private Route resolveUrl(RequestMethod method, String url, String pathInfo)
     throws EngineException {
         if (null == url) throw new IllegalArgumentException("url can't be null;");
 
@@ -60,45 +58,15 @@ public class Site extends Router {
         if (null == pathInfo) {
             var routes = routes_.get(url);
             if (routes != null && !routes.isEmpty()) {
-                var route = findRouteForMethod(routes, request.getMethod(), r -> true);
-                if (route != null) {
-                    return route;
-                }
-            }
-
-            if ('/' == url.charAt(url.length() - 1)) {
-                var stripped_url = url.substring(0, url.length() - 1);
-                // if the url contains a dot in the last part, it shouldn't be
-                // seen as simulating a directory
-                if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
-                    if (routes != null && !routes.isEmpty()) {
-                        var route = findRouteForMethod(routes, request.getMethod(), r -> true);
-                        if (route != null) {
-                            return route;
-                        }
+                for (var route : routes) {
+                    if (routeHandlesMethod(route, method)) {
+                        return route;
                     }
                 }
             }
         }
 
-        return resolvePathInfoUrl(request, url, pathInfo);
-    }
-
-    // GET routes also answer HEAD, routes that handle HEAD themselves come first
-    private static Route findRouteForMethod(List<Route> routes, RequestMethod method, Predicate<Route> condition) {
-        for (var route : routes) {
-            if (routeHandlesMethod(route, method) && condition.test(route)) {
-                return route;
-            }
-        }
-        if (method == RequestMethod.HEAD) {
-            for (var route : routes) {
-                if (routeHandlesMethod(route, RequestMethod.GET) && condition.test(route)) {
-                    return route;
-                }
-            }
-        }
-        return null;
+        return resolvePathInfoUrl(method, url, pathInfo);
     }
 
     private static boolean routeHandlesMethod(Route route, RequestMethod method) {
@@ -113,7 +81,7 @@ public class Site extends Router {
         return false;
     }
 
-    private Route resolvePathInfoUrl(Request request, String url, String pathInfo)
+    private Route resolvePathInfoUrl(RequestMethod method, String url, String pathInfo)
     throws EngineException {
         var routes = pathInfoRoutes_.get(url);
         if (null == routes ||
@@ -124,23 +92,26 @@ public class Site extends Router {
         // if a path info was provided, check the path info mappings for the first that matches
         if (pathInfo != null) {
             var path_info = StringUtils.stripFromFront(pathInfo, "/");
-            var route = findRouteForMethod(routes, request.getMethod(), r -> {
-                if (r.pathInfoHandling().type() == PathInfoType.MAP) {
-                    for (var mapping : r.pathInfoHandling().mappings()) {
-                        if (mapping.regexp().matcher(path_info).matches()) {
-                            return true;
+            for (var route : routes) {
+                if (route.pathInfoHandling().type() == PathInfoType.MAP && routeHandlesMethod(route, method)) {
+                    for (var mapping : route.pathInfoHandling().mappings()) {
+                        var matcher = mapping.regexp().matcher(path_info);
+                        if (matcher.matches()) {
+                            return route;
                         }
                     }
                 }
-                return false;
-            });
-            if (route != null) {
-                return route;
             }
         }
 
         // return the first route that handles the url and doesn't have  any path info mappings
-        return findRouteForMethod(routes, request.getMethod(), r -> r.pathInfoHandling().type() == PathInfoType.CAPTURE);
+        for (var route : routes) {
+            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && routeHandlesMethod(route, method)) {
+                return route;
+            }
+        }
+
+        return null;
     }
 
     private Route resolveFallback(String url) {
@@ -163,12 +134,42 @@ public class Site extends Router {
         }
     }
 
+    private Route resolveRoute(RequestMethod method, String elementUrl, StringBuilder elementUrlBuffer) {
+        Route route;
+        elementUrlBuffer.setLength(0);
+        elementUrlBuffer.append(elementUrl);
+        var element_url_location = -1;
+        String path_info = null;
+        do {
+            // if a slash was found in the url, it was stripped away
+            // and thus the only urls that should match then are path info
+            // urls
+            if (element_url_location > -1) {
+                path_info = elementUrl.substring(element_url_location);
+            }
+            route = resolveUrl(method, elementUrlBuffer.toString(), path_info);
+
+            if (route != null) {
+                break;
+            }
+
+            element_url_location = elementUrlBuffer.lastIndexOf("/");
+            if (-1 == element_url_location) {
+                break;
+            }
+            elementUrlBuffer.setLength(element_url_location);
+        }
+        while (true);
+
+        return route;
+    }
+
     /**
      * Looks for an element that corresponds to a particular request URL.
      * <p>
      * This method will determine the best element match by stepping up the path
-     * segments. It will also look for fallback elements, cater for trailing
-     * slashes, and figure out the correct path info.
+     * segments. It will also look for fallback elements and figure out the
+     * correct path info.
      * <p>
      *
      * @param elementUrl the URL that will be used to search for the element
@@ -179,31 +180,13 @@ public class Site extends Router {
      */
     RouteMatch findRouteForRequest(Request request, String elementUrl) {
         // obtain the element info that mapped to the requested path info
-        Route route;
-        var element_url_buffer = new StringBuilder(elementUrl);
-        var element_url_location = -1;
+        var element_url_buffer = new StringBuilder();
         var element_path_info = "";
-        String path_info = null;
-        do {
-            // if a slash was found in the url, it was stripped away
-            // and thus the only urls that should match then are path info
-            // urls
-            if (element_url_location > -1) {
-                path_info = elementUrl.substring(element_url_location);
-            }
-            route = resolveUrl(request, element_url_buffer.toString(), path_info);
-
-            if (route != null) {
-                break;
-            }
-
-            element_url_location = element_url_buffer.lastIndexOf("/");
-            if (-1 == element_url_location) {
-                break;
-            }
-            element_url_buffer.setLength(element_url_location);
+        var route = resolveRoute(request.getMethod(), elementUrl, element_url_buffer);
+        // GET routes answer HEAD, only when no route at all handles HEAD itself
+        if (null == route && request.getMethod() == RequestMethod.HEAD) {
+            route = resolveRoute(RequestMethod.GET, elementUrl, element_url_buffer);
         }
-        while (true);
 
         // no target element, get the fallback element
         if (null == route) {
