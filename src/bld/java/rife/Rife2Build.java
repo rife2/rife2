@@ -124,6 +124,9 @@ public class Rife2Build extends AbstractRife2Build {
             .javaOptions()
                 .javaAgent(new File(buildDistDirectory(), jarAgentOperation.destinationFileName()));
 
+        jarSourcesOperation()
+            .sourceDirectories(core_src_main_java_directory);
+
         javadocOperation()
             .sourceFiles(FileUtils.getJavaFileList(core_src_main_java_directory))
             .javadocOptions()
