@@ -5,6 +5,7 @@
 package rife.test;
 
 import org.junit.jupiter.api.Test;
+import rife.config.RifeConfig;
 import rife.engine.*;
 import rife.template.TemplateFactory;
 import rife.tools.IntegerUtils;
@@ -35,6 +36,47 @@ public class TestMocksEngine {
         assertEquals(200, response.getStatus());
         assertEquals("text/plain; charset=UTF-8", response.getContentType());
         assertEquals("Just some text 127.0.0.1:", response.getText());
+    }
+
+    @Test
+    void testPrettyExceptionStatus() {
+        var log = RifeConfig.engine().getLogEngineExceptions();
+        RifeConfig.engine().setLogEngineExceptions(false);
+        try {
+            var conversation = new MockConversation(new Site() {
+                public void setup() {
+                    get("/error", c -> {
+                        c.setStatus(201);
+                        throw new RuntimeException("route failure");
+                    });
+                }
+            });
+
+            var response = conversation.doRequest("http://localhost/error");
+            assertEquals(500, response.getStatus());
+            assertTrue(response.getText().contains("route failure"));
+        } finally {
+            RifeConfig.engine().setLogEngineExceptions(log);
+        }
+    }
+
+    @Test
+    void testPrettyInitExceptionStatus() {
+        var log = RifeConfig.engine().getLogEngineExceptions();
+        RifeConfig.engine().setLogEngineExceptions(false);
+        try {
+            var conversation = new MockConversation(new Site() {
+                public void setup() {
+                    throw new RuntimeException("setup failure");
+                }
+            });
+
+            var response = conversation.doRequest("http://localhost/anything");
+            assertEquals(500, response.getStatus());
+            assertTrue(response.getText().contains("setup failure"));
+        } finally {
+            RifeConfig.engine().setLogEngineExceptions(log);
+        }
     }
 
     @Test

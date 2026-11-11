@@ -240,6 +240,7 @@ public class Gate {
 
     private void printExceptionDetails(Throwable exception, Response response) {
         response.clearBuffer();
+        response.setStatus(Context.SC_INTERNAL_SERVER_ERROR);
 
         TemplateFactory template_factory = null;
         if (response.isContentTypeSet()) {
