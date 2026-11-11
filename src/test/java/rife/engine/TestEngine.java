@@ -968,6 +968,38 @@ public class TestEngine {
     }
 
     @Test
+    void testGetAnswersHead()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/page", c -> {
+                    c.setContentType("text/plain");
+                    c.addHeader("X-Method", c.method().name());
+                    c.addCookie(new CookieBuilder("visited", "yes"));
+                    c.print("page");
+                });
+                get("/explicit", c -> c.addHeader("X-Route", "get"));
+                head("/explicit", c -> c.addHeader("X-Route", "head"));
+            }
+        })) {
+            var client = java.net.http.HttpClient.newHttpClient();
+            var head = java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/page"))
+                .method("HEAD", java.net.http.HttpRequest.BodyPublishers.noBody()).build();
+            var response = client.send(head, java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, response.statusCode());
+            assertEquals("text/plain;charset=utf-8", response.headers().firstValue("Content-Type").orElse(null));
+            assertEquals("HEAD", response.headers().firstValue("X-Method").orElse(null));
+            assertTrue(response.headers().firstValue("Set-Cookie").orElse("").startsWith("visited=yes"));
+            assertEquals("", response.body());
+
+            response = client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/explicit"))
+                    .method("HEAD", java.net.http.HttpRequest.BodyPublishers.noBody()).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals("head", response.headers().firstValue("X-Route").orElse(null));
+        }
+    }
+
+    @Test
     void testConfigResource()
     throws IOException {
         try (final var server = new TestServerRunner(new Site() {

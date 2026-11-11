@@ -35,16 +35,16 @@ public class TestRouting {
                 assertEquals("class GetElement",                        webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/get3"), HttpMethod.GET)).getWebResponse().getContentAsString());
                 assertEquals("class GetPathInfoElement:otherpathinfo",  webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/get4/otherpathinfo"), HttpMethod.GET)).getWebResponse().getContentAsString());
 
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetSite_GetElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetSite_GetPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get5"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get6/differentpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetSite_GetElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetSite_GetPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/get3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/get4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetSite_GetElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetSite_GetPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get5"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/get6/differentpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetSite_GetElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetSite_GetPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/get3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/get4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
 
                 assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetSite_GetElement"), HttpMethod.POST)).getWebResponse().getStatusCode());
                 assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetSite_GetPathInfoElement/pathinfo"), HttpMethod.POST)).getWebResponse().getStatusCode());
@@ -233,16 +233,16 @@ public class TestRouting {
                 assertEquals("class GetPostElement",                        webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/getPost3"), HttpMethod.GET)).getWebResponse().getContentAsString());
                 assertEquals("class GetPostPathInfoElement:otherpathinfo",  webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/getPost4/otherpathinfo"), HttpMethod.GET)).getWebResponse().getContentAsString());
 
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetPostSite_GetPostElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetPostSite_GetPostPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost5"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost6/differentpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetPostSite_GetPostElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetPostSite_GetPostPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/getPost3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/getPost4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetPostSite_GetPostElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetPostSite_GetPostPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost5"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/getPost6/differentpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetPostSite_GetPostElement"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/routingGetPostSite_GetPostPathInfoElement/pathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/getPost3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/supplier/getPost4/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
 
                 assertEquals("class GetPostElement",                        webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetPostSite_GetPostElement"), HttpMethod.POST)).getWebResponse().getContentAsString());
                 assertEquals("class GetPostPathInfoElement:pathinfo",       webClient.getPage(new WebRequest(new URL("http://localhost:8181/routingGetPostSite_GetPostPathInfoElement/pathinfo"), HttpMethod.POST)).getWebResponse().getContentAsString());
@@ -724,12 +724,12 @@ public class TestRouting {
                 assertEquals("class GetElement",                        webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo5"), HttpMethod.GET)).getWebResponse().getContentAsString());
                 assertEquals("class GetPathInfoElement:otherpathinfo",  webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo6/otherpathinfo"), HttpMethod.GET)).getWebResponse().getContentAsString());
 
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo1"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo2/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo4/differentpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo5"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
-                assertNotEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo6/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo1"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo2/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo3"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo4/differentpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo5"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
+                assertEquals(200, webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo6/otherpathinfo"), HttpMethod.HEAD)).getWebResponse().getStatusCode());
 
                 assertEquals("class PostElement",                        webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo1"), HttpMethod.POST)).getWebResponse().getContentAsString());
                 assertEquals("class PostPathInfoElement:otherpathinfo",  webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo2/otherpathinfo"), HttpMethod.POST)).getWebResponse().getContentAsString());

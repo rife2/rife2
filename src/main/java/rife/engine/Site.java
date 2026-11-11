@@ -13,8 +13,10 @@ import rife.workflow.Workflow;
 
 import java.io.File;
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Predicate;
 
 /**
  * The main site of your web application, which is also the
@@ -58,10 +60,9 @@ public class Site extends Router {
         if (null == pathInfo) {
             var routes = routes_.get(url);
             if (routes != null && !routes.isEmpty()) {
-                for (var route : routes) {
-                    if (routeHandlesMethod(route, request.getMethod())) {
-                        return route;
-                    }
+                var route = findRouteForMethod(routes, request.getMethod(), r -> true);
+                if (route != null) {
+                    return route;
                 }
             }
 
@@ -71,10 +72,9 @@ public class Site extends Router {
                 // seen as simulating a directory
                 if (stripped_url.lastIndexOf('.') <= stripped_url.lastIndexOf('/')) {
                     if (routes != null && !routes.isEmpty()) {
-                        for (var route : routes) {
-                            if (routeHandlesMethod(route, request.getMethod())) {
-                                return route;
-                            }
+                        var route = findRouteForMethod(routes, request.getMethod(), r -> true);
+                        if (route != null) {
+                            return route;
                         }
                     }
                 }
@@ -82,6 +82,23 @@ public class Site extends Router {
         }
 
         return resolvePathInfoUrl(request, url, pathInfo);
+    }
+
+    // GET routes also answer HEAD, routes that handle HEAD themselves come first
+    private static Route findRouteForMethod(List<Route> routes, RequestMethod method, Predicate<Route> condition) {
+        for (var route : routes) {
+            if (routeHandlesMethod(route, method) && condition.test(route)) {
+                return route;
+            }
+        }
+        if (method == RequestMethod.HEAD) {
+            for (var route : routes) {
+                if (routeHandlesMethod(route, RequestMethod.GET) && condition.test(route)) {
+                    return route;
+                }
+            }
+        }
+        return null;
     }
 
     private static boolean routeHandlesMethod(Route route, RequestMethod method) {
@@ -107,26 +124,23 @@ public class Site extends Router {
         // if a path info was provided, check the path info mappings for the first that matches
         if (pathInfo != null) {
             var path_info = StringUtils.stripFromFront(pathInfo, "/");
-            for (var route : routes) {
-                if (route.pathInfoHandling().type() == PathInfoType.MAP && routeHandlesMethod(route, request.getMethod())) {
-                    for (var mapping : route.pathInfoHandling().mappings()) {
-                        var matcher = mapping.regexp().matcher(path_info);
-                        if (matcher.matches()) {
-                            return route;
+            var route = findRouteForMethod(routes, request.getMethod(), r -> {
+                if (r.pathInfoHandling().type() == PathInfoType.MAP) {
+                    for (var mapping : r.pathInfoHandling().mappings()) {
+                        if (mapping.regexp().matcher(path_info).matches()) {
+                            return true;
                         }
                     }
                 }
-            }
-        }
-
-        // return the first route that handles the url and doesn't have  any path info mappings
-        for (var route : routes) {
-            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && routeHandlesMethod(route, request.getMethod())) {
+                return false;
+            });
+            if (route != null) {
                 return route;
             }
         }
 
-        return null;
+        // return the first route that handles the url and doesn't have  any path info mappings
+        return findRouteForMethod(routes, request.getMethod(), r -> r.pathInfoHandling().type() == PathInfoType.CAPTURE);
     }
 
     private Route resolveFallback(String url) {

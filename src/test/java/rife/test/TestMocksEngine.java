@@ -18,6 +18,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -181,6 +182,48 @@ public class TestMocksEngine {
 
         response = conversation.doRequest("http://localhost/simple/plain");
         assertEquals(404, response.getStatus());
+    }
+
+    @Test
+    void testGetAnswersHead() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/page", c -> {
+                    c.setContentType("text/plain");
+                    c.addHeader("X-Method", c.method().name());
+                    c.addCookie(new CookieBuilder("visited", "yes"));
+                    c.print("page");
+                });
+                get("/info", PathInfoHandling.CAPTURE, c -> c.print("info:" + c.pathInfo()));
+                get("/explicit-after", c -> c.addHeader("X-Route", "get"));
+                head("/explicit-after", c -> c.addHeader("X-Route", "head"));
+                head("/explicit-before", c -> c.addHeader("X-Route", "head"));
+                get("/explicit-before", c -> c.addHeader("X-Route", "get"));
+                post("/post", c -> c.print("post"));
+            }
+        });
+
+        var head = new MockRequest().method(RequestMethod.HEAD);
+        var response = conversation.doRequest("/page", head);
+        assertEquals(200, response.getStatus());
+        assertEquals("text/plain; charset=UTF-8", response.getContentType());
+        assertEquals("HEAD", response.getHeader("X-Method"));
+        assertEquals(List.of("visited"), response.getNewCookieNames());
+        assertEquals("", response.getText());
+        assertEquals(0, response.getBytes().length);
+
+        assertEquals("page", conversation.doRequest("/page").getText());
+
+        response = conversation.doRequest("/info/more", new MockRequest().method(RequestMethod.HEAD));
+        assertEquals(200, response.getStatus());
+        assertEquals("", response.getText());
+
+        assertEquals("head", conversation.doRequest("/explicit-after", new MockRequest().method(RequestMethod.HEAD)).getHeader("X-Route"));
+        assertEquals("head", conversation.doRequest("/explicit-before", new MockRequest().method(RequestMethod.HEAD)).getHeader("X-Route"));
+        assertEquals("get", conversation.doRequest("/explicit-after").getHeader("X-Route"));
+        assertEquals("get", conversation.doRequest("/explicit-before").getHeader("X-Route"));
+
+        assertEquals(404, conversation.doRequest("/post", new MockRequest().method(RequestMethod.HEAD)).getStatus());
     }
 
     @Test

@@ -11,6 +11,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import rife.engine.AbstractResponse;
 import rife.engine.Request;
+import rife.engine.RequestMethod;
 import rife.engine.Response;
 import rife.engine.exceptions.EngineException;
 import rife.template.Template;
@@ -69,6 +70,8 @@ public class MockResponse extends AbstractResponse {
     /**
      * Retrieves an array of all the bytes that have been written to this
      * response.
+     * <p>For a {@code HEAD} request this is empty, since a servlet container
+     * doesn't send the content of the response.
      *
      * @return an array of bytes with the response content
      * @see #getText
@@ -77,6 +80,9 @@ public class MockResponse extends AbstractResponse {
      * @since 1.0
      */
     public byte[] getBytes() {
+        if (getRequest().getMethod() == RequestMethod.HEAD) {
+            return new byte[0];
+        }
         return mockOutputStream_.toByteArray();
     }
 

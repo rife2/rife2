@@ -273,6 +273,8 @@ public class Router {
     /**
      * Registers a class element as a route for the GET method,
      * the path will be derived from the uncapitalized shortened class name.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param elementClass the element to register a route for
      * @since 1.0
@@ -284,6 +286,8 @@ public class Router {
     /**
      * Registers a class element as a route for the GET method with a pathinfo handling,
      * the path will be derived from the uncapitalized shortened class name.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param pathInfo     the pathinfo handling to use
      * @param elementClass the element to register a route for
@@ -295,6 +299,8 @@ public class Router {
 
     /**
      * Registers a class element as a route for the GET method with a specific path.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param path         the path of the route
      * @param elementClass the element to register a route for
@@ -307,6 +313,8 @@ public class Router {
     /**
      * Registers a class element as a route for the GET method with a specific path
      * and pathinfo handling.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param path         the path of the route
      * @param pathInfo     the pathinfo handling to use
@@ -320,6 +328,8 @@ public class Router {
     /**
      * Registers an element supplier as a route for the GET method,
      * the path will be derived from the uncapitalized shortened class name.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param elementSupplier the element to register a route for
      * @since 1.1
@@ -331,6 +341,8 @@ public class Router {
     /**
      * Registers an element supplier as a route for the GET method with a pathinfo handling,
      * the path will be derived from the uncapitalized shortened class name.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param pathInfo        the pathinfo handling to use
      * @param elementSupplier the element to register a route for
@@ -342,6 +354,8 @@ public class Router {
 
     /**
      * Registers an element supplier as a route for the GET method with a specific path.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param path            the path of the route
      * @param elementSupplier the element to register a route for
@@ -354,6 +368,8 @@ public class Router {
     /**
      * Registers an element supplier as a route for the GET method with a specific path
      * and pathinfo handling.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param path            the path of the route
      * @param pathInfo        the pathinfo handling to use
@@ -366,6 +382,8 @@ public class Router {
 
     /**
      * Registers a lambda element as a route for the GET method with a specific path.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param path    the path of the route
      * @param element the element to register a route for
@@ -378,6 +396,8 @@ public class Router {
     /**
      * Registers a lambda element as a route for the GET method with a specific path
      * and pathinfo handling.
+     * <p>A HEAD request is also handled by this route, unless a route for
+     * the HEAD method matches it.
      *
      * @param path     the path of the route
      * @param pathInfo the pathinfo handling to use
@@ -1499,6 +1519,8 @@ public class Router {
 
     /**
      * Registers a class element as a route for HTTP method with a specific path and pathinfo handling.
+     * <p>When the methods include GET, a HEAD request is also handled by this
+     * route, unless a route for the HEAD method matches it.
      *
      * @param path         the path of the route
      * @param pathInfo     the pathinfo handling to use
@@ -1512,6 +1534,8 @@ public class Router {
 
     /**
      * Registers a class element as a route for HTTP method with a specific path handling.
+     * <p>When the methods include GET, a HEAD request is also handled by this
+     * route, unless a route for the HEAD method matches it.
      *
      * @param path         the path of the route
      * @param methods      the HTTP methods
@@ -1595,6 +1619,8 @@ public class Router {
 
     /**
      * Registers an element supplier as a route for HTTP methods with a specific path and pathinfo handling.
+     * <p>When the methods include GET, a HEAD request is also handled by this
+     * route, unless a route for the HEAD method matches it.
      *
      * @param path            the path of the route
      * @param pathInfo        the pathinfo handling to use
@@ -1608,6 +1634,8 @@ public class Router {
 
     /**
      * Registers an element supplier as a route for HTTP methods with a specific path handling.
+     * <p>When the methods include GET, a HEAD request is also handled by this
+     * route, unless a route for the HEAD method matches it.
      *
      * @param path            the path of the route
      * @param methods         the HTTP methods

@@ -26,16 +26,16 @@ public class TestMocksRouting {
         assertEquals("class GetElement",                        conversation.doRequest("/supplier/get3", new MockRequest().method(RequestMethod.GET)).getText());
         assertEquals("class GetPathInfoElement:otherpathinfo",  conversation.doRequest("/supplier/get4/otherpathinfo", new MockRequest().method(RequestMethod.GET)).getText());
 
-        assertNotEquals(200, conversation.doRequest("/routingGetSite_GetElement", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/routingGetSite_GetPathInfoElement/pathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/get3", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/get4/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/get5", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/get6/differentpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/supplier/routingGetSite_GetElement", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/supplier/routingGetSite_GetPathInfoElement/pathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/supplier/get3", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/supplier/get4/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/routingGetSite_GetElement", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/routingGetSite_GetPathInfoElement/pathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/get3", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/get4/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/get5", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/get6/differentpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/supplier/routingGetSite_GetElement", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/supplier/routingGetSite_GetPathInfoElement/pathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/supplier/get3", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/supplier/get4/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
 
         assertNotEquals(200, conversation.doRequest("/routingGetSite_GetElement", new MockRequest().method(RequestMethod.POST)).getStatus());
         assertNotEquals(200, conversation.doRequest("/routingGetSite_GetPathInfoElement/pathinfo", new MockRequest().method(RequestMethod.POST)).getStatus());
@@ -581,12 +581,12 @@ public class TestMocksRouting {
         assertEquals("class GetElement",                        conversation.doRequest("/combo5", new MockRequest().method(RequestMethod.GET)).getText());
         assertEquals("class GetPathInfoElement:otherpathinfo",  conversation.doRequest("/combo6/otherpathinfo", new MockRequest().method(RequestMethod.GET)).getText());
 
-        assertNotEquals(200, conversation.doRequest("/combo1", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/combo2/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/combo3", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/combo4/differentpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/combo5", new MockRequest().method(RequestMethod.HEAD)).getStatus());
-        assertNotEquals(200, conversation.doRequest("/combo6/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/combo1", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/combo2/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/combo3", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/combo4/differentpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/combo5", new MockRequest().method(RequestMethod.HEAD)).getStatus());
+        assertEquals(200, conversation.doRequest("/combo6/otherpathinfo", new MockRequest().method(RequestMethod.HEAD)).getStatus());
 
         assertEquals("class PostElement",                        conversation.doRequest("/combo1", new MockRequest().method(RequestMethod.POST)).getText());
         assertEquals("class PostPathInfoElement:otherpathinfo",  conversation.doRequest("/combo2/otherpathinfo", new MockRequest().method(RequestMethod.POST)).getText());
