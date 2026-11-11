@@ -84,7 +84,9 @@ public class TestContinuations {
 
                 var text = page.getWebResponse().getContentAsString();
 
+                webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
                 page = webClient.getPage("http://localhost:8181/null_reference?" + SpecialParameters.CONT_ID + "=" + text);
+                assertEquals(500, page.getWebResponse().getStatusCode());
                 assertTrue(page.getWebResponse().getContentAsString().contains("java.lang.NullPointerException"));
             }
         }
