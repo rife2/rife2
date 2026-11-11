@@ -16,6 +16,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,6 +58,29 @@ public class TestMocksEngine {
             assertTrue(response.getText().contains("route failure"));
         } finally {
             RifeConfig.engine().setLogEngineExceptions(log);
+        }
+    }
+
+    @Test
+    void testPassThroughSuffix() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/robots.txt", c -> c.print("User-agent: *"));
+            }
+        });
+
+        assertEquals(404, conversation.doRequest("http://localhost/robots.txt").getStatus());
+
+        var suffixes = RifeConfig.engine().getPassThroughSuffixes();
+        var without_txt = new HashSet<>(suffixes);
+        without_txt.remove("txt");
+        RifeConfig.engine().setPassThroughSuffixes(without_txt);
+        try {
+            var response = conversation.doRequest("http://localhost/robots.txt");
+            assertEquals(200, response.getStatus());
+            assertEquals("User-agent: *", response.getText());
+        } finally {
+            RifeConfig.engine().setPassThroughSuffixes(suffixes);
         }
     }
 

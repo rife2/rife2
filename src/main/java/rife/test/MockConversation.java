@@ -5,11 +5,13 @@
 package rife.test;
 
 import jakarta.servlet.http.Cookie;
+import rife.config.RifeConfig;
 import rife.engine.Gate;
 import rife.engine.Site;
 import rife.engine.exceptions.EngineException;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ArrayUtils;
+import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import java.util.ArrayList;
@@ -130,6 +132,10 @@ public class MockConversation implements AutoCloseable {
      * <pre>/some/url?name1=value1&amp;name2=value2</pre>
      * <p>Note that when the complete URL form is used, it should correspond
      * to the scheme, hostname and port configuration of this conversation.
+     * <p>Like a deployed application, a request whose URL ends in one of the
+     * {@linkplain rife.config.RifeConfig.EngineConfig#getPassThroughSuffixes()
+     * pass-through suffixes} isn't routed and gets a 404 response, since
+     * there's no container here to serve it as a static file.
      *
      * @param url     the url that should be tested
      * @param request the request that will be used
@@ -185,7 +191,9 @@ public class MockConversation implements AutoCloseable {
         var response = new MockResponse(this, request);
         request.setMockResponse(response);
         request.setRequestedSessionId(path_parameters);
-        if (!gate_.handleRequest("", url, request, response)) {
+        var extension = FileUtils.getExtension(url);
+        if ((extension != null && RifeConfig.engine().getPassThroughSuffixes().contains(extension)) ||
+            !gate_.handleRequest("", url, request, response)) {
             response.setStatus(404);
         }
         return response;
