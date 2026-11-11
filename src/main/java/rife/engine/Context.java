@@ -53,7 +53,7 @@ public class Context {
     /**
      * Status code (301) indicating that the resource has permanently moved to the location in the response.
      *
-     * @since 1.10.2
+     * @since 1.11.0
      */
     public static final int SC_MOVED_PERMANENTLY = 301;
 
@@ -61,7 +61,7 @@ public class Context {
      * Status code (308) indicating that the resource has permanently moved to the location in the response,
      * and that the request method must not change.
      *
-     * @since 1.10.2
+     * @since 1.11.0
      */
     public static final int SC_PERMANENT_REDIRECT = 308;
 
@@ -1256,7 +1256,7 @@ public class Context {
      *            will be called with this object, so a variety of types can be used
      * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
      *                           catch this exception
-     * @since 1.10.2
+     * @since 1.11.0
      */
     public void redirectPermanent(Object url)
     throws RedirectException {
@@ -1274,7 +1274,7 @@ public class Context {
      * @param route the route to which the request will be redirected
      * @throws RedirectException an exception that is used to immediately interrupt the execution, don't
      *                           catch this exception
-     * @since 1.10.2
+     * @since 1.11.0
      */
     public void redirectPermanent(Route route)
     throws RedirectException {

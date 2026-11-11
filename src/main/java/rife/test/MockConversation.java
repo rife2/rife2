@@ -64,7 +64,7 @@ public class MockConversation implements AutoCloseable {
      *
      * @param site       the site structure that will be tested
      * @param properties the properties that will be used by this conversation
-     * @since 1.10.2
+     * @since 1.11.0
      */
     public MockConversation(Site site, HierarchicalProperties properties)
     throws EngineException {
