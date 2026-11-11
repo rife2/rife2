@@ -99,7 +99,14 @@ public abstract class Executor {
         assert task != null;
 
         var executor_thread = new ExecutorThread(this, task);
+        executor_thread.activate();
         var thread = new Thread(executor_thread, getHandledTaskType());
-        thread.start();
+        try {
+            thread.start();
+        } catch (RuntimeException | Error e) {
+            // a task that never runs would otherwise stay busy forever
+            scheduler_.getTaskManager().deactivateTask(task.getId());
+            throw e;
+        }
     }
 }

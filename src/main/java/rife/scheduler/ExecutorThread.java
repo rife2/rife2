@@ -10,10 +10,20 @@ import rife.scheduler.exceptions.TaskManagerException;
 class ExecutorThread implements Runnable {
     private final Executor executor_;
     private final Task task_;
+    private boolean activated_ = false;
 
     public ExecutorThread(Executor executor, Task task) {
         executor_ = executor;
         task_ = task;
+    }
+
+    // called on the scheduler thread, so that its next step can't start the task again
+    void activate() {
+        try {
+            executor_.getScheduler().getTaskManager().activateTask(task_.getId());
+            activated_ = true;
+        } catch (TaskManagerException ignored) {
+        }
     }
 
     public void run() {
@@ -23,8 +33,9 @@ class ExecutorThread implements Runnable {
         var manager = executor_.getScheduler().getTaskManager();
 
         try {
-            manager.activateTask(task_.getId());
-            successful_execution = executor_.executeTask(task_);
+            if (activated_) {
+                successful_execution = executor_.executeTask(task_);
+            }
         } catch (TaskManagerException ignored) {
         } finally {
             try {

@@ -11,12 +11,15 @@ import rife.scheduler.Scheduler;
 import rife.scheduler.Task;
 import rife.scheduler.TestRetryExecutor;
 import rife.scheduler.TestTasktypes;
+import rife.scheduler.taskmanagers.MemoryTasks;
+import rife.scheduler.taskoptionmanagers.MemoryTaskOptions;
 import rife.tools.ExceptionUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,6 +72,44 @@ public class TestMemoryScheduler {
         scheduler.addExecutor(executor);
         assertEquals(executor, scheduler.getExecutor(executor.getHandledTaskType()));
         assertTrue(scheduler.removeExecutor(executor));
+    }
+
+    @Test
+    void testTaskStartedOnceWhileActivating()
+    throws Exception {
+        var taskmanager = new MemoryTasks() {
+            public boolean activateTask(int id) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                return super.activateTask(id);
+            }
+        };
+        var scheduler = new Scheduler(taskmanager, new MemoryTaskOptions());
+        var executions = new AtomicInteger();
+        var executor = new Executor() {
+            public boolean executeTask(Task task) {
+                executions.incrementAndGet();
+                return true;
+            }
+        };
+        scheduler.addExecutor(executor);
+        scheduler.setSleepTime(50);
+        taskmanager.addTask(executor.createTask().planned(System.currentTimeMillis() - 1));
+
+        scheduler.start();
+        try {
+            Thread.sleep(600);
+        } finally {
+            synchronized (scheduler) {
+                scheduler.stop();
+                scheduler.wait();
+            }
+        }
+
+        assertEquals(1, executions.get());
     }
 
     @Test
