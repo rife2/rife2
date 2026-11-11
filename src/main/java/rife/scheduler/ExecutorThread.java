@@ -21,6 +21,8 @@ class ExecutorThread implements Runnable {
     void activate() {
         try {
             executor_.getScheduler().getTaskManager().activateTask(task_.getId());
+            // rescheduling stores this copy, it has to stay busy until deactivateTask
+            task_.setBusy(true);
             activated_ = true;
         } catch (TaskManagerException ignored) {
         }

@@ -11,10 +11,13 @@ import rife.database.Datasource;
 import rife.database.TestDatasources;
 import rife.scheduler.Executor;
 import rife.scheduler.Frequency;
+import rife.scheduler.Scheduler;
 import rife.scheduler.Task;
+import rife.scheduler.TaskManager;
 import rife.scheduler.TestRetryExecutor;
 import rife.scheduler.TestTasktypes;
 import rife.scheduler.exceptions.SchedulerManagerException;
+import rife.scheduler.exceptions.TaskManagerException;
 import rife.tools.ExceptionUtils;
 import rife.tools.Localization;
 
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -188,6 +192,84 @@ public class TestDatabaseScheduler {
             taskmanager.removeTask(task.getId());
         } finally {
             tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testRetriedTaskStartedOnceWhileDeactivating(Datasource datasource)
+    throws Exception {
+        setup(datasource);
+
+        try {
+            var database_scheduler = DatabaseSchedulingFactory.instance(datasource).createScheduler();
+            var taskmanager = new SlowDeactivationTasks(database_scheduler.getTaskManager());
+            var scheduler = new Scheduler(taskmanager, database_scheduler.getTaskOptionManager());
+            var executions = new AtomicInteger();
+            var executor = new Executor() {
+                public boolean executeTask(Task task) {
+                    if (executions.incrementAndGet() == 1) {
+                        return false;
+                    }
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    return true;
+                }
+
+                protected long getRescheduleDelay() {
+                    return 100;
+                }
+            };
+            scheduler.addExecutor(executor);
+            scheduler.setSleepTime(50);
+            var id = taskmanager.addTask(executor.createTask().planned(System.currentTimeMillis()));
+
+            scheduler.start();
+            try {
+                var deadline = System.currentTimeMillis() + 3000;
+                while (taskmanager.getTask(id) != null &&
+                       System.currentTimeMillis() < deadline) {
+                    Thread.sleep(10);
+                }
+                assertNull(taskmanager.getTask(id));
+                assertEquals(2, executions.get());
+            } finally {
+                synchronized (scheduler) {
+                    scheduler.stop();
+                    scheduler.wait();
+                }
+            }
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    // widens the window between a failed execution's reschedule and its deactivation
+    private record SlowDeactivationTasks(TaskManager delegate) implements TaskManager {
+        public void setScheduler(Scheduler scheduler) { delegate.setScheduler(scheduler); }
+        public Scheduler getScheduler() { return delegate.getScheduler(); }
+        public int addTask(Task task) throws TaskManagerException { return delegate.addTask(task); }
+        public boolean updateTask(Task task) throws TaskManagerException { return delegate.updateTask(task); }
+        public Task getTask(int id) throws TaskManagerException { return delegate.getTask(id); }
+        public boolean removeTask(int id) throws TaskManagerException { return delegate.removeTask(id); }
+        public Collection<Task> getAllTasks() throws TaskManagerException { return delegate.getAllTasks(); }
+        public Collection<Task> getTasksToProcess() throws TaskManagerException { return delegate.getTasksToProcess(); }
+        public Collection<Task> getScheduledTasks() throws TaskManagerException { return delegate.getScheduledTasks(); }
+        public boolean rescheduleTask(Task task, long planned, Frequency frequency) throws TaskManagerException { return delegate.rescheduleTask(task, planned, frequency); }
+        public boolean activateTask(int id) throws TaskManagerException { return delegate.activateTask(id); }
+        public boolean concludeTask(Task task) throws TaskManagerException { return delegate.concludeTask(task); }
+
+        public boolean deactivateTask(int id)
+        throws TaskManagerException {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            return delegate.deactivateTask(id);
         }
     }
 
