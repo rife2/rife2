@@ -143,11 +143,7 @@ public class MemoryUsers implements CredentialsManager, RoleUsersManager, Passwo
 
     public MemoryUsers addUser(String login, RoleUserAttributes attributes)
     throws CredentialsManagerException {
-        if (null == login ||
-            login.isEmpty() ||
-            null == attributes) {
-            throw new AddUserErrorException(login, attributes);
-        }
+        DatabaseUsers.checkNewUser(login, attributes);
 
         writeLock_.lock();
         try {

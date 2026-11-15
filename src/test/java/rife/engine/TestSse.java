@@ -999,7 +999,7 @@ public class TestSse {
             validator.getCredentialsManager()
                 .addRole("admin")
                 .addUser("alice", new rife.authentication.credentialsmanagers.RoleUserAttributes("alicepass").role("admin"))
-                .addUser("bob", new rife.authentication.credentialsmanagers.RoleUserAttributes("bobpass"));
+                .addUser("bobby", new rife.authentication.credentialsmanagers.RoleUserAttributes("bobbypass"));
         }
 
         final Route login = route("/login", new rife.authentication.elements.Login(config,
@@ -1033,7 +1033,7 @@ public class TestSse {
         var alice_conversation = loginConversation(site, "alice", "alicepass");
         var alice_events = alice_conversation.doRequest("/events");
 
-        var bob_conversation = loginConversation(site, "bob", "bobpass");
+        var bob_conversation = loginConversation(site, "bobby", "bobbypass");
         var bob_events = bob_conversation.doRequest("/events");
 
         assertEquals(2, site.broadcaster.connectionCount());

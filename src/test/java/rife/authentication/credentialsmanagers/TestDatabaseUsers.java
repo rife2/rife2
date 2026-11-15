@@ -7,6 +7,7 @@ package rife.authentication.credentialsmanagers;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import rife.authentication.credentials.RoleUser;
+import rife.authentication.credentialsmanagers.exceptions.AddUserErrorException;
 import rife.authentication.credentialsmanagers.exceptions.DuplicateLoginException;
 import rife.authentication.credentialsmanagers.exceptions.DuplicateRoleException;
 import rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdException;
@@ -132,6 +133,21 @@ public class TestDatabaseUsers {
             roles_.add(name);
 
             return true;
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testAddUserLoginLength(Datasource datasource) {
+        var users = DatabaseUsersFactory.instance(datasource);
+        try {
+            users.install();
+            assertThrows(AddUserErrorException.class, () -> users.addUser("abcd", new RoleUserAttributes("thepassword")));
+            assertThrows(AddUserErrorException.class, () -> users.addUser("a".repeat(41), new RoleUserAttributes("thepassword")));
+            users.addUser("abcde", new RoleUserAttributes("thepassword"));
+            assertEquals(1, users.countUsers());
+        } finally {
+            users.remove();
         }
     }
 

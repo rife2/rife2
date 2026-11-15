@@ -119,11 +119,7 @@ public class com_mysql_cj_jdbc_Driver extends generic {
 
     public DatabaseUsers addUser(final String login, final RoleUserAttributes attributes)
     throws CredentialsManagerException {
-        if (null == login ||
-            login.isEmpty() ||
-            null == attributes) {
-            throw new AddUserErrorException(login, attributes);
-        }
+        checkNewUser(login, attributes);
 
         try {
             // ensure that the password is encoded if an encoder has been set

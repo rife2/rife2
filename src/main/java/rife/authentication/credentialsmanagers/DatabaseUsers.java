@@ -6,6 +6,7 @@
  */
 package rife.authentication.credentialsmanagers;
 
+import rife.config.RifeConfig;
 import rife.authentication.Credentials;
 import rife.authentication.CredentialsManager;
 import rife.authentication.PasswordEncrypting;
@@ -249,6 +250,18 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         return result;
     }
 
+    // RoleUser validates the login length, so the user couldn't log in
+    protected static void checkNewUser(String login, RoleUserAttributes attributes)
+    throws AddUserErrorException {
+        if (null == login ||
+            login.isEmpty() ||
+            login.length() < RifeConfig.authentication().getLoginMinimumLength() ||
+            login.length() > RifeConfig.authentication().getLoginMaximumLength() ||
+            null == attributes) {
+            throw new AddUserErrorException(login, attributes);
+        }
+    }
+
     protected void _addUser(final Insert addUserWithId, final Select getFreeUserId, final Select getRoleId, final Insert addRoleLink, final String login, final RoleUserAttributes attributes)
     throws CredentialsManagerException {
         assert addUserWithId != null;
@@ -256,11 +269,7 @@ public abstract class DatabaseUsers extends DbQueryManager implements Credential
         assert getRoleId != null;
         assert addRoleLink != null;
 
-        if (null == login ||
-            login.isEmpty() ||
-            null == attributes) {
-            throw new AddUserErrorException(login, attributes);
-        }
+        checkNewUser(login, attributes);
 
         try {
             try {

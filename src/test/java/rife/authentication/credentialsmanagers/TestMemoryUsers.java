@@ -6,6 +6,7 @@ package rife.authentication.credentialsmanagers;
 
 import org.junit.jupiter.api.Test;
 import rife.authentication.credentials.RoleUser;
+import rife.authentication.credentialsmanagers.exceptions.AddUserErrorException;
 import rife.authentication.credentialsmanagers.exceptions.DuplicateLoginException;
 import rife.authentication.credentialsmanagers.exceptions.DuplicateRoleException;
 import rife.authentication.credentialsmanagers.exceptions.DuplicateUserIdException;
@@ -116,6 +117,16 @@ public class TestMemoryUsers {
         } catch (CredentialsManagerException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+    }
+
+    @Test
+    void testAddUserLoginLength() {
+        var users = new MemoryUsers();
+        assertThrows(AddUserErrorException.class, () -> users.addUser("abcd", new RoleUserAttributes("thepassword")));
+        assertThrows(AddUserErrorException.class, () -> users.addUser("a".repeat(41), new RoleUserAttributes("thepassword")));
+        users.addUser("abcde", new RoleUserAttributes("thepassword"));
+        users.addUser("a".repeat(40), new RoleUserAttributes("thepassword"));
+        assertEquals(2, users.countUsers());
     }
 
     @Test
