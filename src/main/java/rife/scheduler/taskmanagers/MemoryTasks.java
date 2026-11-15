@@ -132,8 +132,6 @@ public class MemoryTasks implements TaskManager {
         if (null == task) throw new IllegalArgumentException("task can't be null.");
         if (planned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
 
-        var result = false;
-
         Task task_tmp;
         try {
             task_tmp = task.clone();
@@ -146,11 +144,8 @@ public class MemoryTasks implements TaskManager {
                 throw new RescheduleTaskErrorException(task.getId(), planned, frequency, e);
             }
         }
-        result = updateTask(task_tmp);
-
-        assert result;
-
-        return result;
+        // false when the task was removed while it was executing
+        return updateTask(task_tmp);
     }
 
     public boolean concludeTask(Task task)

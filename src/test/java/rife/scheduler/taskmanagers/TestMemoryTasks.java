@@ -163,6 +163,16 @@ public class TestMemoryTasks {
     }
 
     @Test
+    void testRescheduleRemovedTask()
+    throws Exception {
+        var manager = new MemoryTasks();
+        var id = manager.addTask(new Task().type(TestTasktypes.UPLOAD_GROUPS).planned(System.currentTimeMillis()).frequency(Frequency.MINUTELY));
+        var task = manager.getTask(id);
+        manager.removeTask(id);
+        assertFalse(manager.rescheduleTask(task, System.currentTimeMillis() + 1000, task.getFrequency()));
+    }
+
+    @Test
     void testGetNonExistingTask() {
         TaskManager manager = new MemoryTasks();
         var task_nonexisting_id = 0;

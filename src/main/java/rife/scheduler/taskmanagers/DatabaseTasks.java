@@ -118,19 +118,12 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
 
         if (null == task) throw new IllegalArgumentException("task can't be null.");
 
-        var result = false;
-
         try {
-            if (0 == executeUpdate(updateTask, handler)) {
-                throw new UpdateTaskErrorException(task);
-            }
-
-            result = true;
+            // like the memory tasks, a task that doesn't exist anymore isn't updated
+            return executeUpdate(updateTask, handler) > 0;
         } catch (DatabaseException e) {
             throw new UpdateTaskErrorException(task, e);
         }
-
-        return result;
     }
 
     protected Task getTask_(Select getTask, ProcessTask processTask, final int id)
@@ -227,8 +220,6 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
         if (null == task) throw new IllegalArgumentException("task can't be null.");
         if (newPlanned <= 0) throw new IllegalArgumentException("newPlanned has to be bigger than 0.");
 
-        var result = false;
-
         Task task_tmp = null;
         try {
             task_tmp = task.clone();
@@ -241,11 +232,8 @@ public abstract class DatabaseTasks extends DbQueryManager implements TaskManage
                 throw new RescheduleTaskErrorException(task.getId(), newPlanned, frequency, e);
             }
         }
-        result = updateTask(task_tmp);
-
-        assert result;
-
-        return result;
+        // false when the task was removed while it was executing
+        return updateTask(task_tmp);
     }
 
     protected boolean concludeTask_(Task task)

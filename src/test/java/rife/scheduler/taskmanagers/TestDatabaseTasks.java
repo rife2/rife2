@@ -43,6 +43,22 @@ public class TestDatabaseTasks {
 
     @ParameterizedTest
     @ArgumentsSource(TestDatasources.class)
+    void testRescheduleRemovedTask(Datasource datasource)
+    throws Exception {
+        setup(datasource);
+        try {
+            var manager = DatabaseTasksFactory.instance(datasource);
+            var id = manager.addTask(new Task().type(TestTasktypes.UPLOAD_GROUPS).planned(System.currentTimeMillis()).frequency(Frequency.MINUTELY));
+            var task = manager.getTask(id);
+            manager.removeTask(id);
+            assertFalse(manager.rescheduleTask(task, System.currentTimeMillis() + 1000, task.getFrequency()));
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
     void testInstantiateTaskManager(Datasource datasource) {
         var manager = DatabaseTasksFactory.instance(datasource);
         assertNotNull(manager);
