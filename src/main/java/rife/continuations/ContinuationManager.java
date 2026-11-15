@@ -4,10 +4,8 @@
  */
 package rife.continuations;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -43,7 +41,7 @@ public class ContinuationManager {
      */
     public ContinuationManager(ContinuationConfigRuntime config) {
         config_ = config;
-        contexts_ = new WeakHashMap<>();
+        contexts_ = new HashMap<>();
     }
 
     /**
@@ -209,46 +207,11 @@ public class ContinuationManager {
 
     private class PurgeContinuations extends Thread {
         public void run() {
-            purge();
-        }
-
-        private void purge() {
+            writeLock_.lock();
             try {
-                var stale_continuations = new ArrayList<String>();
-                for (var context : contexts_.values()) {
-                    if (context != null &&
-                        isExpired(context)) {
-                        stale_continuations.add(context.getId());
-                    }
-                }
-
-                if (!stale_continuations.isEmpty()) {
-                    writeLock_.lock();
-                    try {
-                        for (var id : stale_continuations) {
-                            contexts_.remove(id);
-                        }
-                    } finally {
-                        writeLock_.unlock();
-                    }
-                }
-
-            } catch (ConcurrentModificationException e) {
-                // Oops, something changed while we were looking.
-                // Lock the context and try again.
-                // Set our priority high while we have the sessions locked
-                var old_priority = Thread.currentThread().getPriority();
-                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-                try {
-                    writeLock_.lock();
-                    try {
-                        contexts_.values().removeIf(context -> context != null && isExpired(context));
-                    } finally {
-                        writeLock_.unlock();
-                    }
-                } finally {
-                    Thread.currentThread().setPriority(old_priority);
-                }
+                contexts_.values().removeIf(ContinuationManager.this::isExpired);
+            } finally {
+                writeLock_.unlock();
             }
         }
     }
