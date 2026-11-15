@@ -8,8 +8,10 @@ import rife.config.RifeConfig;
 import rife.scheduler.exceptions.*;
 import rife.scheduler.schedulermanagers.DatabaseScheduling;
 import rife.scheduler.schedulermanagers.MemoryScheduling;
+import rife.tools.ExceptionUtils;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The {@code Scheduler} class performs the actual task scheduling and dispatch to
@@ -291,6 +293,9 @@ public class Scheduler implements Runnable {
                         wait(difference);
                     }
                 } catch (InterruptedException e) {
+                    break;
+                } catch (RuntimeException e) {
+                    Logger.getLogger("rife.scheduler").severe("The scheduler stopped after an error:\n" + ExceptionUtils.getExceptionStackTrace(e));
                     break;
                 }
             }

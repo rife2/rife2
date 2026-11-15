@@ -19,10 +19,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static rife.scheduler.SchedulerTesting.stopAndAwait;
@@ -92,6 +97,43 @@ public class TestMemoryScheduler {
         scheduler.stop();
         scheduler_thread.get().join(2000);
         assertFalse(scheduler_thread.get().isAlive());
+    }
+
+    @Test
+    void testStepErrorIsLoggedAndStops()
+    throws Exception {
+        var scheduler_thread = new AtomicReference<Thread>();
+        var taskmanager = new MemoryTasks() {
+            public Collection<Task> getTasksToProcess() {
+                scheduler_thread.set(Thread.currentThread());
+                throw new IllegalStateException("the task store is unreachable");
+            }
+        };
+        var records = new CopyOnWriteArrayList<LogRecord>();
+        var handler = new Handler() {
+            public void publish(LogRecord record) { records.add(record); }
+            public void flush() {}
+            public void close() {}
+        };
+        var logger = Logger.getLogger("rife.scheduler");
+        logger.addHandler(handler);
+        try {
+            var scheduler = new Scheduler(taskmanager, new MemoryTaskOptions());
+            scheduler.start();
+
+            var deadline = System.currentTimeMillis() + 5000;
+            while ((scheduler_thread.get() == null || scheduler_thread.get().isAlive()) &&
+                   System.currentTimeMillis() < deadline) {
+                Thread.sleep(10);
+            }
+            assertFalse(scheduler_thread.get().isAlive());
+            assertFalse(scheduler.isRunning());
+            assertEquals(1, records.size());
+            assertEquals(Level.SEVERE, records.get(0).getLevel());
+            assertTrue(records.get(0).getMessage().contains("the task store is unreachable"));
+        } finally {
+            logger.removeHandler(handler);
+        }
     }
 
     @Test
