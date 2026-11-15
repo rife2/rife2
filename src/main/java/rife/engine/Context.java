@@ -213,20 +213,18 @@ public class Context {
         }
 
         Element element = null;
-        ContinuationContext continuation_context = null;
 
-        // resume a continuation context if it can be found
+        // only the element that a continuation belongs to resumes it, resuming
+        // gives it a new id, which would hide it from that element when
+        // a before route resumes it first
         var resume_id = parameter(SpecialParameters.CONT_ID);
-        continuation_context = site_.continuationManager_.resumeContext(resume_id);
-
-        // if a continuation context can be resumed, activate it
-        // when its continuable is the same type as the element that should be processed,
-        // process that continuable instead
-        if (continuation_context != null) {
-            ContinuationContext.setActiveContext(continuation_context);
-
-            if (continuation_context.getContinuable() != null &&
-                route.getElementClass() == continuation_context.getContinuable().getClass()) {
+        var existing_context = site_.continuationManager_.getContext(resume_id);
+        if (existing_context != null &&
+            existing_context.getContinuable() != null &&
+            route.getElementClass() == existing_context.getContinuable().getClass()) {
+            var continuation_context = site_.continuationManager_.resumeContext(resume_id);
+            if (continuation_context != null) {
+                ContinuationContext.setActiveContext(continuation_context);
                 updatedTemplatesInContinuation(continuation_context);
 
                 element = (Element) continuation_context.getContinuable();

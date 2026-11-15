@@ -75,6 +75,27 @@ public class TestContinuations {
     }
 
     @Test
+    void testPauseWithBeforeRoute()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                before(TestBeforeNoop.class);
+                get("/simple", TestSimplePause::new);
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage("http://localhost:8181/simple");
+                var lines = StringUtils.splitToArray(page.getWebResponse().getContentAsString(), "\n");
+                assertEquals("before simple pause", lines[0]);
+
+                // the before route doesn't take the continuation of the element
+                page = webClient.getPage("http://localhost:8181/simple?" + SpecialParameters.CONT_ID + "=" + lines[1]);
+                assertEquals("after simple pause", page.getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
     void testNull()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
