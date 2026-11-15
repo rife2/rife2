@@ -152,6 +152,17 @@ public class TestMemoryTasks {
     }
 
     @Test
+    void testGetAllTasksIsACopy()
+    throws Exception {
+        var manager = new MemoryTasks();
+        manager.addTask(new Task().type(TestTasktypes.UPLOAD_GROUPS).planned(System.currentTimeMillis()));
+        var all = manager.getAllTasks();
+        manager.addTask(new Task().type(TestTasktypes.SEND_RANKING).planned(System.currentTimeMillis()));
+        assertEquals(1, all.size());
+        assertEquals(2, manager.getAllTasks().size());
+    }
+
+    @Test
     void testGetNonExistingTask() {
         TaskManager manager = new MemoryTasks();
         var task_nonexisting_id = 0;

@@ -82,7 +82,7 @@ public class MemoryTasks implements TaskManager {
     public Collection<Task> getAllTasks()
     throws TaskManagerException {
         synchronized (this) {
-            return Collections.unmodifiableCollection(taskMapping_.values());
+            return Collections.unmodifiableCollection(new ArrayList<>(taskMapping_.values()));
         }
     }
 
