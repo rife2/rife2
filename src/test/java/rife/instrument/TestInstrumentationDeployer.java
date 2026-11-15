@@ -7,8 +7,10 @@ package rife.instrument;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import rife.tools.FileUtils;
+import rife.validation.Validated;
 import rife.workflow.Work;
 import rife.workflow.Workflow;
+import rifeinstrumenttests.Note;
 import rifeworkflowtests.CountdownWork;
 
 import java.io.File;
@@ -103,6 +105,44 @@ public class TestInstrumentationDeployer {
         } finally {
             FileUtils.deleteDirectory(in_dir);
             FileUtils.deleteDirectory(out_dir);
+        }
+    }
+
+    @Test
+    void testInstrumentMetaDataBeanTwice()
+    throws Throwable {
+        var in_dir = Files.createTempDirectory("deployer-in").toFile();
+        var out_dir = Files.createTempDirectory("deployer-out").toFile();
+        var second_out = Files.createTempDirectory("deployer-out2").toFile();
+        try {
+            var class_file = new File(in_dir, "rifeinstrumenttests/Note.class");
+            class_file.getParentFile().mkdirs();
+            FileUtils.writeBytes(classBytes(Note.class), class_file);
+
+            assertEquals(List.of("rifeinstrumenttests.Note"), InstrumentationDeployer.instrument(List.of(in_dir), out_dir, false));
+
+            // the merged metadata makes the bean constrained, so it also
+            // gets lazy loading, neither is added a second time
+            assertEquals(List.of(), InstrumentationDeployer.instrument(List.of(out_dir), second_out, false));
+
+            var bytes = FileUtils.readBytes(new File(out_dir, "rifeinstrumenttests/Note.class"));
+            var loader = new ClassLoader(getClass().getClassLoader()) {
+                protected Class<?> loadClass(String name, boolean resolve)
+                throws ClassNotFoundException {
+                    if (name.equals("rifeinstrumenttests.Note")) {
+                        var loaded = findLoadedClass(name);
+                        return loaded != null ? loaded : defineClass(name, bytes, 0, bytes.length);
+                    }
+                    return super.loadClass(name, resolve);
+                }
+            };
+            var note = loader.loadClass("rifeinstrumenttests.Note").getDeclaredConstructor().newInstance();
+            assertInstanceOf(Validated.class, note);
+            assertFalse(((Validated) note).validate());
+        } finally {
+            FileUtils.deleteDirectory(in_dir);
+            FileUtils.deleteDirectory(out_dir);
+            FileUtils.deleteDirectory(second_out);
         }
     }
 }
