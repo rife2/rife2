@@ -28,6 +28,31 @@ public class TestContinuations {
     }
 
     @Test
+    void testFinishedPause()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/finished", TestFinishedPause::new);
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                HtmlPage page = webClient.getPage("http://localhost:8181/finished");
+                var lines = StringUtils.splitToArray(page.getWebResponse().getContentAsString(), "\n");
+                assertEquals("before 1", lines[0]);
+
+                page = webClient.getPage("http://localhost:8181/finished?" + SpecialParameters.CONT_ID + "=" + lines[1]);
+                lines = StringUtils.splitToArray(page.getWebResponse().getContentAsString(), "\n");
+                assertEquals("after 1", lines[0]);
+
+                // the finished execution isn't resumed, a new instance starts
+                page = webClient.getPage("http://localhost:8181/finished?" + SpecialParameters.CONT_ID + "=" + lines[1]);
+                lines = StringUtils.splitToArray(page.getWebResponse().getContentAsString(), "\n");
+                assertEquals("before 1", lines[0]);
+            }
+        }
+    }
+
+    @Test
     void testSimplePause()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {

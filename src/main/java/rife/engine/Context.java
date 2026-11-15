@@ -180,12 +180,25 @@ public class Context {
         response_.setLastElement(element);
 
         // process the element with this context
+        var resumed_context = ContinuationContext.getActiveContext();
+        var paused = false;
         try {
             element.process(this);
         } catch (NextException ignored) {
             // this element is done processing
             // move on to the next one
+        } catch (PauseException e) {
+            paused = true;
+            throw e;
         } finally {
+            if (!paused) {
+                // a finished execution can't be resumed, links on its last
+                // page start the element again from a new instance
+                if (resumed_context != null &&
+                    resumed_context.getContinuable() == element) {
+                    site_.continuationManager_.removeContext(resumed_context.getId());
+                }
+            }
             route.finalizeElementInstance(element, this);
             ContinuationConfigRuntime.clearActiveConfigRuntime();
             ContinuationContext.clearActiveContext();
