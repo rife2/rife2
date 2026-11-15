@@ -476,7 +476,11 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         }
 
         // set general headers
-        context.setContentType(store.getContentType(content_info));
+        var content_type = store.getContentType(content_info);
+        if (null == content_type) {
+            content_type = "application/octet-stream";
+        }
+        context.setContentType(content_type);
         if (content_info.hasName()) {
             context.addHeader("Content-Disposition", inlineDisposition(content_info.getName()));
         }

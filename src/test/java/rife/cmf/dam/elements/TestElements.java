@@ -412,6 +412,7 @@ public class TestElements {
                 var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve/c++%20notes")).build();
                 var response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 assertEquals(200, response.statusCode());
+                assertEquals("application/octet-stream", response.headers().firstValue("Content-Type").orElse("").split(";")[0]);
                 assertEquals("the notes", response.body());
             }
         } finally {
