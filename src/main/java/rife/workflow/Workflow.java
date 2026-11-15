@@ -57,12 +57,13 @@ public class Workflow {
     private final AtomicLong activePauseCount_ = new AtomicLong();
 
     /**
-     * Creates a new workflow instance with a cached thread pool.
+     * Creates a new workflow instance with a cached thread pool of daemon
+     * threads.
      *
      * @since 1.0
      */
     public Workflow() {
-        this(Executors.newCachedThreadPool());
+        this(createDefaultExecutor());
     }
 
     /**
@@ -82,7 +83,7 @@ public class Workflow {
      * @since 1.0
      */
     public Workflow(HierarchicalProperties properties) {
-        this(Executors.newCachedThreadPool(), properties);
+        this(createDefaultExecutor(), properties);
     }
 
     /**
@@ -118,6 +119,14 @@ public class Workflow {
         workExecutor_ = executor;
         listeners_ = new CopyOnWriteArraySet<>();
         errorListeners_ = new CopyOnWriteArraySet<>();
+    }
+
+    private static ExecutorService createDefaultExecutor() {
+        return Executors.newCachedThreadPool(runnable -> {
+            var thread = Executors.defaultThreadFactory().newThread(runnable);
+            thread.setDaemon(true);
+            return thread;
+        });
     }
 
     /**

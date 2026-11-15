@@ -85,6 +85,16 @@ public class TestWorkflow {
     }
 
     @Test
+    void testDefaultExecutorUsesDaemonThreads()
+    throws Throwable {
+        var workflow = new Workflow();
+        var work = new RuntimeRecordingWork();
+        workflow.start(work);
+        workflow.waitForNoWork();
+        assertTrue(work.isDaemon());
+    }
+
+    @Test
     void testPausedWorkDoesntExpire()
     throws Throwable {
         var work = new RuntimeRecordingWork();
