@@ -390,7 +390,7 @@ public class SseConnection implements AutoCloseable {
             // context and concurrent sends don't mutate a shared template
             processed = (Template) template.clone();
             processed.setAttribute(Context.class.getName(), context_);
-            new EngineTemplateProcessor(context_, processed).processTemplate();
+            context_.processTemplate(processed);
             var block_id = event.templateBlockId();
             var content = block_id == null ? processed.getContent() : processed.getBlock(block_id);
             // a single trailing line break is a template file convention,

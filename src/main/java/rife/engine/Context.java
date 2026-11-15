@@ -507,26 +507,75 @@ public class Context {
      * testing API will have access to this template instance, allowing you
      * to assert of value content, instead of having to parse a response.
      *
-     * @param template the template to print
+     * @param template the template to print, nothing is printed when it's
+     *                 {@code null}
      * @throws TemplateException          if an error occurs while processing
      *                                    the template
      * @throws EngineException            if an error occurs during the output
      *                                    of the content
      * @throws SseOutputRefusedException  when an SSE connection has been
      *                                    established for this request
+     * @see #processTemplate(Template)
      * @since 1.0
      */
     public void print(Template template)
     throws TemplateException {
-        ensureNoSseConnection();
+        if (prepareForPrint(template)) {
+            // print the element contents with the auto-generated values
+            response_.print(template);
+        }
+    }
 
-        if (template != null && !template.hasAttribute(Context.class.getName())) {
+    /**
+     * Processes the filtered tags of a template, like printing it would,
+     * without printing it.
+     * <p>This fills in the values that the engine provides, like
+     * {@code route:}, {@code webapp:}, {@code context:} and {@code param:}
+     * tags. You need this when a template is embedded in another one as a
+     * value, since its content is generated at that moment and only the
+     * template that is printed is processed otherwise:
+     * <pre>board.setValue("card", c.processTemplate(card));
+     *
+     * for (var item : items) {
+     *     card.setValue("title", item.title());
+     *     board.appendValue("cards", c.processTemplate(card));
+     * }</pre>
+     * <p>The response isn't touched, its content type isn't set either.
+     * Processing the same template again only fills in the values that
+     * aren't set yet.
+     *
+     * @param template the template to process
+     * @return the provided template; or
+     * <p>{@code null} if the provided template was {@code null}
+     * @throws TemplateException if an error occurs while processing the template
+     * @see #print(Template)
+     * @since 1.11.0
+     */
+    public Template processTemplate(Template template)
+    throws TemplateException {
+        if (null == template) {
+            return null;
+        }
+
+        if (!template.hasAttribute(Context.class.getName())) {
             template.setAttribute(Context.class.getName(), this);
         }
 
         new EngineTemplateProcessor(this, template).processTemplate();
 
-        // set the content type
+        return template;
+    }
+
+    private boolean prepareForPrint(Template template)
+    throws TemplateException {
+        ensureNoSseConnection();
+
+        if (null == template) {
+            return false;
+        }
+
+        processTemplate(template);
+
         if (!response_.isContentTypeSet()) {
             var content_type = template.getDefaultContentType();
             if (null == content_type) {
@@ -536,8 +585,7 @@ public class Context {
             response_.setContentType(content_type);
         }
 
-        // print the element contents with the auto-generated values
-        response_.print(template);
+        return true;
     }
 
     /**
@@ -572,29 +620,9 @@ public class Context {
      */
     public void printBlock(Template template, String blockId)
     throws TemplateException {
-        ensureNoSseConnection();
-
-        if (template == null) {
-            return;
+        if (prepareForPrint(template)) {
+            response_.printBlock(template, blockId);
         }
-
-        if (!template.hasAttribute(Context.class.getName())) {
-            template.setAttribute(Context.class.getName(), this);
-        }
-
-        new EngineTemplateProcessor(this, template).processTemplate();
-
-        // set the content type
-        if (!response_.isContentTypeSet()) {
-            var content_type = template.getDefaultContentType();
-            if (null == content_type) {
-                content_type = RifeConfig.engine().getDefaultContentType();
-            }
-
-            response_.setContentType(content_type);
-        }
-
-        response_.printBlock(template, blockId);
     }
 
     /**
