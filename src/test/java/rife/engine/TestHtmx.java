@@ -204,6 +204,10 @@ public class TestHtmx {
             get("/location-full", c -> c.hxLocation(new HxLocation("/spa")
                 .source("#src").event("click").select("#frag")
                 .values(new Note("info", "a")).headers(Map.of("X-Extra", "1"))));
+            get("/trigger-non-ascii", c -> c.hxTrigger("saved", "Caf\u00e9 \u2615"));
+            get("/trigger-non-ascii-name", c -> c.hxTrigger("caf\u00e9"));
+            get("/location-non-ascii", c -> c.hxLocation(new HxLocation("/caf\u00e9").target("#main")));
+            get("/location-non-ascii-plain", c -> c.hxLocation(new HxLocation("/caf\u00e9")));
             get("/no-push", c -> c.hxNoPushUrl());
             get("/no-replace", c -> c.hxNoReplaceUrl());
         }
@@ -293,6 +297,15 @@ public class TestHtmx {
         assertEquals("{\"path\":\"/spa\",\"source\":\"#src\",\"event\":\"click\",\"select\":\"#frag\"," +
                      "\"values\":{\"level\":\"info\",\"message\":\"a\"},\"headers\":{\"X-Extra\":\"1\"}}",
             m.doRequest("/location-full").getHeader("HX-Location"));
+    }
+
+    @Test
+    void testNonAsciiHeaderJson() {
+        var m = new MockConversation(new ResponseSite());
+        assertEquals("{\"saved\":\"Caf\\u00e9 \\u2615\"}", m.doRequest("/trigger-non-ascii").getHeader("HX-Trigger"));
+        assertEquals("{\"caf\\u00e9\":null}", m.doRequest("/trigger-non-ascii-name").getHeader("HX-Trigger"));
+        assertEquals("{\"path\":\"/caf\\u00e9\",\"target\":\"#main\"}", m.doRequest("/location-non-ascii").getHeader("HX-Location"));
+        assertEquals("{\"path\":\"/caf\\u00e9\"}", m.doRequest("/location-non-ascii-plain").getHeader("HX-Location"));
     }
 
     @Test

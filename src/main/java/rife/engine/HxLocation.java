@@ -164,7 +164,8 @@ public class HxLocation {
     String headerValue(Context context) {
         var path = route_ != null ? context.urlFor(route_).toString() : path_;
         if (null == source_ && null == event_ && null == target_ &&
-            null == swap_ && null == select_ && null == values_ && null == headers_) {
+            null == swap_ && null == select_ && null == values_ && null == headers_ &&
+            Context.isAsciiHeaderValue(path)) {
             return path;
         }
 
@@ -177,6 +178,6 @@ public class HxLocation {
         if (select_ != null) location.put("select", select_);
         if (values_ != null) location.put("values", values_);
         if (headers_ != null) location.put("headers", headers_);
-        return Json.toString(location);
+        return Context.asciiHeaderJson(Json.toString(location));
     }
 }

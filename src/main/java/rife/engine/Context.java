@@ -3919,7 +3919,7 @@ public class Context {
         if (1 == events.size()) {
             var single = events.entrySet().iterator().next();
             // a single event without a payload stays a plain event name
-            if (HX_NO_DATA == single.getValue()) {
+            if (HX_NO_DATA == single.getValue() && isAsciiHeaderValue(single.getKey())) {
                 return single.getKey();
             }
         }
@@ -3936,6 +3936,34 @@ public class Context {
             value.append(':');
             value.append(Json.toString(HX_NO_DATA == event.getValue() ? null : event.getValue()));
         }
-        return value.append('}').toString();
+        return asciiHeaderJson(value.append('}').toString());
+    }
+
+    static boolean isAsciiHeaderValue(String value) {
+        for (var i = 0; i < value.length(); i++) {
+            if (value.charAt(i) > '\u007e') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // browsers decode header bytes as ISO-8859-1, and JSON only allows
+    // non-ASCII characters inside strings, where an escape is equivalent
+    static String asciiHeaderJson(String json) {
+        if (isAsciiHeaderValue(json)) {
+            return json;
+        }
+
+        var result = new StringBuilder(json.length() + 16);
+        for (var i = 0; i < json.length(); i++) {
+            var c = json.charAt(i);
+            if (c > '\u007e') {
+                result.append(String.format("\\u%04x", (int) c));
+            } else {
+                result.append(c);
+            }
+        }
+        return result.toString();
     }
 }
