@@ -4,7 +4,6 @@
  */
 package rife.servlet;
 
-import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import rife.config.RifeConfig;
 import rife.engine.UploadedFile;
@@ -18,7 +17,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-class MultipartRequest {
+/**
+ * Parses a {@code multipart/form-data} request body into parameters and
+ * uploaded files, with the upload limits and the upload path of the
+ * {@linkplain RifeConfig.EngineConfig engine configuration}.
+ *
+ * @author Geert Bevin (gbevin[remove] at uwyn dot com)
+ * @since 1.11.0
+ */
+public class MultipartRequest {
     private static final String CONTENT_TYPE_HEADER = "content-type";
     private static final String MULTIPART_CONTENT_TYPE = "multipart/form-data";
     private static final String BOUNDARY_PREFIX = "boundary=";
@@ -35,26 +42,70 @@ class MultipartRequest {
 
     private File uploadDirectory_ = null;
 
-    private final HttpServletRequest request_;
+    private final String contentType_;
     private final byte[] parameterBuffer_;
     private final byte[] fileBuffer_;
     private String boundary_ = null;
-    private ServletInputStream input_ = null;
+    private InputStream input_ = null;
     private String encoding_ = DEFAULT_ENCODING;
 
     private final Map<String, String[]> parameters_;
     private final Map<String, UploadedFile[]> files_;
 
     MultipartRequest(HttpServletRequest request) throws MultipartRequestException {
-        if (null == request) throw new IllegalArgumentException("request can't be null");
-
-        request_ = request;
         // Servlet 6.1 containers (Jakarta EE 11) process the multipart body themselves
         // when the request parameters are accessed, either consuming the input stream
         // or throwing an exception when no multipart configuration is present.
         // Since only the query string parameters are needed at this point, parse them
         // directly without touching the container's parameter API.
-        parameters_ = extractQueryParameters(request.getQueryString());
+        this(contentType(request), request.getQueryString(), inputStream(request));
+    }
+
+    private static String contentType(HttpServletRequest request) {
+        if (null == request) throw new IllegalArgumentException("request can't be null");
+
+        // Access header two ways to work around WebSphere oddities
+        var type_header = request.getHeader(CONTENT_TYPE_HEADER);
+        var type_method = request.getContentType();
+
+        // If one value is null, choose the other value
+        if (null == type_header) {
+            return type_method;
+        }
+        if (null == type_method) {
+            return type_header;
+        }
+        // If neither value is null, choose the longer value
+        return type_header.length() > type_method.length() ? type_header : type_method;
+    }
+
+    private static InputStream inputStream(HttpServletRequest request) {
+        try {
+            return request.getInputStream();
+        } catch (IOException e) {
+            throw new MultipartInputErrorException(e);
+        }
+    }
+
+    /**
+     * Parses a multipart body.
+     *
+     * @param contentType the content type of the request, with its boundary
+     * @param input       the body of the request
+     * @throws MultipartRequestException when the body can't be parsed or
+     *                                   exceeds the upload limits
+     * @since 1.11.0
+     */
+    public MultipartRequest(String contentType, InputStream input) throws MultipartRequestException {
+        this(contentType, null, input);
+    }
+
+    private MultipartRequest(String contentType, String queryString, InputStream input) throws MultipartRequestException {
+        if (null == input) throw new IllegalArgumentException("input can't be null");
+
+        contentType_ = contentType;
+        input_ = input instanceof BufferedInputStream ? input : new BufferedInputStream(input, 8 * 1024);
+        parameters_ = extractQueryParameters(queryString);
         files_ = new LinkedHashMap<>();
         parameterBuffer_ = new byte[8 * 1024];
         fileBuffer_ = new byte[100 * 1024];
@@ -65,7 +116,15 @@ class MultipartRequest {
         readParts();
     }
 
-    static boolean isValidContentType(String type) {
+    /**
+     * Checks whether a content type is the one of a multipart form.
+     *
+     * @param type the content type
+     * @return {@code true} if it's {@code multipart/form-data}; or
+     * <p>{@code false} otherwise
+     * @since 1.11.0
+     */
+    public static boolean isValidContentType(String type) {
         return null != type &&
             type.toLowerCase().startsWith(MULTIPART_CONTENT_TYPE);
     }
@@ -107,11 +166,23 @@ class MultipartRequest {
         return parameters;
     }
 
-    Map<String, String[]> getParameterMap() {
+    /**
+     * Retrieves the parameters of the request.
+     *
+     * @return the parameters by name
+     * @since 1.11.0
+     */
+    public Map<String, String[]> getParameterMap() {
         return parameters_;
     }
 
-    Map<String, UploadedFile[]> getFileMap() {
+    /**
+     * Retrieves the uploaded files of the request.
+     *
+     * @return the uploaded files by name
+     * @since 1.11.0
+     */
+    public Map<String, UploadedFile[]> getFileMap() {
         return files_;
     }
 
@@ -133,43 +204,34 @@ class MultipartRequest {
     }
 
     private void initialize() throws MultipartRequestException {
-        // Check the content type to is correct to support a multipart request
-        // Access header two ways to work around WebSphere oddities
-        String type = null;
-        var type_header = request_.getHeader(CONTENT_TYPE_HEADER);
-        var type_method = request_.getContentType();
-
-        // If one value is null, choose the other value
-        if (type_header == null &&
-            type_method != null) {
-            type = type_method;
-        } else if (type_method == null &&
-            type_header != null) {
-            type = type_header;
-        }
-        // If neither value is null, choose the longer value
-        else if (type_header != null &&
-            type_method != null) {
-            type = (type_header.length() > type_method.length() ? type_header : type_method);
-        }
-
         // ensure that the content-type is correct
-        if (!isValidContentType(type)) {
-            throw new MultipartInvalidContentTypeException(type);
+        if (!isValidContentType(contentType_)) {
+            throw new MultipartInvalidContentTypeException(contentType_);
         }
 
         // extract the boundary separator that is used by this request
-        boundary_ = extractBoundary(type);
+        boundary_ = extractBoundary(contentType_);
         if (null == boundary_) {
             throw new MultipartMissingBoundaryException();
         }
+    }
 
-        // obtain the input stream
-        try {
-            input_ = request_.getInputStream();
-        } catch (IOException e) {
-            throw new MultipartInputErrorException(e);
+    // reads up to and including a newline, like ServletInputStream.readLine()
+    private int readLine(byte[] buffer, int offset, int length) throws IOException {
+        if (length <= 0) {
+            return 0;
         }
+
+        var count = 0;
+        int c;
+        while ((c = input_.read()) != -1) {
+            buffer[offset++] = (byte) c;
+            count++;
+            if (c == '\n' || count == length) {
+                break;
+            }
+        }
+        return count > 0 ? count : -1;
     }
 
     private void checkInputStart() throws MultipartRequestException {
@@ -222,7 +284,7 @@ class MultipartRequest {
         var result = 0;
         do {
             try {
-                result = input_.readLine(parameterBuffer_, 0, parameterBuffer_.length);
+                result = readLine(parameterBuffer_, 0, parameterBuffer_.length);
             } catch (IOException e) {
                 throw new MultipartInputErrorException(e);
             }
@@ -486,7 +548,7 @@ class MultipartRequest {
         // Since we want a byte-for-byte transfer, we have to cut those chars.
         var rnflag = false;
         try {
-            while ((result = input_.readLine(fileBuffer_, 0, fileBuffer_.length)) != -1) {
+            while ((result = readLine(fileBuffer_, 0, fileBuffer_.length)) != -1) {
                 // Check for boundary
                 if (result > 2 &&
                     '-' == fileBuffer_[0] &&

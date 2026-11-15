@@ -15,6 +15,7 @@ import java.io.File;
 import java.security.SecureRandom;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Predicate;
 
 /**
  * The main site of your web application, which is also the
@@ -47,7 +48,7 @@ public class Site extends Router {
      * <p>{@code null} if the URL and path info aren't registered in this site
      * @since 1.0
      */
-    private Route resolveUrl(RequestMethod method, String url, String pathInfo)
+    private Route resolveUrl(Predicate<Route> accepts, String url, String pathInfo)
     throws EngineException {
         if (null == url) throw new IllegalArgumentException("url can't be null;");
 
@@ -59,19 +60,23 @@ public class Site extends Router {
             var routes = routes_.get(url);
             if (routes != null && !routes.isEmpty()) {
                 for (var route : routes) {
-                    if (routeHandlesMethod(route, method)) {
+                    if (accepts.test(route)) {
                         return route;
                     }
                 }
             }
         }
 
-        return resolvePathInfoUrl(method, url, pathInfo);
+        return resolvePathInfoUrl(accepts, url, pathInfo);
     }
 
     private static boolean routeHandlesMethod(Route route, RequestMethod method) {
+        return route.methods() == null || routeDeclaresMethod(route, method);
+    }
+
+    private static boolean routeDeclaresMethod(Route route, RequestMethod method) {
         if (route.methods() == null) {
-            return true;
+            return false;
         }
         for (var m : route.methods()) {
             if (m == method) {
@@ -81,7 +86,7 @@ public class Site extends Router {
         return false;
     }
 
-    private Route resolvePathInfoUrl(RequestMethod method, String url, String pathInfo)
+    private Route resolvePathInfoUrl(Predicate<Route> accepts, String url, String pathInfo)
     throws EngineException {
         var routes = pathInfoRoutes_.get(url);
         if (null == routes ||
@@ -93,7 +98,7 @@ public class Site extends Router {
         if (pathInfo != null) {
             var path_info = StringUtils.stripFromFront(pathInfo, "/");
             for (var route : routes) {
-                if (route.pathInfoHandling().type() == PathInfoType.MAP && routeHandlesMethod(route, method)) {
+                if (route.pathInfoHandling().type() == PathInfoType.MAP && accepts.test(route)) {
                     for (var mapping : route.pathInfoHandling().mappings()) {
                         var matcher = mapping.regexp().matcher(path_info);
                         if (matcher.matches()) {
@@ -106,7 +111,7 @@ public class Site extends Router {
 
         // return the first route that handles the url and doesn't have  any path info mappings
         for (var route : routes) {
-            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && routeHandlesMethod(route, method)) {
+            if (route.pathInfoHandling().type() == PathInfoType.CAPTURE && accepts.test(route)) {
                 return route;
             }
         }
@@ -134,7 +139,7 @@ public class Site extends Router {
         }
     }
 
-    private Route resolveRoute(RequestMethod method, String elementUrl, StringBuilder elementUrlBuffer) {
+    private Route resolveRoute(Predicate<Route> accepts, String elementUrl, StringBuilder elementUrlBuffer) {
         Route route;
         elementUrlBuffer.setLength(0);
         elementUrlBuffer.append(elementUrl);
@@ -147,7 +152,7 @@ public class Site extends Router {
             if (element_url_location > -1) {
                 path_info = elementUrl.substring(element_url_location);
             }
-            route = resolveUrl(method, elementUrlBuffer.toString(), path_info);
+            route = resolveUrl(accepts, elementUrlBuffer.toString(), path_info);
 
             if (route != null) {
                 break;
@@ -182,10 +187,18 @@ public class Site extends Router {
         // obtain the element info that mapped to the requested path info
         var element_url_buffer = new StringBuilder();
         var element_path_info = "";
-        var route = resolveRoute(request.getMethod(), elementUrl, element_url_buffer);
-        // GET routes answer HEAD, only when no route at all handles HEAD itself
-        if (null == route && request.getMethod() == RequestMethod.HEAD) {
-            route = resolveRoute(RequestMethod.GET, elementUrl, element_url_buffer);
+        var method = request.getMethod();
+        Route route;
+        if (method == RequestMethod.HEAD) {
+            // an explicit HEAD route wins, otherwise GET routes answer HEAD
+            // too and the order of registration decides between them and
+            // the routes for any method
+            route = resolveRoute(r -> routeDeclaresMethod(r, RequestMethod.HEAD), elementUrl, element_url_buffer);
+            if (null == route) {
+                route = resolveRoute(r -> routeHandlesMethod(r, RequestMethod.GET), elementUrl, element_url_buffer);
+            }
+        } else {
+            route = resolveRoute(r -> routeHandlesMethod(r, method), elementUrl, element_url_buffer);
         }
 
         // no target element, get the fallback element

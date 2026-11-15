@@ -873,4 +873,99 @@ public class TestMocksEngine {
         var request = HttpRequest.newBuilder(new URI(url)).build();
         return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString()).body();
     }
+
+    @Test
+    void testRequestsAfterDestroy() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/status", c -> {
+                    c.session().setAttribute("seen", "yes");
+                    c.print("up");
+                });
+                get("/seen", c -> c.print(c.session().attribute("seen")));
+            }
+        });
+        conversation.doRequest("/status");
+        conversation.destroy();
+        // a conversation keeps routing and keeps its sessions after it was destroyed
+        assertEquals("up", conversation.doRequest("/status").getText());
+        assertEquals("yes", conversation.doRequest("/seen").getText());
+    }
+
+    @Test
+    void testCookieValuesStayUnchecked() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/set", c -> c.addCookie(new CookieBuilder("search", "two words")));
+            }
+        });
+        conversation.doRequest("/set");
+        assertEquals("two words", conversation.getCookieValue("search"));
+    }
+
+    @Test
+    void testReusedRequest() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/echo", c -> c.print(c.parameter("v")));
+            }
+        });
+        var request = new MockRequest().parameter("v", "set");
+        assertEquals("set", conversation.doRequest("/echo", request).getText());
+        assertEquals("set", conversation.doRequest("/echo?v=url", request).getText());
+    }
+
+    @Test
+    void testSessionCookie() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/session", c -> c.print(c.session().isNew()));
+            }
+        }).contextPath("/ctx");
+        assertEquals("true", conversation.doRequest("/session").getText());
+        var cookie = conversation.getCookie("JSESSIONID");
+        assertEquals("/", cookie.getPath());
+        assertFalse(cookie.isHttpOnly());
+        assertEquals("false", conversation.doRequest("/session").getText());
+    }
+
+    @Test
+    void testSessionUrlsAndTimeout() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/create", c -> c.print(c.session().id() + "|" + c.response().encodeURL("/next") + "|" + c.session().maxInactiveInterval()));
+            }
+        });
+        var parts = conversation.doRequest("/create").getText().split("\\|");
+        // a conversation keeps session ids in URLs and its sessions don't time out
+        assertEquals("/next;jsessionid=" + parts[0], parts[1]);
+        assertEquals("0", parts[2]);
+    }
+
+    @Test
+    void testMockRequestNeedsConversation() {
+        try (var runner = new SiteRunner().start(new Site())) {
+            assertThrows(IllegalStateException.class, () -> runner.handle("/", new MockRequest()));
+        }
+    }
+
+    @Test
+    void testCancelledRequestHandledAgain() {
+        var conversation = new MockConversation(new Site() {
+            public void setup() {
+                get("/echo", c -> c.print("echo"));
+            }
+        });
+        var request = new MockRequest();
+        assertEquals("echo", conversation.doRequest("/echo", request).getText());
+        request.cancel();
+        assertEquals("echo", conversation.doRequest("/echo", request).getText());
+    }
+
+    @Test
+    void testNoStaticFiles() {
+        var conversation = new MockConversation(new Site());
+        // the file is in META-INF/resources of the test classpath
+        assertEquals(404, conversation.doRequest("/site-runner-webjar.txt").getStatus());
+    }
 }

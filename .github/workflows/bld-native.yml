@@ -115,3 +115,20 @@ jobs:
           URL2=$(echo "$R2" | grep -o "href='[^']*'" | cut -d"'" -f2)
           curl -sf "$URL2" | grep -q "^3 " || (echo "second resume failed" && exit 1)
           kill $COUNTER_PID
+
+      - name: Build the native site runner example without a servlet container
+        run: |
+          SERVLET_API=$(ls lib/provided/modules/jakarta.servlet-api-*.jar 2>/dev/null | grep -v -e sources -e javadoc || true)
+          [ -f "$SERVLET_API" ] || (echo "expected exactly one servlet API jar, found: $SERVLET_API" && exit 1)
+          native-image --no-fallback \
+            -cp "build/instrumented_examples:build/dist/rife2-$(cat src/main/resources/RIFE_VERSION).jar:$SERVLET_API:build/main_examples" \
+            -o build/site-runner-native rife.examples.HelloSiteRunner
+
+      - name: Verify the native site runner handles requests in-process
+        run: |
+          set -o pipefail
+          build/site-runner-native | tee site-runner.txt
+          grep -q "^hello runner$" site-runner.txt || (echo "the form wasn't handled" && exit 1)
+          grep -q "^1 " site-runner.txt || (echo "missing the first count" && exit 1)
+          grep -q "^2 " site-runner.txt || (echo "the continuation didn't resume" && exit 1)
+          grep -q "^/missing handled: false$" site-runner.txt || (echo "an unrouted path was handled" && exit 1)

@@ -7,6 +7,8 @@ package rife.examples;
 import org.junit.jupiter.api.Test;
 import rife.database.Datasource;
 import rife.engine.RequestMethod;
+import rife.engine.SiteRequest;
+import rife.engine.SiteRunner;
 import rife.test.MockRequest;
 import rife.examples.apis.MyService;
 import rife.examples.services.HelloService;
@@ -211,6 +213,22 @@ class HelloTest {
     void verifyHelloSseWorkflow() {
         try (var m = new MockConversation(new HelloSseWorkflow())) {
             assertTrue(m.doRequest("/").getText().contains("Standing by"));
+        }
+    }
+
+    @Test
+    void verifyHelloSiteRunner() {
+        try (var runner = new SiteRunner().scheme("hello").serverName("app").start(new HelloSiteRunner())) {
+            assertEquals("hello runner", runner.handle("/greet", new SiteRequest(RequestMethod.POST)
+                .contentType("application/x-www-form-urlencoded")
+                .body("name=runner")).getText());
+
+            var first = runner.handle("/count").getText();
+            assertTrue(first.startsWith("1 "));
+            var link = first.substring(first.indexOf("href='") + 6, first.lastIndexOf("'"));
+            assertTrue(runner.handle(link).getText().startsWith("2 "));
+
+            assertFalse(runner.handle("/missing").isHandled());
         }
     }
 }

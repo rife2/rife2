@@ -131,8 +131,7 @@ public class SseConnection implements AutoCloseable {
         try {
             response_.getOutputStream().flush();
         } catch (IOException | EngineException e) {
-            open_ = false;
-            completeAsyncContext();
+            close();
         }
     }
 
@@ -333,7 +332,21 @@ public class SseConnection implements AutoCloseable {
         synchronized (this) {
             open_ = false;
             completeAsyncContext();
+            if (response_ instanceof AbstractResponse abstract_response &&
+                abstract_response.detachedConnection() == this) {
+                abstract_response.detachedConnectionClosed();
+            }
         }
+        var broadcaster = broadcaster_;
+        if (broadcaster != null) {
+            broadcaster.unregister(this);
+        }
+    }
+
+    // ends the connection without waiting for an event that's still being
+    // written, since the thread that abandons it can be blocked in that write
+    void abandon() {
+        open_ = false;
         var broadcaster = broadcaster_;
         if (broadcaster != null) {
             broadcaster.unregister(this);

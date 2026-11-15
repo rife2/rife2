@@ -315,6 +315,9 @@ public interface Response {
 
     /**
      * Retrieves the underlying {@link HttpServletResponse}.
+     * <p>This will be {@code null} when the site is run by a
+     * {@link SiteRunner} or during out-of-container testing, so code that
+     * needs the servlet API has to check for that.
      *
      * @return the underlying {@code HttpServletResponse} instance; or
      * <p>{@code null} if this response isn't backed by

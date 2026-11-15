@@ -41,6 +41,15 @@
       "condition": {
         "typeReachable": "jakarta.servlet.http.HttpServlet"
       }
+    },
+    {
+      "name": "jakarta.servlet.http.LocalStrings",
+      "locales": [
+        "und"
+      ],
+      "condition": {
+        "typeReachable": "jakarta.servlet.http.Cookie"
+      }
     }
   ]
 }

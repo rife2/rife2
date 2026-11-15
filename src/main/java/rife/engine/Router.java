@@ -64,8 +64,11 @@ public class Router {
      * are destroyed before the router that they belong to.
      * <p>
      * RIFE2 keeps track of the active {@code Datasource} and
-     * {@code Scheduler} instances, automatically closing and stopping
-     * them after all the {@code destroy()} methods have been called.
+     * {@code Scheduler} instances, and a web application in a servlet
+     * container automatically closes and stops them after all the
+     * {@code destroy()} methods have been called. A {@link SiteRunner}
+     * and out-of-container testing leave them running, since they belong
+     * to the whole process.
      * <p>
      * You can implement this method to close any other application
      * resources that require it.

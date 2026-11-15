@@ -12,6 +12,7 @@ import rife.ioc.HierarchicalProperties;
 import rife.template.TemplateFactory;
 import rife.tools.ExceptionFormattingUtils;
 import rife.tools.ExceptionUtils;
+import rife.tools.StringUtils;
 
 import java.util.logging.Logger;
 
@@ -101,10 +102,7 @@ public class Gate {
         }
 
         // strip away the optional path parameters
-        var path_parameters_index = elementUrl.indexOf(';');
-        if (path_parameters_index != -1) {
-            elementUrl = elementUrl.substring(0, path_parameters_index);
-        }
+        elementUrl = stripPathParameters(elementUrl);
 
         // Handle the request
         // check if an exception occurred during the initialization
@@ -158,12 +156,18 @@ public class Gate {
             }
             return false;
         } catch (Throwable e) {
+            // nobody is waiting for the response of a cancelled request, the
+            // failure of the element is only how it noticed that
+            if (response instanceof SiteResponse site_response && site_response.isCancelled()) {
+                return true;
+            }
+
             var sse_connection = sseConnection(context, response);
             if (sse_connection != null) {
                 // an error response can't be rendered into a committed event
                 // stream, log the exception and end the connection
                 if (RifeConfig.engine().getLogEngineExceptions()) {
-                    var message = "Error on host " + context.request().getServerName() + ":" + context.request().getServerPort() + context.request().getContextPath();
+                    var message = "Error on host " + host(context.request());
                     Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(e));
                 }
                 sse_connection.close();
@@ -208,7 +212,7 @@ public class Gate {
     }
 
     private void handleRequestException(Throwable exception, Context c) {
-        var message = "Error on host " + c.request().getServerName() + ":" + c.request().getServerPort() + c.request().getContextPath();
+        var message = "Error on host " + host(c.request());
         if (RifeConfig.engine().getLogEngineExceptions()) {
             Logger.getLogger("rife.engine").severe(message + "\n" + ExceptionUtils.getExceptionStackTrace(exception));
         }
@@ -268,5 +272,27 @@ public class Gate {
 
         response.print(template.getContent());
     }
-}
 
+    // a site runner without a port has none to show
+    private static String host(Request request) {
+        var port = request.getServerPort();
+        return request.getServerName() + (port < 0 ? "" : ":" + port) + request.getContextPath();
+    }
+
+    // every segment can have path parameters, like /a;x=1/b
+    static String stripPathParameters(String url) {
+        if (url.indexOf(';') == -1) {
+            return url;
+        }
+
+        var segments = StringUtils.split(url, "/");
+        for (var i = 0; i < segments.size(); i++) {
+            var segment = segments.get(i);
+            var parameters_index = segment.indexOf(';');
+            if (parameters_index != -1) {
+                segments.set(i, segment.substring(0, parameters_index));
+            }
+        }
+        return String.join("/", segments);
+    }
+}

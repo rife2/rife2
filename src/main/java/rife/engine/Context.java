@@ -3102,7 +3102,7 @@ public class Context {
             token = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
             addCookie(new CookieBuilder(cookie_name, token)
                 .path("/")
-                .secure(scheme().equals("https"))
+                .secure(secure())
                 .httpOnly(true)
                 .sameSite(SameSite.LAX));
         }

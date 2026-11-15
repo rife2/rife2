@@ -134,6 +134,11 @@ public abstract class AbstractResponse implements Response {
     protected void sseEventSent(Template template) {
     }
 
+    // called when a detached event stream is closed, so that a response
+    // without a servlet container can end too
+    void detachedConnectionClosed() {
+    }
+
     public Element getLastElement() {
         return lastElement_;
     }

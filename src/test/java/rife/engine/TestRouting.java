@@ -8,12 +8,14 @@ import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import org.junit.jupiter.api.Test;
+import rife.ioc.HierarchicalProperties;
 
 import java.io.IOException;
 import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestRouting {
     @Test
@@ -773,6 +775,54 @@ public class TestRouting {
                 assertEquals("class PatchElement",                        webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo5"), HttpMethod.PATCH)).getWebResponse().getContentAsString());
                 assertEquals("class PatchPathInfoElement:otherpathinfo",  webClient.getPage(new WebRequest(new URL("http://localhost:8181/combo6/otherpathinfo"), HttpMethod.PATCH)).getWebResponse().getContentAsString());
             }
+        }
+    }
+
+    @Test
+    void testRoutingPathParameters()
+    throws IOException {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/a", c -> c.print("a"));
+                get("/a/b", c -> c.print("b"));
+            }
+        })) {
+            try (final var webClient = new WebClient()) {
+                // every segment can have path parameters
+                assertEquals("b", webClient.getPage(new WebRequest(new URL("http://localhost:8181/a;x=1/b"), HttpMethod.GET)).getWebResponse().getContentAsString());
+                assertEquals("b", webClient.getPage(new WebRequest(new URL("http://localhost:8181/a/b;x=1"), HttpMethod.GET)).getWebResponse().getContentAsString());
+            }
+        }
+    }
+
+    @Test
+    void testStripPathParameters() {
+        assertEquals("/a/b", Gate.stripPathParameters("/a;x=1/b;y=2"));
+        assertEquals("/a/", Gate.stripPathParameters("/a;x/"));
+        assertEquals("", Gate.stripPathParameters(";"));
+        assertEquals("/plain", Gate.stripPathParameters("/plain"));
+    }
+
+    @Test
+    void testOnlyPathParametersRouteToRoot() {
+        var gate = new Gate();
+        gate.setup(new HierarchicalProperties(), new Site() {
+            public void setup() {
+                get("/", c -> c.print("root"));
+            }
+        });
+        try (var runner = new SiteRunner().start(new Site())) {
+            // a context path that's followed by path parameters only
+            var request = new SiteRequest();
+            request.attach(runner);
+            var response = request.createResponse();
+            request.prepare(response, "/ctx;jsessionid=x");
+            request.parse(null, null);
+            assertTrue(gate.handleRequest("/ctx", ";jsessionid=x", request, response));
+            response.finish();
+            assertEquals("root", response.getText());
+        } finally {
+            gate.destroy();
         }
     }
 }

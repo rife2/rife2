@@ -21,6 +21,7 @@ import java.util.StringJoiner;
 import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static rife.bld.dependencies.Scope.provided;
 import static rife.bld.dependencies.Scope.test;
@@ -359,7 +360,7 @@ public class Rife2Build extends AbstractRife2Build {
             "--add-modules", "rife", "-m", "rife/rife.ModularProbe"));
     }
 
-    @BuildCommand(value = "test-native", summary = "Verifies that what the framework ships beside its classes is embedded in a native image")
+    @BuildCommand(value = "test-native", summary = "Verifies that what the framework ships beside its classes is embedded in a native image, and that a site runner works in one")
     public void testNative()
     throws Exception {
         jar();
@@ -392,6 +393,93 @@ public class Rife2Build extends AbstractRife2Build {
         run(List.of(nativeImageTool(), "-cp", classes_directory.getAbsolutePath() + File.pathSeparator + jar,
             "--no-fallback", "-o", new File(probe_directory, "resource-probe").getAbsolutePath(), "NativeResourceProbe"));
         run(List.of(new File(probe_directory, "resource-probe").getAbsolutePath()));
+
+        // a site runner only needs the servlet API beside the framework, so
+        // the image is built without a servlet container to prove that
+        var site_runner_probe = new File(probe_directory, "NativeSiteRunnerProbe.java");
+        FileUtils.writeString("""
+            import rife.engine.*;
+
+            public class NativeSiteRunnerProbe {
+                public static void main(String[] args) {
+                    try (var runner = new SiteRunner().scheme("probe").serverName("app").staticUberJarResourceBase("probe").start(new Site() {
+                        public void setup() {
+                            post("/greet", c -> c.print("hello " + c.parameter("name") + " from " + c.request().getServerRootUrl(-1)));
+                            get("/visit", c -> c.print(c.session().id() + ":" + c.session().isNew()));
+                        }
+                    })) {
+                        var text = runner.handle("/greet?name=native", new SiteRequest(RequestMethod.POST)).getText();
+                        if (!text.equals("hello native from probe://app")) {
+                            fail("unexpected response: " + text);
+                        }
+                        if (runner.handle("/missing").isHandled()) {
+                            fail("an unrouted path was handled");
+                        }
+                        var first_visit = runner.handle("/visit").getText();
+                        var session_id = first_visit.substring(0, first_visit.indexOf(':'));
+                        var next_visit = runner.handle("/visit", new SiteRequest().header("Cookie", "JSESSIONID=" + session_id)).getText();
+                        if (!first_visit.endsWith(":true") || !next_visit.equals(session_id + ":false")) {
+                            fail("the session wasn't kept: " + first_visit + " " + next_visit);
+                        }
+
+                        // the cookies of a jar survive in their file store
+                        var cookie_file = new java.io.File(args[0]);
+                        try (var remembering = new SiteRunner().cookieJar(new SiteCookieJar(new SiteCookieFileStore(cookie_file))).start(new Site() {
+                            public void setup() {
+                                get("/remember", c -> c.addCookie(new rife.engine.CookieBuilder("city", "ghent").path("/").maxAge(3600)));
+                            }
+                        })) {
+                            remembering.handle("/remember");
+                        }
+                        var restored = new SiteCookieJar(new SiteCookieFileStore(cookie_file)).getCookies();
+                        if (restored.size() != 1 || !"ghent".equals(restored.get(0).value())) {
+                            fail("the cookies weren't restored: " + restored);
+                        }
+
+                        // the static files of a native image are its embedded resources
+                        var file = runner.handle("/hello.txt");
+                        if (200 != file.getStatus() || !file.getText().equals("hello file") || !"10".equals(file.getHeader("Content-Length"))) {
+                            fail("unexpected static file: " + file.getStatus() + " " + file.getText());
+                        }
+                        var etag = file.getHeader("ETag");
+                        if (null == etag || 304 != runner.handle("/hello.txt", new SiteRequest().header("If-None-Match", etag)).getStatus()) {
+                            fail("the static file isn't versioned: " + etag);
+                        }
+                        if (runner.handle("/sub").isHandled()) {
+                            fail("a resource directory was served");
+                        }
+                    }
+
+                    System.out.println("the native image runs a site without a servlet container");
+                }
+
+                private static void fail(String message) {
+                    System.out.println(message);
+                    System.exit(3);
+                }
+            }
+            """, site_runner_probe);
+        var static_file = new File(classes_directory, "probe/hello.txt");
+        var nested_file = new File(classes_directory, "probe/sub/inner.txt");
+        var static_config = new File(classes_directory, "META-INF/native-image/probe/resource-config.json");
+        nested_file.getParentFile().mkdirs();
+        static_config.getParentFile().mkdirs();
+        FileUtils.writeString("hello file", static_file);
+        FileUtils.writeString("inner file", nested_file);
+        FileUtils.writeString("""
+            {"resources": {"includes": [{"pattern": "probe/.*"}]}}
+            """, static_config);
+
+        var servlet_api = Stream.concat(providedModulePathJars().stream(), providedClasspathJars().stream())
+            .filter(f -> f.getName().startsWith("jakarta.servlet-api-"))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("the servlet API jar wasn't found: run the download command first"))
+            .getAbsolutePath();
+        var site_runner_classpath = classes_directory.getAbsolutePath() + File.pathSeparator + jar + File.pathSeparator + servlet_api;
+        run(List.of(compilerTool(), "--release", "17", "-cp", jar + File.pathSeparator + servlet_api, "-d", classes_directory.getAbsolutePath(), site_runner_probe.getAbsolutePath()));
+        run(List.of(nativeImageTool(), "-cp", site_runner_classpath,
+            "--no-fallback", "-o", new File(probe_directory, "site-runner-probe").getAbsolutePath(), "NativeSiteRunnerProbe"));
+        run(List.of(new File(probe_directory, "site-runner-probe").getAbsolutePath(), new File(probe_directory, "cookies.txt").getAbsolutePath()));
     }
 
     /**
@@ -420,7 +508,7 @@ public class Rife2Build extends AbstractRife2Build {
     throws Exception {
         var process = new ProcessBuilder(command).inheritIO().start();
         if (process.waitFor() != 0) {
-            throw new AssertionError("the framework isn't able to hand out what it ships with: " + String.join(" ", command));
+            throw new AssertionError("a packaging check failed: " + String.join(" ", command));
         }
     }
 

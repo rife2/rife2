@@ -4,23 +4,21 @@
  */
 package rife.test;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.Request;
 import rife.engine.RequestMethod;
+import rife.engine.SiteRequest;
+import rife.engine.SiteResponse;
 import rife.engine.UploadedFile;
 import rife.engine.exceptions.MultipartFileTooBigException;
 import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;
 import rife.engine.exceptions.MultipartRequestException;
-import rife.tools.StringUtils;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -31,45 +29,29 @@ import java.util.*;
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @since 1.0
  */
-public class MockRequest implements Request {
-    private static final String
-        SESSIONID_NOT_CHECKED = "not checked",
-        SESSIONID_URL = "url",
-        SESSIONID_COOKIE = "cookie",
-        SESSIONID_NONE = "none";
-
-    private final Map<String, String[]> parameters_ = new LinkedHashMap<>();
-    private final MockHeaders headers_ = new MockHeaders();
-    private RequestMethod requestMethod_ = RequestMethod.GET;
-    private Map<String, UploadedFile[]> files_;
-    private String body_ = null;
-    private byte[] bodyAsBytes_ = null;
-    private Map<String, Object> attributes_;
-    private String characterEncoding_;
-    private String contentType_;
-    private List<Locale> locales_;
+public class MockRequest extends SiteRequest {
     private File uploadDirectory_;
 
     private MockConversation mockConversation_;
-    private MockResponse mockResponse_;
-    private MockSession session_;
-    private String requestedSessionId_;
-    private String sessionIdState_ = SESSIONID_NOT_CHECKED;
 
-    private String protocol_ = "HTTP/1.1";
-    private String remoteAddr_ = "127.0.0.1";
-    private String remoteUser_;
-    private String remoteHost_ = "localhost";
-    private boolean secure_ = false;
+    /**
+     * Creates a new {@code GET} request that isn't secure unless
+     * {@link #setSecure(boolean)} is used.
+     *
+     * @since 1.0
+     */
+    public MockRequest() {
+        setSecure(false);
+    }
 
     public void init() {
         String parameter_name = null;
         String[] parameter_values = null;
-        for (var entry : parameters_.entrySet()) {
+        for (var entry : getParameters().entrySet()) {
             parameter_name = entry.getKey();
             parameter_values = entry.getValue();
 
-            parameters_.put(parameter_name, parameter_values);
+            getParameters().put(parameter_name, parameter_values);
         }
     }
 
@@ -77,27 +59,29 @@ public class MockRequest implements Request {
         mockConversation_ = conversation;
     }
 
-    void setMockResponse(MockResponse response) {
-        mockResponse_ = response;
+    @Override
+    protected SiteResponse createResponse() {
+        if (null == mockConversation_) throw new IllegalStateException("a MockRequest can only be used with a MockConversation");
+
+        return new MockResponse(mockConversation_, this);
     }
 
-    public RequestMethod getMethod() {
-        return requestMethod_;
-    }
+    // the body isn't parsed, and the parameters of the query string are only
+    // added when the request doesn't have them yet
+    @Override
+    protected void parseParameters(String queryString) {
+        if (null == queryString) {
+            return;
+        }
 
-    /**
-     * Sets the method of this request.
-     * <p>The method defaults to {@link RequestMethod#GET}.
-     *
-     * @param method the method that will be used by this request
-     * @see #getMethod
-     * @see #method
-     * @since 1.0
-     */
-    public void setMethod(RequestMethod method) {
-        if (null == method) throw new IllegalArgumentException("method can't be null");
-
-        requestMethod_ = method;
+        var parameters = MockConversation.extractQueryParameters(queryString);
+        if (parameters != null) {
+            for (var entry : parameters.entrySet()) {
+                if (!hasParameter(entry.getKey())) {
+                    setParameter(entry.getKey(), entry.getValue());
+                }
+            }
+        }
     }
 
     /**
@@ -130,24 +114,7 @@ public class MockRequest implements Request {
      * @since 1.0
      */
     public boolean hasParameter(String name) {
-        return parameters_.containsKey(name);
-    }
-
-    /**
-     * Retrieves all the parameters of this request.
-     *
-     * @return a {@code Map} of the parameters with the names as the keys
-     * and their value arrays as the values
-     * @see #hasParameter
-     * @see #setParameters
-     * @see #setParameter(String, String...)
-     * @see #setParameter(String, Object...)
-     * @see #parameter(String, String...)
-     * @see #parameter(String, Object...)
-     * @since 1.0
-     */
-    public Map<String, String[]> getParameters() {
-        return parameters_;
+        return getParameters().containsKey(name);
     }
 
     /**
@@ -211,9 +178,9 @@ public class MockRequest implements Request {
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
         if (null == values) throw new IllegalArgumentException("values can't be null");
 
-        parameters_.put(name, values);
-        if (files_ != null) {
-            files_.remove(name);
+        getParameters().put(name, values);
+        if (getFiles() != null) {
+            getFiles().remove(name);
         }
     }
 
@@ -239,9 +206,9 @@ public class MockRequest implements Request {
             strings[i] = String.valueOf(values[i]);
         }
 
-        parameters_.put(name, strings);
-        if (files_ != null) {
-            files_.remove(name);
+        getParameters().put(name, strings);
+        if (getFiles() != null) {
+            getFiles().remove(name);
         }
     }
 
@@ -287,25 +254,6 @@ public class MockRequest implements Request {
      * Sets this request's body
      *
      * @param body the body as a string
-     * @see #body
-     * @see #getBody
-     * @see #bodyAsBytes
-     * @see #getBodyAsBytes
-     * @since 1.0
-     */
-    public void setBody(String body) {
-        body_ = body;
-        try {
-            bodyAsBytes_ = body.getBytes(getCharacterEncoding());
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Sets this request's body
-     *
-     * @param body the body as a string
      * @return this {@code MockRequest} instance
      * @see #setBody
      * @see #getBody
@@ -317,30 +265,6 @@ public class MockRequest implements Request {
         setBody(body);
 
         return this;
-    }
-
-    public String getBody() {
-        if (body_ == null) {
-            body_ = StringUtils.toString(getBodyAsBytes(), getCharacterEncoding());
-        }
-
-        return body_;
-    }
-
-    /**
-     * Sets this request's body as bytes.
-     *
-     * @param bytes the body as bytes
-     * @see #setBody
-     * @see #body
-     * @see #getBody
-     * @see #bodyAsBytes
-     * @see #getBodyAsBytes
-     * @since 1.0
-     */
-    public void setBodyAsBytes(byte[] bytes) {
-        body_ = null;
-        bodyAsBytes_ = bytes;
     }
 
     /**
@@ -361,67 +285,18 @@ public class MockRequest implements Request {
         return this;
     }
 
-    public byte[] getBodyAsBytes() {
-        return bodyAsBytes_;
-    }
+    /**
+     * Sets the body of this request as a stream.
+     *
+     * @param stream the stream with the body
+     * @return this {@code MockRequest} instance
+     * @see #setBodyAsStream
+     * @since 1.11.0
+     */
+    public MockRequest bodyAsStream(InputStream stream) {
+        setBodyAsStream(stream);
 
-    public Map<String, UploadedFile[]> getFiles() {
-        return files_;
-    }
-
-    public boolean hasFile(String name) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        if (null == getFiles()) {
-            return false;
-        }
-
-        if (!getFiles().containsKey(name)) {
-            return false;
-        }
-
-        var uploaded_files = getFiles().get(name);
-
-        if (0 == uploaded_files.length) {
-            return false;
-        }
-
-        for (var uploaded_file : uploaded_files) {
-            if (uploaded_file != null &&
-                uploaded_file.getName() != null) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public UploadedFile getFile(String name) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        if (null == getFiles()) {
-            return null;
-        }
-
-        var files = getFiles().get(name);
-        if (null == files) {
-            return null;
-        }
-
-        return files[0];
-    }
-
-    public UploadedFile[] getFiles(String name) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        if (null == getFiles()) {
-            return null;
-        }
-
-        return getFiles().get(name);
+        return this;
     }
 
     private void checkUploadDirectory() {
@@ -497,8 +372,8 @@ public class MockRequest implements Request {
 
         checkUploadDirectory();
 
-        if (null == files_) {
-            files_ = new LinkedHashMap<>();
+        if (null == getFiles()) {
+            setUploadedFiles(new LinkedHashMap<>());
         }
 
         var uploaded_files = new UploadedFile[files.length];
@@ -561,8 +436,8 @@ public class MockRequest implements Request {
             }
         }
 
-        files_.put(name, uploaded_files);
-        parameters_.remove(name);
+        getFiles().put(name, uploaded_files);
+        getParameters().remove(name);
     }
 
     /**
@@ -652,69 +527,6 @@ public class MockRequest implements Request {
         return mockConversation_.getCookies();
     }
 
-    public Object getAttribute(String name) {
-        if (null == attributes_) {
-            return null;
-        }
-
-        return attributes_.get(name);
-    }
-
-    public boolean hasAttribute(String name) {
-        if (null == attributes_) {
-            return false;
-        }
-
-        return attributes_.containsKey(name);
-    }
-
-    public Enumeration<String> getAttributeNames() {
-        if (null == attributes_) {
-            return Collections.enumeration(new ArrayList<>());
-        }
-
-        return Collections.enumeration(attributes_.keySet());
-    }
-
-    public void removeAttribute(String name) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        if (null == attributes_) {
-            return;
-        }
-
-        attributes_.remove(name);
-    }
-
-    public void setAttribute(String name, Object object) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        if (null == attributes_) {
-            attributes_ = new HashMap<>();
-        }
-
-        attributes_.put(name, object);
-    }
-
-    public String getCharacterEncoding() {
-        return characterEncoding_;
-    }
-
-    /**
-     * Set the character encoding of this request.
-     *
-     * @param encoding the name of the character encoding
-     * @since 1.0
-     */
-    public void setCharacterEncoding(String encoding) {
-        if (null == encoding) throw new IllegalArgumentException("encoding can't be null");
-        if (encoding.isEmpty()) throw new IllegalArgumentException("encoding can't be empty");
-
-        characterEncoding_ = encoding;
-    }
-
     /**
      * Set the character encoding of this request.
      *
@@ -726,23 +538,6 @@ public class MockRequest implements Request {
         setCharacterEncoding(encoding);
 
         return this;
-    }
-
-    public String getContentType() {
-        return contentType_;
-    }
-
-    /**
-     * Set the content type of this request.
-     *
-     * @param type the content type
-     * @since 1.0
-     */
-    public void setContentType(String type) {
-        if (null == type) throw new IllegalArgumentException("type can't be null");
-        if (type.isEmpty()) throw new IllegalArgumentException("type can't be empty");
-
-        contentType_ = type;
     }
 
     /**
@@ -758,26 +553,6 @@ public class MockRequest implements Request {
         return this;
     }
 
-    public long getDateHeader(String name) {
-        return headers_.getDateHeader(name);
-    }
-
-    public String getHeader(String name) {
-        return headers_.getHeader(name);
-    }
-
-    public Enumeration<String> getHeaderNames() {
-        return Collections.enumeration(headers_.getHeaderNames());
-    }
-
-    public Enumeration<String> getHeaders(String name) {
-        return Collections.enumeration(headers_.getHeaders(name));
-    }
-
-    public int getIntHeader(String name) {
-        return headers_.getIntHeader(name);
-    }
-
     /**
      * Adds a request header with the given name and value. This method allows
      * request headers to have multiple values.
@@ -788,11 +563,7 @@ public class MockRequest implements Request {
      * @since 1.0
      */
     public MockRequest addHeader(String name, String value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-        if (null == value) throw new IllegalArgumentException("value can't be null");
-
-        headers_.addHeader(name, value);
+        super.addHeader(name, value);
 
         return this;
     }
@@ -808,10 +579,7 @@ public class MockRequest implements Request {
      * @since 1.0
      */
     public MockRequest addDateHeader(String name, long value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        headers_.addDateHeader(name, value);
+        super.addDateHeader(name, value);
 
         return this;
     }
@@ -826,42 +594,9 @@ public class MockRequest implements Request {
      * @since 1.0
      */
     public MockRequest addIntHeader(String name, int value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        headers_.addIntHeader(name, value);
+        super.addIntHeader(name, value);
 
         return this;
-    }
-
-    /**
-     * Checks whether a certain request header is present.
-     *
-     * @param name the name of the header to check
-     * @return {@code true} if the header was present; or
-     * <p>{@code false} otherwise
-     * @since 1.0
-     */
-    public boolean containsHeader(String name) {
-        return headers_.containsHeader(name);
-    }
-
-    /**
-     * Sets a request header with the given name and date-value. The date is
-     * specified in terms of milliseconds since the epoch. If the header had
-     * already been set, the new value overwrites the previous one. The {@link
-     * #containsHeader} method can be used to test for the presence of a
-     * header before setting its value.
-     *
-     * @param name  the name of the header to set
-     * @param value the assigned date value
-     * @since 1.0
-     */
-    public void setDateHeader(String name, long value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        headers_.setDateHeader(name, value);
     }
 
     /**
@@ -876,24 +611,6 @@ public class MockRequest implements Request {
         setDateHeader(name, value);
 
         return this;
-    }
-
-    /**
-     * Sets a request header with the given name and value. If the header had
-     * already been set, the new value overwrites the previous one. The {@link
-     * #containsHeader} method can be used to test for the presence of a
-     * header before setting its value.
-     *
-     * @param name  the name of the header to set
-     * @param value the header value
-     * @since 1.0
-     */
-    public void setHeader(String name, String value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-        if (null == value) throw new IllegalArgumentException("value can't be null");
-
-        headers_.setHeader(name, value);
     }
 
     /**
@@ -933,23 +650,6 @@ public class MockRequest implements Request {
     }
 
     /**
-     * Sets a request header with the given name and integer value. If the
-     * header had already been set, the new value overwrites the previous one.
-     * The containsHeader method can be used to test for the presence of a
-     * header before setting its value.
-     *
-     * @param name  the name of the header to set
-     * @param value the assigned integer value
-     * @since 1.0
-     */
-    public void setIntHeader(String name, int value) {
-        if (null == name) throw new IllegalArgumentException("name can't be null");
-        if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
-
-        headers_.setIntHeader(name, value);
-    }
-
-    /**
      * Sets a request header with the given name and integer value.
      *
      * @param name  the name of the header to set
@@ -961,50 +661,6 @@ public class MockRequest implements Request {
         setIntHeader(name, value);
 
         return this;
-    }
-
-    /**
-     * Removes a request header with the given name.
-     *
-     * @param name the name of the header to remove
-     * @since 1.0
-     */
-    public void removeHeader(String name) {
-        headers_.removeHeader(name);
-    }
-
-    public Locale getLocale() {
-        if (null == locales_ ||
-            locales_.isEmpty()) {
-            return Locale.getDefault();
-        }
-
-        return locales_.get(0);
-    }
-
-    public Enumeration<Locale> getLocales() {
-        return Collections.enumeration(Objects.requireNonNullElseGet(locales_, () -> new ArrayList() {{
-            add(Locale.getDefault());
-        }}));
-
-    }
-
-    /**
-     * Adds a {@link Locale} to this request.
-     *
-     * @param locale the locale to add
-     * @since 1.0
-     */
-    public void addLocale(Locale locale) {
-        if (null == locale) {
-            return;
-        }
-
-        if (null == locales_) {
-            locales_ = new ArrayList<>();
-        }
-
-        locales_.add(locale);
     }
 
     /**
@@ -1020,24 +676,6 @@ public class MockRequest implements Request {
         return this;
     }
 
-    public String getProtocol() {
-        return protocol_;
-    }
-
-    /**
-     * Set the protocol of this request.
-     * <p>The default protocol is {@code "HTTP/1.1"}.
-     *
-     * @param protocol the protocol to set
-     * @since 1.0
-     */
-    public void setProtocol(String protocol) {
-        if (null == protocol) throw new IllegalArgumentException("protocol can't be null");
-        if (protocol.isEmpty()) throw new IllegalArgumentException("protocol can't be empty");
-
-        protocol_ = protocol;
-    }
-
     /**
      * Set the protocol of this request.
      *
@@ -1049,24 +687,6 @@ public class MockRequest implements Request {
         setProtocol(protocol);
 
         return this;
-    }
-
-    public String getRemoteAddr() {
-        return remoteAddr_;
-    }
-
-    /**
-     * Set the remote address of this request.
-     * <p>The default remote address is "{@code 127.0.0.1"}.
-     *
-     * @param remoteAddr the remote address to set
-     * @since 1.0
-     */
-    public void setRemoteAddr(String remoteAddr) {
-        if (null == remoteAddr) throw new IllegalArgumentException("remoteAddr can't be null");
-        if (remoteAddr.isEmpty()) throw new IllegalArgumentException("remoteAddr can't be empty");
-
-        remoteAddr_ = remoteAddr;
     }
 
     /**
@@ -1082,24 +702,6 @@ public class MockRequest implements Request {
         return this;
     }
 
-    public String getRemoteUser() {
-        return remoteUser_;
-    }
-
-    /**
-     * Set the remote user of this request.
-     * <p>The default remote user is {@code null}.
-     *
-     * @param remoteUser the remote user to set
-     * @since 1.0
-     */
-    public void setRemoteUser(String remoteUser) {
-        if (null == remoteUser) throw new IllegalArgumentException("remoteUser can't be null");
-        if (remoteUser.isEmpty()) throw new IllegalArgumentException("remoteUser can't be empty");
-
-        remoteUser_ = remoteUser;
-    }
-
     /**
      * Set the remote user of this request.
      *
@@ -1111,24 +713,6 @@ public class MockRequest implements Request {
         setRemoteUser(remoteUser);
 
         return this;
-    }
-
-    public String getRemoteHost() {
-        return remoteHost_;
-    }
-
-    /**
-     * Set the remote host of this request.
-     * <p>The default remote host is "{@code localhost}".
-     *
-     * @param remoteHost the remote host to set
-     * @since 1.0
-     */
-    public void setRemoteHost(String remoteHost) {
-        if (null == remoteHost) throw new IllegalArgumentException("remoteHost can't be null");
-        if (remoteHost.isEmpty()) throw new IllegalArgumentException("remoteHost can't be empty");
-
-        remoteHost_ = remoteHost;
     }
 
     /**
@@ -1160,22 +744,6 @@ public class MockRequest implements Request {
         return mockConversation_.getContextPath();
     }
 
-    public boolean isSecure() {
-        return secure_;
-    }
-
-    /**
-     * Set whether this request is secure.
-     * <p>A request is not secure by default.
-     *
-     * @param secure {@code true} if this request is secure; or
-     *               <p>{@code false} otherwise
-     * @since 1.0
-     */
-    public void setSecure(boolean secure) {
-        secure_ = secure;
-    }
-
     /**
      * Set whether this request is secure.
      *
@@ -1190,95 +758,4 @@ public class MockRequest implements Request {
         return this;
     }
 
-    public HttpSession getSession(boolean create) {
-        if (session_ != null && session_.isValid()) {
-            return session_;
-        }
-
-        session_ = null;
-
-        var id = getRequestedSessionId();
-
-        if (id != null) {
-            session_ = mockConversation_.getSession(id);
-            if (null == session_ && !create) {
-                return null;
-            }
-        }
-
-        if (session_ == null && create) {
-            session_ = newSession();
-        }
-
-        return session_;
-    }
-
-    public HttpSession getSession() {
-        return getSession(true);
-    }
-
-    void setRequestedSessionId(String pathParams) {
-        requestedSessionId_ = null;
-
-        // try cookies first
-        var cookies = getCookies();
-        if (cookies != null && cookies.length > 0) {
-            for (Cookie cookie : cookies) {
-                if (MockConversation.SESSION_ID_COOKIE.equalsIgnoreCase(cookie.getName())) {
-                    if (requestedSessionId_ != null) {
-                        // Multiple jsessionid cookies. Probably due to
-                        // multiple paths and/or domains. Pick the first
-                        // known session or the last defined cookie.
-                        if (mockConversation_.getSession(requestedSessionId_) != null) {
-                            break;
-                        }
-                    }
-
-                    requestedSessionId_ = cookie.getValue();
-                    sessionIdState_ = SESSIONID_COOKIE;
-                }
-            }
-        }
-
-        // check if there is an url encoded session param.
-        if (pathParams != null && pathParams.startsWith(MockConversation.SESSION_ID_URL)) {
-            var id = pathParams.substring(MockConversation.SESSION_ID_URL.length() + 1);
-
-            if (null == requestedSessionId_) {
-                requestedSessionId_ = id;
-                sessionIdState_ = SESSIONID_URL;
-            }
-        }
-
-        if (null == requestedSessionId_) {
-            sessionIdState_ = SESSIONID_NONE;
-        }
-    }
-
-    String getRequestedSessionId() {
-        return requestedSessionId_;
-    }
-
-    MockSession newSession() {
-        var session = mockConversation_.newHttpSession();
-        var cookie = new Cookie(MockConversation.SESSION_ID_COOKIE, session.getId());
-        cookie.setPath("/");
-        cookie.setMaxAge(-1);
-
-        mockResponse_.addCookie(cookie);
-
-        return session;
-    }
-
-    boolean isRequestedSessionIdFromCookie() {
-        return SESSIONID_COOKIE.equals(sessionIdState_);
-    }
-
-    public RequestDispatcher getRequestDispatcher(String url) {
-        return null;
-    }
-
-    public HttpServletRequest getHttpServletRequest() {
-        return null;
-    }
 }

@@ -5,16 +5,16 @@
 package rife.test;
 
 import jakarta.servlet.http.Cookie;
-import rife.config.RifeConfig;
-import rife.engine.Gate;
 import rife.engine.Site;
+import rife.engine.SiteRequest;
+import rife.engine.SiteRunner;
 import rife.engine.exceptions.EngineException;
 import rife.ioc.HierarchicalProperties;
 import rife.tools.ArrayUtils;
-import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,14 +31,10 @@ import java.util.Map;
  */
 public class MockConversation implements AutoCloseable {
     static final String SESSION_ID_COOKIE = "JSESSIONID";
-    static final String SESSION_ID_URL = "jsessionid";
-    static final String SESSION_URL_PREFIX = ";" + SESSION_ID_URL + "=";
 
-    private Gate gate_ = null;
-
+    private final SiteRunner runner_;
     private final HierarchicalProperties properties_;
-    private final HashMap<String, MockCookie> cookies_ = new HashMap<>();
-    private final HashMap<String, MockSession> sessions_ = new HashMap<>();
+    private final Map<String, MockCookie> cookies_ = Collections.synchronizedMap(new HashMap<>());
     private String scheme_ = "http";
     private String serverName_ = "localhost";
     private int serverPort_ = 80;
@@ -59,7 +55,7 @@ public class MockConversation implements AutoCloseable {
     /**
      * Creates a new {@code MockConversation} instance for a particular
      * site, with the properties that the site is set up with.
-     * <p>The properties are used as they are, system properties are only
+     * <p>The properties are used as they are, so system properties are only
      * visible when they're part of their hierarchy.
      *
      * @param site       the site structure that will be tested
@@ -69,9 +65,46 @@ public class MockConversation implements AutoCloseable {
     public MockConversation(Site site, HierarchicalProperties properties)
     throws EngineException {
         properties_ = properties;
+        // preserves the behaviour that conversations had before the site runner
+        runner_ = new SiteRunner(properties) {
+            @Override
+            protected Cookie createSessionCookie(SiteRequest request, String id) {
+                var cookie = new Cookie(SESSION_ID_COOKIE, id);
+                cookie.setPath("/");
+                cookie.setMaxAge(-1);
+                return cookie;
+            }
 
-        gate_ = new Gate();
-        gate_.setup(properties_, site);
+            @Override
+            protected boolean isServingAfterStop() {
+                return true;
+            }
+
+            @Override
+            protected boolean isReusingRequests() {
+                return true;
+            }
+
+            @Override
+            protected boolean isKeepingDetachedStreamsOpen() {
+                return true;
+            }
+
+            @Override
+            protected boolean isValidatingCookies() {
+                return false;
+            }
+
+            @Override
+            protected boolean isServingStaticResources() {
+                return false;
+            }
+        };
+        runner_.sessionCookieName(SESSION_ID_COOKIE);
+        runner_.sessionUrlParameters(true);
+        // sessions only end when they're invalidated
+        runner_.sessionTimeout(0);
+        runner_.start(site);
     }
 
     /**
@@ -81,7 +114,7 @@ public class MockConversation implements AutoCloseable {
      * @since 1.6.1
      */
     public Site getSite() {
-        return gate_.getSite();
+        return runner_.getSite();
     }
 
     /**
@@ -107,7 +140,7 @@ public class MockConversation implements AutoCloseable {
      * @since 1.10
      */
     public void destroy() {
-        gate_.destroy();
+        runner_.stop();
     }
 
     /**
@@ -179,39 +212,7 @@ public class MockConversation implements AutoCloseable {
             url = url.substring(server_root.length());
         }
 
-        // add the parameters in the URL to the request parameters
-        var parameters = extractParameters(url);
-        if (parameters != null) {
-            for (var entry : parameters.entrySet()) {
-                if (!request.hasParameter(entry.getKey())) {
-                    request.setParameter(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-
-        // get the path parameters
-        String path_parameters = null;
-        var path_parameters_index = url.indexOf(';');
-        if (path_parameters_index != -1) {
-            path_parameters = url.substring(0, path_parameters_index);
-        }
-
-        // remove the query string
-        var index_query = url.indexOf('?');
-        if (index_query != -1) {
-            url = url.substring(0, index_query);
-        }
-
-        // perform the request
-        var response = new MockResponse(this, request);
-        request.setMockResponse(response);
-        request.setRequestedSessionId(path_parameters);
-        var extension = FileUtils.getExtension(url);
-        if ((extension != null && RifeConfig.engine().getPassThroughSuffixes().contains(extension)) ||
-            !gate_.handleRequest("", url, request, response)) {
-            response.setStatus(404);
-        }
-        return response;
+        return (MockResponse) runner_.handle(url, request);
     }
 
     /**
@@ -398,9 +399,11 @@ public class MockConversation implements AutoCloseable {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
-        for (var cookie : cookies_.values()) {
-            if (cookie.getName().equals(name) && !cookie.isExpired()) {
-                return true;
+        synchronized (cookies_) {
+            for (var cookie : cookies_.values()) {
+                if (cookie.getName().equals(name) && !cookie.isExpired()) {
+                    return true;
+                }
             }
         }
 
@@ -424,9 +427,11 @@ public class MockConversation implements AutoCloseable {
         if (null == name) throw new IllegalArgumentException("name can't be null");
         if (name.isEmpty()) throw new IllegalArgumentException("name can't be empty");
 
-        for (var cookie : cookies_.values()) {
-            if (cookie.getName().equals(name) && !cookie.isExpired()) {
-                return cookie;
+        synchronized (cookies_) {
+            for (var cookie : cookies_.values()) {
+                if (cookie.getName().equals(name) && !cookie.isExpired()) {
+                    return cookie;
+                }
             }
         }
 
@@ -471,11 +476,14 @@ public class MockConversation implements AutoCloseable {
      * @since 1.0
      */
     public Cookie[] getCookies() {
-        if (cookies_.isEmpty()) {
-            return null;
-        }
+        ArrayList<MockCookie> active_cookies;
+        synchronized (cookies_) {
+            if (cookies_.isEmpty()) {
+                return null;
+            }
 
-        var active_cookies = new ArrayList<>(cookies_.values());
+            active_cookies = new ArrayList<>(cookies_.values());
+        }
         active_cookies.removeIf(MockCookie::isExpired);
 
         var cookies = new MockCookie[active_cookies.size()];
@@ -601,6 +609,10 @@ public class MockConversation implements AutoCloseable {
             query = url.substring(index_query + 1);
         }
 
+        return extractQueryParameters(query);
+    }
+
+    static Map<String, String[]> extractQueryParameters(String query) {
         Map<String, String[]> parameters = new HashMap<>();
 
         var query_parts = StringUtils.split(query, "&");
@@ -624,20 +636,5 @@ public class MockConversation implements AutoCloseable {
         }
 
         return parameters;
-    }
-
-    MockSession getSession(String id) {
-        return sessions_.get(id);
-    }
-
-    MockSession newHttpSession() {
-        var session = new MockSession(this);
-        sessions_.put(session.getId(), session);
-
-        return session;
-    }
-
-    void removeSession(String id) {
-        sessions_.remove(id);
     }
 }

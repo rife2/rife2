@@ -332,6 +332,9 @@ public interface Request {
 
     /**
      * Retrieves the underlying {@link HttpServletRequest}.
+     * <p>This will be {@code null} when the site is run by a
+     * {@link SiteRunner} or during out-of-container testing, so code that
+     * needs the servlet API has to check for that.
      *
      * @return the underlying {@code HttpServletRequest} instance; or
      * <p>{@code null} if this request isn't backed by
