@@ -211,14 +211,15 @@ public class BasicContinuableRunner {
                                     context = manager_.getContext(runId);
                                 }
 
-                                // set up the context
-                                if (context != null) {
-                                    if (callAnswer != null) {
-                                        context.setCallAnswer(callAnswer);
-                                    }
-                                    ContinuationContext.setActiveContext(context);
-                                    object = context.getContinuable();
+                                if (null == context) {
+                                    return null;
                                 }
+
+                                if (callAnswer != null) {
+                                    context.setCallAnswer(callAnswer);
+                                }
+                                ContinuationContext.setActiveContext(context);
+                                object = context.getContinuable();
                             }
                         }
 

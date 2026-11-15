@@ -168,4 +168,13 @@ public class TestPause {
             assertNull(id7b);
         }
     }
+
+    @Test
+    void testUnknownContinuation()
+    throws Throwable {
+        var runner = new ContinuableRunnerTest();
+        assertNull(runner.resume("unknown"));
+        assertNull(runner.answer("unknown", "answer"));
+        assertNull(runner.run("unknown"));
+    }
 }
