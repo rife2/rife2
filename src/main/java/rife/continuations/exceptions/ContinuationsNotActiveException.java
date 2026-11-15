@@ -23,6 +23,6 @@ public class ContinuationsNotActiveException extends RuntimeException {
      * @since 1.0
      */
     public ContinuationsNotActiveException() {
-        super("Continuations are not active for this class method. This class hasn't been instrumented or is has been reloaded through hot-swap.");
+        super("Continuations are not active for this class method. This class hasn't been instrumented or it has been reloaded through hot-swap.");
     }
 }
