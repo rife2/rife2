@@ -442,10 +442,12 @@ public class TestSiteRunner {
         })) {
             var plain = runner.handle("/page");
             assertNull(plain.getHeader("Content-Encoding"));
+            assertEquals("Accept-Encoding", plain.getHeader("Vary"));
             assertEquals(1000, plain.getBytes().length);
 
             var compressed = runner.handle("/page", new SiteRequest().header("Accept-Encoding", "gzip, deflate"));
             assertEquals("gzip", compressed.getHeader("Content-Encoding"));
+            assertEquals("Accept-Encoding", compressed.getHeader("Vary"));
             assertEquals(compressed.getBytes().length, compressed.getContentLength());
             assertTrue(compressed.getBytes().length < 100);
         }

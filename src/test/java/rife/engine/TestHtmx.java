@@ -60,8 +60,9 @@ public class TestHtmx {
         // the response actually differs on the header, never adds a Vary entry
         // on its own. Declaring the dependency is the caller's choice, through
         // varyOn or printHtmxFragment.
-        assertNull(m.doRequest("/info").getHeader("Vary"), "a plain read does not vary");
-        assertNull(m.doRequest("/info", new MockRequest().htmx()).getHeader("Vary"),
+        // only the compression of the html content varies
+        assertEquals(List.of("Accept-Encoding"), m.doRequest("/info").getHeaders("Vary"), "a plain read does not vary");
+        assertEquals(List.of("Accept-Encoding"), m.doRequest("/info", new MockRequest().htmx()).getHeaders("Vary"),
             "an htmx read does not vary either");
     }
 
@@ -359,7 +360,7 @@ public class TestHtmx {
         assertEquals(1, vary.stream().filter("HX-Request"::equals).count(), "HX-Request is added only once");
         // "hx-request" is the same header as "HX-Request", so it doesn't add a
         // second entry; header names are compared case-insensitively
-        assertEquals(2, vary.size(), "case variants and repeats don't build up duplicate Vary entries");
+        assertEquals(3, vary.size(), "case variants and repeats don't build up duplicate Vary entries, besides Accept-Encoding");
     }
 
     // a CSRF-protected page whose template emits the htmx headers attribute

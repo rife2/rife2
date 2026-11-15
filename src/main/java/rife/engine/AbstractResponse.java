@@ -368,6 +368,10 @@ public abstract class AbstractResponse implements Response {
                         if (RifeConfig.engine().getGzipCompression() &&
                             RifeConfig.engine().getGzipCompressionTypes().contains(content_type) &&
                             !SseConnection.CONTENT_TYPE_EVENT_STREAM.equals(content_type)) {
+                            // the body depends on the request's accepted encodings,
+                            // also when this one doesn't accept gzip
+                            addHeader("Vary", "Accept-Encoding");
+
                             String accept_encoding = request_.getHeader("Accept-Encoding");
                             if (accept_encoding != null &&
                                 accept_encoding.contains("gzip")) {
