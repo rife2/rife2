@@ -12,6 +12,7 @@ import rife.tools.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -135,6 +136,15 @@ public class TestImageIOLoader {
 
         assertNull(image);
         assertEquals(0, errors.size());
+    }
+
+    @Test
+    void testLoadFromBytesTruncated()
+    throws Exception {
+        var data = FileUtils.readBytes(ResourceFinderClasspath.instance().getResource("uwyn.png"));
+        Set<String> errors = new HashSet<>();
+        assertNull(new ImageIOLoader().loadFromBytes(Arrays.copyOf(data, data.length / 2), errors));
+        assertFalse(errors.isEmpty());
     }
 
     @Test

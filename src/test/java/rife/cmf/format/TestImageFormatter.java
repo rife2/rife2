@@ -23,6 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -116,6 +117,15 @@ public class TestImageFormatter {
             // TODO : check why no errors are added
 //            assertTrue(e.getErrors().size() > 0);
         }
+    }
+
+    @Test
+    void testFormatTruncatedData()
+    throws Exception {
+        var data = FileUtils.readBytes(ResourceFinderClasspath.instance().getResource("uwyn.png"));
+        var content = new Content(MimeType.IMAGE_PNG, Arrays.copyOf(data, data.length / 2));
+        var e = assertThrows(UnreadableDataFormatException.class, () -> new ImageFormatter().format(content, null));
+        assertFalse(e.getErrors().isEmpty());
     }
 
     @Test

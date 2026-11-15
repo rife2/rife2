@@ -70,7 +70,7 @@ public class ImageIOLoader extends ImageContentLoaderBackend {
                 errors.add(ExceptionUtils.getExceptionStackTrace(e));
             }
 
-            image = null;
+            return null;
         }
 
         return new LoadedContent<>(mime_type, image);
