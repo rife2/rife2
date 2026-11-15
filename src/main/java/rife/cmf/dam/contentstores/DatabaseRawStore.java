@@ -355,9 +355,39 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         return statement;
     }
 
+    /**
+     * Serves a range of the content data for a certain content id through
+     * the provided context.
+     * <p>This takes over the complete handling of the request, like
+     * {@link #serveContentData(Context, int)}, apart from the status and the
+     * {@code Content-Range} header.
+     *
+     * <p>An {@code end} beyond the last byte serves the data up to its last
+     * byte, as does a negative {@code end}.
+     *
+     * @param context an active web engine context
+     * @param id      the id of the content whose data will be served
+     * @param start   the position of the first byte that will be served
+     * @param end     the position of the last byte that will be served, inclusive
+     * @throws IllegalArgumentException if {@code start} is negative, or
+     *                                  {@code end} isn't negative and lies before {@code start}
+     * @throws ContentManagerException  if an unexpected error occurred
+     * @since 1.11.0
+     */
+    public abstract void serveContentData(Context context, int id, long start, long end)
+    throws ContentManagerException;
+
     protected void _serveContentData(final Select retrieveContentChunks, final Context context, final int id)
     throws ContentManagerException {
+        _serveContentData(retrieveContentChunks, context, id, 0, -1);
+    }
+
+    // an end before zero serves the data up to its last byte
+    protected void _serveContentData(final Select retrieveContentChunks, final Context context, final int id, final long start, final long end)
+    throws ContentManagerException {
         if (null == context) throw new IllegalArgumentException("element can't be null");
+        if (start < 0) throw new IllegalArgumentException("start can't be negative");
+        if (end >= 0 && end < start) throw new IllegalArgumentException("end can't lie before start");
 
         if (id < 0) {
             context.defer();
@@ -372,7 +402,13 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
             context.defer();
             return;
         }
-        context.setContentLength(size);
+        final var last = end < 0 ? size - 1 : Math.min(end, size - 1);
+        final var count = Math.max(0, last - start + 1);
+        context.setContentLength((int) count);
+        // empty data is stored without any chunks
+        if (0 == size) {
+            return;
+        }
 
         try {
             Boolean success = executeQuery(retrieveContentChunks, new DbPreparedStatementHandler<>() {
@@ -394,7 +430,7 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
                     // output the content
                     var os = context.outputStream();
                     try {
-                        serveChunks(resultSet, os, size);
+                        serveChunks(resultSet, os, start, count);
 
                         os.flush();
                     } catch (IOException e) {
@@ -414,21 +450,30 @@ public abstract class DatabaseRawStore extends DbQueryManager implements Content
         }
     }
 
-    protected void serveChunks(DbResultSet resultset, OutputStream os, int size)
+    // the chunks don't have a fixed size, so the ones before the range are
+    // read and skipped, and no chunks are read after it
+    protected void serveChunks(DbResultSet resultset, OutputStream os, long skip, long count)
     throws SQLException {
-        var buffer = new byte[512];
+        var buffer = new byte[8192];
+        var remaining_skip = skip;
+        var remaining = count;
         do {
-            var is = resultset.getBinaryStream("chunk");
-            var buffered_raw_is = new BufferedInputStream(is, 512);
-            var buffer_size = 0;
-            try {
-                while ((buffer_size = buffered_raw_is.read(buffer)) != -1) {
-                    os.write(buffer, 0, buffer_size);
+            try (var is = resultset.getBinaryStream("chunk")) {
+                int read;
+                while (remaining > 0 && (read = is.read(buffer)) != -1) {
+                    var offset = (int) Math.min(remaining_skip, read);
+                    remaining_skip -= offset;
+                    var length = (int) Math.min(read - offset, remaining);
+                    if (length > 0) {
+                        os.write(buffer, offset, length);
+                        remaining -= length;
+                    }
                 }
             } catch (IOException e) {
-                // don't do anything, the client has probably disconnected
+                // the client has probably disconnected
+                return;
             }
         }
-        while (resultset.next());
+        while (remaining > 0 && resultset.next());
     }
 }

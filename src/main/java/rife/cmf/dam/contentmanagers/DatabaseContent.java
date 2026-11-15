@@ -16,19 +16,25 @@ import rife.cmf.dam.contentmanagers.exceptions.RemoveContentErrorException;
 import rife.cmf.dam.contentmanagers.exceptions.UnknownContentRepositoryException;
 import rife.cmf.dam.contentmanagers.exceptions.UnsupportedMimeTypeException;
 import rife.cmf.dam.contentstores.DatabaseImageStoreFactory;
+import rife.cmf.dam.contentstores.DatabaseRawStore;
 import rife.cmf.dam.contentstores.DatabaseRawStoreFactory;
 import rife.cmf.dam.contentstores.DatabaseTextStoreFactory;
 import rife.cmf.dam.exceptions.ContentManagerException;
 import rife.cmf.transform.ContentTransformer;
+import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.database.DbQueryManager;
 import rife.database.DbRowProcessor;
 import rife.database.DbTransactionUser;
 import rife.database.exceptions.DatabaseException;
 import rife.database.queries.*;
+import rife.engine.ByteRange;
 import rife.engine.Context;
+import rife.engine.RequestMethod;
 import rife.engine.Route;
+import rife.tools.HttpUtils;
 import rife.tools.InnerClassException;
+import rife.tools.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
@@ -465,30 +471,116 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
             throw new UnsupportedMimeTypeException(mime_type);
         }
 
-        // set cache headers
-        long if_modified_since = context.headerDate("If-Modified-Since");
-        var last_modified = content_info.getCreated();
-        var last_modified_timestamp = (last_modified.getTime() / 1000) * 1000;
-        if (if_modified_since > 0 &&
-            if_modified_since >= last_modified_timestamp) {
+        var content_type = store.getContentType(content_info);
+        if (null == content_type) {
+            content_type = "application/octet-stream";
+        }
+
+        // set cache headers, a not modified response carries them too
+        var last_modified_timestamp = (content_info.getCreated().getTime() / 1000) * 1000;
+        var etag = contentEtag(content_info, content_type);
+        context.addHeader("ETag", etag);
+        context.addHeader("Cache-Control", "must-revalidate");
+        context.addDateHeader("Expires", System.currentTimeMillis() + 60 * 60 * 1000);
+        context.addDateHeader("Last-Modified", last_modified_timestamp);
+        if (isNotModified(context, etag, last_modified_timestamp)) {
+            // the response that this replaces would have varied on the
+            // compression, which is only decided once content is sent
+            if (etag.startsWith("W/")) {
+                context.addHeader("Vary", "Accept-Encoding");
+            }
             context.setStatus(Context.SC_NOT_MODIFIED);
             return;
         }
 
         // set general headers
-        var content_type = store.getContentType(content_info);
-        if (null == content_type) {
-            content_type = "application/octet-stream";
-        }
         context.setContentType(content_type);
         if (content_info.hasName()) {
             context.addHeader("Content-Disposition", inlineDisposition(content_info.getName()));
         }
-        context.addHeader("Cache-Control", "must-revalidate");
-        context.addDateHeader("Expires", System.currentTimeMillis() + 60 * 60 * 1000);
-        context.addDateHeader("Last-Modified", last_modified_timestamp);
+
+        // only raw data is sent as it's stored, a weak tag means that gzip
+        // can change its bytes
+        if (store instanceof DatabaseRawStore raw_store && !etag.startsWith("W/")) {
+            context.addHeader("Accept-Ranges", "bytes");
+
+            // ranges are only defined for GET
+            var range_header = context.method() == RequestMethod.GET ? context.header("Range") : null;
+            if (range_header != null && ifRangeMatches(context, etag, last_modified_timestamp)) {
+                var size = raw_store.getSize(content_info.getContentId());
+                var range = size < 0 ? null : ByteRange.parse(range_header, size);
+                if (range == ByteRange.UNSATISFIABLE) {
+                    context.setStatus(416);
+                    context.addHeader("Content-Range", "bytes */" + size);
+                    context.setContentLength(0);
+                    return;
+                }
+                if (range != null) {
+                    context.setStatus(206);
+                    context.addHeader("Content-Range", "bytes " + range.start() + "-" + range.end() + "/" + size);
+                    raw_store.serveContentData(context, content_info.getContentId(), range.start(), range.end());
+                    return;
+                }
+            }
+        }
 
         store.serveContentData(context, content_info.getContentId());
+    }
+
+    // every store gets a new content id, the creation time tells apart the
+    // ids that a reinstalled sequence hands out again; gzip changes the bytes
+    // that are sent, so a compressible type only gets a weak tag
+    static String contentEtag(DatabaseContentInfo info, String contentType) {
+        var etag = "\"" + Integer.toHexString(info.getContentId()) + "-" + Long.toHexString(info.getCreated().getTime()) + "\"";
+        if (RifeConfig.engine().getGzipCompression() &&
+            RifeConfig.engine().getGzipCompressionTypes().contains(HttpUtils.extractMimeTypeFromContentType(contentType))) {
+            return "W/" + etag;
+        }
+        return etag;
+    }
+
+    // If-None-Match takes precedence over If-Modified-Since, and is compared weakly
+    private static boolean isNotModified(Context context, String etag, long lastModified) {
+        var if_none_match = context.header("If-None-Match");
+        if (if_none_match != null) {
+            var opaque = stripWeakness(etag);
+            for (var candidate : StringUtils.split(if_none_match, ",")) {
+                var tag = candidate.trim();
+                if (tag.equals("*") || stripWeakness(tag).equals(opaque)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // an invalid date is ignored
+        try {
+            var if_modified_since = context.headerDate("If-Modified-Since");
+            return if_modified_since > 0 && if_modified_since >= lastModified;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    // a range is only served for the version the client already has part of
+    private static boolean ifRangeMatches(Context context, String etag, long lastModified) {
+        var if_range = context.header("If-Range");
+        if (null == if_range) {
+            return true;
+        }
+        if_range = if_range.trim();
+        if (if_range.startsWith("\"") || if_range.startsWith("W/")) {
+            return if_range.equals(etag);
+        }
+        try {
+            return context.headerDate("If-Range") == lastModified;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    private static String stripWeakness(String etag) {
+        return etag.startsWith("W/") ? etag.substring(2) : etag;
     }
 
     // RFC 6266, with an ASCII fallback for clients that don't read filename*

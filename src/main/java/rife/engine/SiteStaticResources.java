@@ -29,8 +29,6 @@ import java.util.zip.CRC32;
 class SiteStaticResources {
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
 
-    private static final long[] UNSATISFIABLE = new long[0];
-
     private final Path directory_;
     private final List<String> classpathBases_;
     private final ClassLoader classLoader_;
@@ -243,18 +241,19 @@ class SiteStaticResources {
 
         long start = 0;
         long end = length - 1;
-        var range = request.getHeader("Range");
+        // ranges are only defined for GET
+        var range = request.getMethod() == RequestMethod.GET ? request.getHeader("Range") : null;
         if (range != null && ifRangeMatches(request, etag, last_modified)) {
-            var parsed = parseRange(range, length);
-            if (parsed == UNSATISFIABLE) {
+            var parsed = ByteRange.parse(range, length);
+            if (parsed == ByteRange.UNSATISFIABLE) {
                 response.setStatus(416);
                 response.setHeader("Content-Range", "bytes */" + length);
                 response.setHeader("Content-Length", "0");
                 return;
             }
             if (parsed != null) {
-                start = parsed[0];
-                end = parsed[1];
+                start = parsed.start();
+                end = parsed.end();
                 response.setStatus(206);
                 response.setHeader("Content-Range", "bytes " + start + "-" + end + "/" + length);
             }
@@ -324,58 +323,6 @@ class SiteStaticResources {
             return lastModified > 0 && SiteHeaders.parseDate(if_range) == lastModified;
         } catch (IllegalArgumentException e) {
             return false;
-        }
-    }
-
-    // a single range as its start and end, or null to serve the whole file
-    static long[] parseRange(String header, long length) {
-        var value = header.trim();
-        if (!value.toLowerCase(Locale.ENGLISH).startsWith("bytes=")) {
-            return null;
-        }
-        value = value.substring(6).trim();
-        if (value.indexOf(',') != -1) {
-            return null;
-        }
-
-        var dash = value.indexOf('-');
-        if (-1 == dash) {
-            return null;
-        }
-
-        try {
-            var first = value.substring(0, dash).trim();
-            var last = value.substring(dash + 1).trim();
-            long start;
-            long end;
-            if (first.isEmpty()) {
-                if (last.isEmpty()) {
-                    return null;
-                }
-                var suffix = Long.parseLong(last);
-                if (suffix <= 0) {
-                    return UNSATISFIABLE;
-                }
-                start = Math.max(0, length - suffix);
-                end = length - 1;
-            } else {
-                start = Long.parseLong(first);
-                end = length - 1;
-                if (!last.isEmpty()) {
-                    var requested_end = Long.parseLong(last);
-                    // a range that ends before it starts is invalid and ignored
-                    if (requested_end < start) {
-                        return null;
-                    }
-                    end = Math.min(requested_end, length - 1);
-                }
-            }
-            if (start >= length || 0 == length) {
-                return UNSATISFIABLE;
-            }
-            return new long[]{start, end};
-        } catch (NumberFormatException e) {
-            return null;
         }
     }
 }

@@ -552,6 +552,11 @@ public class TestSiteRunner {
             assertEquals(200, head.getStatus());
             assertEquals("10", head.getHeader("Content-Length"));
             assertEquals(0, head.getBytes().length);
+            // ranges are only defined for GET
+            var head_range = runner.handle("/data.txt", new SiteRequest(RequestMethod.HEAD).header("Range", "bytes=2-5"));
+            assertEquals(200, head_range.getStatus());
+            assertEquals("10", head_range.getHeader("Content-Length"));
+            assertNull(head_range.getHeader("Content-Range"));
 
             assertEquals("body {}", runner.handle("/sub/style.css").getText());
             assertEquals("text/css", runner.handle("/sub/style.css").getContentType());
@@ -1521,20 +1526,23 @@ public class TestSiteRunner {
 
     @Test
     void testRangeParsing() {
-        assertArrayEquals(new long[]{0, 9}, SiteStaticResources.parseRange("bytes=0-", 10));
-        assertArrayEquals(new long[]{2, 5}, SiteStaticResources.parseRange("BYTES=2-5", 10));
-        assertArrayEquals(new long[]{8, 9}, SiteStaticResources.parseRange("bytes=8-100", 10));
-        assertArrayEquals(new long[]{0, 9}, SiteStaticResources.parseRange("bytes=-100", 10));
-        assertArrayEquals(new long[0], SiteStaticResources.parseRange("bytes=-0", 10));
-        assertArrayEquals(new long[0], SiteStaticResources.parseRange("bytes=10-", 10));
-        assertArrayEquals(new long[0], SiteStaticResources.parseRange("bytes=0-", 0));
+        assertEquals(new ByteRange(0, 9), ByteRange.parse("bytes=0-", 10));
+        assertEquals(new ByteRange(2, 5), ByteRange.parse("BYTES=2-5", 10));
+        assertEquals(new ByteRange(8, 9), ByteRange.parse("bytes=8-100", 10));
+        assertEquals(new ByteRange(0, 9), ByteRange.parse("bytes=-100", 10));
+        assertSame(ByteRange.UNSATISFIABLE, ByteRange.parse("bytes=-0", 10));
+        assertSame(ByteRange.UNSATISFIABLE, ByteRange.parse("bytes=10-", 10));
+        assertSame(ByteRange.UNSATISFIABLE, ByteRange.parse("bytes=0-", 0));
         // what can't be served as a single range gives the whole file
-        assertNull(SiteStaticResources.parseRange("bytes=5-2", 10));
-        assertNull(SiteStaticResources.parseRange("bytes=0-1,3-4", 10));
-        assertNull(SiteStaticResources.parseRange("bytes=-", 10));
-        assertNull(SiteStaticResources.parseRange("bytes=a-b", 10));
-        assertNull(SiteStaticResources.parseRange("items=0-1", 10));
-        assertNull(SiteStaticResources.parseRange("bytes=99999999999999999999-", 10));
+        assertNull(ByteRange.parse("bytes=5-2", 10));
+        assertNull(ByteRange.parse("bytes=0-1,3-4", 10));
+        assertNull(ByteRange.parse("bytes=-", 10));
+        assertNull(ByteRange.parse("bytes=a-b", 10));
+        assertNull(ByteRange.parse("items=0-1", 10));
+        assertNull(ByteRange.parse("bytes=99999999999999999999-", 10));
+        assertNull(ByteRange.parse("bytes=--5", 10));
+        assertNull(ByteRange.parse("bytes=+5-", 10));
+        assertNull(ByteRange.parse("bytes=1-+5", 10));
     }
 
     @Test

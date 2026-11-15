@@ -135,4 +135,9 @@ public class generic extends DatabaseRawStore {
     throws ContentManagerException {
         _serveContentData(retrieveContentChunks_, context, id);
     }
+
+    public void serveContentData(Context context, int id, long start, long end)
+    throws ContentManagerException {
+        _serveContentData(retrieveContentChunks_, context, id, start, end);
+    }
 }

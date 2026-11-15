@@ -26,8 +26,8 @@ public class org_postgresql_Driver extends generic {
         return inTransaction(() -> super._useContentDataResult(retrieveContentChunks, id, user));
     }
 
-    protected void _serveContentData(final Select retrieveContentChunks, final Context context, final int id)
+    protected void _serveContentData(final Select retrieveContentChunks, final Context context, final int id, final long start, final long end)
     throws ContentManagerException {
-        inTransaction(() -> super._serveContentData(retrieveContentChunks, context, id));
+        inTransaction(() -> super._serveContentData(retrieveContentChunks, context, id, start, end));
     }
 }
