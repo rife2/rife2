@@ -12,13 +12,14 @@ import java.util.Map;
 /**
  * Describes an htmx client-side navigation together with its context, for
  * the JSON form of the {@code HX-Location} response header.
- * <p>When a location only carries a path, it will be sent as the plain
- * path string, exactly like {@link Context#hxLocation(String)} does. As
- * soon as you add any piece of context, the header switches over to htmx's
- * JSON object form:
+ * <p>When a location only carries its path or route, it will be sent as
+ * the plain URL string, exactly like {@link Context#hxLocation(String)}
+ * does. A route resolves to its absolute URL, like
+ * {@link Context#urlFor(Route)}. As soon as you add any piece of context,
+ * the header switches over to htmx's JSON object form:
  * <pre>c.hxLocation(new HxLocation(books).target("#main").swap("outerHTML"));</pre>
  * <p>which sends:
- * <pre>HX-Location: {"path":"/books","target":"#main","swap":"outerHTML"}</pre>
+ * <pre>HX-Location: {"path":"http://localhost:8080/books","target":"#main","swap":"outerHTML"}</pre>
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Context#hxLocation(HxLocation)

@@ -3624,7 +3624,7 @@ public class Context {
      * <p>The {@link HxLocation} argument carries the context of the
      * navigation, like the target to swap into or the swap style:
      * <pre>c.hxLocation(new HxLocation(books).target("#main").swap("outerHTML"));</pre>
-     * <p>A location without any context is sent as the plain path, the same
+     * <p>A location without any context is sent as the plain URL, the same
      * as {@link #hxLocation(String)}.
      *
      * @param location the location to navigate to, with its context
