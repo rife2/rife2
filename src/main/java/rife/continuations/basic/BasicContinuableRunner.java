@@ -4,6 +4,7 @@
  */
 package rife.continuations.basic;
 
+import rife.config.RifeConfig;
 import rife.continuations.*;
 import rife.continuations.exceptions.*;
 
@@ -474,9 +475,26 @@ public class BasicContinuableRunner {
         return manager_;
     }
 
+    /**
+     * Retrieves how long paused continuations stay available after they
+     * were last paused, before they expire.
+     * <p>This can be overridden in case the default duration isn't
+     * appropriate.
+     *
+     * @return the duration in milliseconds
+     * @since 1.11.0
+     */
+    public long getContinuationDuration() {
+        return RifeConfig.EngineConfig.DEFAULT_CONTINUATION_DURATION;
+    }
+
     private class BasicConfigRuntime extends ContinuationConfigRuntime {
         public ContinuationManager getContinuationManager(Object executingInstance) {
             return manager_;
+        }
+
+        public long getContinuationDuration() {
+            return BasicContinuableRunner.this.getContinuationDuration();
         }
 
         public boolean cloneContinuations(Object executingContinuable) {

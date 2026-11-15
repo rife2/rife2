@@ -104,6 +104,11 @@ public class Workflow {
                 method.setAccessible(true);
                 method.invoke(object, Workflow.this);
             }
+
+            // paused work waits for its event for as long as the workflow exists
+            public long getContinuationDuration() {
+                return Long.MAX_VALUE;
+            }
         };
         runner_.setCloneContinuations(false);
         runner_.setCallTargetRetriever(new EventTypeCallTargetRetriever());

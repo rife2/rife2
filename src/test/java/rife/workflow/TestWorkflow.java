@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Timeout;
 import rifeworkflowtests.CountdownWork;
 import rifeworkflowtests.DurableHandoffWork;
 import rifeworkflowtests.NestedPrivateFieldWork;
+import rifeworkflowtests.RuntimeRecordingWork;
 import rifeworkflowtests.TestEventTypes;
 import rifeworkflowtests.WorkDep1;
 import rifeworkflowtests.WorkDep2;
@@ -81,6 +82,16 @@ public class TestWorkflow {
         wf.waitForNoWork();
 
         assertEquals(2, work.getEvent().getData());
+    }
+
+    @Test
+    void testPausedWorkDoesntExpire()
+    throws Throwable {
+        var work = new RuntimeRecordingWork();
+        var workflow = new Workflow();
+        workflow.start(work);
+        workflow.waitForNoWork();
+        assertEquals(Long.MAX_VALUE, work.getContinuationDuration());
     }
 
     @Test
