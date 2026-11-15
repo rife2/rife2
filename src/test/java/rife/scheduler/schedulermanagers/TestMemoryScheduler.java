@@ -280,6 +280,32 @@ public class TestMemoryScheduler {
     }
 
     @Test
+    void testRetryWaitsForTheRescheduleDelay()
+    throws Exception {
+        var scheduler = new MemoryScheduling().createScheduler();
+        var executor = new TestRetryExecutor(400);
+        var task = executor.createTask();
+        task.setPlanned(System.currentTimeMillis());
+
+        scheduler.addExecutor(executor);
+        scheduler.setSleepTime(20);
+        scheduler.getTaskManager().addTask(task);
+
+        scheduler.start();
+        try {
+            executor.waitForExecutions(2);
+            var times = executor.getExecutionTimes();
+            assertEquals(2, times.size());
+            assertTrue(times.get(1) - times.get(0) >= 400, "retried after " + (times.get(1) - times.get(0)) + "ms");
+        } finally {
+            synchronized (scheduler) {
+                scheduler.stop();
+                scheduler.wait();
+            }
+        }
+    }
+
+    @Test
     void testRepeatingTaskRetry()
     throws Exception {
         var scheduler = new MemoryScheduling().createScheduler();

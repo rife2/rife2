@@ -41,16 +41,28 @@ public class TestTask {
 
             assertEquals(id, task.getId());
             assertEquals(type, task.getType());
-            var calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(planned);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            assertEquals(calendar.getTimeInMillis(), task.getPlanned());
+            assertEquals(planned, task.getPlanned());
             assertEquals(frequency, task.getFrequency());
             assertEquals(busy, task.isBusy());
         } catch (FrequencyException e) {
             fail(ExceptionUtils.getExceptionStackTrace(e));
         }
+    }
+
+    @Test
+    void testNextTimestampWithinTheMinute()
+    throws Exception {
+        // a retry is planned within the current minute, the frequency still
+        // has to give the next execution once it ran
+        var now = System.currentTimeMillis();
+        if (now % 60000 == 0) {
+            Thread.sleep(2);
+            now = System.currentTimeMillis();
+        }
+        var task = new Task().planned(now).frequency(Frequency.MINUTELY);
+        var next = task.getNextTimestamp();
+        assertTrue(next > now);
+        assertEquals(0, next % 60000);
     }
 
     @Test

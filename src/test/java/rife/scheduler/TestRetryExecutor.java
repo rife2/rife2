@@ -4,14 +4,27 @@
  */
 package rife.scheduler;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestRetryExecutor extends Executor {
     private static final long TIMEOUT = 3000;
 
     private final AtomicInteger executions_ = new AtomicInteger();
+    private final List<Long> executionTimes_ = new CopyOnWriteArrayList<>();
+    private final long rescheduleDelay_;
+
+    public TestRetryExecutor() {
+        this(100);
+    }
+
+    public TestRetryExecutor(long rescheduleDelay) {
+        rescheduleDelay_ = rescheduleDelay;
+    }
 
     public boolean executeTask(Task task) {
+        executionTimes_.add(System.currentTimeMillis());
         // only the first execution fails, which has the task retried
         return executions_.incrementAndGet() > 1;
     }
@@ -21,7 +34,11 @@ public class TestRetryExecutor extends Executor {
     }
 
     protected long getRescheduleDelay() {
-        return 100;
+        return rescheduleDelay_;
+    }
+
+    public List<Long> getExecutionTimes() {
+        return executionTimes_;
     }
 
     public int getExecutions() {
