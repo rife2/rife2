@@ -23,6 +23,8 @@ import rife.validation.Constrained;
 import rife.validation.ConstrainedProperty;
 import rife.validation.ConstrainedUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -820,9 +822,21 @@ public class ContentQueryManager<T> extends GenericQueryManagerDelegate<T> imple
                                     .attributes(property.getContentAttributes())
                                     .cachedLoadedData(property.getCachedLoadedData());
 
-                                contentManager_.storeContent(buildCmfPath(constrained, id, property.getPropertyName()),
-                                    content,
-                                    property.getTransformer());
+                                try {
+                                    contentManager_.storeContent(buildCmfPath(constrained, id, property.getPropertyName()),
+                                        content,
+                                        property.getTransformer());
+                                } finally {
+                                    // storing consumes the stream, and parametersBean opens
+                                    // one on the uploaded file that nothing else can close
+                                    if (value instanceof InputStream stream) {
+                                        try {
+                                            stream.close();
+                                        } catch (IOException e) {
+                                            // the content has been stored already
+                                        }
+                                    }
+                                }
                             }
                         } catch (BeanUtilsException | ContentManagerException e) {
                             throw new DatabaseException(e);

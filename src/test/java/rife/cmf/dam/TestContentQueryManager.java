@@ -22,6 +22,8 @@ import rife.tools.InnerClassException;
 import rife.tools.exceptions.FileUtilsErrorException;
 
 import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -362,6 +364,33 @@ public class TestContentQueryManager {
                         }
                     }
                 });
+            } finally {
+                manager.remove();
+            }
+        } finally {
+            tearDown(datasource);
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(TestDatasources.class)
+    void testSaveContentRawClosesStream(Datasource datasource) {
+        setup(datasource);
+        try {
+            var manager = new ContentQueryManager<>(datasource, ContentRaw.class);
+            manager.install();
+            try {
+                var closed = new boolean[1];
+                var stream = new FilterInputStream(new ByteArrayInputStream(new byte[]{1, 2, 3})) {
+                    public void close()
+                    throws IOException {
+                        closed[0] = true;
+                        super.close();
+                    }
+                };
+
+                assertTrue(manager.save(new ContentRaw().name("streamed").raw(stream)) >= 0);
+                assertTrue(closed[0]);
             } finally {
                 manager.remove();
             }
