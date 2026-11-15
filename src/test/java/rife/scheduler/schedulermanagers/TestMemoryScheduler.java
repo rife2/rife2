@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,6 +64,37 @@ public class TestMemoryScheduler {
 
         Scheduler.stopAllActiveSchedulers();
         assertFalse(scheduler.isRunning());
+    }
+
+    @Test
+    void testStopWhenTheInterruptIsSwallowed()
+    throws Exception {
+        var entered = new CountDownLatch(1);
+        var scheduler_thread = new AtomicReference<Thread>();
+        var taskmanager = new MemoryTasks() {
+            private boolean swallowed_ = false;
+
+            public Collection<Task> getTasksToProcess() {
+                if (!swallowed_) {
+                    swallowed_ = true;
+                    scheduler_thread.set(Thread.currentThread());
+                    entered.countDown();
+                    // like a JDBC driver that clears the interrupt and carries on
+                    while (!Thread.interrupted()) {
+                        Thread.onSpinWait();
+                    }
+                }
+                return super.getTasksToProcess();
+            }
+        };
+        var scheduler = new Scheduler(taskmanager, new MemoryTaskOptions());
+        scheduler.setSleepTime(50);
+        scheduler.start();
+        assertTrue(entered.await(5, TimeUnit.SECONDS));
+
+        scheduler.stop();
+        scheduler_thread.get().join(2000);
+        assertFalse(scheduler_thread.get().isAlive());
     }
 
     @Test

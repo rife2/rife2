@@ -261,23 +261,34 @@ public class Scheduler implements Runnable {
         }
     }
 
+    // code that runs during a step, like a JDBC driver, can swallow the
+    // interrupt of stop(), which also clears or replaces the thread
+    private boolean isStopped() {
+        synchronized (this) {
+            return thread_ != Thread.currentThread();
+        }
+    }
+
     public void run() {
         try {
             while (true) {
                 try {
-                    if (!Thread.interrupted()) {
-                        scheduleStep();
-                        // Ensure that the wakeup is always on an even multiplier of the
-                        // sleep time, this to ensure that no drift occurs.
-                        var now = RifeConfig.tools().getCalendarInstance().getTimeInMillis();
-                        var projected = ((now + sleepTime_) / sleepTime_) * sleepTime_;
-                        var difference = projected - now;
-
-                        synchronized (this) {
-                            wait(difference);
-                        }
-                    } else {
+                    if (Thread.interrupted() || isStopped()) {
                         break;
+                    }
+
+                    scheduleStep();
+                    // Ensure that the wakeup is always on an even multiplier of the
+                    // sleep time, this to ensure that no drift occurs.
+                    var now = RifeConfig.tools().getCalendarInstance().getTimeInMillis();
+                    var projected = ((now + sleepTime_) / sleepTime_) * sleepTime_;
+                    var difference = projected - now;
+
+                    synchronized (this) {
+                        if (isStopped()) {
+                            break;
+                        }
+                        wait(difference);
                     }
                 } catch (InterruptedException e) {
                     break;
