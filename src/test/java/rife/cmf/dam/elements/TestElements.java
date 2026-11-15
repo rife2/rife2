@@ -678,10 +678,16 @@ public class TestElements {
         assertArrayEquals(java.util.Arrays.copyOfRange(data, start, end + 1), response.body());
     }
 
+    // one client for all the requests, a client per request kept a selector
+    // and its sockets open for each one, which stalled the Windows runners;
+    // a stuck request fails the test instead of the whole build
+    private static final HttpClient SERVE_CLIENT = HttpClient.newHttpClient();
+    private static final java.time.Duration SERVE_TIMEOUT = java.time.Duration.ofSeconds(30);
+
     // a first argument of HEAD sends a HEAD request
     private static HttpResponse<byte[]> serveBytes(String path, String... headers)
     throws Exception {
-        var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve" + path));
+        var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve" + path)).timeout(SERVE_TIMEOUT);
         if (headers.length > 0 && "HEAD".equals(headers[0])) {
             request.method("HEAD", HttpRequest.BodyPublishers.noBody());
             headers = java.util.Arrays.copyOfRange(headers, 1, headers.length);
@@ -689,16 +695,16 @@ public class TestElements {
         if (headers.length > 0) {
             request.headers(headers);
         }
-        return HttpClient.newHttpClient().send(request.build(), HttpResponse.BodyHandlers.ofByteArray());
+        return SERVE_CLIENT.send(request.build(), HttpResponse.BodyHandlers.ofByteArray());
     }
 
     private static HttpResponse<String> serve(String path, String... headers)
     throws Exception {
-        var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve" + path));
+        var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve" + path)).timeout(SERVE_TIMEOUT);
         if (headers.length > 0) {
             request.headers(headers);
         }
-        return HttpClient.newHttpClient().send(request.build(), HttpResponse.BodyHandlers.ofString());
+        return SERVE_CLIENT.send(request.build(), HttpResponse.BodyHandlers.ofString());
     }
 
     @ParameterizedTest
