@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.scheduler.SchedulerTesting.stopAndAwait;
 
 public class TestMemoryScheduler {
     @Test
@@ -37,14 +38,10 @@ public class TestMemoryScheduler {
     void testStartStopScheduler() {
         var scheduler = new MemoryScheduling().createScheduler();
         scheduler.start();
-        synchronized (scheduler) {
-            scheduler.stop();
-
-            try {
-                scheduler.wait();
-            } catch (InterruptedException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+        try {
+            stopAndAwait(scheduler);
+        } catch (InterruptedException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
     }
 
@@ -137,10 +134,7 @@ public class TestMemoryScheduler {
         try {
             Thread.sleep(600);
         } finally {
-            synchronized (scheduler) {
-                scheduler.stop();
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
         }
 
         assertEquals(1, executions.get());
@@ -166,14 +160,10 @@ public class TestMemoryScheduler {
 
         scheduler.start();
         Thread.sleep(sleep_time * 2);
-        synchronized (scheduler) {
-            scheduler.stop();
-
-            try {
-                scheduler.wait();
-            } catch (InterruptedException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+        try {
+            stopAndAwait(scheduler);
+        } catch (InterruptedException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
 
         var executed_tasks = executor.getExecutedTasks();
@@ -212,14 +202,10 @@ public class TestMemoryScheduler {
         var executed_tasks = executor.getExecutedTasks();
         var executed_tasks_size = executed_tasks.size();
 
-        synchronized (scheduler) {
-            scheduler.stop();
-
-            try {
-                scheduler.wait();
-            } catch (InterruptedException e) {
-                fail(ExceptionUtils.getExceptionStackTrace(e));
-            }
+        try {
+            stopAndAwait(scheduler);
+        } catch (InterruptedException e) {
+            fail(ExceptionUtils.getExceptionStackTrace(e));
         }
 
         // task frequency fits in the thread sleep time
@@ -265,10 +251,7 @@ public class TestMemoryScheduler {
         var executed_tasks = executor.getExecutedTasks();
         var executed_tasks_size = executed_tasks.size();
 
-        synchronized (scheduler) {
-            scheduler.stop();
-            scheduler.wait();
-        }
+        stopAndAwait(scheduler);
 
         // task frequency fits in the thread sleep time
         long number_of_executions = (thread_sleep_time / task_frequency);
@@ -306,10 +289,7 @@ public class TestMemoryScheduler {
             assertEquals(2, executor.getExecutions());
             assertNull(TestRetryExecutor.waitForConclusion(taskmanager, id));
         } finally {
-            synchronized (scheduler) {
-                scheduler.stop();
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
         }
     }
 
@@ -332,10 +312,7 @@ public class TestMemoryScheduler {
             assertEquals(2, times.size());
             assertTrue(times.get(1) - times.get(0) >= 400, "retried after " + (times.get(1) - times.get(0)) + "ms");
         } finally {
-            synchronized (scheduler) {
-                scheduler.stop();
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
         }
     }
 
@@ -364,10 +341,7 @@ public class TestMemoryScheduler {
             assertTrue(concluded.getPlanned() > System.currentTimeMillis());
             assertEquals(Frequency.MINUTELY, concluded.getFrequency());
         } finally {
-            synchronized (scheduler) {
-                scheduler.stop();
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
         }
     }
 

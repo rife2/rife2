@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static rife.scheduler.SchedulerTesting.stopAndAwait;
 
 public class TestDatabaseScheduler {
     public void setup(Datasource datasource) {
@@ -70,11 +71,7 @@ public class TestDatabaseScheduler {
         var scheduler = DatabaseSchedulingFactory.instance(datasource).createScheduler();
         try {
             scheduler.start();
-            synchronized (scheduler) {
-                scheduler.stop();
-
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
         } finally {
             tearDown(datasource);
         }
@@ -121,11 +118,7 @@ public class TestDatabaseScheduler {
         try {
             scheduler.start();
             Thread.sleep(sleep_time * 2);
-            synchronized (scheduler) {
-                scheduler.stop();
-
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
 
             var executed_tasks = executor.getExecutedTasks();
             assertEquals(1, executed_tasks.size());
@@ -170,10 +163,7 @@ public class TestDatabaseScheduler {
             var executed_tasks = executor.getExecutedTasks();
             var executed_tasks_size = executed_tasks.size();
 
-            synchronized (scheduler) {
-                scheduler.stop();
-                scheduler.wait();
-            }
+            stopAndAwait(scheduler);
 
             // task frequency fits in the thread sleep time
             long number_of_executions = (thread_sleep_time / task_frequency) + 1;
@@ -237,10 +227,7 @@ public class TestDatabaseScheduler {
                 assertNull(taskmanager.getTask(id));
                 assertEquals(2, executions.get());
             } finally {
-                synchronized (scheduler) {
-                    scheduler.stop();
-                    scheduler.wait();
-                }
+                stopAndAwait(scheduler);
             }
         } finally {
             tearDown(datasource);
@@ -297,10 +284,7 @@ public class TestDatabaseScheduler {
                 assertEquals(2, executor.getExecutions());
                 assertNull(TestRetryExecutor.waitForConclusion(taskmanager, id));
             } finally {
-                synchronized (scheduler) {
-                    scheduler.stop();
-                    scheduler.wait();
-                }
+                stopAndAwait(scheduler);
             }
         } finally {
             tearDown(datasource);
@@ -336,10 +320,7 @@ public class TestDatabaseScheduler {
                 assertTrue(concluded.getPlanned() > System.currentTimeMillis());
                 assertEquals(Frequency.MINUTELY, concluded.getFrequency());
             } finally {
-                synchronized (scheduler) {
-                    scheduler.stop();
-                    scheduler.wait();
-                }
+                stopAndAwait(scheduler);
             }
         } finally {
             tearDown(datasource);
