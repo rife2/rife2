@@ -30,6 +30,7 @@ import rife.engine.Context;
 import rife.engine.Route;
 import rife.tools.InnerClassException;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -477,13 +478,46 @@ public abstract class DatabaseContent extends DbQueryManager implements ContentM
         // set general headers
         context.setContentType(store.getContentType(content_info));
         if (content_info.hasName()) {
-            context.addHeader("Content-Disposition", "inline; filename=" + content_info.getName());
+            context.addHeader("Content-Disposition", inlineDisposition(content_info.getName()));
         }
         context.addHeader("Cache-Control", "must-revalidate");
         context.addDateHeader("Expires", System.currentTimeMillis() + 60 * 60 * 1000);
         context.addDateHeader("Last-Modified", last_modified_timestamp);
 
         store.serveContentData(context, content_info.getContentId());
+    }
+
+    // RFC 6266, with an ASCII fallback for clients that don't read filename*
+    static String inlineDisposition(String name) {
+        var fallback = new StringBuilder();
+        var plain = true;
+        for (var i = 0; i < name.length(); i++) {
+            var ch = name.charAt(i);
+            if (ch < 0x20 || ch >= 0x7f) {
+                fallback.append('_');
+                plain = false;
+            } else {
+                if (ch == '"' || ch == '\\') {
+                    fallback.append('\\');
+                }
+                fallback.append(ch);
+            }
+        }
+
+        var result = new StringBuilder("inline; filename=\"").append(fallback).append('"');
+        if (!plain) {
+            result.append("; filename*=UTF-8''");
+            for (var b : name.getBytes(StandardCharsets.UTF_8)) {
+                var c = (char) (b & 0xff);
+                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') ||
+                    "!#$&+-.^_`|~".indexOf(c) != -1) {
+                    result.append(c);
+                } else {
+                    result.append('%').append(String.format("%02X", (int) c));
+                }
+            }
+        }
+        return result.toString();
     }
 
     protected String _getContentForHtml(String location, Context context, Route route)

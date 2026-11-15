@@ -78,6 +78,7 @@ public class TestElements {
                     UnexpectedPage page = webClient.getPage("http://localhost:8181/serve/rawdata");
                     var response = page.getWebResponse();
                     assertEquals("application/octet-stream", response.getContentType());
+                    assertEquals("inline; filename=\"mycoollib.so\"", response.getResponseHeaderValue("Content-Disposition"));
                     assertEquals(size, response.getContentLength());
                     assertArrayEquals(binary, FileUtils.readBytes(response.getContentAsStream()));
 
