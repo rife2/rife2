@@ -3225,6 +3225,9 @@ public class Context {
 
     /**
      * Sets the content type of the response being sent to the client.
+     * <p>A text type without a charset gets {@code charset=UTF-8} added, a
+     * binary type is sent as it is. Text that is printed is encoded with the
+     * charset of the content type, or with UTF-8 if it has none.
      *
      * @param contentType the MIME type of the content
      * @since 1.0

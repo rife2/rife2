@@ -1142,6 +1142,50 @@ public class TestSiteRunner {
     }
 
     @Test
+    void testCharsetOnlyForText() {
+        try (var runner = new SiteRunner().start(new Site() {
+            public void setup() {
+                get("/binary", c -> {
+                    c.setContentType("application/octet-stream");
+                    c.print("caf\u00e9");
+                });
+                get("/image", c -> {
+                    c.setContentType("image/png");
+                    c.print("png");
+                });
+                get("/json", c -> {
+                    c.setContentType("application/json");
+                    c.print("{}");
+                });
+                get("/svg", c -> {
+                    c.setContentType("image/svg+xml");
+                    c.print("<svg/>");
+                });
+                get("/latin", c -> {
+                    c.setContentType("text/plain; charset=ISO-8859-1");
+                    c.print("caf\u00e9");
+                });
+                get("/html", c -> c.print("caf\u00e9"));
+            }
+        })) {
+            // binary content doesn't take a charset, printed text stays UTF-8
+            var binary = runner.handle("/binary");
+            assertEquals("application/octet-stream", binary.getHeader("Content-Type"));
+            assertArrayEquals("caf\u00e9".getBytes(StandardCharsets.UTF_8), binary.getBytes());
+            assertEquals("image/png", runner.handle("/image").getHeader("Content-Type"));
+
+            assertEquals("application/json; charset=UTF-8", runner.handle("/json").getHeader("Content-Type"));
+            assertEquals("image/svg+xml; charset=UTF-8", runner.handle("/svg").getHeader("Content-Type"));
+            var latin = runner.handle("/latin");
+            assertEquals("text/plain; charset=ISO-8859-1", latin.getHeader("Content-Type"));
+            assertArrayEquals("caf\u00e9".getBytes(StandardCharsets.ISO_8859_1), latin.getBytes());
+            var html = runner.handle("/html");
+            assertEquals("text/html; charset=UTF-8", html.getHeader("Content-Type"));
+            assertArrayEquals("caf\u00e9".getBytes(StandardCharsets.UTF_8), html.getBytes());
+        }
+    }
+
+    @Test
     void testGzipStreamed() {
         try (var runner = new SiteRunner().start(new Site() {
             public void setup() {

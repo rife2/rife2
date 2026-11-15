@@ -14,8 +14,10 @@ import rife.tools.HttpUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -156,12 +158,39 @@ public abstract class AbstractResponse implements Response {
             return;
         }
 
-        if (!contentType.contains(HttpUtils.CHARSET)) {
+        // a charset only applies to text, binary content doesn't take one
+        if (!contentType.contains(HttpUtils.CHARSET) &&
+            isTextual(HttpUtils.extractMimeTypeFromContentType(contentType))) {
             contentType = contentType + "; charset=UTF-8";
         }
 
         contentType_ = contentType;
         _setContentType(contentType);
+    }
+
+    static boolean isTextual(String mimeType) {
+        var type = mimeType.toLowerCase(Locale.ENGLISH);
+        var parameters = type.indexOf(';');
+        if (parameters != -1) {
+            type = type.substring(0, parameters);
+        }
+        type = type.trim();
+        return type.startsWith("text/") ||
+               type.endsWith("+xml") ||
+               type.endsWith("+json") ||
+               type.equals("application/json") ||
+               type.equals("application/xml") ||
+               type.equals("application/javascript") ||
+               type.equals("application/ecmascript");
+    }
+
+    // printed text is UTF-8 unless the content type names another charset,
+    // also when a binary content type has none
+    private String getTextEncoding() {
+        if (contentType_ != null && contentType_.contains(HttpUtils.CHARSET)) {
+            return getCharacterEncoding();
+        }
+        return StandardCharsets.UTF_8.name();
     }
 
     public void enableTextBuffer(boolean enabled) {
@@ -243,7 +272,7 @@ public abstract class AbstractResponse implements Response {
             ensureOutputStream();
 
             try {
-                outputStream_.write(text.getBytes(getCharacterEncoding()));
+                outputStream_.write(text.getBytes(getTextEncoding()));
                 outputStream_.flush();
             } catch (IOException e) {
                 throw new EngineException(e);
@@ -261,7 +290,7 @@ public abstract class AbstractResponse implements Response {
 
         ensureOutputStream();
 
-        String encoding = getCharacterEncoding();
+        String encoding = getTextEncoding();
         try {
             outputStream_.flush();
 

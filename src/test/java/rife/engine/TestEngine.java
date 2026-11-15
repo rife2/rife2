@@ -297,6 +297,36 @@ public class TestEngine {
     }
 
     @Test
+    void testCharsetOnlyForTextDeployed()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                get("/binary", c -> {
+                    c.setContentType("application/octet-stream");
+                    c.print("caf\u00e9");
+                });
+                get("/text", c -> {
+                    c.setContentType("text/plain");
+                    c.print("caf\u00e9");
+                });
+            }
+        })) {
+            // binary content doesn't take a charset, printed text stays UTF-8
+            var binary = java.net.http.HttpClient.newHttpClient().send(
+                java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/binary")).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+            assertEquals("application/octet-stream", binary.headers().firstValue("Content-Type").orElse(null));
+            assertArrayEquals("caf\u00e9".getBytes(java.nio.charset.StandardCharsets.UTF_8), binary.body());
+
+            var text = java.net.http.HttpClient.newHttpClient().send(
+                java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/text")).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+            assertEquals("text/plain;charset=utf-8", text.headers().firstValue("Content-Type").orElse("").replace(" ", "").toLowerCase());
+            assertArrayEquals("caf\u00e9".getBytes(java.nio.charset.StandardCharsets.UTF_8), text.body());
+        }
+    }
+
+    @Test
     void testPathInfoMappingMultiple()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {

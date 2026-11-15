@@ -616,7 +616,11 @@ public class TestElements {
         var path = served.path();
         var full = serveBytes(path);
         assertEquals(200, full.statusCode(), path);
-        assertTrue(full.headers().firstValue("Content-Type").orElse("").startsWith(served.contentType()), path);
+        var content_type = full.headers().firstValue("Content-Type").orElse("");
+        assertTrue(content_type.startsWith(served.contentType()), path);
+        // only text takes a charset
+        var textual = served.contentType().startsWith("text/") || served.contentType().endsWith("+xml");
+        assertEquals(textual, content_type.contains("charset="), path + " " + content_type);
         assertTrue(full.body().length > 3, path);
         var etag = full.headers().firstValue("ETag").orElseThrow();
         assertEquals(weak, etag.startsWith("W/"), path + " " + etag);
@@ -715,7 +719,7 @@ public class TestElements {
                 var request = HttpRequest.newBuilder(new URI("http://localhost:8181/serve/c++%20notes")).build();
                 var response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 assertEquals(200, response.statusCode());
-                assertEquals("application/octet-stream", response.headers().firstValue("Content-Type").orElse("").split(";")[0]);
+                assertEquals("application/octet-stream", response.headers().firstValue("Content-Type").orElse(null));
                 assertEquals("the notes", response.body());
             }
         } finally {
