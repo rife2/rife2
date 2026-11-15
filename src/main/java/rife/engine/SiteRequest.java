@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.EngineException;
+import rife.engine.exceptions.InvalidFormException;
 import rife.servlet.MultipartRequest;
 import rife.tools.ArrayUtils;
 import rife.tools.FileUtils;
@@ -124,8 +125,8 @@ public class SiteRequest implements Request {
      * Parses the parameters of this request from the query string and from
      * the body.
      * <p>The values of the query string come first. Urlencoded bodies are
-     * only read for {@code POST} and {@code PUT}, like with Jetty, while
-     * multipart bodies are read for any method. A request with a malformed
+     * read for {@code POST}, {@code PUT} and {@code PATCH}, while multipart
+     * bodies are read for any method. A request with a malformed
      * escape, or with a form beyond the limits of the runner, is answered
      * with {@code 400}.
      *
@@ -152,7 +153,7 @@ public class SiteRequest implements Request {
             return;
         }
 
-        if ((method_ == RequestMethod.POST || method_ == RequestMethod.PUT) &&
+        if ((method_ == RequestMethod.POST || method_ == RequestMethod.PUT || method_ == RequestMethod.PATCH) &&
             content_type != null &&
             content_type.toLowerCase(Locale.ENGLISH).startsWith(FORM_CONTENT_TYPE)) {
             var body = readFormBody();

@@ -6,6 +6,7 @@ package rife.engine;
 
 import jakarta.servlet.http.Cookie;
 import rife.config.RifeConfig;
+import rife.engine.exceptions.InvalidFormException;
 import rife.engine.exceptions.MultipartFileErrorException;
 import rife.engine.exceptions.MultipartFileTooBigException;
 import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;

@@ -164,6 +164,7 @@ public class TestSiteRunner {
                 post("/form", element);
                 put("/form", element);
                 patch("/form", element);
+                patch("/body", c -> c.print(c.parameter("b") + "|" + c.body()));
             }
         })) {
             var body = "a=%C3%A9t%C3%A9+x&b=2&a=%41".getBytes(StandardCharsets.ISO_8859_1);
@@ -185,11 +186,15 @@ public class TestSiteRunner {
             }
             assertEquals(400, runner.handle("/form?a=%zz", form("b=2")).getStatus());
 
-            // like Jetty, PATCH bodies aren't read as forms
+            // htmx sends PATCH values in the body
             response = runner.handle("/form?a=q", new SiteRequest(RequestMethod.PATCH)
                 .header("Content-Type", "application/x-www-form-urlencoded")
                 .bodyAsBytes(body));
-            assertEquals("PATCH:q:null", response.getText());
+            assertEquals("PATCH:q,été x,A:2", response.getText());
+            response = runner.handle("/body", new SiteRequest(RequestMethod.PATCH)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .bodyAsStream(new ByteArrayInputStream(body)));
+            assertEquals("2|a=%C3%A9t%C3%A9+x&b=2&a=%41", response.getText());
         }
     }
 

@@ -967,6 +967,74 @@ public class TestEngine {
         }
     }
 
+    static class PatchFormSite extends Site {
+        public void setup() {
+            patch("/form", c -> c.print(c.method() + ":" + String.join(",", c.parameterValues("a")) + ":" + c.parameter("b") + "|" + c.body()));
+        }
+    }
+
+    @Test
+    void testPatchFormBody()
+    throws Exception {
+        try (final var server = new TestServerRunner(new PatchFormSite())) {
+            checkPatchFormBody("http://localhost:8181");
+        }
+    }
+
+    @Test
+    void testTomcatPatchFormBody()
+    throws Exception {
+        try (final var server = new TestTomcatRunner(new PatchFormSite())) {
+            checkPatchFormBody("http://localhost:8282");
+        }
+    }
+
+    private static void checkPatchFormBody(String root)
+    throws Exception {
+        var client = java.net.http.HttpClient.newHttpClient();
+        var form = "a=%C3%A9t%C3%A9+x&b=2&a=%41";
+        var response = client.send(patch(root + "/form?a=q", "application/x-www-form-urlencoded; charset=UTF-8", form),
+            java.net.http.HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertEquals("PATCH:q,été x,A:2|" + form, response.body());
+
+        response = client.send(patch(root + "/form?a=q", "text/plain", form),
+            java.net.http.HttpResponse.BodyHandlers.ofString());
+        assertEquals("PATCH:q:null|" + form, response.body());
+
+        var too_many = new StringBuilder("p0=1");
+        for (var i = 1; i <= 1000; i++) {
+            too_many.append("&p").append(i).append("=1");
+        }
+        for (var invalid : java.util.List.of("a=%zz", "a=" + "x".repeat(200000), too_many.toString())) {
+            response = client.send(patch(root + "/form", "application/x-www-form-urlencoded", invalid),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals(400, response.statusCode());
+        }
+
+        // a request that no route answers is passed on with its body, so the
+        // container answers it alike whatever the body
+        var passed_on = client.send(patch(root + "/other", "application/x-www-form-urlencoded", "a=1"),
+            java.net.http.HttpResponse.BodyHandlers.ofString()).statusCode();
+        assertNotEquals(400, passed_on);
+        response = client.send(patch(root + "/other", "application/x-www-form-urlencoded", "a=%zz"),
+            java.net.http.HttpResponse.BodyHandlers.ofString());
+        assertEquals(passed_on, response.statusCode());
+
+        // the values of one name count once
+        var repeated = "a=1" + "&a=1".repeat(1000);
+        response = client.send(patch(root + "/form", "application/x-www-form-urlencoded", repeated),
+            java.net.http.HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+    }
+
+    private static java.net.http.HttpRequest patch(String url, String contentType, String body) {
+        return java.net.http.HttpRequest.newBuilder(java.net.URI.create(url))
+            .header("Content-Type", contentType)
+            .method("PATCH", java.net.http.HttpRequest.BodyPublishers.ofString(body, StandardCharsets.ISO_8859_1))
+            .build();
+    }
+
     @Test
     void testGetAnswersHead()
     throws Exception {

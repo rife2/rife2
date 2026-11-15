@@ -11,25 +11,34 @@ import jakarta.servlet.http.HttpSession;
 import rife.config.RifeConfig;
 import rife.engine.Request;
 import rife.engine.RequestMethod;
+import rife.engine.SiteRunner;
 import rife.engine.UploadedFile;
 import rife.engine.exceptions.EngineException;
+import rife.engine.exceptions.InvalidFormException;
+import rife.tools.ArrayUtils;
 import rife.tools.FileUtils;
 import rife.tools.StringUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class HttpRequest implements Request {
+    private static final String FORM_CONTENT_TYPE = "application/x-www-form-urlencoded";
+
     private final HttpServletRequest request_;
 
     private Map<String, String[]> parameters_ = null;
     private Map<String, UploadedFile[]> files_ = null;
     private String body_ = null;
     private byte[] bodyAsBytes_ = null;
+    private boolean formBodyPending_ = false;
 
     public HttpRequest(HttpServletRequest request)
     throws EngineException {
@@ -60,7 +69,82 @@ public class HttpRequest implements Request {
 
                 parameters_.put(parameter_name, parameter_values);
             }
+
+            // servlet containers don't parse the forms of PATCH requests,
+            // while htmx sends PATCH values in the body too; it's read once
+            // a route needs the parameters, so that the body of a request
+            // that's passed on stays untouched
+            formBodyPending_ = RequestMethod.PATCH.name().equals(request_.getMethod()) &&
+                isFormContentType(request_.getContentType());
         }
+    }
+
+    private static boolean isFormContentType(String type) {
+        return type != null &&
+            type.toLowerCase(Locale.ENGLISH).startsWith(FORM_CONTENT_TYPE);
+    }
+
+    // reads at most one byte more than the limit, so that a large body isn't kept
+    private void addFormBody() {
+        if (null == bodyAsBytes_) {
+            try {
+                bodyAsBytes_ = request_.getInputStream().readNBytes(SiteRunner.DEFAULT_MAX_FORM_CONTENT_SIZE + 1);
+            } catch (IOException e) {
+                throw new EngineException(e);
+            }
+        }
+        if (bodyAsBytes_.length > SiteRunner.DEFAULT_MAX_FORM_CONTENT_SIZE) {
+            bodyAsBytes_ = new byte[0];
+            throw new InvalidFormException("the form is larger than " + SiteRunner.DEFAULT_MAX_FORM_CONTENT_SIZE + " bytes");
+        }
+
+        var encoding = RifeConfig.engine().getRequestEncoding();
+        var form = new LinkedHashMap<String, String[]>();
+        for (var pair : StringUtils.split(new String(bodyAsBytes_, StandardCharsets.ISO_8859_1), "&")) {
+            if (pair.isEmpty()) {
+                continue;
+            }
+
+            var separator = pair.indexOf('=');
+            var name = decodeFormComponent(-1 == separator ? pair : pair.substring(0, separator), encoding);
+            var value = -1 == separator ? "" : decodeFormComponent(pair.substring(separator + 1), encoding);
+            if (name.isEmpty()) {
+                continue;
+            }
+
+            var values = form.get(name);
+            form.put(name, null == values ? new String[]{value} : ArrayUtils.join(values, value));
+        }
+        if (form.size() > SiteRunner.DEFAULT_MAX_FORM_PARAMETERS) {
+            throw new InvalidFormException("the form has more than " + SiteRunner.DEFAULT_MAX_FORM_PARAMETERS + " parameters");
+        }
+
+        for (var entry : form.entrySet()) {
+            var values = parameters_.get(entry.getKey());
+            parameters_.put(entry.getKey(), null == values ? entry.getValue() : ArrayUtils.join(values, entry.getValue()));
+        }
+    }
+
+    // like Jetty, a malformed escape makes the whole form invalid
+    private static String decodeFormComponent(String component, Charset encoding) {
+        var raw = component.getBytes(StandardCharsets.ISO_8859_1);
+        var bytes = new ByteArrayOutputStream(raw.length);
+        for (var i = 0; i < raw.length; i++) {
+            var b = raw[i];
+            if ('+' == b) {
+                bytes.write(' ');
+            } else if ('%' == b) {
+                if (i + 2 >= raw.length ||
+                    Character.digit(raw[i + 1], 16) == -1 || Character.digit(raw[i + 2], 16) == -1) {
+                    throw new InvalidFormException("the form has a malformed escape");
+                }
+                bytes.write((Character.digit(raw[i + 1], 16) << 4) + Character.digit(raw[i + 2], 16));
+                i += 2;
+            } else {
+                bytes.write(b);
+            }
+        }
+        return bytes.toString(encoding);
     }
 
     @Override
@@ -70,6 +154,10 @@ public class HttpRequest implements Request {
 
     @Override
     public Map<String, String[]> getParameters() {
+        if (formBodyPending_) {
+            formBodyPending_ = false;
+            addFormBody();
+        }
         return parameters_;
     }
 

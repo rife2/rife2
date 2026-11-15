@@ -11,6 +11,7 @@ import rife.config.RifeConfig;
 import rife.database.Datasource;
 import rife.engine.Gate;
 import rife.engine.Site;
+import rife.engine.exceptions.InvalidFormException;
 import rife.ioc.HierarchicalProperties;
 import rife.scheduler.Scheduler;
 import rife.tools.FileUtils;
@@ -125,7 +126,13 @@ public class RifeFilter implements Filter {
                     final var http_request = new HttpRequest(http_servlet_request);
                     final var http_response = new HttpResponse(http_request, http_servlet_response);
                     http_request.init();
-                    if (gate_.handleRequest(gateUrl_, element_url, http_request, http_response)) {
+                    try {
+                        if (gate_.handleRequest(gateUrl_, element_url, http_request, http_response)) {
+                            return;
+                        }
+                    } catch (InvalidFormException e) {
+                        // the parameters are read before anything is written
+                        http_servlet_response.sendError(HttpServletResponse.SC_BAD_REQUEST);
                         return;
                     }
                 }
