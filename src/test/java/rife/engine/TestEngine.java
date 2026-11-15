@@ -228,6 +228,34 @@ public class TestEngine {
     }
 
     @Test
+    void testPathInfoMappingDecoded()
+    throws Exception {
+        try (final var server = new TestServerRunner(new Site() {
+            Route word;
+
+            public void setup() {
+                word = get("/word", PathInfoHandling.MAP(m -> m.p("name", "\\p{L}+( \\p{L}+)*")), c -> {
+                    c.print(c.parameter("name") + "|" + c.urlFor(word).param("name", c.parameter("name")));
+                });
+            }
+        })) {
+            var response = java.net.http.HttpClient.newHttpClient().send(
+                java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/word/caf%C3%A9%20cr%C3%A8me")).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, response.statusCode());
+            var parts = response.body().split("\\|");
+            assertEquals("caf\u00e9 cr\u00e8me", parts[0]);
+
+            // the url that RIFE2 builds for the value routes back to it
+            response = java.net.http.HttpClient.newHttpClient().send(
+                java.net.http.HttpRequest.newBuilder(java.net.URI.create(parts[1].startsWith("http") ? parts[1] : "http://localhost:8181" + parts[1])).build(),
+                java.net.http.HttpResponse.BodyHandlers.ofString());
+            assertEquals(200, response.statusCode());
+            assertEquals("caf\u00e9 cr\u00e8me", response.body().split("\\|")[0]);
+        }
+    }
+
+    @Test
     void testPathInfoMappingMultiple()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {

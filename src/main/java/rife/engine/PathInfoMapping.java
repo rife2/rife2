@@ -9,6 +9,7 @@ import rife.tools.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -116,5 +117,17 @@ public class PathInfoMapping {
             regexp_ = Pattern.compile(mappingRegexp_.toString());
         }
         return regexp_;
+    }
+
+    // matches the decoded path info, since UrlBuilder checks the patterns
+    // against parameter values before encoding them
+    Matcher matcher(String pathInfo) {
+        var decoded = pathInfo;
+        try {
+            decoded = StringUtils.decodeUrl(pathInfo);
+        } catch (IllegalArgumentException e) {
+            // a malformed escape is matched as it was sent
+        }
+        return regexp().matcher(decoded);
     }
 }

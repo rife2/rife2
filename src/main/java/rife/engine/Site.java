@@ -100,7 +100,7 @@ public class Site extends Router {
             for (var route : routes) {
                 if (route.pathInfoHandling().type() == PathInfoType.MAP && accepts.test(route)) {
                     for (var mapping : route.pathInfoHandling().mappings()) {
-                        var matcher = mapping.regexp().matcher(path_info);
+                        var matcher = mapping.matcher(path_info);
                         if (matcher.matches()) {
                             return route;
                         }

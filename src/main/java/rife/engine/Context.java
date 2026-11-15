@@ -104,7 +104,7 @@ public class Context {
         if (routeMatch_ != null) {
             if (routeMatch_.route().pathInfoHandling().type() == PathInfoType.MAP) {
                 for (var mapping : routeMatch_.route().pathInfoHandling().mappings()) {
-                    var matcher = mapping.regexp().matcher(pathInfo());
+                    var matcher = mapping.matcher(pathInfo());
                     if (matcher.matches()) {
                         var parameters = mapping.parameters();
                         var groups = mapping.groups();
