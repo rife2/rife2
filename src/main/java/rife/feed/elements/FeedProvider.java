@@ -50,8 +50,8 @@ public class FeedProvider implements Element, EntryProcessor {
 
         switch (feedType) {
             case ATOM_1_0, JSON_1_1 ->
-                // ISO8601
-                dateFormat_ = RifeConfig.tools().getSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                // RFC 3339
+                dateFormat_ = RifeConfig.tools().getSimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
             default ->
                 // RFC822
                 dateFormat_ = RifeConfig.tools().getSimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z");

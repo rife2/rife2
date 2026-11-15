@@ -209,7 +209,7 @@ public class TestFeedProvider {
                 <title>feed_title</title>
                 <subtitle>feed_description</subtitle>
                 <id>feed_link</id>
-                <updated>2023-11-24T02:00:00-0500</updated>
+                <updated>2023-11-24T02:00:00-05:00</updated>
                 <link href="feed_link" type="text/html" />
                 <link href="http://localhost/atom" rel="self" />
                 <category term="feed_category1"></category>
@@ -228,8 +228,8 @@ public class TestFeedProvider {
                     <category term="entry_category1_1"></category>
                     <category term="entry_category1_2"></category>
                     <id>entry_link1</id>
-                    <updated>2023-11-24T01:00:00-0500</updated>
-                    <published>2023-11-24T01:00:00-0500</published>
+                    <updated>2023-11-24T01:00:00-05:00</updated>
+                    <published>2023-11-24T01:00:00-05:00</published>
                     <author>
                         <name>entry_author1</name>
                     </author>
@@ -243,8 +243,8 @@ public class TestFeedProvider {
                     <category term="entry_category2_1"></category>
                     <category term="entry_category2_2"></category>
                     <id>entry_link2</id>
-                    <updated>2023-11-24T02:00:00-0500</updated>
-                    <published>2023-11-24T02:00:00-0500</published>
+                    <updated>2023-11-24T02:00:00-05:00</updated>
+                    <published>2023-11-24T02:00:00-05:00</published>
                     <author>
                         <name>entry_author2</name>
                     </author>
@@ -271,7 +271,7 @@ public class TestFeedProvider {
                 <title>feed_title</title>
                 <subtitle>feed_description</subtitle>
                 <id>feed_link</id>
-                <updated>2023-11-24T03:00:00-0500</updated>
+                <updated>2023-11-24T03:00:00-05:00</updated>
                 <link href="feed_link" type="text/html" />
                 <link href="http://localhost/images_atom" rel="self" />
                 <category term="feed_category"></category>
@@ -286,8 +286,8 @@ public class TestFeedProvider {
                     <title>entry_title1</title>
                     <link rel="alternate" type="text/html" href="entry_link1" />
                     <id>entry_link1</id>
-                    <updated>2023-11-24T01:00:00-0500</updated>
-                    <published>2023-11-24T01:00:00-0500</published>
+                    <updated>2023-11-24T01:00:00-05:00</updated>
+                    <published>2023-11-24T01:00:00-05:00</published>
                     <author>
                         <name>entry_author1</name>
                     </author>
@@ -300,8 +300,8 @@ public class TestFeedProvider {
                     <title>entry_title2</title>
                     <link rel="alternate" type="text/html" href="entry_link2" />
                     <id>entry_link2</id>
-                    <updated>2023-11-24T02:00:00-0500</updated>
-                    <published>2023-11-24T02:00:00-0500</published>
+                    <updated>2023-11-24T02:00:00-05:00</updated>
+                    <published>2023-11-24T02:00:00-05:00</published>
                     <author>
                         <name>entry_author2</name>
                     </author>
@@ -313,8 +313,8 @@ public class TestFeedProvider {
                     <title>entry_title3</title>
                     <link rel="alternate" type="text/html" href="entry_link3" />
                     <id>entry_link3</id>
-                    <updated>2023-11-24T03:00:00-0500</updated>
-                    <published>2023-11-24T03:00:00-0500</published>
+                    <updated>2023-11-24T03:00:00-05:00</updated>
+                    <published>2023-11-24T03:00:00-05:00</published>
                     <author>
                         <name>entry_author3</name>
                     </author>
@@ -342,7 +342,7 @@ public class TestFeedProvider {
                 <title>feed_title_namespace</title>
                 <subtitle>feed_description_namespace</subtitle>
                 <id>feed_link_namespace</id>
-                <updated>2023-11-24T02:00:00-0500</updated>
+                <updated>2023-11-24T02:00:00-05:00</updated>
                 <link href="feed_link_namespace" type="text/html" />
                 <link href="http://localhost/namespaces_atom" rel="self" />
                 <rights>feed_copyright_namespace</rights>
@@ -356,8 +356,8 @@ public class TestFeedProvider {
                     <link rel="alternate" type="text/html" href="entry_link_namespace1" />
                     <category term="entry_category1"></category>
                     <id>entry_link_namespace1</id>
-                    <updated>2023-11-24T01:00:00-0500</updated>
-                    <published>2023-11-24T01:00:00-0500</published>
+                    <updated>2023-11-24T01:00:00-05:00</updated>
+                    <published>2023-11-24T01:00:00-05:00</published>
                     <author>
                         <name>entry_author_namespace1</name>
                     </author>
@@ -369,8 +369,8 @@ public class TestFeedProvider {
                     <link rel="alternate" type="text/html" href="entry_link_namespace2" />
                     <category term="entry_category2"></category>
                     <id>entry_link_namespace2</id>
-                    <updated>2023-11-24T02:00:00-0500</updated>
-                    <published>2023-11-24T02:00:00-0500</published>
+                    <updated>2023-11-24T02:00:00-05:00</updated>
+                    <published>2023-11-24T02:00:00-05:00</published>
                     <author>
                         <name>entry_author_namespace2</name>
                     </author>
@@ -409,7 +409,7 @@ public class TestFeedProvider {
                         "tags": ["entry_category1_1", "entry_category1_2"],
                         "title": "entry_title1",
                         "content_html": "\\"entry\\"\\n<content>1",
-                        "date_published": "2023-11-24T01:00:00-0500",
+                        "date_published": "2023-11-24T01:00:00-05:00",
                         "authors": [
                             {
                                 "name": "entry_author1"
@@ -422,7 +422,7 @@ public class TestFeedProvider {
                         "tags": ["entry_category2_1", "entry_category2_2"],
                         "title": "entry_title2",
                         "content_html": "\\"entry\\"\\n<content>2",
-                        "date_published": "2023-11-24T02:00:00-0500",
+                        "date_published": "2023-11-24T02:00:00-05:00",
                         "authors": [
                             {
                                 "name": "entry_author2"
@@ -463,7 +463,7 @@ public class TestFeedProvider {
                         "tags": [],
                         "title": "entry_title1",
                         "content_html": "\\"entry\\"\\n<content>1",
-                        "date_published": "2023-11-24T01:00:00-0500",
+                        "date_published": "2023-11-24T01:00:00-05:00",
                         "authors": [
                             {
                                 "name": "entry_author1"
@@ -477,7 +477,7 @@ public class TestFeedProvider {
                         "tags": [],
                         "title": "entry_title2",
                         "content_html": "\\"entry\\"\\n<content>2",
-                        "date_published": "2023-11-24T02:00:00-0500",
+                        "date_published": "2023-11-24T02:00:00-05:00",
                         "authors": [
                             {
                                 "name": "entry_author2"
@@ -490,7 +490,7 @@ public class TestFeedProvider {
                         "tags": [],
                         "title": "entry_title3",
                         "content_html": "\\"entry\\"\\n<content>3",
-                        "date_published": "2023-11-24T03:00:00-0500",
+                        "date_published": "2023-11-24T03:00:00-05:00",
                         "authors": [
                             {
                                 "name": "entry_author3"
