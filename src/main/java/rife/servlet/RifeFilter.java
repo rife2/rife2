@@ -12,6 +12,10 @@ import rife.database.Datasource;
 import rife.engine.Gate;
 import rife.engine.Site;
 import rife.engine.exceptions.InvalidFormException;
+import rife.engine.exceptions.MultipartFileErrorException;
+import rife.engine.exceptions.MultipartFileTooBigException;
+import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;
+import rife.engine.exceptions.MultipartRequestException;
 import rife.ioc.HierarchicalProperties;
 import rife.scheduler.Scheduler;
 import rife.tools.FileUtils;
@@ -125,14 +129,21 @@ public class RifeFilter implements Filter {
                     final var element_url = request_uri.substring(gateUrl_.length());
                     final var http_request = new HttpRequest(http_servlet_request);
                     final var http_response = new HttpResponse(http_request, http_servlet_response);
-                    http_request.init();
                     try {
+                        http_request.init();
                         if (gate_.handleRequest(gateUrl_, element_url, http_request, http_response)) {
                             return;
                         }
-                    } catch (InvalidFormException e) {
+                    } catch (InvalidFormException | MultipartRequestException e) {
+                        // the upload directory and its files are the site's own
+                        // problem, the rest is what the request sent
+                        if (e instanceof MultipartInvalidUploadDirectoryException ||
+                            e instanceof MultipartFileErrorException) {
+                            throw e;
+                        }
                         // the parameters are read before anything is written
-                        http_servlet_response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                        http_servlet_response.sendError(e instanceof MultipartFileTooBigException ?
+                            HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE : HttpServletResponse.SC_BAD_REQUEST);
                         return;
                     }
                 }

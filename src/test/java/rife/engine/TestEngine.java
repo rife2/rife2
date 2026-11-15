@@ -256,6 +256,47 @@ public class TestEngine {
     }
 
     @Test
+    void testMultipartLimitsDeployed()
+    throws Exception {
+        var boundary = "----limits";
+        var body = ("--" + boundary + "\r\n" +
+                    "Content-Disposition: form-data; name=\"doc\"; filename=\"big.txt\"\r\n" +
+                    "Content-Type: text/plain\r\n\r\n" +
+                    "x".repeat(100) + "\r\n" +
+                    "--" + boundary + "--\r\n").getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        var size_limit = RifeConfig.engine().getFileUploadSizeLimit();
+        var size_check = RifeConfig.engine().getFileUploadSizeCheck();
+        var size_exception = RifeConfig.engine().getFileUploadSizeException();
+        try (final var server = new TestServerRunner(new Site() {
+            public void setup() {
+                post("/upload", c -> c.print(c.file("doc").wasSizeExceeded()));
+            }
+        })) {
+            RifeConfig.engine().setFileUploadSizeLimit(10).setFileUploadSizeCheck(true).setFileUploadSizeException(true);
+            assertEquals(413, postMultipart("multipart/form-data; boundary=" + boundary, body));
+            // a body that can't be read as multipart is a bad request
+            assertEquals(400, postMultipart("multipart/form-data", body));
+
+            RifeConfig.engine().setFileUploadSizeException(false);
+            assertEquals(200, postMultipart("multipart/form-data; boundary=" + boundary, body));
+        } finally {
+            RifeConfig.engine()
+                .setFileUploadSizeLimit(size_limit)
+                .setFileUploadSizeCheck(size_check)
+                .setFileUploadSizeException(size_exception);
+        }
+    }
+
+    private static int postMultipart(String contentType, byte[] body)
+    throws Exception {
+        return java.net.http.HttpClient.newHttpClient().send(
+            java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:8181/upload"))
+                .header("Content-Type", contentType)
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofByteArray(body)).build(),
+            java.net.http.HttpResponse.BodyHandlers.discarding()).statusCode();
+    }
+
+    @Test
     void testPathInfoMappingMultiple()
     throws Exception {
         try (final var server = new TestServerRunner(new Site() {
