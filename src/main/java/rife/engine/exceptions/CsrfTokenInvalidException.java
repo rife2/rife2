@@ -8,8 +8,7 @@ import java.io.Serial;
 
 /**
  * Thrown when a request that changes state provides a CSRF token that
- * doesn't correspond to the token of the browser that established the
- * session.
+ * doesn't correspond to the token cookie of the browser that sent it.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see CsrfTokenException

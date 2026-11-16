@@ -67,10 +67,10 @@ public class ServerSentEvent {
      * <p>Browsers echo the last received ID back in the
      * {@code Last-Event-ID} header when they reconnect, which can be
      * retrieved with {@link SseConnection#lastEventId()}.
-     * <p>Event IDs that you set yourself are the reconnection strategy of
-     * your application. Broadcasters that have
+     * <p>When you set event IDs yourself, your application takes care of
+     * the reconnections. Broadcasters that have
      * {@link SseBroadcaster#history(int) history} enabled assign their own
-     * IDs and will refuse events that carry one.
+     * IDs and will refuse events that already carry one.
      *
      * @param id the ID of the event
      * @return this event instance

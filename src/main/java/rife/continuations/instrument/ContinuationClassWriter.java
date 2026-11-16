@@ -15,10 +15,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Computes frame hierarchy relationships from class-file resources instead
- * of loading classes that may still be in the process of being defined.
- */
+// computes the class hierarchy for the frames from the class files, instead
+// of loading classes that may still be in the process of being defined
 class ContinuationClassWriter extends ClassWriter {
     private static final String OBJECT_INTERNAL_NAME = "java/lang/Object";
 

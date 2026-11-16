@@ -6,12 +6,12 @@ package rife.engine;
 
 /**
  * The method of a {@code SseErrorListener} will be executed when an event
- * couldn't be converted or delivered to a {@code SseBroadcaster}, and it is
- * registered with whatever feeds that broadcaster, like
- * {@code SseGqmBridge.onError}.
+ * couldn't be converted or delivered to a {@code SseBroadcaster}. You
+ * register it with whatever sends the events to that broadcaster, for
+ * instance through {@code SseGqmBridge.onError}.
  * <p>Such a failure happens after the operation that triggered it has
  * completed, which means that it can't affect the outcome of that operation
- * and that these listeners are the way for you to detect that something went
+ * anymore. These listeners are how you can find out that something went
  * wrong. When no listener has been registered, the failures are logged to
  * the {@code rife.engine} logger instead.
  *

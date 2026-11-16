@@ -19,10 +19,10 @@ import java.nio.charset.StandardCharsets;
  * (SSE) connection to a client.
  * <p>An SSE connection is obtained inside an element through
  * {@link Context#sse()} or {@link Context#sse(SseBroadcaster)}. Creating it
- * prepares the response for event streaming: the content type is set to
- * {@code text/event-stream}, response buffering is disabled, and the
- * headers are flushed to the client so that it knows that the stream has
- * been established. Every event that is sent afterwards will immediately be
+ * will prepare the response for event streaming, which means that the
+ * content type is set to {@code text/event-stream}, response buffering is
+ * disabled, and the headers are flushed to the client so that it knows that
+ * the stream has been established. Every event that is sent afterwards will immediately be
  * flushed to the client.
  * <p>The first variant keeps the element in control of the connection,
  * which stays open for as long as the element is executing:

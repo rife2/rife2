@@ -43,9 +43,9 @@ public class SseWorkflowBridge implements EventListener {
 
     /**
      * Creates a new bridge that converts workflow events with the default
-     * conversion: the string representation of the event type becomes the
-     * SSE event name, and the string representation of the event data, when
-     * it's present, becomes the SSE event data.
+     * conversion, which uses the string representation of the event type as
+     * the SSE event name, and the string representation of the event data,
+     * when it's present, as the SSE event data.
      *
      * @param broadcaster the broadcaster the converted events will be sent
      *                    to

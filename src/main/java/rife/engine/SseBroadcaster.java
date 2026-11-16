@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * Manages a collection of detached server-sent events connections and
  * broadcasts events to all of them.
  * <p>A broadcaster is typically stored in a field of your {@link Site} and
- * handed to {@link Context#sse(SseBroadcaster)} inside the element of an
+ * passed to {@link Context#sse(SseBroadcaster)} inside the element of an
  * SSE route. The element returns immediately while the connection stays
  * open, which makes it possible to push events afterwards from anywhere
  * else in the application: another element, a scheduled task, a workflow,
@@ -121,15 +121,16 @@ public class SseBroadcaster implements AutoCloseable {
      * guaranteed, even though the history preserves the order of the IDs,
      * and such events can be delivered again after a reconnection. Events
      * that are broadcast sequentially from a single thread will always
-     * arrive in order. A connection whose client stops reading without
-     * disconnecting can block a sending thread while it's being written to,
-     * and since that write doesn't fail, the heartbeat can't reap such a
-     * connection: it's only reaped when the connection timeout of the
-     * servlet container fails the write. You should bound that timeout in
-     * the container configuration, which is done for the embedded servers
-     * through {@link Server#connectionIdleTimeout} or
-     * {@link TomcatServer#connectionTimeout}, and keep it longer than the
-     * heartbeat interval.
+     * arrive in order.
+     * <p>A connection whose client stops reading without disconnecting will
+     * block the thread that's writing to it. Since that write doesn't fail,
+     * the heartbeat can't remove such a connection, it will only be removed
+     * once the connection timeout of the servlet container makes the write
+     * fail. You should therefore limit that timeout in the configuration of
+     * your container and keep it longer than the heartbeat interval. For the
+     * embedded servers, this is done through
+     * {@link Server#connectionIdleTimeout} or
+     * {@link TomcatServer#connectionTimeout}.
      *
      * @param capacity the number of events to buffer
      * @return this broadcaster instance
@@ -503,15 +504,15 @@ public class SseBroadcaster implements AutoCloseable {
      * and reap the connections whose clients have disconnected, which would
      * otherwise hold on to their resources until the next
      * application-initiated broadcast. A client that stops reading without
-     * disconnecting stalls its write instead of failing it, so such a
-     * connection is only reaped when the connection timeout of the servlet
-     * container fails the write. Intervals in the range of 15 to 30 seconds
-     * are typical, and they should stay shorter than the connection timeout
-     * of the container so that healthy idle streams are kept alive: the
-     * embedded Jetty {@link Server} closes connections that have been idle
-     * for 30 seconds by default, which makes a 15 second heartbeat
-     * appropriate with that default, while a 30 second heartbeat races the
-     * timeout. Embedded Tomcat defaults to 60 seconds.
+     * disconnecting makes the write stall instead of fail, so such a
+     * connection will only be removed once the connection timeout of the
+     * servlet container makes the write fail.
+     * <p>Intervals of 15 to 30 seconds are typical. They should stay shorter
+     * than the connection timeout of the container, so that healthy idle
+     * streams are kept alive. The embedded Jetty {@link Server} closes
+     * connections that have been idle for 30 seconds by default, so a 15
+     * second heartbeat works well with that default, while a 30 second one
+     * can race the timeout. Embedded Tomcat defaults to 60 seconds.
      * <p>The heartbeat runs on a daemon thread. Calling this method again
      * will replace the previous interval, while {@link #stopHeartbeat()}
      * stops the heartbeat, as does {@link #close()}.
@@ -633,8 +634,8 @@ public class SseBroadcaster implements AutoCloseable {
      * });</pre>
      * <p>The filter receives each connection like
      * {@link #send(ServerSentEvent, SseConnectionFilter)} does, with the
-     * context of the request that established the connection. The event history and
-     * the {@link #heartbeat heartbeat} are unaffected.
+     * context of the request that established the connection. The event
+     * history and the {@link #heartbeat heartbeat} are unaffected.
      *
      * @param filter the filter that determines which connections are closed
      * @return the number of connections that were closed

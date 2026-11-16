@@ -13,8 +13,8 @@ package rife.workflow;
  * logger instead.
  * <p>Failed work counts as finished work, which means that
  * {@link Workflow#waitForNoWork} and {@link Workflow#waitForPausedWork}
- * return normally when work fails, and these listeners are the way for you
- * to detect that failures happened.
+ * return normally when work fails, and these listeners are how you can find
+ * out that failures happened.
  *
  * @rife.apiNote The workflow engine is in a BETA STAGE and might still change.
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)

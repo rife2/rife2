@@ -38,14 +38,14 @@ import java.util.logging.Logger;
  *     .onDeleted(objectId -&gt; null));</pre>
  * <p>Restoring beans doesn't broadcast events, and neither do the
  * installation and the removal of the database structure. Note that this
- * bridge only observes the changes that are made through the query manager
- * that it is registered with, since modifications that reach the database
- * in other ways aren't broadcast.
+ * bridge only sees the changes that are made through the query manager that
+ * it's registered with, modifications that reach the database in any other
+ * way won't be broadcast.
  * <p>The converters run on the thread that performs the database
  * operation, after that operation has completed. Since the database change
  * has already happened at that point, exceptions from the conversion or
- * from the broadcast don't propagate to the database operation: they are
- * handed to the {@link #onError onError} listener, or logged to the
+ * from the broadcast don't propagate to the database operation. They're
+ * passed to the {@link #onError onError} listener instead, or logged to the
  * {@code rife.engine} logger when no listener was provided. You should
  * configure the converters before registering the bridge as a listener.
  *
@@ -164,8 +164,8 @@ public class SseGqmBridge<BeanType> implements GenericQueryManagerListener<BeanT
     /**
      * Provides a listener for conversion and broadcast failures.
      * <p>The bridge is notified after the database operation has completed,
-     * so that a failure can't affect the result of a change that has already
-     * happened. Failures are logged to the {@code rife.engine} logger by
+     * which means that a failure can't affect the result of a change that
+     * has already happened. Failures are logged to the {@code rife.engine} logger by
      * default, and providing a listener will replace that behavior.
      * <p>A listener that fails itself can't affect the operation either,
      * since its failure is logged together with the failure that it was

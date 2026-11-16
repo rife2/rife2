@@ -10,11 +10,11 @@ package rife.engine;
  * limited to the connections that it accepts.
  * <p>This makes it possible to address the clients that belong together,
  * for instance the ones that are watching the same document or that are
- * logged in as the same user, which relies on the attributes that you gave
- * the connections when they were established.
- * <p>Note that a filter is executed again when a client reconnects and the
- * events that it missed are replayed from the history, so that it has to
- * keep deciding the same way to stay consistent.
+ * logged in as the same user, based on the attributes that you gave the
+ * connections when they were established.
+ * <p>Note that a filter will be executed again when a client reconnects and
+ * the events that it missed are replayed from the history, so it should
+ * always decide the same way for the same connection.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see SseBroadcaster#send(ServerSentEvent, SseConnectionFilter)

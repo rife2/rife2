@@ -630,9 +630,8 @@ public class MockRequest extends SiteRequest {
     /**
      * Marks this request as coming from htmx by setting the
      * {@code HX-Request} header that htmx sends along with every request.
-     * <p>This makes it a one-liner to exercise the htmx side of an element
-     * that serves both a full page and a fragment, so that a single test
-     * can assert both paths:
+     * <p>This makes it easy to test the htmx side of an element that serves
+     * both a full page and a fragment, so that a single test can check both:
      * <pre>var full     = m.doRequest("/books");
      * var fragment = m.doRequest("/books", new MockRequest().htmx());</pre>
      * <p>You can add the other {@code HX-*} request headers by chaining

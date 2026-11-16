@@ -132,9 +132,8 @@ public class Context {
         var route = routeMatch_.route();
 
         try {
-            // establishing an SSE connection is terminal for the element
-            // chain: output from later elements would corrupt the
-            // event stream
+            // establishing an SSE connection ends the element chain, since
+            // the output of later elements would corrupt the event stream
             for (var before_route : route.router().before_) {
                 processElement(before_route);
                 if (sseConnection_ != null) {
@@ -590,20 +589,20 @@ public class Context {
 
     /**
      * Prints a single named block of a template to the response.
-     * <p>The template's filtered tags (values, routes, application and
-     * context tags) are processed just as with {@link #print(Template)}, but
-     * only the content of the requested block is written out, not the whole
-     * template. This is the low-level primitive for sending HTML fragments to
-     * htmx and other hypermedia libraries.
-     * <p>When you want to serve the full page on a normal request and just a
-     * block on an htmx request, you should use {@link #printHtmxFragment},
-     * which makes that choice for you and which, unlike a bare {@link
-     * #isHxRequest()} check, still serves the full page when htmx is restoring
-     * a page from its history. This method is what you use when you
-     * specifically want a block, such as an htmx out-of-band update. Give the
-     * block's root element an {@code hx-swap-oob} attribute in the template
-     * and print it after the main content, so that htmx swaps it in wherever
-     * it belongs.
+     * <p>The filtered tags of the template (values, routes, application and
+     * context tags) will be processed like with {@link #print(Template)},
+     * but only the content of the requested block will be written out. This
+     * makes it easy to send HTML fragments to htmx and other hypermedia
+     * libraries.
+     * <p>If you want to serve the full page on a normal request and only a
+     * block on an htmx request, you should use {@link #printHtmxFragment}
+     * instead. It makes that choice for you and, unlike a plain {@link
+     * #isHxRequest()} check, it still serves the full page when htmx restores
+     * a page from its history. Use this method when you specifically want a
+     * block, for instance for an htmx out-of-band update. Give the root
+     * element of the block an {@code hx-swap-oob} attribute in the template
+     * and print it after the main content, so that htmx swaps it in where it
+     * belongs.
      * <pre>c.print(mainTemplate);          // the primary swap
      * c.printBlock(mainTemplate, "cartBadge"); // an hx-swap-oob block, updated too</pre>
      *
@@ -628,27 +627,28 @@ public class Context {
     /**
      * Prints a template as a full page or as one of its blocks, depending on
      * whether the request came from htmx.
-     * <p>This is the whole "one element serves both" pattern in a single call:
-     * on a normal request the entire template is printed with {@link
-     * #print(Template)}, and on an {@link #isHxRequest() htmx request} only the
-     * named block is printed with {@link #printBlock}. Pair it with a block
-     * value ({@code <!--bv blockId-->}) and the same element handles the full
-     * page and the fragment with no branching of its own:
+     * <p>This makes it possible for one element to serve both with a single
+     * call: on a normal request the entire template will be printed with
+     * {@link #print(Template)}, and on an {@link #isHxRequest() htmx request}
+     * only the named block will be printed with {@link #printBlock}. When you
+     * pair it with a block value ({@code <!--bv blockId-->}), the same element
+     * handles the full page and the fragment without any branching of its own:
      * <pre>get("/books", c -&gt; {
      *     var t = c.template("books");
      *     // ... fill it ...
      *     c.printHtmxFragment(t, "list");   // full page normally, just the list to htmx
      * });</pre>
-     * <p>An htmx {@link #isHxHistoryRestoreRequest() history-restoration
-     * request} is deliberately served the full page, since htmx replaces the
-     * whole document when restoring from history and a fragment would corrupt
-     * back/forward navigation.
-     * <p>Because the response genuinely differs on these headers, this adds
-     * {@code HX-Request} and {@code HX-History-Restore-Request} to the
-     * response's {@code Vary} header, so a cache never hands the full page to
-     * an htmx request or the other way around. Using this instead of a
-     * hand-written {@link #isHxRequest()} branch keeps the history-restoration
-     * guard and the {@code Vary} header from being forgotten.
+     * <p>An htmx {@link #isHxHistoryRestoreRequest() history restoration
+     * request} will always get the full page, since htmx replaces the whole
+     * document when it restores from history and a fragment would break the
+     * back and forward navigation.
+     * <p>Since the response differs depending on these headers, this method
+     * also adds {@code HX-Request} and {@code HX-History-Restore-Request} to
+     * the {@code Vary} header of the response, so that a cache never serves
+     * the full page to an htmx request or the other way around. That's why
+     * it's better to use this method than your own {@link #isHxRequest()}
+     * check, you can't forget about history restoration or the {@code Vary}
+     * header.
      *
      * @param template the template to print
      * @param blockId  the id of the block to send on an htmx request
@@ -665,8 +665,8 @@ public class Context {
      */
     public void printHtmxFragment(Template template, String blockId)
     throws TemplateException {
-        // the chosen response differs on both headers, so a cache must key on
-        // them; this is the divergence point, where varying is always correct
+        // the response differs on both headers, so a cache has to take them
+        // into account, and here it's always correct to vary on them
         varyOn("HX-Request", "HX-History-Restore-Request");
         if (isHxRequest() && !isHxHistoryRestoreRequest()) {
             printBlock(template, blockId);
@@ -1965,17 +1965,9 @@ public class Context {
         }
     }
 
-    /**
-     * Provides the values that a property receives when its parameter didn't
-     * arrive while its form field did.
-     * <p>A boolean property is entered through a checkbox, which browsers
-     * don't send when it isn't checked, so an absent parameter means
-     * {@code false} instead of whatever the property defaults to. The other
-     * properties are reset from a new bean instance, which the {@code null}
-     * return value asks for.
-     *
-     * @since 1.10
-     */
+    // the values of a property whose form field didn't send a parameter, a
+    // boolean is a checkbox that browsers don't send when it isn't checked so
+    // it becomes false, and null resets the others from a new bean instance
     private String[] absentParameterValues(String parameterName, String prefix, Map<String, PropertyDescriptor> beanProperties) {
         var property_name = parameterName;
         if (prefix != null) {
@@ -2026,21 +2018,21 @@ public class Context {
      * <p>The validation group declares which properties are part of the
      * form. Only those properties will be populated, and a property whose
      * parameter is absent will be reset instead of keeping its current
-     * value: a boolean property becomes {@code false} since browsers don't
-     * send checkboxes that aren't checked, the other properties are reset
-     * to the value of a new bean instance. A restored bean will thus reflect
-     * exactly what the form submitted, while the properties outside of the
-     * group preserve their current values.
-     * <p>Each property is populated through a single transport: a property
-     * with a {@code file} constraint is only assigned from file uploads,
-     * while the other properties are only assigned from regular parameter
-     * values. A file property is left untouched when no upload actually
-     * arrived, an absent file input never clears the stored content.
+     * value. A boolean property becomes {@code false}, since browsers don't
+     * send checkboxes that aren't checked, and the other properties are
+     * reset to the value of a new bean instance. This means that a restored
+     * bean reflects exactly what the form submitted, while the properties
+     * outside of the group keep their current values.
+     * <p>A property with a {@code file} constraint will only be assigned from
+     * file uploads, while the other properties will only be assigned from
+     * regular parameter values. A file property is left untouched when no
+     * file was uploaded, so an empty file input will never clear the stored
+     * content.
      * <p>Since every property of the group is expected to be part of the
      * form, a group should only contain the properties that are actually
      * submitted. Controls that the browser doesn't send, like disabled ones,
-     * and partial submissions of a group's form will reset the properties
-     * that didn't arrive.
+     * and partial submissions of the form of a group will reset the
+     * properties that didn't arrive.
      *
      * @param bean   the bean instance that will be filled
      * @param prefix the prefix that will be put in front of each property
@@ -2078,16 +2070,16 @@ public class Context {
      * parameter values that were sent.
      * <p>Only the provided properties will be populated, and a property
      * whose parameter is absent will be reset instead of keeping its current
-     * value: a boolean property becomes {@code false} since browsers don't
-     * send checkboxes that aren't checked, the other properties are reset to
-     * the value of a new bean instance. A restored bean will thus reflect
-     * exactly what the form submitted, while the properties that aren't
-     * provided preserve their current values.
-     * <p>Each property is populated through a single transport: a property
-     * with a {@code file} constraint is only assigned from file uploads,
-     * while the other properties are only assigned from regular parameter
-     * values. A file property is left untouched when no upload actually
-     * arrived, an absent file input never clears the stored content.
+     * value. A boolean property becomes {@code false}, since browsers don't
+     * send checkboxes that aren't checked, and the other properties are
+     * reset to the value of a new bean instance. This means that a restored
+     * bean reflects exactly what the form submitted, while the properties
+     * that aren't provided keep their current values.
+     * <p>A property with a {@code file} constraint will only be assigned from
+     * file uploads, while the other properties will only be assigned from
+     * regular parameter values. A file property is left untouched when no
+     * file was uploaded, so an empty file input will never clear the stored
+     * content.
      * <p>Since every provided property is expected to be part of the form,
      * you should only provide the ones that are actually submitted. Controls
      * that the browser doesn't send, like disabled ones, and partial
@@ -2118,12 +2110,10 @@ public class Context {
 
             Object empty_bean = null;
 
-            // the properties are named by whoever asks for them, which doesn't
-            // have to match the case that the bean declares and doesn't have
-            // to name a property of it at all
-            // they're resolved to what the bean calls them before anything is
-            // assigned, so that two names for one property don't take turns
-            // filling it in and emptying it again
+            // the provided names don't have to use the case of the bean's
+            // properties, or even be properties of the bean, so they're first
+            // resolved to the bean's own names, this prevents two names of the
+            // same property from filling it in and emptying it again
             var selected = new LinkedHashSet<PropertyDescriptor>();
             for (var property_name : properties) {
                 if (null == property_name ||
@@ -2141,13 +2131,13 @@ public class Context {
                 var parameter_name = (null == prefix ? canonical_name : prefix + canonical_name);
                 var constrained_property = constrained == null ? null : constrained.getConstrainedProperty(canonical_name);
 
-                // a file property is only entered through uploads, every
-                // other property only through regular parameters
+                // a file property is only filled in from uploads, the other
+                // properties only from regular parameters
                 if (constrained_property != null &&
                     constrained_property.isFile()) {
-                    // an unselected file input still produces an upload part,
-                    // only a part with an actual filename counts as an upload,
-                    // without one the stored content stays untouched
+                    // an empty file input still sends an upload part, only a
+                    // part with a filename is an actual upload, otherwise the
+                    // stored content stays untouched
                     UploadedFile uploaded = null;
                     var uploaded_files = files(parameter_name);
                     if (uploaded_files != null) {
@@ -3170,7 +3160,7 @@ public class Context {
      * because one was already established while processing it, or because
      * the browser sent its token cookie.
      * <p>Unlike {@link #csrfToken()} this method will not create a token, so
-     * that you can decide whether to include the token without minting one
+     * that you can decide whether to include the token without creating one
      * for browsers that don't have it yet. The {@code route:inputs:} filtered
      * tag uses it to add the token to the forms of the pages where it's
      * active.
@@ -3495,26 +3485,27 @@ public class Context {
     // ---------------------------------------------------------------------
     // htmx integration
     //
-    // Request-side accessors read the HX-* headers that htmx sends, so an
+    // the request accessors read the HX-* headers that htmx sends, so that an
     // element can tell an htmx request apart from a full page load and adapt
-    // its response. Response-side helpers set the HX-* headers that htmx acts
-    // on, typed instead of hand-written, and route-aware so history URLs and
-    // redirects survive refactoring. None of this couples RIFE2 to htmx: the
-    // accessors are plain header reads and the setters plain header writes.
+    // its response. The response methods set the HX-* headers that htmx acts
+    // on and can generate their URLs from routes, so that history URLs and
+    // redirects keep working when you change your routes. None of this ties
+    // RIFE2 to htmx, these are plain header reads and writes
     // ---------------------------------------------------------------------
 
     /**
      * Indicates whether the current request was issued by htmx.
      * <p>This reads the {@code HX-Request} header that htmx sets on every
-     * request it makes. It's a plain read with no side effects, so consulting
-     * it for logging or a decision that doesn't change the output is free.
-     * <p>To serve a fragment to htmx and the full page otherwise, prefer
-     * {@link #printHtmxFragment}: it makes that choice, guards the
-     * {@link #isHxHistoryRestoreRequest() history-restoration} case, and
-     * declares {@code Vary} for you. You should only branch on this method
-     * yourself when that helper doesn't fit, and then declare the dependency
+     * request it makes. This method will only read the header without any
+     * side effects, so you can freely use it for logging or for decisions
+     * that don't change the output.
+     * <p>To serve a fragment to htmx and the full page otherwise, you should
+     * use {@link #printHtmxFragment} instead, which makes that choice, takes
+     * care of the {@link #isHxHistoryRestoreRequest() history restoration}
+     * case and declares the {@code Vary} header for you. Only branch on this
+     * method yourself when that doesn't fit, and then declare the dependency
      * with {@link #varyOn varyOn("HX-Request")}, since a shared cache could
-     * otherwise hand the fragment to a browser or the full page to htmx.
+     * otherwise serve the fragment to a browser or the full page to htmx.
      *
      * @return {@code true} when this is an htmx request; or
      * <p>{@code false} otherwise
@@ -3569,7 +3560,7 @@ public class Context {
     }
 
     /**
-     * Returns the {@code id} of the element that triggered an htmx request,
+     * Retrieves the {@code id} of the element that triggered an htmx request,
      * from the {@code HX-Trigger} request header.
      *
      * @return the triggering element's id, or {@code null} if absent
@@ -3580,7 +3571,7 @@ public class Context {
     }
 
     /**
-     * Returns the {@code name} of the element that triggered an htmx request,
+     * Retrieves the {@code name} of the element that triggered an htmx request,
      * from the {@code HX-Trigger-Name} request header.
      *
      * @return the triggering element's name, or {@code null} if absent
@@ -3591,7 +3582,7 @@ public class Context {
     }
 
     /**
-     * Returns the {@code id} of the target element of an htmx request, from
+     * Retrieves the {@code id} of the target element of an htmx request, from
      * the {@code HX-Target} request header.
      *
      * @return the target element's id, or {@code null} if absent
@@ -3602,7 +3593,7 @@ public class Context {
     }
 
     /**
-     * Returns the browser's current URL at the time of the htmx request, from
+     * Retrieves the browser's current URL at the time of the htmx request, from
      * the {@code HX-Current-URL} request header.
      *
      * @return the current URL, or {@code null} if absent
@@ -3613,7 +3604,7 @@ public class Context {
     }
 
     /**
-     * Returns the user's response to an {@code hx-prompt}, from the
+     * Retrieves the user's response to an {@code hx-prompt}, from the
      * {@code HX-Prompt} request header.
      *
      * @return the prompt response, or {@code null} if absent
@@ -3809,13 +3800,14 @@ public class Context {
     /**
      * Triggers a client-side event as soon as the response is received, by
      * adding it to the {@code HX-Trigger} response header.
-     * <p>Calls accumulate: each one adds its event to the same header, so
-     * independent pieces of code can trigger their own events without
-     * overwriting each other. A single event without a payload travels as a
-     * plain event name; as soon as several events or a payload are involved,
-     * the header switches to htmx's JSON object form, where an event without
-     * a payload carries a {@code null} detail. Triggering the same event
-     * again replaces its payload.
+     * <p>Each call adds its event to the same header, so that independent
+     * pieces of code can trigger their own events without overwriting each
+     * other. A single event without a payload is sent as its plain name. As
+     * soon as there are several events or a payload, or when the name has
+     * characters outside of ASCII, the header will use the JSON object form
+     * of htmx instead. An event without a payload then gets a {@code null}
+     * detail, and the characters outside of ASCII are escaped. Triggering the same event again replaces its
+     * payload.
      *
      * @param event the name of the event to trigger
      * @since 1.10
@@ -3828,9 +3820,9 @@ public class Context {
      * Triggers a client-side event with a data payload as soon as the
      * response is received, by adding it to the {@code HX-Trigger} response
      * header.
-     * <p>The payload is serialized to JSON with RIFE2's own
-     * {@link Json} support, so records, beans, maps and collections all work
-     * without an extra dependency. Calls accumulate like
+     * <p>The payload is converted to JSON with RIFE2's own {@link Json}
+     * support, so that records, beans, maps and collections all work without
+     * an extra dependency. Each call adds its event to the header, like with
      * {@link #hxTrigger(String)}.
      *
      * @param event the name of the event to trigger
@@ -3897,18 +3889,18 @@ public class Context {
 
     /**
      * Declares that the response depends on one or more request headers, by
-     * adding each to the response's {@code Vary} header so a cache keeps
-     * responses that differ on those headers apart.
-     * <p>You should use this method whenever you shape the response from a
-     * request header that you read, such as branching on {@link
+     * adding each of them to the {@code Vary} header of the response, so that
+     * a cache keeps the responses that differ on those headers apart.
+     * <p>You should use this method whenever the response depends on a
+     * request header that you read, for instance when you branch on {@link
      * #isHxRequest()} or {@link #isHxBoosted()} to serve different content.
-     * The htmx accessors only read their headers and don't vary on their own,
-     * precisely so that reading a header for logging, or for a decision that
-     * doesn't change the output, never fragments a cache.
-     * {@link #printHtmxFragment} declares its own variance, which means that
-     * this method is only needed when you do the branching yourself. Each name
-     * is added at most once per request, so that repeated calls don't have any
-     * additional effect.
+     * The htmx accessors don't add to the {@code Vary} header themselves, so
+     * that reading a header for logging, or for a decision that doesn't
+     * change the output, never splits up a cache. {@link #printHtmxFragment}
+     * declares its own {@code Vary} header, which means that you only need
+     * this method when you do the branching yourself. Each name is added at
+     * most once per request, so calling this again with the same header
+     * doesn't have any effect.
      *
      * @param headers the request header names the response varies on
      * @see #isHxRequest()
@@ -3917,8 +3909,8 @@ public class Context {
      */
     public void varyOn(String... headers) {
         if (variedHeaders_ == null) {
-            // HTTP header names are case-insensitive, so dedup that way too;
-            // the first-seen spelling is the one written to Vary
+            // header names are case-insensitive, so they're deduplicated
+            // that way too, the first spelling is the one written to Vary
             variedHeaders_ = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         }
         for (var header : headers) {
@@ -3928,13 +3920,12 @@ public class Context {
         }
     }
 
-    // marks an event that was added without a payload, distinct from an
-    // event whose payload is an explicit null
+    // marks an event that was added without a payload, which isn't the
+    // same as an event with a null payload
     private static final Object HX_NO_DATA = new Object();
 
-    // accumulates an event in the given trigger header and rewrites the whole
-    // header, so that independent hxTrigger calls compose instead of
-    // overwriting one another
+    // adds an event to a trigger header and writes the whole header again,
+    // so that independent hxTrigger calls don't overwrite each other
     private void addHxTrigger(String headerName, String event, Object data) {
         if (hxTriggers_ == null) {
             hxTriggers_ = new HashMap<>();
@@ -3953,9 +3944,9 @@ public class Context {
             }
         }
 
-        // several events or a payload: htmx's JSON object form, with Json
-        // serializing each payload graph, including beans and records nested
-        // in maps, collections and arrays
+        // several events or a payload use the JSON object form of htmx,
+        // Json converts each payload, also the beans and records that are
+        // nested in maps, collections and arrays
         var value = new StringBuilder("{");
         for (var event : events.entrySet()) {
             if (value.length() > 1) {
