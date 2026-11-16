@@ -4,6 +4,7 @@
  */
 package rife.engine.elements;
 
+import rife.authentication.elements.AuthConfig;
 import rife.engine.Context;
 import rife.engine.Element;
 import rife.engine.RequestMethod;
@@ -42,6 +43,17 @@ import java.util.Set;
  *         c.print(c.template("reload"));
  *     }
  * });</pre>
+ * <p>When your users log in with RIFE2's authentication, you can provide
+ * its {@link AuthConfig}. If {@code RifeConfig.engine()} also has a
+ * {@linkplain rife.config.RifeConfig.EngineConfig#setSecret(String) secret},
+ * the token of a user that's logged in will be signed for that user. This
+ * protects you against tokens that someone else managed to plant in the
+ * browser, and the browser will get a new token when the user logs in or
+ * out:
+ * <pre>before(new CsrfProtected(config));</pre>
+ * <p>Since the new token is given out when a page is loaded, a page that
+ * was loaded before the user logged in can't submit its forms anymore, so
+ * you should load a page after logging in, for instance by redirecting.
  *
  * @author Geert Bevin (gbevin[remove] at uwyn dot com)
  * @see Context#csrfToken()
@@ -62,6 +74,7 @@ public class CsrfProtected implements Element {
         EnumSet.of(RequestMethod.POST, RequestMethod.PUT, RequestMethod.PATCH, RequestMethod.DELETE);
 
     private final Set<RequestMethod> protectedMethods_;
+    private final AuthConfig authConfig_;
 
     /**
      * Creates a new instance that verifies the
@@ -87,15 +100,48 @@ public class CsrfProtected implements Element {
      * @since 1.10
      */
     public CsrfProtected(Set<RequestMethod> protectedMethods) {
+        this(null, protectedMethods);
+    }
+
+    /**
+     * Creates a new instance that verifies the
+     * {@link #DEFAULT_PROTECTED_METHODS state-changing request methods} and
+     * binds the token to the user that's logged in with the provided
+     * authentication configuration.
+     *
+     * @param authConfig the authentication configuration whose cookie
+     *                   identifies the user that's logged in
+     * @see #CsrfProtected(AuthConfig, Set)
+     * @since 1.11.0
+     */
+    public CsrfProtected(AuthConfig authConfig) {
+        this(authConfig, DEFAULT_PROTECTED_METHODS);
+    }
+
+    /**
+     * Creates a new instance that verifies the provided request methods and
+     * binds the token to the user that's logged in with the provided
+     * authentication configuration.
+     *
+     * @param authConfig       the authentication configuration whose cookie
+     *                         identifies the user that's logged in; or
+     *                         {@code null} to not bind the token
+     * @param protectedMethods the request methods that are verified
+     * @see #CsrfProtected(AuthConfig)
+     * @since 1.11.0
+     */
+    public CsrfProtected(AuthConfig authConfig, Set<RequestMethod> protectedMethods) {
         if (null == protectedMethods) throw new IllegalArgumentException("protectedMethods can't be null");
 
+        authConfig_ = authConfig;
         protectedMethods_ = EnumSet.copyOf(protectedMethods);
     }
 
     public void process(Context c) {
+        var identity = authConfig_ == null ? null : c.cookieValue(authConfig_.authCookieName());
         if (protectedMethods_.contains(c.method())) {
             try {
-                c.verifyCsrfToken();
+                c.verifyCsrfToken(identity);
             } catch (CsrfTokenException e) {
                 refused(c, e);
                 // stop the chain so the protected route doesn't run
@@ -104,7 +150,7 @@ public class CsrfProtected implements Element {
             return;
         }
 
-        c.ensureCsrfToken();
+        c.ensureCsrfToken(identity);
     }
 
     /**

@@ -24,11 +24,14 @@ import rife.tools.exceptions.BeanUtilsException;
 import rife.validation.ConstrainedUtils;
 import rife.validation.Validated;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.beans.PropertyDescriptor;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.util.*;
 
@@ -89,6 +92,7 @@ public class Context {
     private Route processedRoute_ = null;
     private SseConnection sseConnection_ = null;
     private String csrfToken_ = null;
+    private String csrfIdentity_ = null;
     private Set<String> variedHeaders_ = null;
     private Map<String, LinkedHashMap<String, Object>> hxTriggers_ = null;
     private Element processedElement_ = null;
@@ -3104,7 +3108,8 @@ public class Context {
     /**
      * Ensures that a CSRF token is established for this request, generating
      * a new one and setting its cookie when the browser doesn't have one
-     * yet.
+     * yet, or when its token isn't signed for the user that's logged in, as
+     * described in {@link #ensureCsrfToken(String)}.
      * <p>Once a token is active for a request, the {@code route:inputs:}
      * filtered tag adds it to the forms it generates, and the token is
      * available on its own through the {@code context:csrfToken} template
@@ -3125,10 +3130,14 @@ public class Context {
 
         var cookie_name = RifeConfig.engine().getCsrfCookieName();
         var token = cookieValue(cookie_name);
-        if (token == null || token.isEmpty()) {
+        if (!isCurrentCsrfToken(token)) {
             var bytes = new byte[32];
             site_.csrfRandom_.nextBytes(bytes);
             token = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+            var secret = RifeConfig.engine().getSecret();
+            if (secret != null && csrfIdentity_ != null) {
+                token = token + "." + signCsrfToken(secret, token, csrfIdentity_);
+            }
             addCookie(new CookieBuilder(cookie_name, token)
                 .path("/")
                 .secure(secure())
@@ -3140,10 +3149,78 @@ public class Context {
     }
 
     /**
+     * Ensures that a CSRF token is established for this request, like
+     * {@link #ensureCsrfToken()} does, and binds it to the user with the
+     * provided identity.
+     * <p>When {@code RifeConfig.engine()} has a
+     * {@linkplain rife.config.RifeConfig.EngineConfig#setSecret(String) secret},
+     * the token of a user that's logged in will be signed for that user, so
+     * that a token that was planted in the browser by someone else can't be
+     * used. The browser gets a new token when the user logs in or out, and
+     * the token of the identity is used for the rest of this request. Since
+     * the new token is given out when a page is loaded, a page that was
+     * loaded before the user logged in can't submit its forms afterwards.
+     *
+     * @param identity the identity of the user that's logged in, like the
+     *                 value of its authentication cookie; or {@code null}
+     *                 when nobody is logged in
+     * @see #verifyCsrfToken(String)
+     * @see rife.engine.elements.CsrfProtected
+     * @since 1.11.0
+     */
+    public void ensureCsrfToken(String identity) {
+        bindCsrfIdentity(identity);
+        ensureCsrfToken();
+    }
+
+    private void bindCsrfIdentity(String identity) {
+        if (identity != null && identity.isEmpty()) {
+            identity = null;
+        }
+        if (!Objects.equals(identity, csrfIdentity_)) {
+            csrfIdentity_ = identity;
+            csrfToken_ = null;
+        }
+    }
+
+    // a token is current when it's signed for the user that's logged in,
+    // and it isn't signed anymore once nobody is logged in
+    private boolean isCurrentCsrfToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        var secret = RifeConfig.engine().getSecret();
+        if (null == secret) {
+            return true;
+        }
+
+        var separator = token.indexOf('.');
+        if (null == csrfIdentity_) {
+            return separator == -1;
+        }
+
+        return separator != -1 &&
+               MessageDigest.isEqual(signCsrfToken(secret, token.substring(0, separator), csrfIdentity_).getBytes(StandardCharsets.UTF_8),
+                                     token.substring(separator + 1).getBytes(StandardCharsets.UTF_8));
+    }
+
+    private static String signCsrfToken(String secret, String nonce, String identity) {
+        try {
+            var mac = Mac.getInstance("HmacSHA256");
+            mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            var signature = mac.doFinal((nonce + "." + identity).getBytes(StandardCharsets.UTF_8));
+            return Base64.getUrlEncoder().withoutPadding().encodeToString(signature);
+        } catch (GeneralSecurityException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
      * Retrieves the CSRF token of the browser that performs this request,
      * establishing one with {@link #ensureCsrfToken()} when the browser
-     * doesn't have one yet. The same token is returned for the rest of this
-     * request.
+     * doesn't have a current one yet. The same token is returned for the
+     * rest of this request.
      *
      * @return the CSRF token of this browser
      * @see #ensureCsrfToken()
@@ -3215,6 +3292,40 @@ public class Context {
                                    provided.getBytes(StandardCharsets.UTF_8))) {
             throw new CsrfTokenInvalidException();
         }
+
+        // a token that's the same in the cookie and in the request can
+        // still have been planted, unless it's signed for the user
+        if (csrfIdentity_ != null && !isCurrentCsrfToken(provided)) {
+            throw new CsrfTokenInvalidException();
+        }
+    }
+
+    /**
+     * Verifies that this request provides the CSRF token of the browser
+     * that performs it, like {@link #verifyCsrfToken()} does, and that the
+     * token is bound to the user with the provided identity.
+     * <p>When {@code RifeConfig.engine()} has a
+     * {@linkplain rife.config.RifeConfig.EngineConfig#setSecret(String) secret}
+     * and a user is logged in, the token has to be signed for that user.
+     * Without a secret, or when nobody is logged in, this verifies the token
+     * like {@link #verifyCsrfToken()}.
+     *
+     * @param identity the identity of the user that's logged in, like the
+     *                 value of its authentication cookie; or {@code null}
+     *                 when nobody is logged in
+     * @throws CsrfTokenMissingException when the browser has no token
+     *                                   cookie, or when the request
+     *                                   provides no token
+     * @throws CsrfTokenInvalidException when the provided token doesn't
+     *                                   correspond to the token cookie, or
+     *                                   isn't signed for the user
+     * @see #ensureCsrfToken(String)
+     * @see rife.engine.elements.CsrfProtected
+     * @since 1.11.0
+     */
+    public void verifyCsrfToken(String identity) {
+        bindCsrfIdentity(identity);
+        verifyCsrfToken();
     }
 
     SseConnection sseConnection() {

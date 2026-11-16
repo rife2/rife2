@@ -4,7 +4,10 @@
  */
 package rife.engine;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import rife.authentication.elements.AuthConfig;
+import rife.authentication.sessionvalidators.MemorySessionValidator;
 import rife.config.RifeConfig;
 import rife.engine.elements.CsrfProtected;
 import rife.engine.exceptions.CsrfTokenException;
@@ -28,6 +31,10 @@ public class TestCsrf {
 
         VerboseCsrfProtected(Set<RequestMethod> protectedMethods) {
             super(protectedMethods);
+        }
+
+        VerboseCsrfProtected(AuthConfig authConfig) {
+            super(authConfig);
         }
 
         protected void refused(Context c, CsrfTokenException e) {
@@ -62,6 +69,37 @@ public class TestCsrf {
         public void setup() {
             before(protectedMethods_ == null ? new VerboseCsrfProtected() : new VerboseCsrfProtected(protectedMethods_));
         }
+    }
+
+    static final String SECRET = "a secret that is long enough to sign tokens";
+    static final String AUTH_COOKIE = AuthConfig.DEFAULT_AUTH_COOKIE_NAME;
+
+    // a site whose token is bound to the user that's logged in, which the
+    // tests simulate with the authentication cookie
+    static class BoundSite extends Site {
+        Route form = get("/form", c -> c.print(c.template("csrf_form")));
+        Route save = post("/save", c -> c.print("saved " + c.parameter("name")));
+
+        public void setup() {
+            before(new VerboseCsrfProtected(new AuthConfig(new MemorySessionValidator())));
+        }
+    }
+
+    @AfterEach
+    void clearSecret() {
+        RifeConfig.engine().setSecret(null);
+    }
+
+    private static String csrfCookie(MockConversation m) {
+        return m.getCookieValue(RifeConfig.engine().getCsrfCookieName());
+    }
+
+    private static String plantedSave(MockConversation m, String token) {
+        m.addCookie(RifeConfig.engine().getCsrfCookieName(), token);
+        return m.doRequest("/save", new MockRequest()
+            .method(RequestMethod.POST)
+            .parameter("name", "Eve")
+            .parameter(RifeConfig.engine().getCsrfParameterName(), token)).getText();
     }
 
     @Test
@@ -355,7 +393,105 @@ public class TestCsrf {
 
     @Test
     void testInvalidArguments() {
-        assertThrows(IllegalArgumentException.class, () -> new CsrfProtected(null));
+        assertThrows(IllegalArgumentException.class, () -> new CsrfProtected((Set<RequestMethod>) null));
+        assertThrows(IllegalArgumentException.class, () -> new CsrfProtected(null, null));
+        assertThrows(IllegalArgumentException.class, () -> RifeConfig.engine().setSecret("too short"));
         assertThrows(IllegalArgumentException.class, () -> new CookieBuilder("name", "value").sameSite(null));
+    }
+
+    @Test
+    void testSignedTokenForLoggedInUser() {
+        RifeConfig.engine().setSecret(SECRET);
+        var m = new MockConversation(new BoundSite());
+        m.addCookie(AUTH_COOKIE, "alice");
+
+        var form = m.doRequest("/form").getParsedHtml().getFormWithName("protected");
+        assertTrue(csrfCookie(m).contains("."));
+        form.setParameter("name", "Alice");
+        assertEquals("saved Alice", form.submit().getText());
+    }
+
+    @Test
+    void testPlantedTokenIsRefusedForLoggedInUser() {
+        var m = new MockConversation(new BoundSite());
+        m.addCookie(AUTH_COOKIE, "alice");
+
+        // without a secret, a token that's the same in the cookie and the
+        // request is accepted, also when someone else planted it
+        assertEquals("saved Eve", plantedSave(m, "planted"));
+
+        RifeConfig.engine().setSecret(SECRET);
+        assertEquals("refused: " + CsrfTokenInvalidException.class.getSimpleName(), plantedSave(m, "planted"));
+    }
+
+    @Test
+    void testTokenOfOtherUserIsRefused() {
+        RifeConfig.engine().setSecret(SECRET);
+        var attacker = new MockConversation(new BoundSite());
+        attacker.addCookie(AUTH_COOKIE, "mallory");
+        attacker.doRequest("/form");
+        var mallory_token = csrfCookie(attacker);
+
+        var m = new MockConversation(new BoundSite());
+        m.addCookie(AUTH_COOKIE, "alice");
+        assertEquals("refused: " + CsrfTokenInvalidException.class.getSimpleName(), plantedSave(m, mallory_token));
+    }
+
+    @Test
+    void testTokenSignedWithOtherSecretIsRefused() {
+        RifeConfig.engine().setSecret(SECRET);
+        var m = new MockConversation(new BoundSite());
+        m.addCookie(AUTH_COOKIE, "alice");
+        m.doRequest("/form");
+        var token = csrfCookie(m);
+
+        RifeConfig.engine().setSecret(SECRET + " but another one");
+        assertEquals("refused: " + CsrfTokenInvalidException.class.getSimpleName(), plantedSave(m, token));
+    }
+
+    @Test
+    void testTokenChangesWhenLoggingInAndOut() {
+        RifeConfig.engine().setSecret(SECRET);
+        var m = new MockConversation(new BoundSite());
+
+        // nobody is logged in, so the token isn't signed and stays the same
+        m.doRequest("/form");
+        var anonymous = csrfCookie(m);
+        assertFalse(anonymous.contains("."));
+        m.doRequest("/form");
+        assertEquals(anonymous, csrfCookie(m));
+
+        // logging in signs a new token for the user
+        m.addCookie(AUTH_COOKIE, "alice");
+        var page = m.doRequest("/form");
+        var alice = csrfCookie(m);
+        assertNotEquals(anonymous, alice);
+        assertTrue(alice.contains("."));
+        assertTrue(page.getText().contains(alice));
+        m.doRequest("/form");
+        assertEquals(alice, csrfCookie(m));
+
+        // another user gets a token of their own
+        m.addCookie(AUTH_COOKIE, "bob");
+        m.doRequest("/form");
+        var bob = csrfCookie(m);
+        assertNotEquals(alice, bob);
+
+        // logging out leaves an unsigned token again
+        m.addCookie(AUTH_COOKIE, "");
+        m.doRequest("/form");
+        assertFalse(csrfCookie(m).contains("."));
+    }
+
+    @Test
+    void testUnboundTokenIsntSigned() {
+        RifeConfig.engine().setSecret(SECRET);
+        var m = new MockConversation(new ProtectedSite());
+        m.addCookie(AUTH_COOKIE, "alice");
+
+        // without the authentication configuration, the token works like before
+        m.doRequest("/form");
+        assertFalse(csrfCookie(m).contains("."));
+        assertEquals("saved Eve", plantedSave(m, "planted"));
     }
 }
