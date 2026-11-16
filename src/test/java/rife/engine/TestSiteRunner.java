@@ -434,6 +434,36 @@ public class TestSiteRunner {
     }
 
     @Test
+    void testListenerContentIsCollected() {
+        try (var runner = new SiteRunner().start(new Site() {
+            public void setup() {
+                get("/small", c -> {
+                    for (var i = 0; i < 1000; i++) {
+                        c.print("part" + i + ";");
+                    }
+                });
+                get("/large", c -> {
+                    for (var i = 0; i < 2000; i++) {
+                        c.print("x".repeat(99) + ";");
+                    }
+                });
+            }
+        })) {
+            var small = new Recorder();
+            runner.handle("/small", new SiteRequest(), small);
+            assertEquals(List.of("committed", "content", "completed"), small.calls);
+            assertTrue(small.text().startsWith("part0;part1;"));
+            assertTrue(small.text().endsWith("part999;"));
+
+            var large = new Recorder();
+            runner.handle("/large", new SiteRequest(), large);
+            assertEquals(200_000, large.bytes().length);
+            assertEquals(7, Collections.frequency(large.calls, "content"));
+            assertEquals("completed", large.last());
+        }
+    }
+
+    @Test
     void testGzip() {
         try (var runner = new SiteRunner().start(new Site() {
             public void setup() {

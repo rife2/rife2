@@ -7,12 +7,13 @@ package rife.engine;
 /**
  * Receives the response of a {@link SiteRunner} while it's being written.
  * <p>{@link #committed} is called once, when the status and the headers are
- * final, before any content. The content then follows in as many calls to
- * {@link #content} as the site writes, and the response ends with
- * {@link #completed}, {@link #failed} or {@link #cancelled}. Exactly one of
- * them is called, and no other call comes after it, so that's where you can
- * let go of what you set up for the response. A failure can also come
- * before the response was committed.
+ * final, before any content. The content then follows in calls to
+ * {@link #content}. Like a servlet container, the site runner collects what
+ * the site writes until it flushes it or until there's 32 KB of it. The
+ * response ends with {@link #completed}, {@link #failed} or
+ * {@link #cancelled}. Exactly one of them is called, and no other call comes
+ * after it, so that's where you can let go of what you set up for the
+ * response. A failure can also come before the response was committed.
  * <p>The response of a detached event stream ends when its connection is
  * closed, which is after {@link SiteRunner#handle(String, SiteRequest, SiteResponseListener)}
  * returned, and its calls come from the threads that send the events.

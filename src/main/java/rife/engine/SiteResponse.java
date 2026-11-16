@@ -847,8 +847,14 @@ public class SiteResponse extends AbstractResponse {
         return null;
     }
 
-    // commits on the first write or flush, like a servlet container does
+    // commits on the first write or flush, and collects the content for the
+    // listener until it's flushed or full, like a servlet container does
     private class BodyStream extends OutputStream {
+        private static final int LISTENER_BUFFER_SIZE = 32 * 1024;
+
+        private byte[] pending_ = null;
+        private int pendingLength_ = 0;
+
         @Override
         public void write(int b)
         throws IOException {
@@ -856,7 +862,7 @@ public class SiteResponse extends AbstractResponse {
         }
 
         @Override
-        public void write(byte[] bytes, int offset, int length)
+        public synchronized void write(byte[] bytes, int offset, int length)
         throws IOException {
             if (cancelled_) {
                 throw new IOException("the request was cancelled");
@@ -879,6 +885,52 @@ public class SiteResponse extends AbstractResponse {
                 return;
             }
 
+            if (pendingLength_ + length > LISTENER_BUFFER_SIZE) {
+                sendPending(listener);
+            }
+            if (length >= LISTENER_BUFFER_SIZE) {
+                send(listener, bytes, offset, length);
+                return;
+            }
+
+            if (null == pending_) {
+                pending_ = new byte[LISTENER_BUFFER_SIZE];
+            }
+            System.arraycopy(bytes, offset, pending_, pendingLength_, length);
+            pendingLength_ += length;
+            if (pendingLength_ == LISTENER_BUFFER_SIZE) {
+                sendPending(listener);
+            }
+        }
+
+        @Override
+        public synchronized void flush()
+        throws IOException {
+            if (cancelled_) {
+                throw new IOException("the request was cancelled");
+            }
+
+            commit();
+
+            var listener = listener_;
+            if (listener != null) {
+                sendPending(listener);
+            }
+        }
+
+        private void sendPending(SiteResponseListener listener)
+        throws IOException {
+            if (0 == pendingLength_) {
+                return;
+            }
+
+            var length = pendingLength_;
+            pendingLength_ = 0;
+            send(listener, pending_, 0, length);
+        }
+
+        private void send(SiteResponseListener listener, byte[] bytes, int offset, int length)
+        throws IOException {
             if (!startListenerCall()) {
                 throw new IOException("the request was cancelled");
             }
@@ -894,16 +946,6 @@ public class SiteResponse extends AbstractResponse {
                 cancel();
                 throw new IOException(failure);
             }
-        }
-
-        @Override
-        public void flush()
-        throws IOException {
-            if (cancelled_) {
-                throw new IOException("the request was cancelled");
-            }
-
-            commit();
         }
     }
 }
