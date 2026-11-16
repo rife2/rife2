@@ -454,6 +454,32 @@ public class TestSiteRunner {
     }
 
     @Test
+    void testGzipJson() {
+        try (var runner = new SiteRunner().start(new Site() {
+            public void setup() {
+                get("/printed", c -> {
+                    c.setContentType("application/json");
+                    c.print("[" + "1,".repeat(500) + "1]");
+                });
+                get("/template", c -> {
+                    var t = c.templateJson("sse_stock");
+                    t.setValue("symbol", "x".repeat(1000));
+                    t.setValue("price", 1);
+                    c.print(t);
+                });
+            }
+        })) {
+            for (var path : List.of("/printed", "/template")) {
+                var compressed = runner.handle(path, new SiteRequest().header("Accept-Encoding", "gzip"));
+                assertTrue(compressed.getContentType().startsWith("application/json"), compressed.getContentType());
+                assertEquals("gzip", compressed.getHeader("Content-Encoding"), path);
+                assertEquals("Accept-Encoding", compressed.getHeader("Vary"), path);
+                assertTrue(compressed.getBytes().length < 200, path);
+            }
+        }
+    }
+
+    @Test
     void testEventStreamCancelledByHost()
     throws Exception {
         var broadcaster = new SseBroadcaster();
