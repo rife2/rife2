@@ -1649,6 +1649,35 @@ public class Router {
         return registerRoute(new RouteSupplier(this, methods, path, elementSupplier));
     }
 
+    /**
+     * Registers a lambda element as a route for HTTP methods with a specific path and pathinfo handling.
+     * <p>When the methods include GET, a HEAD request is also handled by this
+     * route, unless a route for the HEAD method matches it.
+     *
+     * @param path     the path of the route
+     * @param pathInfo the pathinfo handling to use
+     * @param methods  the HTTP methods
+     * @param element  the element to register a route for
+     * @since 1.11.0
+     */
+    public final Route route(String path, PathInfoHandling pathInfo, RequestMethod[] methods, Element element) {
+        return registerRoute(new RouteInstance(this, methods, path, pathInfo, element));
+    }
+
+    /**
+     * Registers a lambda element as a route for HTTP methods with a specific path.
+     * <p>When the methods include GET, a HEAD request is also handled by this
+     * route, unless a route for the HEAD method matches it.
+     *
+     * @param path    the path of the route
+     * @param methods the HTTP methods
+     * @param element the element to register a route for
+     * @since 1.11.0
+     */
+    public final Route route(String path, RequestMethod[] methods, Element element) {
+        return registerRoute(new RouteInstance(this, methods, path, element));
+    }
+
     final Route registerRoute(Route route) {
         ensurePreDeployment();
         switch (route.pathInfoHandling().type()) {
