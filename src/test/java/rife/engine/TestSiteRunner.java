@@ -565,6 +565,36 @@ public class TestSiteRunner {
     }
 
     @Test
+    void testEventStreamCancelledWhileItOpens()
+    throws Exception {
+        var broadcaster = new SseBroadcaster();
+        var cancelling = java.util.concurrent.Executors.newSingleThreadExecutor();
+        try (var runner = new SiteRunner().start(new Site() {
+            public void setup() {
+                get("/events", c -> c.sse(broadcaster));
+            }
+        })) {
+            // a cancel that lands while the connection registers
+            for (var i = 0; i < 5000; i++) {
+                var request = new SiteRequest();
+                var go = new java.util.concurrent.atomic.AtomicBoolean();
+                var cancel = cancelling.submit(() -> {
+                    while (!go.get()) {
+                        Thread.onSpinWait();
+                    }
+                    request.cancel();
+                });
+                go.set(true);
+                runner.handle("/events", request, new Recorder());
+                cancel.get();
+            }
+            assertEquals(0, broadcaster.connectionCount());
+        } finally {
+            cancelling.shutdownNow();
+        }
+    }
+
+    @Test
     void testEventStreamClosedBySite()
     throws Exception {
         var broadcaster = new SseBroadcaster();

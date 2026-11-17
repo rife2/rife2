@@ -164,6 +164,11 @@ public class SseBroadcaster implements AutoCloseable {
                     connections_.add(connection);
                 }
             }
+            // abandoning doesn't wait for this monitor, so a connection that
+            // was abandoned between the check and the add is removed here
+            if (!connection.isOpen()) {
+                unregister(connection);
+            }
             return;
         }
 
