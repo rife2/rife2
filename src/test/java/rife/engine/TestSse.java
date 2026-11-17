@@ -873,7 +873,9 @@ public class TestSse {
         assertFalse(response.getEvents().isEmpty());
         assertEquals(List.of("keep-alive"), response.getEvents().get(0).getComments());
 
-        // the heartbeat reaps connections whose clients are gone
+        // the heartbeat reaps connections whose clients are gone, it's
+        // stopped until the count is checked, so a beat can't reap first
+        site.broadcaster.stopHeartbeat();
         var request = new MockRequest();
         var context = new Context("", new Site() {
             public void setup() {
@@ -881,6 +883,7 @@ public class TestSse {
         }, request, new WriteFailingResponse(request), null);
         context.sse(site.broadcaster);
         assertEquals(2, site.broadcaster.connectionCount());
+        site.broadcaster.heartbeat(Duration.ofMillis(25));
         deadline = System.currentTimeMillis() + 10000;
         while (site.broadcaster.connectionCount() > 1 &&
                System.currentTimeMillis() < deadline) {
