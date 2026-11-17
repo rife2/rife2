@@ -131,6 +131,28 @@ public class TestSiteRunner {
     }
 
     @Test
+    void testNativeAppScript() {
+        var properties = new rife.ioc.HierarchicalProperties();
+        properties.put("rife.nativeapp.platform", "ios\"");
+        try (var runner = new SiteRunner(properties).scheme("myapp").serverName("app").contextPath("/c&tx").start(new Site() {
+            public void setup() {
+                get("/page", c -> c.print(c.template("native_app")));
+            }
+        })) {
+            assertEquals("<html lang=\"en\"><head><script src=\"myapp://app/c&amp;tx/rife2-native-app.js\" data-platform=\"ios&quot;\"></script></head></html>\n",
+                runner.handle("/c&tx/page").getText());
+        }
+
+        try (var runner = new SiteRunner().start(new Site() {
+            public void setup() {
+                get("/page", c -> c.print(c.template("native_app")));
+            }
+        })) {
+            assertEquals("<html lang=\"en\"><head></head></html>\n", runner.handle("/page").getText());
+        }
+    }
+
+    @Test
     void testOrigin() {
         try (var runner = new SiteRunner().scheme("myapp").serverName("app").start(new Site() {
             public void setup() {

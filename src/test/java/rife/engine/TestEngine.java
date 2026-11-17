@@ -56,9 +56,9 @@ public class TestEngine {
         })) {
             try (final var webClient = new WebClient()) {
                 final HtmlPage values = webClient.getPage("http://localhost:8181/values");
-                assertEquals("<p>||</p>\n", values.getWebResponse().getContentAsString());
+                assertEquals("<p>|||</p>\n", values.getWebResponse().getContentAsString());
                 final HtmlPage defaults = webClient.getPage("http://localhost:8181/defaults");
-                assertEquals("<p>a|b|c</p>\n", defaults.getWebResponse().getContentAsString(), "default content still applies");
+                assertEquals("<p>a|b|c|d</p>\n", defaults.getWebResponse().getContentAsString(), "default content still applies");
             }
         }
     }
