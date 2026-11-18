@@ -12,6 +12,7 @@ import rife.engine.exceptions.MultipartFileTooBigException;
 import rife.engine.exceptions.MultipartInvalidUploadDirectoryException;
 import rife.engine.exceptions.MultipartRequestException;
 import rife.ioc.HierarchicalProperties;
+import rife.nativeapp.NativeApp;
 import rife.tools.FileUtils;
 
 import java.io.File;
@@ -53,6 +54,10 @@ import java.util.function.LongSupplier;
  * the response has the status {@code 404} and {@link SiteResponse#isHandled()}
  * returns {@code false}, so that your application can still answer it in its
  * own way.
+ * <p>When the property {@code rife.nativeapp.platform} is set, as
+ * {@link rife.nativeapp.NativeApp} sets it inside an app, the script that
+ * the {@code context:nativeAppScript} template value includes is served too,
+ * after the static files of the site.
  * <p>Several site runners can run side by side, but keep in mind that the
  * {@linkplain RifeConfig.EngineConfig engine configuration} is shared by
  * all the sites of a process. Its proxy root URL doesn't apply to a site
@@ -915,6 +920,12 @@ public class SiteRunner implements AutoCloseable {
         }
         bases.add(WEBJARS_RESOURCE_BASE);
         var site = getSite();
+        // the script of the pages inside an app, which no other site serves;
+        // the platform is read where the template value that includes it reads it
+        var platform = (null == site ? properties_ : site.properties()).getValueString(NativeApp.PLATFORM_PROPERTY);
+        if (platform != null && !platform.isEmpty()) {
+            bases.add(NativeApp.SCRIPT_RESOURCE_BASE);
+        }
         var class_loader = null == site ? SiteRunner.class.getClassLoader() : site.getClass().getClassLoader();
         resources = new SiteStaticResources(directory, bases, class_loader);
         staticResources_ = resources;

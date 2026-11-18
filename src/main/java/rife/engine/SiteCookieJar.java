@@ -13,7 +13,9 @@ import java.util.logging.Logger;
 /**
  * Acts as the browser for the cookies of a {@link SiteRunner}. It
  * keeps the cookies that the responses set and sends them back with the
- * requests they apply to, by host, domain, path, expiry and secure flag.
+ * requests they apply to, by host, domain, path, expiry and secure flag,
+ * and leaves out the {@code SameSite} ones that a request of another site
+ * shouldn't get, as a browser does.
  * <p>When the web view of your application keeps the cookies of the origin
  * itself, you don't need a jar. With a {@link SiteCookieStore}, the cookies
  * that have an expiry also survive a restart of your application, which is
@@ -145,14 +147,69 @@ public class SiteCookieJar {
             return;
         }
 
+        // as a browser does, a request that another site made, from a frame
+        // inside a page for instance, gets no cookie that's strictly for the
+        // site, and a lax one, which is also what one without SameSite is,
+        // only when it shows a page without changing something
+        var cross_site = isCrossSite(request);
+        var safe = switch (request.getMethod()) {
+            case GET, HEAD, OPTIONS, TRACE -> true;
+            default -> false;
+        };
+        var mode = request.getHeader("Sec-Fetch-Mode");
+        // without that, a page is opened without an Origin, which a script that asks sends
+        var page = null == mode ? null == request.getHeader("Origin") : lower(mode).equals("navigate") && "document".equals(lower(request.getHeader("Sec-Fetch-Dest")));
         var header = new StringBuilder();
         for (var cookie : cookies) {
+            if (cross_site && !"none".equals(lower(cookie.sameSite()))) {
+                if ("strict".equals(lower(cookie.sameSite())) || !safe || !page) {
+                    continue;
+                }
+            }
             if (!header.isEmpty()) {
                 header.append("; ");
             }
             header.append(cookie.name()).append('=').append(null == cookie.value() ? "" : cookie.value());
         }
-        request.addHeader(HEADER_COOKIE, header.toString());
+        if (!header.isEmpty()) {
+            request.addHeader(HEADER_COOKIE, header.toString());
+        }
+    }
+
+    // what the web view says of who made the request, or else where it came from
+    private static boolean isCrossSite(SiteRequest request) {
+        var fetch_site = request.getHeader("Sec-Fetch-Site");
+        if (fetch_site != null) {
+            return lower(fetch_site).equals("cross-site");
+        }
+        var origin = request.getHeader("Origin");
+        if (null == origin) {
+            return false;
+        }
+        // read here, since java.net.URI has no host for a name with an
+        // underscore, like the one of an Android package; and an origin of
+        // null, from a sandboxed frame, is another site
+        var said = origin.trim();
+        var scheme_end = said.indexOf("://");
+        if (scheme_end < 0) {
+            return true;
+        }
+        var rest = said.substring(scheme_end + 3);
+        String host;
+        if (rest.startsWith("[")) {
+            var close = rest.indexOf(']');
+            host = close < 0 ? rest : rest.substring(0, close + 1);
+        } else {
+            var end = rest.length();
+            for (var separator : new char[]{':', '/'}) {
+                var at = rest.indexOf(separator);
+                if (at >= 0 && at < end) {
+                    end = at;
+                }
+            }
+            host = rest.substring(0, end);
+        }
+        return !lower(host).equals(lower(request.getServerName()));
     }
 
     void store(SiteRequest request, Collection<Cookie> cookies) {

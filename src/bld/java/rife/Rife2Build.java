@@ -15,6 +15,7 @@ import rife.tools.FileUtils;
 import java.io.File;
 import java.nio.file.Path;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.StringJoiner;
@@ -38,6 +39,7 @@ public class Rife2Build extends AbstractRife2Build {
         var jetty_version = version(12,1,12);
         var jsoup_version = version(1,23,2);
         var tomcat_version = version(11,0,25);
+        var graalvm_sdk_version = version(25,0,5);
 
         scope(provided)
             .include(module("org.jsoup", "jsoup", jsoup_version))
@@ -45,7 +47,10 @@ public class Rife2Build extends AbstractRife2Build {
             .include(module("org.eclipse.jetty.ee10", "jetty-ee10-servlet", jetty_version))
             .include(module("org.apache.tomcat.embed", "tomcat-embed-core", tomcat_version).excludeSources())
             .include(module("org.apache.tomcat.embed", "tomcat-embed-jasper", tomcat_version))
-            .include(module("net.imagej", "ij", imagej_version).excludeSources());
+            .include(module("net.imagej", "ij", imagej_version).excludeSources())
+            // only native-image has these, on the JVM the C functions are never loaded
+            .include(module("org.graalvm.sdk", "nativeimage", graalvm_sdk_version))
+            .include(module("org.graalvm.sdk", "word", graalvm_sdk_version));
         scope(test)
             .include(dependency("org.junit-pioneer", "junit-pioneer", version(2,3,0)))
             .include(dependency("org.jsoup", "jsoup", jsoup_version))
@@ -338,6 +343,11 @@ public class Rife2Build extends AbstractRife2Build {
                         throw new AssertionError("the error template didn't come out of the module");
                     }
 
+                    // a site finds it with its own class loader, which only sees what isn't a package of the module
+                    if (null == ModularProbe.class.getClassLoader().getResource(rife.nativeapp.NativeApp.SCRIPT_RESOURCE_BASE + "/rife2-native-app.js")) {
+                        throw new AssertionError("the script of the pages inside an app didn't come out of the module");
+                    }
+
                     System.out.println("the module hands out its own resources (version " + version + ")");
                 }
             }
@@ -480,6 +490,13 @@ public class Rife2Build extends AbstractRife2Build {
         run(List.of(nativeImageTool(), "-cp", site_runner_classpath,
             "--no-fallback", "-o", new File(probe_directory, "site-runner-probe").getAbsolutePath(), "NativeSiteRunnerProbe"));
         run(List.of(new File(probe_directory, "site-runner-probe").getAbsolutePath(), new File(probe_directory, "cookies.txt").getAbsolutePath()));
+
+        // native-image puts the C functions it finds on the classpath into
+        // any image, the ones of an app only belong in a shared library
+        var executable = Files.readAllBytes(new File(probe_directory, "site-runner-probe").toPath());
+        if (new String(executable, StandardCharsets.ISO_8859_1).contains("rife2_handle")) {
+            throw new IllegalStateException("an executable of a site has the C functions of a native app");
+        }
     }
 
     /**

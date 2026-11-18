@@ -11,6 +11,9 @@
       "pattern":"\\QRIFE_VERSION\\E"
     },
     {
+      "pattern":"\\QMETA-INF/rife2-native-app/rife2-native-app.js\\E"
+    },
+    {
       "pattern":"\\Qjetty-dir.css\\E"
     },
     {

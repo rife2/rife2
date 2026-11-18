@@ -7,6 +7,7 @@ package rife.engine;
 import rife.authentication.elements.Identified;
 import rife.config.RifeConfig;
 import rife.engine.exceptions.EngineException;
+import rife.nativeapp.NativeApp;
 import rife.template.Template;
 import rife.template.TemplateEncoder;
 import rife.template.TemplateFactoryFilters;
@@ -24,9 +25,7 @@ class EngineTemplateProcessor {
     public static final String ID_CONTEXT_CONT_ID = "context:contId";
     public static final String ID_CONTEXT_CSRF_TOKEN = "context:csrfToken";
     public static final String ID_CONTEXT_HTMX_HEADERS = "context:htmxHeaders";
-    public static final String ID_CONTEXT_NATIVE_APP = "context:nativeApp";
-    // set by rife2-native-app when the site runs inside an app
-    static final String PROPERTY_NATIVE_APP_PLATFORM = "rife.nativeapp.platform";
+    public static final String ID_CONTEXT_NATIVE_APP_SCRIPT = "context:nativeAppScript";
     static final String NATIVE_APP_SCRIPT = "rife2-native-app.js";
 
     private final Context context_;
@@ -128,17 +127,17 @@ class EngineTemplateProcessor {
             setValues.add(ID_CONTEXT_HTMX_HEADERS);
         }
 
-        if (template_.hasValueId(ID_CONTEXT_NATIVE_APP) &&
-            !template_.isValueSet(ID_CONTEXT_NATIVE_APP)) {
-            // the script of rife2-native-app, which only an app serves
-            var platform = context_.properties().getValueString(PROPERTY_NATIVE_APP_PLATFORM);
+        if (template_.hasValueId(ID_CONTEXT_NATIVE_APP_SCRIPT) &&
+            !template_.isValueSet(ID_CONTEXT_NATIVE_APP_SCRIPT)) {
+            // the script that only an app serves, as NativeApp's static file
+            var platform = context_.properties().getValueString(NativeApp.PLATFORM_PROPERTY);
             if (platform != null && !platform.isEmpty()) {
-                template_.setValue(ID_CONTEXT_NATIVE_APP,
+                template_.setValue(ID_CONTEXT_NATIVE_APP_SCRIPT,
                     "<script src=\"" + encoder_.encode(context_.webappRootUrl(-1) + NATIVE_APP_SCRIPT) + "\" data-platform=\"" + encoder_.encode(platform) + "\"></script>");
             } else {
-                blankUnavailableValue(ID_CONTEXT_NATIVE_APP);
+                blankUnavailableValue(ID_CONTEXT_NATIVE_APP_SCRIPT);
             }
-            setValues.add(ID_CONTEXT_NATIVE_APP);
+            setValues.add(ID_CONTEXT_NATIVE_APP_SCRIPT);
         }
     }
 

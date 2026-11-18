@@ -13,6 +13,7 @@ import rife.config.RifeConfig;
 import rife.continuations.ContinuationContext;
 import rife.engine.continuations.TestSimplePause;
 import rife.engine.exceptions.EngineException;
+import rife.nativeapp.NativeApp;
 import rife.tools.FileUtils;
 
 import java.io.ByteArrayInputStream;
@@ -133,7 +134,7 @@ public class TestSiteRunner {
     @Test
     void testNativeAppScript() {
         var properties = new rife.ioc.HierarchicalProperties();
-        properties.put("rife.nativeapp.platform", "ios\"");
+        properties.put(NativeApp.PLATFORM_PROPERTY, "ios\"");
         try (var runner = new SiteRunner(properties).scheme("myapp").serverName("app").contextPath("/c&tx").start(new Site() {
             public void setup() {
                 get("/page", c -> c.print(c.template("native_app")));
@@ -141,14 +142,30 @@ public class TestSiteRunner {
         })) {
             assertEquals("<html lang=\"en\"><head><script src=\"myapp://app/c&amp;tx/rife2-native-app.js\" data-platform=\"ios&quot;\"></script></head></html>\n",
                 runner.handle("/c&tx/page").getText());
+            var script = runner.handle("/c&tx/rife2-native-app.js");
+            assertEquals(200, script.getStatus());
+            assertTrue(script.getText().contains("window.rife2NativeApp"));
         }
 
+        // the site can be told too, as the template value is
         try (var runner = new SiteRunner().start(new Site() {
+            public void setup() {
+                properties().put(NativeApp.PLATFORM_PROPERTY, "android");
+                get("/page", c -> c.print(c.template("native_app")));
+            }
+        })) {
+            assertTrue(runner.handle("/page").getText().contains("data-platform=\"android\""));
+            assertEquals(200, runner.handle("/rife2-native-app.js").getStatus());
+        }
+
+        // a site outside an app has neither, also not from the static files of an uberjar
+        try (var runner = new SiteRunner().staticUberJarResourceBase("webapp").start(new Site() {
             public void setup() {
                 get("/page", c -> c.print(c.template("native_app")));
             }
         })) {
             assertEquals("<html lang=\"en\"><head></head></html>\n", runner.handle("/page").getText());
+            assertFalse(runner.handle("/rife2-native-app.js").isHandled());
         }
     }
 
@@ -1306,6 +1323,53 @@ public class TestSiteRunner {
             var compressed = recorder.bytes();
             assertEquals(List.of(String.valueOf(compressed.length)), recorder.headers.get("Content-Length"));
             assertTrue(compressed.length < 100);
+        }
+    }
+
+    @Test
+    void testCookieJarKeepsSameSiteCookiesFromOtherSites() {
+        try (var runner = new SiteRunner().serverName("app").cookieJar(new SiteCookieJar()).start(new Site() {
+            public void setup() {
+                get("/set", c -> {
+                    c.addCookie(new CookieBuilder("strict", "s").path("/").sameSite(SameSite.STRICT));
+                    c.addCookie(new CookieBuilder("lax", "l").path("/").sameSite(SameSite.LAX));
+                    c.addCookie(new CookieBuilder("none", "n").path("/").sameSite(SameSite.NONE));
+                    c.addCookie(new CookieBuilder("unsaid", "u").path("/"));
+                });
+                get("/told", c -> c.print(c.cookieValue("strict") + "," + c.cookieValue("lax") + "," + c.cookieValue("none") + "," + c.cookieValue("unsaid")));
+                post("/told", c -> c.print(c.cookieValue("strict") + "," + c.cookieValue("lax") + "," + c.cookieValue("none") + "," + c.cookieValue("unsaid")));
+            }
+        })) {
+            runner.handle("/set");
+            assertEquals("s,l,n,u", runner.handle("/told").getText());
+            assertEquals("s,l,n,u", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Origin", "http://app")).getText());
+            assertEquals("s,l,n,u", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Sec-Fetch-Site", "same-origin")).getText());
+            // a frame of another site that links or submits to this one
+            assertEquals("null,l,n,u", runner.handle("/told", new SiteRequest().header("Sec-Fetch-Site", "cross-site")).getText());
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Origin", "https://elsewhere.example")).getText());
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Origin", "null")).getText());
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Sec-Fetch-Site", "cross-site").header("Origin", "http://app")).getText());
+            // what another site's frame loads, rather than a page it opens
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest().header("Sec-Fetch-Site", "cross-site").header("Sec-Fetch-Mode", "no-cors").header("Sec-Fetch-Dest", "image")).getText());
+            assertEquals("null,l,n,u", runner.handle("/told", new SiteRequest().header("Sec-Fetch-Site", "cross-site").header("Sec-Fetch-Mode", "navigate").header("Sec-Fetch-Dest", "document")).getText());
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest().header("Sec-Fetch-Site", "cross-site").header("Sec-Fetch-Mode", "navigate").header("Sec-Fetch-Dest", "iframe")).getText());
+            // a script of another site that asks, without the headers that say what it is
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest().header("Origin", "https://elsewhere.example")).getText());
+            assertEquals("null,null,n,null", runner.handle("/told", new SiteRequest().header("Origin", "http://[::1]:8080")).getText());
+        }
+
+        // the host of an Android package can have an underscore, which java.net.URI has no host for
+        try (var runner = new SiteRunner().scheme("https").serverName("com.example.my_app.invalid").cookieJar(new SiteCookieJar()).start(new Site() {
+            public void setup() {
+                get("/set", c -> c.addCookie(new CookieBuilder("session", "s").path("/").sameSite(SameSite.LAX)));
+                post("/told", c -> c.print(c.cookieValue("session") + " " + c.header("Cookie")));
+            }
+        })) {
+            runner.handle("/set");
+            assertEquals("s session=s", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Origin", "https://com.example.my_app.invalid")).getText());
+            assertEquals("s session=s", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Origin", "https://COM.example.my_app.invalid:443")).getText());
+            // and a request without cookies says none
+            assertEquals("null null", runner.handle("/told", new SiteRequest(RequestMethod.POST).header("Origin", "https://elsewhere.example")).getText());
         }
     }
 

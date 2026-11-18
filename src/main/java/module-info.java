@@ -11,6 +11,8 @@ module rife {
     requires static jakarta.servlet;
     requires static org.eclipse.jetty.server;
     requires static org.eclipse.jetty.ee10.servlet;
+    requires static org.graalvm.nativeimage;
+    requires static org.graalvm.word;
     requires static org.jsoup;
     requires static tomcat.embed.core;
 
@@ -68,6 +70,7 @@ module rife {
     exports rife.ioc;
     exports rife.ioc.exceptions;
     exports rife.json;
+    exports rife.nativeapp;
     exports rife.resources;
     exports rife.resources.exceptions;
     exports rife.scheduler;
@@ -92,4 +95,7 @@ module rife {
     exports rife.workflow;
     exports rife.xml;
     exports rife.xml.exceptions;
+
+    uses rife.engine.Site;
+    uses rife.nativeapp.SiteProvider;
 }
