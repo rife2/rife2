@@ -4,7 +4,7 @@
  */
 
 /**
- * Provides the classes that run a site inside an iOS, macOS or Android app,
+ * Provides the classes that run a site inside an iOS, macOS, visionOS or Android app,
  * compiled into a native library by GraalVM.
  * @since 1.11.0
  */
