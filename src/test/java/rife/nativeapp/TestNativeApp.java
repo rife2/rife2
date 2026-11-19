@@ -240,7 +240,7 @@ class TestNativeApp {
         var script = ask(app, "/rife2-native-app.js");
         assertEquals(200, script.status);
         assertTrue(script.headers.contains("Content-Type: text/javascript"), script.headers);
-        assertTrue(script.text().contains("window.rife2NativeApp = {platform: platform};"));
+        assertTrue(script.text().contains("window.rife2NativeApp = Object.freeze({"));
         app.stop();
 
         var browser = new NativeApp(new Site() {

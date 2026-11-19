@@ -9,6 +9,13 @@
 // through the "rife2" message handler of its web view, an Android app through
 // the Rife2NativeApp object that it puts in the site's own pages, which
 // takes messages and answers some.
+//
+// A page and its app also tell each other what's their own, through
+// window.rife2NativeApp: tell(name, data) tells the app, which it only
+// hears when hears(name) says so, and on(name, heard) hears what the app
+// tells the page. The app says what it hears, and which protocol it speaks,
+// in window.rife2NativeAppHost before the page's scripts run, or when an older
+// web view of Android can't, through the told() of window.Rife2NativeAppHost.
 (() => {
     function told(bridge) {
         const waiting = new Map();
@@ -30,7 +37,8 @@
                 const id = ++number;
                 waiting.set(id, answer);
                 tell({action: 'posted', id: id, type: type, data: data});
-            })
+            }),
+            tell: (name, data) => tell({action: 'tell', name: name, data: data})
         };
     }
 
@@ -40,15 +48,27 @@
     }
     const apple = window.webkit && window.webkit.messageHandlers ? window.webkit.messageHandlers.rife2 : null;
     const android = window.Rife2NativeApp ? told(window.Rife2NativeApp) : null;
+    // an app of before the protocol says nothing, and hears nothing of a page's own; an
+    // older web view of Android has the app say it when it's asked
+    let host = window.rife2NativeAppHost;
+    if (!host && window.Rife2NativeAppHost && typeof window.Rife2NativeAppHost.told === 'function') {
+        try {
+            host = JSON.parse(window.Rife2NativeAppHost.told());
+        } catch (e) {
+            host = null;
+        }
+    }
+    host = host && typeof host === 'object' ? host : {};
 
     // the styles can have rules for a page of an app, and for one platform
     document.documentElement.classList.add('in-app', 'on-' + platform);
 
     // A page keeps its size under two fingers and a double tap, as a screen of
-    // an app does, and is laid out down to the edges of the screen. An Android
-    // app says so with the settings of its web view.
+    // an app does, and is laid out down to the edges of the screen, unless
+    // the app says that its pages zoom. An Android app says so with the
+    // settings of its web view.
     const viewport = document.querySelector('meta[name=viewport]');
-    if (apple && viewport) {
+    if (apple && viewport && host.zooms !== true) {
         viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover');
     }
 
@@ -63,8 +83,52 @@
         androidOnly(android);
     }
 
+    const listeners = new Map();
+    const hears = name => Array.isArray(host.heard) && host.heard.includes(String(name));
     // once all of the above is in place, which a second inclusion leaves alone
-    window.rife2NativeApp = {platform: platform};
+    window.rife2NativeApp = Object.freeze({
+        platform: platform,
+        protocol: Number(host.protocol) || 0,
+        // whether the app hears what a page tells it by that name
+        hears: hears,
+        // tells the app something that a script can send, answers whether it was told
+        tell: (name, data) => {
+            if (!hears(name)) {
+                return false;
+            }
+            const said = {action: 'tell', name: String(name), data: data === undefined ? null : data};
+            try {
+                if (apple) {
+                    apple.postMessage(said);
+                } else if (android) {
+                    android.tell(said.name, said.data);
+                } else {
+                    return false;
+                }
+            } catch (e) {
+                // what a message can't carry, a function or an element for instance
+                return false;
+            }
+            return true;
+        },
+        // hears what the app tells the page by that name, the one listener before it no longer
+        on: (name, listener) => {
+            if (typeof listener === 'function') {
+                listeners.set(String(name), listener);
+            } else {
+                listeners.delete(String(name));
+            }
+        },
+        // what the app tells the page, answers whether it was heard
+        told: (name, data) => {
+            const listener = listeners.get(String(name));
+            if (!listener) {
+                return false;
+            }
+            listener(data);
+            return true;
+        }
+    });
 
     // what a web view of Android lacks beside printing
     function androidOnly(android) {
