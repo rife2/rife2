@@ -354,18 +354,26 @@ public class Rife2Build extends AbstractRife2Build {
             """, probe);
 
         var module_path = new StringJoiner(File.pathSeparator);
-        module_path.add(new File(new File(buildDirectory(), "dist"), jarFileName()).getAbsolutePath());
-        for (var jar : compileClasspathJars()) {
-            module_path.add(jar.getAbsolutePath());
+        var run_module_path = new StringJoiner(File.pathSeparator);
+        for (var path : List.of(module_path, run_module_path)) {
+            path.add(new File(new File(buildDirectory(), "dist"), jarFileName()).getAbsolutePath());
+            for (var jar : compileClasspathJars()) {
+                path.add(jar.getAbsolutePath());
+            }
         }
         for (var jar : providedClasspathJars()) {
             module_path.add(jar.getAbsolutePath());
+            // the GraalVM SDK is only required statically, and a GraalVM
+            // before 23.1 has it as org.graalvm.sdk, which these jars clash with
+            if (!jar.getName().startsWith("nativeimage-") && !jar.getName().startsWith("word-")) {
+                run_module_path.add(jar.getAbsolutePath());
+            }
         }
 
         run(List.of(compilerTool(), "--module-path", module_path.toString(),
             "--patch-module", "rife=" + new File(probe_directory, "src").getAbsolutePath(),
             "--add-modules", "rife", "-d", classes_directory.getAbsolutePath(), probe.getAbsolutePath()));
-        run(List.of(javaTool(), "--module-path", module_path.toString(),
+        run(List.of(javaTool(), "--module-path", run_module_path.toString(),
             "--patch-module", "rife=" + classes_directory.getAbsolutePath(),
             "--add-modules", "rife", "-m", "rife/rife.ModularProbe"));
     }
